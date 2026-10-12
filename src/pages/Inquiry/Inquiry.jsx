@@ -27,6 +27,7 @@ import {
   Sparkles,
   Check,
   X,
+  Eye,
   Phone,
   Mail,
   Building,
@@ -245,6 +246,91 @@ function CustomSelect({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// Small Uploaded File Preview Card
+function FilePreviewCard({ file, onRemove }) {
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const isImage =
+    file?.type?.startsWith("image/") ||
+    /\.(jpg|jpeg|png|webp|gif)$/i.test(file?.name || "");
+  const isPdf =
+    file?.type === "application/pdf" ||
+    /\.pdf$/i.test(file?.name || "");
+
+  useEffect(() => {
+    if (file && isImage) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [file, isImage]);
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return "";
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  return (
+    <div className="flex items-center gap-3 p-2.5 bg-white border border-gray-200 rounded-xl shadow-xs transition hover:border-gray-300">
+      {/* Thumbnail */}
+      {isImage && previewUrl ? (
+        <a
+          href={previewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="relative flex-shrink-0 group cursor-pointer block"
+          title="Click to view full image"
+        >
+          <img
+            src={previewUrl}
+            alt={file?.name || "Preview"}
+            className="w-12 h-12 rounded-lg object-cover border border-gray-200"
+          />
+          <div className="absolute inset-0 bg-black/30 rounded-lg opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white">
+            <Eye className="w-3.5 h-3.5" />
+          </div>
+        </a>
+      ) : (
+        <div className="w-12 h-12 rounded-lg bg-orange-50/70 border border-orange-200/80 flex flex-col items-center justify-center text-[#95442c] flex-shrink-0">
+          <FileText className="w-5 h-5 text-[#95442c]" />
+          <span className="text-[10px] font-bold uppercase mt-0.5 font-mono">
+            {isPdf ? "PDF" : "DOC"}
+          </span>
+        </div>
+      )}
+
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <p className="text-xs sm:text-sm font-semibold text-gray-800 truncate" title={file?.name}>
+          {file?.name}
+        </p>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-[11px] text-gray-500 font-mono">
+            {formatFileSize(file?.size)}
+          </span>
+          <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+            <CheckCircle2 className="w-3 h-3" /> Uploaded
+          </span>
+        </div>
+      </div>
+
+      {/* Remove Button */}
+      <button
+        type="button"
+        onClick={onRemove}
+        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition flex-shrink-0"
+        title="Remove file"
+      >
+        <X className="w-4 h-4" />
+      </button>
     </div>
   );
 }
@@ -484,6 +570,7 @@ export default function Inquiry() {
 
   const goToNextStep = () => {
     if (validateStep(currentStep)) {
+      setErrors({});
       setCurrentStep((prev) => Math.min(prev + 1, 6));
       window.scrollTo({ top: 300, behavior: "smooth" });
     } else {
@@ -492,6 +579,7 @@ export default function Inquiry() {
   };
 
   const goToPrevStep = () => {
+    setErrors({});
     setCurrentStep((prev) => Math.max(prev - 1, 1));
     window.scrollTo({ top: 300, behavior: "smooth" });
   };
@@ -598,6 +686,12 @@ export default function Inquiry() {
   // Submit Handler (Requires Email OTP verification before submitting)
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Guard: Prevent submission if not on the final step (Section 6)
+    if (currentStep < 6) {
+      goToNextStep();
+      return;
+    }
 
     // Validate all steps before submitting
     for (let s = 1; s <= 6; s++) {
@@ -838,28 +932,24 @@ export default function Inquiry() {
         description="Apply for the official RAG Pro Partner Program by Gomzi Nutrition. High margins, 100% genuine lab-tested supplements, and dedicated business support for certified fitness professionals."
       />
 
-      <div className="min-h-screen bg-[#fafbfc] pt-24 pb-20">
+      <div className="min-h-screen bg-white pt-8 sm:pt-12 pb-16 sm:pb-20">
         {isSuccess && <Confetti numberOfPieces={250} recycle={false} />}
 
         {/* Hero Banner */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#95442c]/10 text-[#95442c] text-xs sm:text-sm font-toma font-semibold tracking-wide uppercase mb-4">
-            <Sparkles className="w-4 h-4 text-[#95442c]" />
-            Official Partner Network
-          </div>
-          <h1 className="font-toma text-3xl sm:text-4xl md:text-5xl font-black text-[#111111] tracking-tight mb-4">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 text-center">
+          <h1 className="font-toma text-3xl sm:text-4xl md:text-5xl font-black text-[#111111] tracking-tight mb-2">
             RAG Pro Partner Program
           </h1>
-          <p className="font-modelica text-gray-600 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+          <p className="font-modelica text-gray-600 text-sm sm:text-base md:text-lg max-w-4xl mx-auto leading-relaxed text-center whitespace-normal sm:whitespace-nowrap">
             Empower your clients with lab-tested nutrition and unlock exclusive partner margins.
           </p>
         </section>
 
         {/* Main Application Container */}
-        <div className="max-w-4xl mx-auto px-2.5 sm:px-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {isSuccess ? (
             /* SUCCESS CELEBRATION VIEW */
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-12 border border-gray-200 shadow-xl text-center animate-fadeIn">
+            <div className="bg-white rounded-2xl p-6 sm:p-12 border-2 border-[#95442c] text-center animate-fadeIn">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-inner">
                 <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12" />
               </div>
@@ -913,8 +1003,20 @@ export default function Inquiry() {
             </div>
           ) : (
             /* APPLICATION FORM */
-            <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 md:p-10 border border-gray-200/90 shadow-xl">
-              <form onSubmit={handleSubmit} noValidate style={{ accentColor: "#95442c" }}>
+            <div className="border-2 border-[#95442c] rounded-2xl p-5 sm:p-8 md:p-10 bg-white">
+              <form
+                onSubmit={handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+                    e.preventDefault();
+                    if (currentStep < 6) {
+                      goToNextStep();
+                    }
+                  }
+                }}
+                noValidate
+                style={{ accentColor: "#95442c" }}
+              >
                 {/* ========================================================
                     SECTION 1: PERSONAL INFORMATION
                    ======================================================== */}
@@ -1171,18 +1273,10 @@ export default function Inquiry() {
                             JPG/PNG/WEBP, clear face photo (max 20MB)
                           </p>
                           {formData.photoFile ? (
-                            <div className="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-xl">
-                              <span className="text-xs font-semibold text-gray-800 truncate flex-1 min-w-0 mr-2">
-                                {formData.photoFile.name}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => removeFile("photoFile")}
-                                className="text-red-500 hover:text-red-700 p-1 flex-shrink-0"
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
-                            </div>
+                            <FilePreviewCard
+                              file={formData.photoFile}
+                              onRemove={() => removeFile("photoFile")}
+                            />
                           ) : (
                             <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
                               <Upload className="w-4 h-4 text-[#95442c]" />
@@ -1206,18 +1300,10 @@ export default function Inquiry() {
                             PDF or Image of front & back (max 20MB)
                           </p>
                           {formData.idProofFile ? (
-                            <div className="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-xl">
-                              <span className="text-xs font-semibold text-gray-800 truncate flex-1 min-w-0 mr-2">
-                                {formData.idProofFile.name}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => removeFile("idProofFile")}
-                                className="text-red-500 hover:text-red-700 p-1 flex-shrink-0"
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
-                            </div>
+                            <FilePreviewCard
+                              file={formData.idProofFile}
+                              onRemove={() => removeFile("idProofFile")}
+                            />
                           ) : (
                             <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
                               <Upload className="w-4 h-4 text-[#95442c]" />
@@ -1263,21 +1349,10 @@ export default function Inquiry() {
                           Upload (PDF/Image)
                         </p>
                         {formData.certFile ? (
-                          <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl">
-                            <div className="flex items-center gap-2 flex-1 min-w-0 mr-2">
-                              <FileText className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                              <span className="text-xs font-semibold text-gray-800 truncate flex-1 min-w-0">
-                                {formData.certFile.name}
-                              </span>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => removeFile("certFile")}
-                              className="text-red-500 hover:text-red-700 p-1 flex-shrink-0"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
+                          <FilePreviewCard
+                            file={formData.certFile}
+                            onRemove={() => removeFile("certFile")}
+                          />
                         ) : (
                           <label className="flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
                             <Upload className="w-4 h-4 text-[#95442c]" />
@@ -1793,7 +1868,7 @@ export default function Inquiry() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {/* Monthly Interactions */}
-                        <div>
+                        <div className="flex flex-col justify-between">
                           <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
                             Approximately How Many Clients Do You Interact With Every Month?
                           </label>
@@ -1805,12 +1880,12 @@ export default function Inquiry() {
                             onChange={(e) =>
                               handleInputChange("monthlyInteractions", e.target.value)
                             }
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] mt-auto"
                           />
                         </div>
 
                         {/* How Many Clients Currently Use Supplements */}
-                        <div>
+                        <div className="flex flex-col justify-between">
                           <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
                             How Many of Your Clients Currently Use Supplements?
                           </label>
@@ -1822,7 +1897,7 @@ export default function Inquiry() {
                             onChange={(e) =>
                               handleInputChange("clientsUsingSupplements", e.target.value)
                             }
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] mt-auto"
                           />
                         </div>
                       </div>
@@ -2048,6 +2123,7 @@ export default function Inquiry() {
 
                   {currentStep < 6 ? (
                     <button
+                      key="step-continue-btn"
                       type="button"
                       onClick={goToNextStep}
                       className={`flex-1 sm:flex-initial sm:w-auto px-4 sm:px-8 py-3 sm:py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-2 shadow-md shadow-[#95442c]/20 text-sm sm:text-base ${
@@ -2058,6 +2134,7 @@ export default function Inquiry() {
                     </button>
                   ) : (
                     <button
+                      key="step-submit-btn"
                       type="submit"
                       disabled={submitting || sendingOtp}
                       className="flex-1 sm:flex-initial sm:w-auto px-2.5 sm:px-10 py-3 sm:py-4 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold sm:font-black rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-3 shadow-lg shadow-[#95442c]/30 disabled:opacity-50 text-xs sm:text-base"
