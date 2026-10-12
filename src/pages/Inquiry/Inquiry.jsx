@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useId } from "react";
+import React, { useState, useEffect, useId, useRef } from "react";
 import SEO from "../../component/SEO";
 import { states, getCities } from "../../utils/indiaLocation";
 import {
@@ -22,6 +22,7 @@ import {
   FileText,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
   ArrowRight,
   Sparkles,
   Check,
@@ -93,6 +94,161 @@ const FOLLOWER_RANGES = [
   "100,000+",
 ];
 
+const SOCIAL_PLATFORM_OPTIONS = [
+  "Instagram",
+  "Facebook",
+  "YouTube",
+  "LinkedIn",
+];
+
+// Premium Brown Themed Custom Select Component
+function CustomSelect({
+  value,
+  onChange,
+  options = [],
+  placeholder = "Select Option",
+  error = false,
+  searchable = false,
+  className = "",
+  id,
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const dropdownRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  // Normalize options: supports string array or { value, label } array
+  const normalizedOptions = options.map((opt) =>
+    typeof opt === "object" && opt !== null
+      ? opt
+      : { value: opt, label: opt }
+  );
+
+  const selectedOption = normalizedOptions.find(
+    (opt) => String(opt.value) === String(value)
+  );
+
+  const filteredOptions = searchable && searchQuery.trim()
+    ? normalizedOptions.filter((opt) =>
+        opt.label.toLowerCase().includes(searchQuery.toLowerCase().trim())
+      )
+    : normalizedOptions;
+
+  // Close on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+        setSearchQuery("");
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // Focus search input when opened
+  useEffect(() => {
+    if (isOpen && searchable && searchInputRef.current) {
+      setTimeout(() => searchInputRef.current?.focus(), 50);
+    }
+  }, [isOpen, searchable]);
+
+  const handleSelect = (optValue) => {
+    onChange({ target: { value: optValue, name: id } });
+    setIsOpen(false);
+    setSearchQuery("");
+  };
+
+  return (
+    <div className={`relative w-full ${className}`} ref={dropdownRef}>
+      <button
+        type="button"
+        id={id}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-left bg-white transition flex items-center justify-between cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
+          error
+            ? "border-red-500 bg-red-50/10"
+            : isOpen
+            ? "border-[#95442c] ring-2 ring-[#95442c]/20"
+            : "border-gray-300 hover:border-gray-400"
+        }`}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+      >
+        <span
+          className={`truncate ${
+            selectedOption && selectedOption.value !== ""
+              ? "text-gray-900 font-medium"
+              : "text-gray-400"
+          }`}
+        >
+          {selectedOption && selectedOption.value !== ""
+            ? selectedOption.label
+            : placeholder}
+        </span>
+        <ChevronDown
+          className={`w-4 h-4 text-gray-500 transition-transform duration-200 flex-shrink-0 ml-2 ${
+            isOpen ? "rotate-180 text-[#95442c]" : ""
+          }`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-60 overflow-hidden flex flex-col animate-fadeIn">
+          {searchable && (
+            <div className="p-2 border-b border-gray-100 bg-gray-50/90 sticky top-0 z-10">
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Type to search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-3 py-1.5 text-xs font-modelica bg-white border border-gray-200 rounded-lg outline-none focus:border-[#95442c] focus:ring-1 focus:ring-[#95442c]"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          )}
+
+          <div className="overflow-y-auto py-1 max-h-52 divide-y divide-gray-50">
+            {filteredOptions.length === 0 ? (
+              <div className="px-4 py-3 text-xs text-gray-400 text-center font-modelica">
+                No matching options found
+              </div>
+            ) : (
+              filteredOptions.map((opt, idx) => {
+                const isSelected = String(opt.value) === String(value);
+                return (
+                  <button
+                    type="button"
+                    key={`${opt.value}-${idx}`}
+                    onClick={() => handleSelect(opt.value)}
+                    className={`w-full px-4 py-2.5 text-sm font-modelica text-left flex items-center justify-between cursor-pointer transition ${
+                      isSelected
+                        ? "bg-[#95442c] text-white font-semibold"
+                        : "text-gray-700 hover:bg-[#fdf5f2] hover:text-[#95442c]"
+                    }`}
+                  >
+                    <span className="truncate">{opt.label}</span>
+                    {isSelected && (
+                      <Check className="w-4 h-4 text-white flex-shrink-0 ml-2" />
+                    )}
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Inquiry() {
   const [currentStep, setCurrentStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -157,6 +313,8 @@ export default function Inquiry() {
     otherClientCategory: "",
 
     // Section 4: Social
+    socialPlatform: "Instagram",
+    socialLink: "",
     instagram: "",
     facebook: "",
     youtube: "",
@@ -190,6 +348,18 @@ export default function Inquiry() {
       if (field === "mobile" && sameAsMobile) {
         updated.whatsapp = value;
       }
+      if (field === "socialPlatform") {
+        updated.instagram = value === "Instagram" ? updated.socialLink : "";
+        updated.facebook = value === "Facebook" ? updated.socialLink : "";
+        updated.youtube = value === "YouTube" ? updated.socialLink : "";
+        updated.linkedin = value === "LinkedIn" ? updated.socialLink : "";
+      }
+      if (field === "socialLink") {
+        if (updated.socialPlatform === "Instagram") updated.instagram = value;
+        if (updated.socialPlatform === "Facebook") updated.facebook = value;
+        if (updated.socialPlatform === "YouTube") updated.youtube = value;
+        if (updated.socialPlatform === "LinkedIn") updated.linkedin = value;
+      }
       return updated;
     });
 
@@ -204,7 +374,7 @@ export default function Inquiry() {
   };
 
   const handleStateChange = (e) => {
-    const selectedIso = e.target.value;
+    const selectedIso = typeof e === "string" ? e : e?.target?.value || "";
     const selectedObj = states.find((s) => s.value === selectedIso);
     setFormData((prev) => ({
       ...prev,
@@ -212,6 +382,9 @@ export default function Inquiry() {
       state: selectedObj ? selectedObj.label : "",
       city: "",
     }));
+    if (errors.state) {
+      setErrors((prev) => ({ ...prev, state: null }));
+    }
   };
 
   const handleSameAsMobileToggle = (checked) => {
@@ -523,10 +696,24 @@ export default function Inquiry() {
             : formData.clientCategory,
 
         // Section 4
-        instagram: formData.instagram,
-        facebook: formData.facebook,
-        youtube: formData.youtube,
-        linkedin: formData.linkedin,
+        social_platform: formData.socialPlatform || "Instagram",
+        social_link: formData.socialLink || "",
+        instagram:
+          formData.socialPlatform === "Instagram"
+            ? formData.socialLink
+            : formData.instagram || "",
+        facebook:
+          formData.socialPlatform === "Facebook"
+            ? formData.socialLink
+            : formData.facebook || "",
+        youtube:
+          formData.socialPlatform === "YouTube"
+            ? formData.socialLink
+            : formData.youtube || "",
+        linkedin:
+          formData.socialPlatform === "LinkedIn"
+            ? formData.socialLink
+            : formData.linkedin || "",
         website: formData.website,
         other_social: formData.otherSocial,
         instagram_followers: formData.instagramFollowers,
@@ -584,10 +771,12 @@ export default function Inquiry() {
 • Primary Client Category: ${formData.clientCategory} ${formData.otherClientCategory ? `(${formData.otherClientCategory})` : ""}
 
 [SECTION 4: SOCIAL MEDIA & ONLINE PRESENCE]
-• Instagram: ${formData.instagram || "N/A"} (Followers: ${formData.instagramFollowers || "N/A"})
-• Facebook: ${formData.facebook || "N/A"}
-• YouTube: ${formData.youtube || "N/A"}
-• LinkedIn: ${formData.linkedin || "N/A"}
+• Selected Social Platform: ${formData.socialPlatform || "Instagram"}
+• Social Profile / Channel Link: ${formData.socialLink || "N/A"}
+• Instagram: ${formData.socialPlatform === "Instagram" ? formData.socialLink : formData.instagram || "N/A"} (Followers: ${formData.instagramFollowers || "N/A"})
+• Facebook: ${formData.socialPlatform === "Facebook" ? formData.socialLink : formData.facebook || "N/A"}
+• YouTube: ${formData.socialPlatform === "YouTube" ? formData.socialLink : formData.youtube || "N/A"}
+• LinkedIn: ${formData.socialPlatform === "LinkedIn" ? formData.socialLink : formData.linkedin || "N/A"}
 • Website / Coaching Profile: ${formData.website || "N/A"}
 • Other Social: ${formData.otherSocial || "N/A"}
 • Monthly Reach / Engagement: ${formData.monthlyReach || "N/A"}
@@ -642,75 +831,6 @@ export default function Inquiry() {
     }
   };
 
-  // Render Step Navigation Indicator
-  const renderStepNav = () => {
-    const steps = [
-      { num: 1, label: "Personal", icon: User },
-      { num: 2, label: "Certifications", icon: Award },
-      { num: 3, label: "Professional", icon: Briefcase },
-      { num: 4, label: "Social", icon: Share2 },
-      { num: 5, label: "Business", icon: TrendingUp },
-      { num: 6, label: "Submit", icon: ShieldCheck },
-    ];
-
-    return (
-      <div className="w-full bg-white border border-gray-200 rounded-2xl p-3 sm:p-4 mb-8 shadow-sm">
-        <div className="flex items-center justify-between relative">
-          {/* Progress bar background line */}
-          <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-100 -translate-y-1/2 z-0 hidden sm:block" />
-          <div
-            className="absolute top-1/2 left-0 h-1 bg-[#95442c] -translate-y-1/2 z-0 transition-all duration-300 hidden sm:block"
-            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
-          />
-
-          {steps.map((s) => {
-            const Icon = s.icon;
-            const isCompleted = currentStep > s.num;
-            const isCurrent = currentStep === s.num;
-
-            return (
-              <button
-                type="button"
-                key={s.num}
-                onClick={() => {
-                  if (s.num <= currentStep || validateStep(currentStep)) {
-                    setCurrentStep(s.num);
-                  }
-                }}
-                className={`relative z-10 flex flex-col items-center gap-1.5 focus:outline-none transition group ${
-                  isCurrent ? "cursor-default" : "cursor-pointer"
-                }`}
-              >
-                <div
-                  className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center font-toma text-sm sm:text-base font-bold transition-all duration-300 ${
-                    isCompleted
-                      ? "bg-green-600 text-white shadow-md shadow-green-100"
-                      : isCurrent
-                      ? "bg-[#95442c] text-white ring-4 ring-[#95442c]/20 shadow-lg"
-                      : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
-                  }`}
-                >
-                  {isCompleted ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
-                </div>
-                <span
-                  className={`font-modelica text-xs hidden md:block font-medium ${
-                    isCurrent
-                      ? "text-[#95442c] font-bold"
-                      : isCompleted
-                      ? "text-gray-900 font-semibold"
-                      : "text-gray-400"
-                  }`}
-                >
-                  {s.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <>
       <SEO
@@ -730,94 +850,52 @@ export default function Inquiry() {
           <h1 className="font-toma text-3xl sm:text-4xl md:text-5xl font-black text-[#111111] tracking-tight mb-4">
             RAG Pro Partner Program
           </h1>
-          <p className="font-modelica text-gray-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-6">
-            Join India’s premier fitness coaching & nutrition partner network.
-            Empower your clients with lab-tested certified nutrition while unlocking
-            exclusive wholesale margins and recurring income.
+          <p className="font-modelica text-gray-600 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Empower your clients with lab-tested nutrition and unlock exclusive partner margins.
           </p>
-
-          {/* Quick Value Pillars */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto text-left">
-            <div className="p-3 bg-white rounded-xl border border-gray-200/80 shadow-xs flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-orange-50 text-[#95442c] flex items-center justify-center font-bold">
-                ✓
-              </div>
-              <div>
-                <p className="text-xs font-toma font-bold text-gray-900">Highest Margins</p>
-                <p className="text-[11px] font-modelica text-gray-500">Industry-leading payout</p>
-              </div>
-            </div>
-            <div className="p-3 bg-white rounded-xl border border-gray-200/80 shadow-xs flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                ✓
-              </div>
-              <div>
-                <p className="text-xs font-toma font-bold text-gray-900">Lab Tested</p>
-                <p className="text-[11px] font-modelica text-gray-500">100% Genuine batch CoA</p>
-              </div>
-            </div>
-            <div className="p-3 bg-white rounded-xl border border-gray-200/80 shadow-xs flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                ✓
-              </div>
-              <div>
-                <p className="text-xs font-toma font-bold text-gray-900">Fast Delivery</p>
-                <p className="text-[11px] font-modelica text-gray-500">Direct to client pan-India</p>
-              </div>
-            </div>
-            <div className="p-3 bg-white rounded-xl border border-gray-200/80 shadow-xs flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-                ✓
-              </div>
-              <div>
-                <p className="text-xs font-toma font-bold text-gray-900">Partner Support</p>
-                <p className="text-[11px] font-modelica text-gray-500">Dedicated relationship lead</p>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* Main Application Container */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto px-2.5 sm:px-6">
           {isSuccess ? (
             /* SUCCESS CELEBRATION VIEW */
-            <div className="bg-white rounded-3xl p-8 sm:p-12 border border-gray-200 shadow-xl text-center animate-fadeIn">
-              <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                <CheckCircle2 className="w-12 h-12" />
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-12 border border-gray-200 shadow-xl text-center animate-fadeIn">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-inner">
+                <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12" />
               </div>
 
               <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold uppercase rounded-full mb-3 inline-block">
                 Application Received
               </span>
 
-              <h2 className="font-toma text-3xl font-extrabold text-gray-900 mb-3">
+              <h2 className="font-toma text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3">
                 Welcome to the RAG Pro Partner Network!
               </h2>
 
-              <p className="font-modelica text-gray-600 text-base max-w-lg mx-auto mb-6 leading-relaxed">
+              <p className="font-modelica text-gray-600 text-sm sm:text-base max-w-lg mx-auto mb-6 leading-relaxed">
                 Thank you, <span className="font-bold text-gray-900">{formData.fullName}</span>!
                 Your application has been received and logged in our partner verification system.
               </p>
 
-              <div className="bg-gray-50 rounded-2xl p-6 max-w-md mx-auto mb-8 border border-gray-200 text-left">
-                <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                  <span className="text-xs font-modelica text-gray-500 uppercase">Application Reference</span>
-                  <span className="font-mono text-sm font-bold text-[#95442c]">{submissionId}</span>
+              <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 max-w-md mx-auto mb-8 border border-gray-200 text-left">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pb-3 border-b border-gray-200">
+                  <span className="text-xs font-modelica text-gray-500 uppercase tracking-wide">Application Reference</span>
+                  <span className="font-mono text-xs sm:text-sm font-bold text-[#95442c] break-all">{submissionId}</span>
                 </div>
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 py-3 border-b border-gray-200">
                   <span className="text-xs font-modelica text-gray-500">Registered Email</span>
-                  <span className="text-sm font-semibold text-gray-800">{formData.email}</span>
+                  <span className="text-xs sm:text-sm font-semibold text-gray-800 break-all">{formData.email}</span>
                 </div>
-                <div className="flex justify-between items-center pt-3">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pt-3">
                   <span className="text-xs font-modelica text-gray-500">Next Action</span>
-                  <span className="text-sm font-semibold text-emerald-600">Verification within 24-48 hrs</span>
+                  <span className="text-xs sm:text-sm font-semibold text-emerald-600">Verification within 24-48 hrs</span>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <a
                   href="/gomzi-supplement"
-                  className="px-8 py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition shadow-md"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition shadow-md text-sm sm:text-base text-center"
                 >
                   Explore Supplements Catalog
                 </a>
@@ -827,7 +905,7 @@ export default function Inquiry() {
                     setIsSuccess(false);
                     setCurrentStep(1);
                   }}
-                  className="px-8 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-toma font-semibold rounded-xl transition"
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-toma font-semibold rounded-xl transition text-sm sm:text-base text-center"
                 >
                   Submit Another Form
                 </button>
@@ -835,10 +913,8 @@ export default function Inquiry() {
             </div>
           ) : (
             /* APPLICATION FORM */
-            <div className="bg-white rounded-3xl p-6 sm:p-10 border border-gray-200/90 shadow-xl">
-              {renderStepNav()}
-
-              <form onSubmit={handleSubmit} noValidate>
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 md:p-10 border border-gray-200/90 shadow-xl">
+              <form onSubmit={handleSubmit} noValidate style={{ accentColor: "#95442c" }}>
                 {/* ========================================================
                     SECTION 1: PERSONAL INFORMATION
                    ======================================================== */}
@@ -899,16 +975,12 @@ export default function Inquiry() {
                         <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
                           Gender <span className="text-red-500">*</span>
                         </label>
-                        <select
+                        <CustomSelect
                           value={formData.gender}
                           onChange={(e) => handleInputChange("gender", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        >
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                          <option value="Other">Other</option>
-                          <option value="Prefer not to say">Prefer not to say</option>
-                        </select>
+                          options={["Male", "Female", "Other", "Prefer not to say"]}
+                          placeholder="Select Gender"
+                        />
                       </div>
 
                       {/* Mobile Number */}
@@ -940,7 +1012,7 @@ export default function Inquiry() {
 
                       {/* WhatsApp Number */}
                       <div>
-                        <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5">
                           <label className="font-modelica text-sm font-semibold text-gray-800">
                             WhatsApp Number <span className="text-red-500">*</span>
                           </label>
@@ -949,7 +1021,7 @@ export default function Inquiry() {
                               type="checkbox"
                               checked={sameAsMobile}
                               onChange={(e) => handleSameAsMobileToggle(e.target.checked)}
-                              className="rounded text-[#95442c] focus:ring-[#95442c]"
+                              className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
                             />
                             Same as Mobile
                           </label>
@@ -1015,156 +1087,150 @@ export default function Inquiry() {
                         )}
                       </div>
 
-                      {/* State */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          State <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          value={formData.stateCode}
-                          onChange={handleStateChange}
-                          className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                            errors.state ? "border-red-500" : "border-gray-300"
-                          }`}
-                        >
-                          <option value="">Select State</option>
-                          {states.map((st) => (
-                            <option key={st.value} value={st.value}>
-                              {st.label}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.state && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.state}</p>
-                        )}
-                      </div>
+                      {/* State, City, PIN Code - In 1 Line */}
+                      <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* State */}
+                        <div>
+                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
+                            State <span className="text-red-500">*</span>
+                          </label>
+                          <CustomSelect
+                            value={formData.stateCode}
+                            onChange={handleStateChange}
+                            options={states}
+                            placeholder="Select State"
+                            error={!!errors.state}
+                            searchable={true}
+                          />
+                          {errors.state && (
+                            <p className="text-red-500 text-xs mt-1 font-modelica">{errors.state}</p>
+                          )}
+                        </div>
 
-                      {/* City */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          City <span className="text-red-500">*</span>
-                        </label>
-                        {availableCities.length > 0 ? (
-                          <select
-                            value={formData.city}
-                            onChange={(e) => handleInputChange("city", e.target.value)}
-                            className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                              errors.city ? "border-red-500" : "border-gray-300"
-                            }`}
-                          >
-                            <option value="">Select City</option>
-                            {availableCities.map((c, idx) => (
-                              <option key={idx} value={c.value}>
-                                {c.label}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
+                        {/* City */}
+                        <div>
+                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
+                            City <span className="text-red-500">*</span>
+                          </label>
+                          {availableCities.length > 0 ? (
+                            <CustomSelect
+                              value={formData.city}
+                              onChange={(e) => handleInputChange("city", e.target.value)}
+                              options={availableCities}
+                              placeholder="Select City"
+                              error={!!errors.city}
+                              searchable={true}
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              placeholder="Enter City"
+                              value={formData.city}
+                              onChange={(e) => handleInputChange("city", e.target.value)}
+                              className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
+                                errors.city ? "border-red-500" : "border-gray-300"
+                              }`}
+                            />
+                          )}
+                          {errors.city && (
+                            <p className="text-red-500 text-xs mt-1 font-modelica">{errors.city}</p>
+                          )}
+                        </div>
+
+                        {/* PIN Code */}
+                        <div>
+                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
+                            PIN Code <span className="text-red-500">*</span>
+                          </label>
                           <input
                             type="text"
-                            placeholder="Enter City"
-                            value={formData.city}
-                            onChange={(e) => handleInputChange("city", e.target.value)}
+                            maxLength={6}
+                            placeholder="395007"
+                            value={formData.pincode}
+                            onChange={(e) =>
+                              handleInputChange("pincode", e.target.value.replace(/\D/g, ""))
+                            }
                             className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                              errors.city ? "border-red-500" : "border-gray-300"
+                              errors.pincode ? "border-red-500" : "border-gray-300"
                             }`}
                           />
-                        )}
-                        {errors.city && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.city}</p>
-                        )}
+                          {errors.pincode && (
+                            <p className="text-red-500 text-xs mt-1 font-modelica">{errors.pincode}</p>
+                          )}
+                        </div>
                       </div>
 
-                      {/* PIN Code */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          PIN Code <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          maxLength={6}
-                          placeholder="395007"
-                          value={formData.pincode}
-                          onChange={(e) =>
-                            handleInputChange("pincode", e.target.value.replace(/\D/g, ""))
-                          }
-                          className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                            errors.pincode ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.pincode && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.pincode}</p>
-                        )}
-                      </div>
-
-                      {/* File 1: Passport-Size Photograph */}
-                      <div className="border border-dashed border-gray-300 rounded-2xl p-4 bg-gray-50/50">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1">
-                          Passport-Size Photograph
-                        </label>
-                        <p className="text-xs text-gray-500 font-modelica mb-3">
-                          JPG/PNG/WEBP, clear face photo (max 20MB)
-                        </p>
-                        {formData.photoFile ? (
-                          <div className="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-xl">
-                            <span className="text-xs font-semibold text-gray-800 truncate max-w-[200px]">
-                              {formData.photoFile.name}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => removeFile("photoFile")}
-                              className="text-red-500 hover:text-red-700 p-1"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ) : (
-                          <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
-                            <Upload className="w-4 h-4 text-[#95442c]" />
-                            Upload Photograph
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={(e) => handleFileChange("photoFile", e)}
-                            />
+                      {/* File Uploads - Passport Photo & Aadhaar Card in 1 Line */}
+                      <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* File 1: Passport-Size Photograph */}
+                        <div className="border border-dashed border-gray-300 rounded-2xl p-4 bg-gray-50/50">
+                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1">
+                            Passport-Size Photograph
                           </label>
-                        )}
-                      </div>
+                          <p className="text-xs text-gray-500 font-modelica mb-3">
+                            JPG/PNG/WEBP, clear face photo (max 20MB)
+                          </p>
+                          {formData.photoFile ? (
+                            <div className="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-xl">
+                              <span className="text-xs font-semibold text-gray-800 truncate flex-1 min-w-0 mr-2">
+                                {formData.photoFile.name}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => removeFile("photoFile")}
+                                className="text-red-500 hover:text-red-700 p-1 flex-shrink-0"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ) : (
+                            <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
+                              <Upload className="w-4 h-4 text-[#95442c]" />
+                              Upload Photograph
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handleFileChange("photoFile", e)}
+                              />
+                            </label>
+                          )}
+                        </div>
 
-                      {/* File 2: Aadhaar Card / ID Proof */}
-                      <div className="border border-dashed border-gray-300 rounded-2xl p-4 bg-gray-50/50">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1">
-                          Aadhaar Card / Government ID Proof
-                        </label>
-                        <p className="text-xs text-gray-500 font-modelica mb-3">
-                          PDF or Image of front & back (max 20MB)
-                        </p>
-                        {formData.idProofFile ? (
-                          <div className="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-xl">
-                            <span className="text-xs font-semibold text-gray-800 truncate max-w-[200px]">
-                              {formData.idProofFile.name}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => removeFile("idProofFile")}
-                              className="text-red-500 hover:text-red-700 p-1"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ) : (
-                          <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
-                            <Upload className="w-4 h-4 text-[#95442c]" />
-                            Upload ID Proof
-                            <input
-                              type="file"
-                              accept="image/*,application/pdf"
-                              className="hidden"
-                              onChange={(e) => handleFileChange("idProofFile", e)}
-                            />
+                        {/* File 2: Aadhaar Card / ID Proof */}
+                        <div className="border border-dashed border-gray-300 rounded-2xl p-4 bg-gray-50/50">
+                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1">
+                            Aadhaar Card / Government ID Proof
                           </label>
-                        )}
+                          <p className="text-xs text-gray-500 font-modelica mb-3">
+                            PDF or Image of front & back (max 20MB)
+                          </p>
+                          {formData.idProofFile ? (
+                            <div className="flex items-center justify-between p-2.5 bg-white border border-gray-200 rounded-xl">
+                              <span className="text-xs font-semibold text-gray-800 truncate flex-1 min-w-0 mr-2">
+                                {formData.idProofFile.name}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => removeFile("idProofFile")}
+                                className="text-red-500 hover:text-red-700 p-1 flex-shrink-0"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ) : (
+                            <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
+                              <Upload className="w-4 h-4 text-[#95442c]" />
+                              Upload ID Proof
+                              <input
+                                type="file"
+                                accept="image/*,application/pdf"
+                                className="hidden"
+                                onChange={(e) => handleFileChange("idProofFile", e)}
+                              />
+                            </label>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1194,20 +1260,20 @@ export default function Inquiry() {
                           Upload Fitness Certification Certificate
                         </label>
                         <p className="text-xs text-gray-500 font-modelica mb-3">
-                          Upload ACE, ACSM, ISSA, FGIIT, K11, or relevant certification (PDF/Image)
+                          Upload (PDF/Image)
                         </p>
                         {formData.certFile ? (
                           <div className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-xl">
-                            <div className="flex items-center gap-2">
-                              <FileText className="w-5 h-5 text-emerald-600" />
-                              <span className="text-xs font-semibold text-gray-800 truncate max-w-[280px]">
+                            <div className="flex items-center gap-2 flex-1 min-w-0 mr-2">
+                              <FileText className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                              <span className="text-xs font-semibold text-gray-800 truncate flex-1 min-w-0">
                                 {formData.certFile.name}
                               </span>
                             </div>
                             <button
                               type="button"
                               onClick={() => removeFile("certFile")}
-                              className="text-red-500 hover:text-red-700 p-1"
+                              className="text-red-500 hover:text-red-700 p-1 flex-shrink-0"
                             >
                               <X className="w-4 h-4" />
                             </button>
@@ -1247,20 +1313,13 @@ export default function Inquiry() {
                         <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
                           Higher Education Qualification <span className="text-red-500">*</span>
                         </label>
-                        <select
+                        <CustomSelect
                           value={formData.higherEducation}
                           onChange={(e) => handleInputChange("higherEducation", e.target.value)}
-                          className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                            errors.higherEducation ? "border-red-500" : "border-gray-300"
-                          }`}
-                        >
-                          <option value="">Select Qualification</option>
-                          {HIGHER_EDUCATION_OPTIONS.map((opt, i) => (
-                            <option key={i} value={opt}>
-                              {opt}
-                            </option>
-                          ))}
-                        </select>
+                          options={HIGHER_EDUCATION_OPTIONS}
+                          placeholder="Select Qualification"
+                          error={!!errors.higherEducation}
+                        />
                         {errors.higherEducation && (
                           <p className="text-red-500 text-xs mt-1 font-modelica">
                             {errors.higherEducation}
@@ -1268,10 +1327,10 @@ export default function Inquiry() {
                         )}
                       </div>
 
-                      {/* Additional Qualifications in Nutrition, Sports Science */}
+                      {/* Additional Qualifications */}
                       <div>
                         <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Additional Qualifications in Nutrition, Sports Science, Dietetics, or Strength & Conditioning (if any)
+                          Additional Qualifications (if any)
                         </label>
                         <textarea
                           rows={2}
@@ -1326,7 +1385,7 @@ export default function Inquiry() {
                                 value={type}
                                 checked={formData.employmentType === type}
                                 onChange={(e) => handleInputChange("employmentType", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c]"
+                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
                               />
                               <span className="text-xs sm:text-sm font-modelica">{type}</span>
                             </label>
@@ -1415,7 +1474,7 @@ export default function Inquiry() {
                                 onChange={(e) =>
                                   handleInputChange("recommendSupplements", e.target.value)
                                 }
-                                className="text-[#95442c] focus:ring-[#95442c]"
+                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
                               />
                               <span className="font-modelica text-sm">{choice}</span>
                             </label>
@@ -1483,7 +1542,7 @@ export default function Inquiry() {
                                 value={cat}
                                 checked={formData.clientCategory === cat}
                                 onChange={(e) => handleInputChange("clientCategory", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c]"
+                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
                               />
                               <span className="text-xs sm:text-sm font-modelica">{cat}</span>
                             </label>
@@ -1523,58 +1582,60 @@ export default function Inquiry() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Instagram */}
+                      {/* Platform Selector Dropdown */}
                       <div>
                         <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
-                          <FaInstagram className="text-pink-600 w-4 h-4" /> Instagram Profile Link
+                          <Share2 className="text-[#95442c] w-4 h-4" /> Select Social Media Platform
                         </label>
-                        <input
-                          type="text"
-                          placeholder="https://instagram.com/your_handle or @handle"
-                          value={formData.instagram}
-                          onChange={(e) => handleInputChange("instagram", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
+                        <CustomSelect
+                          value={formData.socialPlatform}
+                          onChange={(e) => handleInputChange("socialPlatform", e.target.value)}
+                          options={SOCIAL_PLATFORM_OPTIONS}
+                          placeholder="Select Platform"
                         />
                       </div>
 
-                      {/* Facebook */}
+                      {/* Dynamic Link Input Based on Selected Platform */}
                       <div>
                         <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
-                          <FaFacebook className="text-blue-600 w-4 h-4" /> Facebook Profile / Page Link
+                          {formData.socialPlatform === "Instagram" && (
+                            <FaInstagram className="text-pink-600 w-4 h-4 flex-shrink-0" />
+                          )}
+                          {formData.socialPlatform === "Facebook" && (
+                            <FaFacebook className="text-blue-600 w-4 h-4 flex-shrink-0" />
+                          )}
+                          {formData.socialPlatform === "YouTube" && (
+                            <FaYoutube className="text-red-600 w-4 h-4 flex-shrink-0" />
+                          )}
+                          {formData.socialPlatform === "LinkedIn" && (
+                            <FaLinkedin className="text-blue-700 w-4 h-4 flex-shrink-0" />
+                          )}
+                          {!["Instagram", "Facebook", "YouTube", "LinkedIn"].includes(formData.socialPlatform) && (
+                            <Share2 className="text-[#95442c] w-4 h-4 flex-shrink-0" />
+                          )}
+                          <span>
+                            {formData.socialPlatform === "Instagram" && "Instagram Profile Link"}
+                            {formData.socialPlatform === "Facebook" && "Facebook Profile / Page Link"}
+                            {formData.socialPlatform === "YouTube" && "YouTube Channel Link"}
+                            {formData.socialPlatform === "LinkedIn" && "LinkedIn Profile Link"}
+                            {!["Instagram", "Facebook", "YouTube", "LinkedIn"].includes(formData.socialPlatform) && "Profile / Channel Link"}
+                          </span>
                         </label>
                         <input
                           type="text"
-                          placeholder="https://facebook.com/your_page"
-                          value={formData.facebook}
-                          onChange={(e) => handleInputChange("facebook", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        />
-                      </div>
-
-                      {/* YouTube */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
-                          <FaYoutube className="text-red-600 w-4 h-4" /> YouTube Channel Link (if applicable)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="https://youtube.com/@channel"
-                          value={formData.youtube}
-                          onChange={(e) => handleInputChange("youtube", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        />
-                      </div>
-
-                      {/* LinkedIn */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
-                          <FaLinkedin className="text-blue-700 w-4 h-4" /> LinkedIn Profile Link (if applicable)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="https://linkedin.com/in/profile"
-                          value={formData.linkedin}
-                          onChange={(e) => handleInputChange("linkedin", e.target.value)}
+                          placeholder={
+                            formData.socialPlatform === "Instagram"
+                              ? "https://instagram.com/your_handle or @handle"
+                              : formData.socialPlatform === "Facebook"
+                              ? "https://facebook.com/your_page"
+                              : formData.socialPlatform === "YouTube"
+                              ? "https://youtube.com/@channel"
+                              : formData.socialPlatform === "LinkedIn"
+                              ? "https://linkedin.com/in/profile"
+                              : "Enter your profile or channel link"
+                          }
+                          value={formData.socialLink}
+                          onChange={(e) => handleInputChange("socialLink", e.target.value)}
                           className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
                         />
                       </div>
@@ -1612,18 +1673,12 @@ export default function Inquiry() {
                         <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
                           Instagram Followers (Approximate)
                         </label>
-                        <select
+                        <CustomSelect
                           value={formData.instagramFollowers}
                           onChange={(e) => handleInputChange("instagramFollowers", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        >
-                          <option value="">Select Range</option>
-                          {FOLLOWER_RANGES.map((r, i) => (
-                            <option key={i} value={r}>
-                              {r}
-                            </option>
-                          ))}
-                        </select>
+                          options={FOLLOWER_RANGES}
+                          placeholder="Select Range"
+                        />
                       </div>
 
                       {/* Monthly Reach */}
@@ -1661,7 +1716,7 @@ export default function Inquiry() {
                                 value={choice}
                                 checked={formData.regularPosts === choice}
                                 onChange={(e) => handleInputChange("regularPosts", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c]"
+                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
                               />
                               <span className="font-modelica text-sm">{choice}</span>
                             </label>
@@ -1711,7 +1766,7 @@ export default function Inquiry() {
                                   type="checkbox"
                                   checked={isChecked}
                                   onChange={() => handleAcquisitionToggle(ch)}
-                                  className="rounded text-[#95442c] focus:ring-[#95442c]"
+                                  className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
                                 />
                                 <span className="text-xs sm:text-sm font-modelica">{ch}</span>
                               </label>
@@ -1807,7 +1862,7 @@ export default function Inquiry() {
                                 value={opt}
                                 checked={formData.salesPotential === opt}
                                 onChange={(e) => handleInputChange("salesPotential", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c]"
+                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
                               />
                               <span className="font-modelica text-sm">{opt}</span>
                             </label>
@@ -1841,7 +1896,7 @@ export default function Inquiry() {
                     </div>
 
                     {/* Summary Quick Card */}
-                    <div className="bg-gray-50/80 rounded-2xl p-5 border border-gray-200 text-sm">
+                    <div className="bg-gray-50/80 rounded-2xl p-4 sm:p-5 border border-gray-200 text-sm">
                       <h4 className="font-toma font-bold text-gray-900 mb-3 flex items-center justify-between">
                         <span>Application Summary Overview</span>
                         <span className="text-xs text-[#95442c] font-semibold">
@@ -1850,24 +1905,24 @@ export default function Inquiry() {
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 text-xs font-modelica text-gray-600">
                         <div>
-                          <strong className="text-gray-800">Applicant:</strong> {formData.fullName} (
-                          {formData.gender}, {formData.dob})
+                          <strong className="text-gray-800">Applicant:</strong>{" "}
+                          <span className="break-words">{formData.fullName} ({formData.gender}, {formData.dob})</span>
                         </div>
                         <div>
-                          <strong className="text-gray-800">Contact:</strong> {formData.mobile} |{" "}
-                          {formData.email}
+                          <strong className="text-gray-800">Contact:</strong>{" "}
+                          <span className="break-all">{formData.mobile} | {formData.email}</span>
                         </div>
                         <div>
-                          <strong className="text-gray-800">Location:</strong> {formData.city},{" "}
-                          {formData.state} - {formData.pincode}
+                          <strong className="text-gray-800">Location:</strong>{" "}
+                          <span className="break-words">{formData.city}, {formData.state} - {formData.pincode}</span>
                         </div>
                         <div>
                           <strong className="text-gray-800">Experience:</strong>{" "}
-                          {formData.experienceYears} Years | {formData.activeClients} Active Clients
+                          <span>{formData.experienceYears} Years | {formData.activeClients} Active Clients</span>
                         </div>
                         <div>
                           <strong className="text-gray-800">Profession:</strong>{" "}
-                          {formData.employmentType}
+                          <span className="break-words">{formData.employmentType}</span>
                         </div>
                         <div>
                           <strong className="text-gray-800">Est. Sales Potential:</strong>{" "}
@@ -1877,10 +1932,10 @@ export default function Inquiry() {
                     </div>
 
                     {/* Declarations Checkboxes */}
-                    <div className="space-y-4 pt-2">
+                    <div className="space-y-3.5 pt-2">
                       {/* Declaration 1 */}
                       <label
-                        className={`p-4 rounded-2xl border flex items-start gap-3 cursor-pointer transition ${
+                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
                           formData.declarationAccurate
                             ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
                             : "border-gray-300 hover:bg-gray-50"
@@ -1892,13 +1947,13 @@ export default function Inquiry() {
                           onChange={(e) =>
                             handleInputChange("declarationAccurate", e.target.checked)
                           }
-                          className="mt-1 rounded text-[#95442c] focus:ring-[#95442c] w-4 h-4"
+                          className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
                         />
-                        <div>
-                          <span className="font-modelica text-sm font-semibold text-gray-900 block">
+                        <div className="flex-1 min-w-0">
+                          <span className="font-modelica text-xs sm:text-sm font-semibold text-gray-900 block leading-snug mb-0.5">
                             I confirm that the information submitted is accurate.
                           </span>
-                          <span className="text-xs text-gray-500 font-modelica">
+                          <span className="text-[11px] sm:text-xs text-gray-500 font-modelica block leading-relaxed">
                             All personal, professional, certification, and business information provided is true to the best of my knowledge.
                           </span>
                         </div>
@@ -1911,7 +1966,7 @@ export default function Inquiry() {
 
                       {/* Declaration 2 */}
                       <label
-                        className={`p-4 rounded-2xl border flex items-start gap-3 cursor-pointer transition ${
+                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
                           formData.declarationVerify
                             ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
                             : "border-gray-300 hover:bg-gray-50"
@@ -1923,13 +1978,13 @@ export default function Inquiry() {
                           onChange={(e) =>
                             handleInputChange("declarationVerify", e.target.checked)
                           }
-                          className="mt-1 rounded text-[#95442c] focus:ring-[#95442c] w-4 h-4"
+                          className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
                         />
-                        <div>
-                          <span className="font-modelica text-sm font-semibold text-gray-900 block">
+                        <div className="flex-1 min-w-0">
+                          <span className="font-modelica text-xs sm:text-sm font-semibold text-gray-900 block leading-snug mb-0.5">
                             I authorize RAG Nutrition to verify my professional certifications and submitted profile details.
                           </span>
-                          <span className="text-xs text-gray-500 font-modelica">
+                          <span className="text-[11px] sm:text-xs text-gray-500 font-modelica block leading-relaxed">
                             RAG Nutrition and Gomzi Life Sciences may conduct partner background and credential verifications.
                           </span>
                         </div>
@@ -1942,7 +1997,7 @@ export default function Inquiry() {
 
                       {/* Declaration 3 */}
                       <label
-                        className={`p-4 rounded-2xl border flex items-start gap-3 cursor-pointer transition ${
+                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
                           formData.declarationPrivacy
                             ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
                             : "border-gray-300 hover:bg-gray-50"
@@ -1954,13 +2009,13 @@ export default function Inquiry() {
                           onChange={(e) =>
                             handleInputChange("declarationPrivacy", e.target.checked)
                           }
-                          className="mt-1 rounded text-[#95442c] focus:ring-[#95442c] w-4 h-4"
+                          className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
                         />
-                        <div>
-                          <span className="font-modelica text-sm font-semibold text-gray-900 block">
+                        <div className="flex-1 min-w-0">
+                          <span className="font-modelica text-xs sm:text-sm font-semibold text-gray-900 block leading-snug mb-0.5">
                             I consent to the handling of my information in accordance with the program’s privacy policy.
                           </span>
-                          <span className="text-xs text-gray-500 font-modelica">
+                          <span className="text-[11px] sm:text-xs text-gray-500 font-modelica block leading-relaxed">
                             Data collected is strictly used for partner onboarding, commission disbursements, and account operations.
                           </span>
                         </div>
@@ -1977,15 +2032,15 @@ export default function Inquiry() {
                 {/* ========================================================
                     NAVIGATION BUTTONS
                    ======================================================== */}
-                <div className="pt-8 mt-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-gray-200 flex flex-row items-center justify-between gap-2.5 sm:gap-4">
                   {currentStep > 1 ? (
                     <button
                       type="button"
                       onClick={goToPrevStep}
                       disabled={submitting}
-                      className="w-full sm:w-auto px-6 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-toma font-bold rounded-xl transition flex items-center justify-center gap-2"
+                      className="flex-1 sm:flex-initial sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-toma font-bold rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base"
                     >
-                      <ChevronLeft className="w-4 h-4" /> Back to Section {currentStep - 1}
+                      <ChevronLeft className="w-4 h-4 flex-shrink-0" /> Back
                     </button>
                   ) : (
                     <div className="hidden sm:block" />
@@ -1995,30 +2050,31 @@ export default function Inquiry() {
                     <button
                       type="button"
                       onClick={goToNextStep}
-                      className="w-full sm:w-auto px-8 py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md shadow-[#95442c]/20"
+                      className={`flex-1 sm:flex-initial sm:w-auto px-4 sm:px-8 py-3 sm:py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-2 shadow-md shadow-[#95442c]/20 text-sm sm:text-base ${
+                        currentStep === 1 ? "w-full sm:w-auto sm:ml-auto" : ""
+                      }`}
                     >
-                      Continue to Section {currentStep + 1}{" "}
-                      <ChevronRight className="w-4 h-4" />
+                      Continue <ChevronRight className="w-4 h-4 flex-shrink-0" />
                     </button>
                   ) : (
                     <button
                       type="submit"
                       disabled={submitting || sendingOtp}
-                      className="w-full sm:w-auto px-10 py-4 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-black rounded-xl transition flex items-center justify-center gap-3 shadow-lg shadow-[#95442c]/30 disabled:opacity-50 text-base"
+                      className="flex-1 sm:flex-initial sm:w-auto px-2.5 sm:px-10 py-3 sm:py-4 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold sm:font-black rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-3 shadow-lg shadow-[#95442c]/30 disabled:opacity-50 text-xs sm:text-base"
                     >
                       {submitting ? (
                         <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Submitting Application...
+                          <div className="w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                          <span className="truncate">Submitting...</span>
                         </>
                       ) : sendingOtp ? (
                         <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Sending Verification OTP...
+                          <div className="w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                          <span className="truncate">Sending OTP...</span>
                         </>
                       ) : (
                         <>
-                          Submit Partner Application <ArrowRight className="w-5 h-5" />
+                          <span>Submit Application</span> <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 flex-shrink-0" />
                         </>
                       )}
                     </button>
@@ -2098,7 +2154,7 @@ export default function Inquiry() {
                   }}
                   placeholder="Enter 6-digit OTP"
                   autoFocus
-                  className="w-full text-center text-2xl font-mono tracking-[0.4em] py-3.5 px-4 bg-gray-50 border-2 border-gray-200 focus:border-[#95442c] focus:bg-white rounded-xl outline-none transition font-bold text-gray-800 placeholder:tracking-normal placeholder:font-sans placeholder:text-base placeholder:text-gray-400"
+                  className="w-full text-center text-xl sm:text-2xl font-mono tracking-[0.25em] sm:tracking-[0.4em] py-3 sm:py-3.5 px-3 sm:px-4 bg-gray-50 border-2 border-gray-200 focus:border-[#95442c] focus:bg-white rounded-xl outline-none transition font-bold text-gray-800 placeholder:tracking-normal placeholder:font-sans placeholder:text-sm sm:placeholder:text-base placeholder:text-gray-400"
                 />
               </div>
 

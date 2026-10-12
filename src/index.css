@@ -84,3 +84,10 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Form inputs brand theme */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #95442c;
+}
+
