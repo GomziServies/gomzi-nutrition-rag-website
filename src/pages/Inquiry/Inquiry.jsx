@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useId, useRef } from "react";
 import SEO from "../../component/SEO";
 import { states, getCities } from "../../utils/indiaLocation";
+import ragLogo from "../../assets/rag-partner-logo.png";
 import {
   sendContactInquiryApi,
   uploadFileApi,
@@ -120,20 +121,19 @@ function CustomSelect({
 
   // Normalize options: supports string array or { value, label } array
   const normalizedOptions = options.map((opt) =>
-    typeof opt === "object" && opt !== null
-      ? opt
-      : { value: opt, label: opt }
+    typeof opt === "object" && opt !== null ? opt : { value: opt, label: opt },
   );
 
   const selectedOption = normalizedOptions.find(
-    (opt) => String(opt.value) === String(value)
+    (opt) => String(opt.value) === String(value),
   );
 
-  const filteredOptions = searchable && searchQuery.trim()
-    ? normalizedOptions.filter((opt) =>
-        opt.label.toLowerCase().includes(searchQuery.toLowerCase().trim())
-      )
-    : normalizedOptions;
+  const filteredOptions =
+    searchable && searchQuery.trim()
+      ? normalizedOptions.filter((opt) =>
+          opt.label.toLowerCase().includes(searchQuery.toLowerCase().trim()),
+        )
+      : normalizedOptions;
 
   // Close on outside click
   useEffect(() => {
@@ -172,12 +172,12 @@ function CustomSelect({
         type="button"
         id={id}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-left bg-white transition flex items-center justify-between cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
+        className={`w-full h-[44px] border-[1.5px] rounded-lg px-3.5 text-sm font-medium text-left bg-white transition flex items-center justify-between cursor-pointer focus:outline-none ${
           error
-            ? "border-red-500 bg-red-50/10"
+            ? "border-[#ef4444] bg-[#fef2f2]"
             : isOpen
-            ? "border-[#95442c] ring-2 ring-[#95442c]/20"
-            : "border-gray-300 hover:border-gray-400"
+              ? "border-[#95442c] ring-3 ring-[#95442c]/20"
+              : "border-[#cbd5e1] hover:border-[#95442c]"
         }`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -185,8 +185,8 @@ function CustomSelect({
         <span
           className={`truncate ${
             selectedOption && selectedOption.value !== ""
-              ? "text-gray-900 font-medium"
-              : "text-gray-400"
+              ? "text-[#0f172a] font-medium"
+              : "text-[#94a3b8] font-normal"
           }`}
         >
           {selectedOption && selectedOption.value !== ""
@@ -194,31 +194,31 @@ function CustomSelect({
             : placeholder}
         </span>
         <ChevronDown
-          className={`w-4 h-4 text-gray-500 transition-transform duration-200 flex-shrink-0 ml-2 ${
+          className={`w-4 h-4 text-[#64748b] transition-transform duration-200 flex-shrink-0 ml-2 ${
             isOpen ? "rotate-180 text-[#95442c]" : ""
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-60 overflow-hidden flex flex-col animate-fadeIn">
+        <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border-[1.5px] border-[#cbd5e1] rounded-lg shadow-xl z-50 max-h-60 overflow-hidden flex flex-col animate-fadeIn">
           {searchable && (
-            <div className="p-2 border-b border-gray-100 bg-gray-50/90 sticky top-0 z-10">
+            <div className="p-2 border-b border-[#f1f5f9] bg-white sticky top-0 z-10">
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Type to search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs font-modelica bg-white border border-gray-200 rounded-lg outline-none focus:border-[#95442c] focus:ring-1 focus:ring-[#95442c]"
+                className="w-full h-[36px] px-3 text-xs bg-white border border-[#cbd5e1] rounded-md outline-none focus:border-[#95442c] focus:ring-1 focus:ring-[#95442c] text-[#0f172a]"
                 onClick={(e) => e.stopPropagation()}
               />
             </div>
           )}
 
-          <div className="overflow-y-auto py-1 max-h-52 divide-y divide-gray-50">
+          <div className="overflow-y-auto py-1 max-h-52 divide-y divide-[#f1f5f9]">
             {filteredOptions.length === 0 ? (
-              <div className="px-4 py-3 text-xs text-gray-400 text-center font-modelica">
+              <div className="px-4 py-3 text-xs text-[#94a3b8] text-center">
                 No matching options found
               </div>
             ) : (
@@ -229,10 +229,10 @@ function CustomSelect({
                     type="button"
                     key={`${opt.value}-${idx}`}
                     onClick={() => handleSelect(opt.value)}
-                    className={`w-full px-4 py-2.5 text-sm font-modelica text-left flex items-center justify-between cursor-pointer transition ${
+                    className={`w-full px-4 py-2.5 text-sm text-left flex items-center justify-between cursor-pointer transition ${
                       isSelected
                         ? "bg-[#95442c] text-white font-semibold"
-                        : "text-gray-700 hover:bg-[#fdf5f2] hover:text-[#95442c]"
+                        : "text-[#334155] hover:bg-[#fdf5f2] hover:text-[#95442c]"
                     }`}
                   >
                     <span className="truncate">{opt.label}</span>
@@ -257,8 +257,7 @@ function FilePreviewCard({ file, onRemove }) {
     file?.type?.startsWith("image/") ||
     /\.(jpg|jpeg|png|webp|gif)$/i.test(file?.name || "");
   const isPdf =
-    file?.type === "application/pdf" ||
-    /\.pdf$/i.test(file?.name || "");
+    file?.type === "application/pdf" || /\.pdf$/i.test(file?.name || "");
 
   useEffect(() => {
     if (file && isImage) {
@@ -279,7 +278,7 @@ function FilePreviewCard({ file, onRemove }) {
   };
 
   return (
-    <div className="flex items-center gap-3 p-2.5 bg-white border border-gray-200 rounded-xl shadow-xs transition hover:border-gray-300">
+    <div className="flex items-center gap-3 p-2.5 bg-white border-[1.5px] border-[#e2e8f0] rounded-lg shadow-xs transition hover:border-[#cbd5e1]">
       {/* Thumbnail */}
       {isImage && previewUrl ? (
         <a
@@ -292,14 +291,14 @@ function FilePreviewCard({ file, onRemove }) {
           <img
             src={previewUrl}
             alt={file?.name || "Preview"}
-            className="w-12 h-12 rounded-lg object-cover border border-gray-200"
+            className="w-12 h-12 rounded-lg object-cover border border-[#e2e8f0]"
           />
           <div className="absolute inset-0 bg-black/30 rounded-lg opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white">
             <Eye className="w-3.5 h-3.5" />
           </div>
         </a>
       ) : (
-        <div className="w-12 h-12 rounded-lg bg-orange-50/70 border border-orange-200/80 flex flex-col items-center justify-center text-[#95442c] flex-shrink-0">
+        <div className="w-12 h-12 rounded-lg bg-[#fdf5f2] border border-[#95442c]/20 flex flex-col items-center justify-center text-[#95442c] flex-shrink-0">
           <FileText className="w-5 h-5 text-[#95442c]" />
           <span className="text-[10px] font-bold uppercase mt-0.5 font-mono">
             {isPdf ? "PDF" : "DOC"}
@@ -309,15 +308,18 @@ function FilePreviewCard({ file, onRemove }) {
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-xs sm:text-sm font-semibold text-gray-800 truncate" title={file?.name}>
+        <p
+          className="text-xs sm:text-sm font-semibold text-[#0f172a] truncate"
+          title={file?.name}
+        >
           {file?.name}
         </p>
         <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-[11px] text-gray-500 font-mono">
+          <span className="text-[11px] text-[#64748b] font-mono">
             {formatFileSize(file?.size)}
           </span>
-          <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
-            <CheckCircle2 className="w-3 h-3" /> Uploaded
+          <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Uploaded
           </span>
         </div>
       </div>
@@ -326,7 +328,7 @@ function FilePreviewCard({ file, onRemove }) {
       <button
         type="button"
         onClick={onRemove}
-        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition flex-shrink-0"
+        className="p-1.5 text-[#94a3b8] hover:text-[#ef4444] hover:bg-red-50 rounded-lg transition flex-shrink-0 cursor-pointer"
         title="Remove file"
       >
         <X className="w-4 h-4" />
@@ -364,12 +366,41 @@ export default function Inquiry() {
     return () => clearInterval(timer);
   }, [resendCooldown]);
 
+  // Form Container Ref for smooth auto-scroll to form on step transitions
+  const formTopRef = useRef(null);
+  const isFirstMount = useRef(true);
+
+  const scrollToFormTop = () => {
+    if (formTopRef.current) {
+      const navOffset = 85; // navbar height + comfortable breathing room
+      const elementPosition = formTopRef.current.getBoundingClientRect().top;
+      const scrollY =
+        window.scrollY ??
+        window.pageYOffset ??
+        document.documentElement.scrollTop;
+      const offsetPosition = elementPosition + scrollY - navOffset;
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Automatically scroll to the top of the form section on every step change
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+    scrollToFormTop();
+  }, [currentStep]);
+
   // Form State
   const [formData, setFormData] = useState({
     // Section 1: Personal
     fullName: "",
     dob: "",
-    gender: "Male",
+    gender: "",
     mobile: "",
     whatsapp: "",
     email: "",
@@ -388,18 +419,18 @@ export default function Inquiry() {
     additionalQualifications: "",
 
     // Section 3: Professional
-    employmentType: "Self-employed",
+    employmentType: "",
     otherEmploymentType: "",
     experienceYears: "",
     activeClients: "",
-    recommendSupplements: "Yes",
+    recommendSupplements: "",
     supplementBrands: "",
     monthlySupplementPurchases: "",
-    clientCategory: "Weight Loss",
+    clientCategory: "",
     otherClientCategory: "",
 
     // Section 4: Social
-    socialPlatform: "Instagram",
+    socialPlatform: "",
     socialLink: "",
     instagram: "",
     facebook: "",
@@ -409,15 +440,15 @@ export default function Inquiry() {
     otherSocial: "",
     instagramFollowers: "",
     monthlyReach: "",
-    regularPosts: "Yes",
+    regularPosts: "",
 
     // Section 5: Sales Potential
-    clientAcquisition: ["Gym / Fitness Studio", "Instagram / Social Media"],
+    clientAcquisition: [],
     otherClientAcquisition: "",
     monthlyInteractions: "",
     clientsUsingSupplements: "",
     commonSupplement: "",
-    salesPotential: "6–15 Products",
+    salesPotential: "",
 
     // Section 6: Declarations
     declarationAccurate: false,
@@ -426,7 +457,9 @@ export default function Inquiry() {
   });
 
   // Available cities based on selected state
-  const availableCities = formData.stateCode ? getCities(formData.stateCode) : [];
+  const availableCities = formData.stateCode
+    ? getCities(formData.stateCode)
+    : [];
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => {
@@ -505,91 +538,137 @@ export default function Inquiry() {
     setFormData((prev) => ({ ...prev, [field]: null }));
   };
 
-  // Step Validations
-  const validateStep = (step) => {
+  // Validate all fields across all sections on the page
+  const validateAll = () => {
     const newErrors = {};
+    let firstErrorField = null;
 
-    if (step === 1) {
-      if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-      if (!formData.dob) newErrors.dob = "Date of birth is required";
-      if (!formData.gender) newErrors.gender = "Gender is required";
-      if (!formData.mobile.trim() || formData.mobile.trim().length < 10) {
-        newErrors.mobile = "Valid 10-digit mobile number is required";
-      }
-      if (!formData.whatsapp.trim()) {
-        newErrors.whatsapp = "WhatsApp number is required";
-      }
-      if (
-        !formData.email.trim() ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-      ) {
-        newErrors.email = "Valid email address is required";
-      }
-      if (!formData.address.trim()) newErrors.address = "Complete address is required";
-      if (!formData.state.trim()) newErrors.state = "State is required";
-      if (!formData.city.trim()) newErrors.city = "City is required";
-      if (!formData.pincode.trim() || formData.pincode.trim().length !== 6) {
-        newErrors.pincode = "Valid 6-digit PIN code is required";
-      }
-    } else if (step === 2) {
-      if (!formData.higherEducation) {
-        newErrors.higherEducation = "Please select your higher education qualification";
-      }
-    } else if (step === 3) {
-      if (!formData.experienceYears) {
-        newErrors.experienceYears = "Please provide your years of experience";
-      }
-      if (!formData.activeClients) {
-        newErrors.activeClients = "Please enter number of active clients";
-      }
-      if (formData.recommendSupplements === "Yes" && !formData.supplementBrands.trim()) {
-        newErrors.supplementBrands = "Please specify brands you recommend or sell";
-      }
-    } else if (step === 5) {
-      if (formData.clientAcquisition.length === 0) {
-        newErrors.clientAcquisition = "Please select at least one client acquisition channel";
-      }
-      if (!formData.salesPotential) {
-        newErrors.salesPotential = "Please select your estimated sales potential";
-      }
-    } else if (step === 6) {
-      if (!formData.declarationAccurate) {
-        newErrors.declarationAccurate = "Please confirm that information submitted is accurate";
-      }
-      if (!formData.declarationVerify) {
-        newErrors.declarationVerify = "Please authorize RAG Nutrition to verify details";
-      }
-      if (!formData.declarationPrivacy) {
-        newErrors.declarationPrivacy = "Please consent to the privacy policy";
-      }
+    // Section 1: Personal & Basic Details
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+      if (!firstErrorField) firstErrorField = "fullName";
+    }
+    if (!formData.dob) {
+      newErrors.dob = "Date of birth is required";
+      if (!firstErrorField) firstErrorField = "dob";
+    }
+    if (!formData.gender) {
+      newErrors.gender = "Gender is required";
+      if (!firstErrorField) firstErrorField = "gender";
+    }
+    if (!formData.mobile.trim() || formData.mobile.trim().length < 10) {
+      newErrors.mobile = "Valid 10-digit mobile number is required";
+      if (!firstErrorField) firstErrorField = "mobile";
+    }
+    if (!formData.whatsapp.trim()) {
+      newErrors.whatsapp = "WhatsApp number is required";
+      if (!firstErrorField) firstErrorField = "whatsapp";
+    }
+    if (
+      !formData.email.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      newErrors.email = "Valid email address is required";
+      if (!firstErrorField) firstErrorField = "email";
+    }
+    if (!formData.address.trim()) {
+      newErrors.address = "Complete address is required";
+      if (!firstErrorField) firstErrorField = "address";
+    }
+    if (!formData.state.trim()) {
+      newErrors.state = "State is required";
+      if (!firstErrorField) firstErrorField = "state";
+    }
+    if (!formData.city.trim()) {
+      newErrors.city = "City is required";
+      if (!firstErrorField) firstErrorField = "city";
+    }
+    if (!formData.pincode.trim() || formData.pincode.trim().length !== 6) {
+      newErrors.pincode = "Valid 6-digit PIN code is required";
+      if (!firstErrorField) firstErrorField = "pincode";
+    }
+
+    // Section 2: Fitness & Professional Certifications
+    if (!formData.higherEducation) {
+      newErrors.higherEducation =
+        "Please select your higher education qualification";
+      if (!firstErrorField) firstErrorField = "higherEducation";
+    }
+
+    // Section 3: Professional Details
+    if (!formData.employmentType) {
+      newErrors.employmentType =
+        "Please select your profession / employment type";
+      if (!firstErrorField) firstErrorField = "employmentType";
+    }
+    if (
+      formData.experienceYears === "" ||
+      Number(formData.experienceYears) < 0
+    ) {
+      newErrors.experienceYears = "Please provide your years of experience";
+      if (!firstErrorField) firstErrorField = "experienceYears";
+    }
+    if (formData.activeClients === "" || Number(formData.activeClients) < 0) {
+      newErrors.activeClients = "Please enter number of active clients";
+      if (!firstErrorField) firstErrorField = "activeClients";
+    }
+    if (!formData.recommendSupplements) {
+      newErrors.recommendSupplements =
+        "Please specify whether you recommend supplements";
+      if (!firstErrorField) firstErrorField = "recommendSupplements";
+    } else if (
+      formData.recommendSupplements === "Yes" &&
+      !formData.supplementBrands.trim()
+    ) {
+      newErrors.supplementBrands =
+        "Please specify brands you recommend or sell";
+      if (!firstErrorField) firstErrorField = "supplementBrands";
+    }
+    if (!formData.clientCategory) {
+      newErrors.clientCategory = "Please select your primary client category";
+      if (!firstErrorField) firstErrorField = "clientCategory";
+    }
+
+    // Section 5: Business Potential & Supplement Sales
+    if (formData.clientAcquisition.length === 0) {
+      newErrors.clientAcquisition =
+        "Please select at least one client acquisition channel";
+      if (!firstErrorField) firstErrorField = "clientAcquisition";
+    }
+    if (!formData.salesPotential) {
+      newErrors.salesPotential = "Please select your estimated sales potential";
+      if (!firstErrorField) firstErrorField = "salesPotential";
+    }
+
+    // Section 6: Verification & Declaration
+    if (!formData.declarationAccurate) {
+      newErrors.declarationAccurate =
+        "Please confirm that information submitted is accurate";
+      if (!firstErrorField) firstErrorField = "declarationAccurate";
+    }
+    if (!formData.declarationVerify) {
+      newErrors.declarationVerify =
+        "Please authorize RAG Nutrition to verify details";
+      if (!firstErrorField) firstErrorField = "declarationVerify";
+    }
+    if (!formData.declarationPrivacy) {
+      newErrors.declarationPrivacy = "Please consent to the privacy policy";
+      if (!firstErrorField) firstErrorField = "declarationPrivacy";
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return { isValid: Object.keys(newErrors).length === 0, firstErrorField };
   };
 
-  const goToNextStep = () => {
-    if (validateStep(currentStep)) {
-      setErrors({});
-      setCurrentStep((prev) => Math.min(prev + 1, 6));
-      window.scrollTo({ top: 300, behavior: "smooth" });
-    } else {
-      errorToast("Please fill in all required fields before continuing");
-    }
-  };
-
-  const goToPrevStep = () => {
-    setErrors({});
-    setCurrentStep((prev) => Math.max(prev - 1, 1));
-    window.scrollTo({ top: 300, behavior: "smooth" });
-  };
+  const validateStep = () => validateAll().isValid;
+  const goToNextStep = () => {};
+  const goToPrevStep = () => {};
 
   // Send Email OTP
   const handleSendEmailOtp = async () => {
     const email = formData.email?.trim();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errorToast("Please enter a valid email address in Section 1");
-      setCurrentStep(1);
+      errorToast("Please enter a valid email address");
       return false;
     }
 
@@ -608,9 +687,7 @@ export default function Inquiry() {
         "";
 
       const devOtp =
-        response?.data?.data?.dev_otp ||
-        response?.data?.dev_otp ||
-        "";
+        response?.data?.data?.dev_otp || response?.data?.dev_otp || "";
 
       if (!vId) {
         throw new Error("Did not receive verification ID from server");
@@ -685,21 +762,23 @@ export default function Inquiry() {
 
   // Submit Handler (Requires Email OTP verification before submitting)
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
 
-    // Guard: Prevent submission if not on the final step (Section 6)
-    if (currentStep < 6) {
-      goToNextStep();
-      return;
-    }
-
-    // Validate all steps before submitting
-    for (let s = 1; s <= 6; s++) {
-      if (!validateStep(s)) {
-        setCurrentStep(s);
-        errorToast(`Please complete the required fields in Section ${s}`);
-        return;
+    const { isValid, firstErrorField } = validateAll();
+    if (!isValid) {
+      errorToast("Please fill in all required fields marked in red");
+      if (firstErrorField) {
+        const el =
+          document.getElementById(firstErrorField) ||
+          document.querySelector(`[name="${firstErrorField}"]`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.focus?.();
+        } else {
+          scrollToFormTop();
+        }
       }
+      return;
     }
 
     // If OTP was already verified, submit directly
@@ -730,7 +809,8 @@ export default function Inquiry() {
         if (!file) return "";
         try {
           const res = await uploadFileApi(file, "contact-inquiry");
-          const url = res?.data?.data?.fileURLs?.[0] || res?.data?.fileURLs?.[0] || "";
+          const url =
+            res?.data?.data?.fileURLs?.[0] || res?.data?.fileURLs?.[0] || "";
           if (url) {
             filesList.push({ url, remark });
             return url;
@@ -743,13 +823,22 @@ export default function Inquiry() {
       };
 
       if (formData.photoFile) {
-        photoUrl = await safeUpload(formData.photoFile, "Passport-Size Photograph");
+        photoUrl = await safeUpload(
+          formData.photoFile,
+          "Passport-Size Photograph",
+        );
       }
       if (formData.idProofFile) {
-        idProofUrl = await safeUpload(formData.idProofFile, "Aadhaar Card / Government ID");
+        idProofUrl = await safeUpload(
+          formData.idProofFile,
+          "Aadhaar Card / Government ID",
+        );
       }
       if (formData.certFile) {
-        certUrl = await safeUpload(formData.certFile, "Fitness Certification Certificate");
+        certUrl = await safeUpload(
+          formData.certFile,
+          "Fitness Certification Certificate",
+        );
       }
 
       // 2. Build details object
@@ -918,7 +1007,7 @@ export default function Inquiry() {
       errorToast(
         err?.response?.data?.message ||
           err?.message ||
-          "Failed to submit application. Please check details and try again."
+          "Failed to submit application. Please check details and try again.",
       );
     } finally {
       setSubmitting(false);
@@ -932,24 +1021,117 @@ export default function Inquiry() {
         description="Apply for the official RAG Pro Partner Program by Gomzi Nutrition. High margins, 100% genuine lab-tested supplements, and dedicated business support for certified fitness professionals."
       />
 
-      <div className="min-h-screen bg-white pt-8 sm:pt-12 pb-16 sm:pb-20">
+      {/* Pristine Clean Production Theme (from gomzi-admin) */}
+      <style>{`
+        .inquiry-theme-scope,
+        .inquiry-theme-scope input,
+        .inquiry-theme-scope select,
+        .inquiry-theme-scope textarea,
+        .inquiry-theme-scope button,
+        .inquiry-theme-scope label,
+        .inquiry-theme-scope span,
+        .inquiry-theme-scope p,
+        .inquiry-theme-scope h1,
+        .inquiry-theme-scope h2,
+        .inquiry-theme-scope h3,
+        .inquiry-theme-scope h4 {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+        .emp-clean-input {
+          background-color: #ffffff !important;
+          border: 1.5px solid #cbd5e1 !important;
+          color: #0f172a !important;
+          font-size: 14px !important;
+          font-weight: 500 !important;
+          border-radius: 8px !important;
+          height: 44px !important;
+          padding: 8px 14px !important;
+          transition: all 0.2s ease !important;
+          width: 100% !important;
+          outline: none !important;
+        }
+        .emp-clean-input:focus {
+          border-color: #95442c !important;
+          box-shadow: 0 0 0 3px rgba(149, 68, 44, 0.18) !important;
+          outline: none !important;
+          background-color: #ffffff !important;
+        }
+        .emp-clean-input::placeholder {
+          color: #94a3b8 !important;
+          font-weight: 400 !important;
+        }
+        .emp-clean-input.is-invalid {
+          border-color: #ef4444 !important;
+          background-color: #fef2f2 !important;
+        }
+        textarea.emp-clean-input {
+          height: auto !important;
+          min-height: 84px !important;
+          padding: 10px 14px !important;
+        }
+        .emp-clean-label {
+          color: #0f172a !important;
+          font-size: 13px !important;
+          font-weight: 700 !important;
+          margin-bottom: 6px !important;
+          display: block !important;
+        }
+        .emp-card-box {
+          background-color: #ffffff !important;
+          border: 1.5px solid #e2e8f0 !important;
+          border-radius: 14px !important;
+          box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05), 0 2px 6px -1px rgba(0,0,0,0.02) !important;
+          overflow: visible !important;
+          position: relative !important;
+        }
+        .emp-upload-box {
+          background-color: #ffffff !important;
+          border: 2px dashed #cbd5e1 !important;
+          border-radius: 12px !important;
+          padding: 20px !important;
+          transition: all 0.2s ease !important;
+        }
+        .emp-upload-box:hover {
+          border-color: #95442c !important;
+          background-color: rgba(149, 68, 44, 0.02) !important;
+        }
+        .inquiry-theme-scope {
+          background-color: #ffffff !important;
+        }
+      `}</style>
+
+      <div className="inquiry-theme-scope min-h-screen bg-white pt-8 sm:pt-12 pb-16 sm:pb-20 font-inter">
         {isSuccess && <Confetti numberOfPieces={250} recycle={false} />}
 
-        {/* Hero Banner */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 text-center">
-          <h1 className="font-toma text-3xl sm:text-4xl md:text-5xl font-black text-[#111111] tracking-tight mb-2">
+        {/* Brand Logo & Hero Header */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 text-center font-inter">
+          <div className="flex justify-center mb-4 sm:mb-5">
+            <a
+              href="/"
+              className="inline-block transition-transform hover:scale-105 active:scale-95"
+              title="RAG Nutrition"
+            >
+              <img
+                src={ragLogo}
+                alt="RAG Nutrition Logo"
+                className="h-20 sm:h-24 md:h-28 w-auto object-contain mx-auto"
+              />
+            </a>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0f172a] tracking-tight mb-2">
             RAG Pro Partner Program
           </h1>
-          <p className="font-modelica text-gray-600 text-sm sm:text-base md:text-lg max-w-4xl mx-auto leading-relaxed text-center whitespace-normal sm:whitespace-nowrap">
-            Empower your clients with lab-tested nutrition and unlock exclusive partner margins.
+          <p className="text-[#64748b] text-sm sm:text-base md:text-lg max-w-4xl mx-auto leading-relaxed text-center whitespace-normal sm:whitespace-nowrap font-normal">
+            Empower your clients with lab-tested nutrition and unlock exclusive
+            partner margins.
           </p>
         </section>
 
         {/* Main Application Container */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 font-inter">
           {isSuccess ? (
             /* SUCCESS CELEBRATION VIEW */
-            <div className="bg-white rounded-2xl p-6 sm:p-12 border-2 border-[#95442c] text-center animate-fadeIn">
+            <div className="emp-card-box p-6 sm:p-12 text-center animate-fadeIn">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-inner">
                 <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12" />
               </div>
@@ -958,34 +1140,50 @@ export default function Inquiry() {
                 Application Received
               </span>
 
-              <h2 className="font-toma text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a] mb-3">
                 Welcome to the RAG Pro Partner Network!
               </h2>
 
-              <p className="font-modelica text-gray-600 text-sm sm:text-base max-w-lg mx-auto mb-6 leading-relaxed">
-                Thank you, <span className="font-bold text-gray-900">{formData.fullName}</span>!
-                Your application has been received and logged in our partner verification system.
+              <p className="text-[#64748b] text-sm sm:text-base max-w-lg mx-auto mb-6 leading-relaxed">
+                Thank you,{" "}
+                <span className="font-bold text-[#0f172a]">
+                  {formData.fullName}
+                </span>
+                ! Your application has been received and logged in our partner
+                verification system.
               </p>
 
-              <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 max-w-md mx-auto mb-8 border border-gray-200 text-left">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pb-3 border-b border-gray-200">
-                  <span className="text-xs font-modelica text-gray-500 uppercase tracking-wide">Application Reference</span>
-                  <span className="font-mono text-xs sm:text-sm font-bold text-[#95442c] break-all">{submissionId}</span>
+              <div className="bg-white rounded-xl p-4 sm:p-6 max-w-md mx-auto mb-8 border border-[#e2e8f0] text-left shadow-2xs">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pb-3 border-b border-[#e2e8f0]">
+                  <span className="text-xs text-[#64748b] uppercase tracking-wide font-medium">
+                    Application Reference
+                  </span>
+                  <span className="font-mono text-xs sm:text-sm font-bold text-[#95442c] break-all">
+                    {submissionId}
+                  </span>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 py-3 border-b border-gray-200">
-                  <span className="text-xs font-modelica text-gray-500">Registered Email</span>
-                  <span className="text-xs sm:text-sm font-semibold text-gray-800 break-all">{formData.email}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 py-3 border-b border-[#e2e8f0]">
+                  <span className="text-xs text-[#64748b] font-medium">
+                    Registered Email
+                  </span>
+                  <span className="text-xs sm:text-sm font-semibold text-[#0f172a] break-all">
+                    {formData.email}
+                  </span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pt-3">
-                  <span className="text-xs font-modelica text-gray-500">Next Action</span>
-                  <span className="text-xs sm:text-sm font-semibold text-emerald-600">Verification within 24-48 hrs</span>
+                  <span className="text-xs text-[#64748b] font-medium">
+                    Next Action
+                  </span>
+                  <span className="text-xs sm:text-sm font-semibold text-emerald-600">
+                    Verification within 24-48 hrs
+                  </span>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <a
                   href="/gomzi-supplement"
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition shadow-md text-sm sm:text-base text-center"
+                  className="w-full sm:w-auto h-[44px] px-6 sm:px-8 bg-[#95442c] hover:bg-[#7d3824] text-white font-bold rounded-lg transition shadow-sm text-sm sm:text-base flex items-center justify-center"
                 >
                   Explore Supplements Catalog
                 </a>
@@ -993,1173 +1191,1524 @@ export default function Inquiry() {
                   type="button"
                   onClick={() => {
                     setIsSuccess(false);
-                    setCurrentStep(1);
+                    scrollToFormTop();
                   }}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-toma font-semibold rounded-xl transition text-sm sm:text-base text-center"
+                  className="w-full sm:w-auto h-[44px] px-6 sm:px-8 bg-white hover:bg-slate-50 text-[#334155] border-[1.5px] border-[#cbd5e1] font-semibold rounded-lg transition text-sm sm:text-base text-center cursor-pointer"
                 >
                   Submit Another Form
                 </button>
               </div>
             </div>
           ) : (
-            /* APPLICATION FORM */
-            <div className="border-2 border-[#95442c] rounded-2xl p-5 sm:p-8 md:p-10 bg-white">
+            /* APPLICATION FORM - ALL SECTIONS ON SINGLE PAGE */
+            <div ref={formTopRef}>
               <form
                 onSubmit={handleSubmit}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
                     e.preventDefault();
-                    if (currentStep < 6) {
-                      goToNextStep();
-                    }
                   }
                 }}
                 noValidate
                 style={{ accentColor: "#95442c" }}
               >
                 {/* ========================================================
-                    SECTION 1: PERSONAL INFORMATION
+                    SECTION 1: PERSONAL & BASIC DETAILS
                    ======================================================== */}
-                {currentStep === 1 && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-center gap-2 text-[#95442c] font-toma text-sm font-bold uppercase tracking-wider mb-1">
-                        <User className="w-4 h-4" /> Section 1 of 6
-                      </div>
-                      <h2 className="font-toma text-2xl font-bold text-gray-900">
-                        Personal Information
-                      </h2>
-                      <p className="font-modelica text-gray-500 text-sm">
-                        Please provide accurate identity and contact details for your partner account.
-                      </p>
+                <div
+                  id="section-1"
+                  className="emp-card-box p-5 sm:p-8 mb-6 sm:mb-8"
+                >
+                  {/* Metronic / gomzi-admin Section Header */}
+                  <div className="flex items-center gap-3.5 pb-5 mb-6 border-b border-[#f1f5f9]">
+                    <div
+                      className="flex items-center justify-center rounded-lg flex-shrink-0"
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        backgroundColor: "rgba(149, 68, 44, 0.1)",
+                        color: "#95442c",
+                        border: "1.5px solid rgba(149, 68, 44, 0.2)",
+                      }}
+                    >
+                      <User className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                        Personal & Basic Details
+                      </h3>
+                      <span className="text-xs sm:text-sm text-[#64748b]">
+                        Primary identity, contact coordinates, and residential
+                        location
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {/* Full Name */}
+                    <div className="md:col-span-2">
+                      <label className="emp-clean-label">
+                        Full Name <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="fullName"
+                        placeholder="e.g. Rahul Sharma"
+                        value={formData.fullName}
+                        onChange={(e) =>
+                          handleInputChange("fullName", e.target.value)
+                        }
+                        className={`emp-clean-input ${
+                          errors.fullName ? "is-invalid" : ""
+                        }`}
+                      />
+                      {errors.fullName && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.fullName}
+                        </p>
+                      )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      {/* Full Name */}
-                      <div className="md:col-span-2">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Full Name <span className="text-red-500">*</span>
+                    {/* Date of Birth */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Date of Birth <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        id="dob"
+                        value={formData.dob}
+                        onChange={(e) =>
+                          handleInputChange("dob", e.target.value)
+                        }
+                        className={`emp-clean-input ${
+                          errors.dob ? "is-invalid" : ""
+                        }`}
+                      />
+                      {errors.dob && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.dob}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Gender */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Gender <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <CustomSelect
+                        id="gender"
+                        value={formData.gender}
+                        onChange={(e) =>
+                          handleInputChange("gender", e.target.value)
+                        }
+                        options={[
+                          "Male",
+                          "Female",
+                          "Other",
+                          "Prefer not to say",
+                        ]}
+                        placeholder="Select Gender"
+                        error={!!errors.gender}
+                      />
+                      {errors.gender && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.gender}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Mobile Number */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5 min-h-[22px]">
+                        <label className="emp-clean-label !mb-0">
+                          Mobile Number{" "}
+                          <span className="text-[#ef4444]">*</span>
+                        </label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-[44px] px-3 bg-white border-[1.5px] border-[#cbd5e1] rounded-lg flex items-center gap-1.5 text-sm font-semibold text-[#0f172a] flex-shrink-0 cursor-default select-none">
+                          <span>+91</span>
+                          <ChevronDown className="w-3.5 h-3.5 text-[#64748b]" />
+                        </div>
+                        <input
+                          type="tel"
+                          id="mobile"
+                          maxLength={10}
+                          placeholder="9876543210"
+                          value={formData.mobile}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "mobile",
+                              e.target.value.replace(/\D/g, ""),
+                            )
+                          }
+                          className={`emp-clean-input ${
+                            errors.mobile ? "is-invalid" : ""
+                          }`}
+                        />
+                      </div>
+                      {errors.mobile && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.mobile}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* WhatsApp Number */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5 min-h-[22px]">
+                        <label className="emp-clean-label !mb-0">
+                          WhatsApp Number{" "}
+                          <span className="text-[#ef4444]">*</span>
+                        </label>
+                        <label className="inline-flex items-center gap-1.5 text-xs text-[#95442c] font-semibold cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={sameAsMobile}
+                            onChange={(e) =>
+                              handleSameAsMobileToggle(e.target.checked)
+                            }
+                            className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                          />
+                          Same as Mobile
+                        </label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`h-[44px] px-3 border-[1.5px] rounded-lg flex items-center gap-1.5 text-sm font-semibold flex-shrink-0 cursor-default select-none ${
+                            sameAsMobile
+                              ? "bg-[#f8fafc] border-[#cbd5e1] text-[#94a3b8]"
+                              : "bg-white border-[#cbd5e1] text-[#0f172a]"
+                          }`}
+                        >
+                          <span>+91</span>
+                          <ChevronDown className="w-3.5 h-3.5 text-[#64748b]" />
+                        </div>
+                        <input
+                          type="tel"
+                          id="whatsapp"
+                          maxLength={10}
+                          placeholder="9876543210"
+                          value={formData.whatsapp}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "whatsapp",
+                              e.target.value.replace(/\D/g, ""),
+                            )
+                          }
+                          disabled={sameAsMobile}
+                          className={`emp-clean-input ${
+                            errors.whatsapp ? "is-invalid" : ""
+                          } ${sameAsMobile ? "!bg-[#f8fafc] !text-[#94a3b8] cursor-not-allowed" : ""}`}
+                        />
+                      </div>
+                      {errors.whatsapp && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.whatsapp}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Email Address */}
+                    <div className="md:col-span-2">
+                      <label className="emp-clean-label">
+                        Email Address <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        placeholder="coach.rahul@gmail.com"
+                        value={formData.email}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
+                        className={`emp-clean-input ${
+                          errors.email ? "is-invalid" : ""
+                        }`}
+                      />
+                      {errors.email && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Complete Residential Address */}
+                    <div className="md:col-span-2">
+                      <label className="emp-clean-label">
+                        Complete Residential Address{" "}
+                        <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <textarea
+                        rows={2}
+                        id="address"
+                        placeholder="House/Flat No., Building Name, Street, Landmark"
+                        value={formData.address}
+                        onChange={(e) =>
+                          handleInputChange("address", e.target.value)
+                        }
+                        className={`emp-clean-input resize-none ${
+                          errors.address ? "is-invalid" : ""
+                        }`}
+                      />
+                      {errors.address && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.address}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* State, City, PIN Code - In 1 Line */}
+                    <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {/* State */}
+                      <div>
+                        <label className="emp-clean-label">
+                          State <span className="text-[#ef4444]">*</span>
+                        </label>
+                        <CustomSelect
+                          id="state"
+                          value={formData.stateCode}
+                          onChange={handleStateChange}
+                          options={states}
+                          placeholder="Select State"
+                          error={!!errors.state}
+                          searchable={true}
+                        />
+                        {errors.state && (
+                          <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                            {errors.state}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* City */}
+                      <div>
+                        <label className="emp-clean-label">
+                          City <span className="text-[#ef4444]">*</span>
+                        </label>
+                        {availableCities.length > 0 ? (
+                          <CustomSelect
+                            id="city"
+                            value={formData.city}
+                            onChange={(e) =>
+                              handleInputChange("city", e.target.value)
+                            }
+                            options={availableCities}
+                            placeholder="Select City"
+                            error={!!errors.city}
+                            searchable={true}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            id="city"
+                            placeholder="Enter City"
+                            value={formData.city}
+                            onChange={(e) =>
+                              handleInputChange("city", e.target.value)
+                            }
+                            className={`emp-clean-input ${
+                              errors.city ? "is-invalid" : ""
+                            }`}
+                          />
+                        )}
+                        {errors.city && (
+                          <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                            {errors.city}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* PIN Code */}
+                      <div>
+                        <label className="emp-clean-label">
+                          PIN Code <span className="text-[#ef4444]">*</span>
                         </label>
                         <input
                           type="text"
-                          placeholder="e.g. Rahul Sharma"
-                          value={formData.fullName}
-                          onChange={(e) => handleInputChange("fullName", e.target.value)}
-                          className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                            errors.fullName ? "border-red-500 bg-red-50/20" : "border-gray-300"
+                          id="pincode"
+                          maxLength={6}
+                          placeholder="395007"
+                          value={formData.pincode}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "pincode",
+                              e.target.value.replace(/\D/g, ""),
+                            )
+                          }
+                          className={`emp-clean-input ${
+                            errors.pincode ? "is-invalid" : ""
                           }`}
                         />
-                        {errors.fullName && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.fullName}</p>
-                        )}
-                      </div>
-
-                      {/* Date of Birth */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Date of Birth <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="date"
-                          value={formData.dob}
-                          onChange={(e) => handleInputChange("dob", e.target.value)}
-                          className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                            errors.dob ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.dob && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.dob}</p>
-                        )}
-                      </div>
-
-                      {/* Gender */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Gender <span className="text-red-500">*</span>
-                        </label>
-                        <CustomSelect
-                          value={formData.gender}
-                          onChange={(e) => handleInputChange("gender", e.target.value)}
-                          options={["Male", "Female", "Other", "Prefer not to say"]}
-                          placeholder="Select Gender"
-                        />
-                      </div>
-
-                      {/* Mobile Number */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Mobile Number <span className="text-red-500">*</span>
-                        </label>
-                        <div className="relative">
-                          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-semibold font-modelica">
-                            +91
-                          </span>
-                          <input
-                            type="tel"
-                            maxLength={10}
-                            placeholder="9876543210"
-                            value={formData.mobile}
-                            onChange={(e) =>
-                              handleInputChange("mobile", e.target.value.replace(/\D/g, ""))
-                            }
-                            className={`w-full border rounded-xl pl-12 pr-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                              errors.mobile ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                        </div>
-                        {errors.mobile && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.mobile}</p>
-                        )}
-                      </div>
-
-                      {/* WhatsApp Number */}
-                      <div>
-                        <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5">
-                          <label className="font-modelica text-sm font-semibold text-gray-800">
-                            WhatsApp Number <span className="text-red-500">*</span>
-                          </label>
-                          <label className="inline-flex items-center gap-1.5 text-xs text-[#95442c] font-medium cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={sameAsMobile}
-                              onChange={(e) => handleSameAsMobileToggle(e.target.checked)}
-                              className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
-                            />
-                            Same as Mobile
-                          </label>
-                        </div>
-                        <div className="relative">
-                          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-semibold font-modelica">
-                            +91
-                          </span>
-                          <input
-                            type="tel"
-                            maxLength={10}
-                            placeholder="9876543210"
-                            value={formData.whatsapp}
-                            onChange={(e) =>
-                              handleInputChange("whatsapp", e.target.value.replace(/\D/g, ""))
-                            }
-                            disabled={sameAsMobile}
-                            className={`w-full border rounded-xl pl-12 pr-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] disabled:bg-gray-100 ${
-                              errors.whatsapp ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                        </div>
-                        {errors.whatsapp && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.whatsapp}</p>
-                        )}
-                      </div>
-
-                      {/* Email Address */}
-                      <div className="md:col-span-2">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Email Address <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="email"
-                          placeholder="coach.rahul@gmail.com"
-                          value={formData.email}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
-                          className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                            errors.email ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.email && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.email}</p>
-                        )}
-                      </div>
-
-                      {/* Complete Residential Address */}
-                      <div className="md:col-span-2">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Complete Residential Address <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          rows={2}
-                          placeholder="House/Flat No., Building Name, Street, Landmark"
-                          value={formData.address}
-                          onChange={(e) => handleInputChange("address", e.target.value)}
-                          className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] resize-none ${
-                            errors.address ? "border-red-500" : "border-gray-300"
-                          }`}
-                        />
-                        {errors.address && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">{errors.address}</p>
-                        )}
-                      </div>
-
-                      {/* State, City, PIN Code - In 1 Line */}
-                      <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* State */}
-                        <div>
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            State <span className="text-red-500">*</span>
-                          </label>
-                          <CustomSelect
-                            value={formData.stateCode}
-                            onChange={handleStateChange}
-                            options={states}
-                            placeholder="Select State"
-                            error={!!errors.state}
-                            searchable={true}
-                          />
-                          {errors.state && (
-                            <p className="text-red-500 text-xs mt-1 font-modelica">{errors.state}</p>
-                          )}
-                        </div>
-
-                        {/* City */}
-                        <div>
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            City <span className="text-red-500">*</span>
-                          </label>
-                          {availableCities.length > 0 ? (
-                            <CustomSelect
-                              value={formData.city}
-                              onChange={(e) => handleInputChange("city", e.target.value)}
-                              options={availableCities}
-                              placeholder="Select City"
-                              error={!!errors.city}
-                              searchable={true}
-                            />
-                          ) : (
-                            <input
-                              type="text"
-                              placeholder="Enter City"
-                              value={formData.city}
-                              onChange={(e) => handleInputChange("city", e.target.value)}
-                              className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                                errors.city ? "border-red-500" : "border-gray-300"
-                              }`}
-                            />
-                          )}
-                          {errors.city && (
-                            <p className="text-red-500 text-xs mt-1 font-modelica">{errors.city}</p>
-                          )}
-                        </div>
-
-                        {/* PIN Code */}
-                        <div>
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            PIN Code <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            maxLength={6}
-                            placeholder="395007"
-                            value={formData.pincode}
-                            onChange={(e) =>
-                              handleInputChange("pincode", e.target.value.replace(/\D/g, ""))
-                            }
-                            className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                              errors.pincode ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                          {errors.pincode && (
-                            <p className="text-red-500 text-xs mt-1 font-modelica">{errors.pincode}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* File Uploads - Passport Photo & Aadhaar Card in 1 Line */}
-                      <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* File 1: Passport-Size Photograph */}
-                        <div className="border border-dashed border-gray-300 rounded-2xl p-4 bg-gray-50/50">
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1">
-                            Passport-Size Photograph
-                          </label>
-                          <p className="text-xs text-gray-500 font-modelica mb-3">
-                            JPG/PNG/WEBP, clear face photo (max 20MB)
+                        {errors.pincode && (
+                          <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                            {errors.pincode}
                           </p>
-                          {formData.photoFile ? (
-                            <FilePreviewCard
-                              file={formData.photoFile}
-                              onRemove={() => removeFile("photoFile")}
-                            />
-                          ) : (
-                            <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
-                              <Upload className="w-4 h-4 text-[#95442c]" />
-                              Upload Photograph
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => handleFileChange("photoFile", e)}
-                              />
-                            </label>
-                          )}
-                        </div>
-
-                        {/* File 2: Aadhaar Card / ID Proof */}
-                        <div className="border border-dashed border-gray-300 rounded-2xl p-4 bg-gray-50/50">
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1">
-                            Aadhaar Card / Government ID Proof
-                          </label>
-                          <p className="text-xs text-gray-500 font-modelica mb-3">
-                            PDF or Image of front & back (max 20MB)
-                          </p>
-                          {formData.idProofFile ? (
-                            <FilePreviewCard
-                              file={formData.idProofFile}
-                              onRemove={() => removeFile("idProofFile")}
-                            />
-                          ) : (
-                            <label className="flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
-                              <Upload className="w-4 h-4 text-[#95442c]" />
-                              Upload ID Proof
-                              <input
-                                type="file"
-                                accept="image/*,application/pdf"
-                                className="hidden"
-                                onChange={(e) => handleFileChange("idProofFile", e)}
-                              />
-                            </label>
-                          )}
-                        </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                )}
 
-                {/* ========================================================
-                    SECTION 2: FITNESS & PROFESSIONAL CERTIFICATIONS
-                   ======================================================== */}
-                {currentStep === 2 && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-center gap-2 text-[#95442c] font-toma text-sm font-bold uppercase tracking-wider mb-1">
-                        <Award className="w-4 h-4" /> Section 2 of 6
-                      </div>
-                      <h2 className="font-toma text-2xl font-bold text-gray-900">
-                        Fitness & Professional Certifications
-                      </h2>
-                      <p className="font-modelica text-gray-500 text-sm">
-                        Showcase your certified credentials and educational background.
-                      </p>
-                    </div>
-
-                    <div className="space-y-5">
-                      {/* Upload Fitness Certificate */}
-                      <div className="border border-dashed border-gray-300 rounded-2xl p-5 bg-gray-50/50">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1">
-                          Upload Fitness Certification Certificate
+                    {/* File Uploads - Passport Photo & Aadhaar Card in 1 Line */}
+                    <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* File 1: Passport-Size Photograph */}
+                      <div className="emp-upload-box">
+                        <label className="emp-clean-label !mb-1">
+                          Passport-Size Photograph
                         </label>
-                        <p className="text-xs text-gray-500 font-modelica mb-3">
-                          Upload (PDF/Image)
+                        <p className="text-xs text-[#64748b] mb-3">
+                          JPG/PNG/WEBP, clear face photo (max 20MB)
                         </p>
-                        {formData.certFile ? (
+                        {formData.photoFile ? (
                           <FilePreviewCard
-                            file={formData.certFile}
-                            onRemove={() => removeFile("certFile")}
+                            file={formData.photoFile}
+                            onRemove={() => removeFile("photoFile")}
                           />
                         ) : (
-                          <label className="flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-gray-50 border border-gray-300 rounded-xl cursor-pointer text-xs font-semibold text-gray-700 transition">
+                          <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-[#cbd5e1] rounded-lg cursor-pointer text-xs font-semibold text-[#0f172a] transition shadow-xs">
                             <Upload className="w-4 h-4 text-[#95442c]" />
-                            Upload Certificate File
+                            Upload Photograph
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => handleFileChange("photoFile", e)}
+                            />
+                          </label>
+                        )}
+                      </div>
+
+                      {/* File 2: Aadhaar Card / ID Proof */}
+                      <div className="emp-upload-box">
+                        <label className="emp-clean-label !mb-1">
+                          Aadhaar Card / Government ID Proof
+                        </label>
+                        <p className="text-xs text-[#64748b] mb-3">
+                          PDF or Image of front & back (max 20MB)
+                        </p>
+                        {formData.idProofFile ? (
+                          <FilePreviewCard
+                            file={formData.idProofFile}
+                            onRemove={() => removeFile("idProofFile")}
+                          />
+                        ) : (
+                          <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-[#cbd5e1] rounded-lg cursor-pointer text-xs font-semibold text-[#0f172a] transition shadow-xs">
+                            <Upload className="w-4 h-4 text-[#95442c]" />
+                            Upload ID Proof
                             <input
                               type="file"
                               accept="image/*,application/pdf"
                               className="hidden"
-                              onChange={(e) => handleFileChange("certFile", e)}
+                              onChange={(e) =>
+                                handleFileChange("idProofFile", e)
+                              }
                             />
                           </label>
                         )}
                       </div>
-
-                      {/* Additional Fitness Certifications */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Additional Fitness Certifications (if any)
-                        </label>
-                        <textarea
-                          rows={2}
-                          placeholder="e.g. CPR/AED Certified, Kettlebell Specialist, Functional Training Trainer"
-                          value={formData.additionalCertifications}
-                          onChange={(e) =>
-                            handleInputChange("additionalCertifications", e.target.value)
-                          }
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] resize-none"
-                        />
-                      </div>
-
-                      {/* Higher Education Qualification */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Higher Education Qualification <span className="text-red-500">*</span>
-                        </label>
-                        <CustomSelect
-                          value={formData.higherEducation}
-                          onChange={(e) => handleInputChange("higherEducation", e.target.value)}
-                          options={HIGHER_EDUCATION_OPTIONS}
-                          placeholder="Select Qualification"
-                          error={!!errors.higherEducation}
-                        />
-                        {errors.higherEducation && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">
-                            {errors.higherEducation}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Additional Qualifications */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Additional Qualifications (if any)
-                        </label>
-                        <textarea
-                          rows={2}
-                          placeholder="e.g. Diploma in Sports Nutrition, Certified Dietetics Consultant, CSCS"
-                          value={formData.additionalQualifications}
-                          onChange={(e) =>
-                            handleInputChange("additionalQualifications", e.target.value)
-                          }
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] resize-none"
-                        />
-                      </div>
                     </div>
                   </div>
-                )}
+                </div>
+
+                {/* ========================================================
+                    SECTION 2: FITNESS & PROFESSIONAL CERTIFICATIONS
+                   ======================================================== */}
+                <div
+                  id="section-2"
+                  className="emp-card-box p-5 sm:p-8 mb-6 sm:mb-8"
+                >
+                  {/* Metronic / gomzi-admin Section Header */}
+                  <div className="flex items-center gap-3.5 pb-5 mb-6 border-b border-[#f1f5f9]">
+                    <div
+                      className="flex items-center justify-center rounded-lg flex-shrink-0"
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        backgroundColor: "rgba(149, 68, 44, 0.1)",
+                        color: "#95442c",
+                        border: "1.5px solid rgba(149, 68, 44, 0.2)",
+                      }}
+                    >
+                      <Award className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                        Fitness & Professional Certifications
+                      </h3>
+                      <span className="text-xs sm:text-sm text-[#64748b]">
+                        Showcase your certified credentials and educational
+                        background
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5">
+                    {/* Upload Fitness Certificate */}
+                    <div className="emp-upload-box">
+                      <label className="emp-clean-label !mb-1">
+                        Upload Fitness Certification Certificate
+                      </label>
+                      <p className="text-xs text-[#64748b] mb-3">
+                        Upload (PDF/Image)
+                      </p>
+                      {formData.certFile ? (
+                        <FilePreviewCard
+                          file={formData.certFile}
+                          onRemove={() => removeFile("certFile")}
+                        />
+                      ) : (
+                        <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-[#cbd5e1] rounded-lg cursor-pointer text-xs font-semibold text-[#0f172a] transition shadow-xs">
+                          <Upload className="w-4 h-4 text-[#95442c]" />
+                          Upload Certificate File
+                          <input
+                            type="file"
+                            accept="image/*,application/pdf"
+                            className="hidden"
+                            onChange={(e) => handleFileChange("certFile", e)}
+                          />
+                        </label>
+                      )}
+                    </div>
+
+                    {/* Additional Fitness Certifications */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Additional Fitness Certifications (if any)
+                      </label>
+                      <textarea
+                        rows={2}
+                        id="additionalCertifications"
+                        placeholder="e.g. CPR/AED Certified, Kettlebell Specialist, Functional Training Trainer"
+                        value={formData.additionalCertifications}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "additionalCertifications",
+                            e.target.value,
+                          )
+                        }
+                        className="emp-clean-input resize-none"
+                      />
+                    </div>
+
+                    {/* Higher Education Qualification */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Higher Education Qualification{" "}
+                        <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <CustomSelect
+                        id="higherEducation"
+                        value={formData.higherEducation}
+                        onChange={(e) =>
+                          handleInputChange("higherEducation", e.target.value)
+                        }
+                        options={HIGHER_EDUCATION_OPTIONS}
+                        placeholder="Select Qualification"
+                        error={!!errors.higherEducation}
+                      />
+                      {errors.higherEducation && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.higherEducation}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Additional Qualifications */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Additional Qualifications (if any)
+                      </label>
+                      <textarea
+                        rows={2}
+                        id="additionalQualifications"
+                        placeholder="e.g. Diploma in Sports Nutrition, Certified Dietetics Consultant, CSCS"
+                        value={formData.additionalQualifications}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "additionalQualifications",
+                            e.target.value,
+                          )
+                        }
+                        className="emp-clean-input resize-none"
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 {/* ========================================================
                     SECTION 3: PROFESSIONAL DETAILS
                    ======================================================== */}
-                {currentStep === 3 && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-center gap-2 text-[#95442c] font-toma text-sm font-bold uppercase tracking-wider mb-1">
-                        <Briefcase className="w-4 h-4" /> Section 3 of 6
-                      </div>
-                      <h2 className="font-toma text-2xl font-bold text-gray-900">
+                <div
+                  id="section-3"
+                  className="emp-card-box p-5 sm:p-8 mb-6 sm:mb-8"
+                >
+                  {/* Metronic / gomzi-admin Section Header */}
+                  <div className="flex items-center gap-3.5 pb-5 mb-6 border-b border-[#f1f5f9]">
+                    <div
+                      className="flex items-center justify-center rounded-lg flex-shrink-0"
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        backgroundColor: "rgba(149, 68, 44, 0.1)",
+                        color: "#95442c",
+                        border: "1.5px solid rgba(149, 68, 44, 0.2)",
+                      }}
+                    >
+                      <Briefcase className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
                         Professional Details
-                      </h2>
-                      <p className="font-modelica text-gray-500 text-sm">
-                        Tell us about your client base and fitness consulting experience.
-                      </p>
+                      </h3>
+                      <span className="text-xs sm:text-sm text-[#64748b]">
+                        Tell us about your client base and fitness consulting
+                        experience
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-5">
+                    {/* Employment Type */}
+                    <div id="employmentType">
+                      <label className="emp-clean-label mb-2">
+                        Current Profession & Employment Type{" "}
+                        <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {EMPLOYMENT_TYPES.map((type, idx) => (
+                          <label
+                            key={idx}
+                            className={`p-3 rounded-lg border-[1.5px] flex items-center gap-3 cursor-pointer transition ${
+                              formData.employmentType === type
+                                ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-semibold shadow-xs"
+                                : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="employmentType"
+                              value={type}
+                              checked={formData.employmentType === type}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "employmentType",
+                                  e.target.value,
+                                )
+                              }
+                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                            />
+                            <span className="text-xs sm:text-sm font-medium">
+                              {type}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                      {formData.employmentType === "Other" && (
+                        <input
+                          type="text"
+                          placeholder="Please specify your profession"
+                          value={formData.otherEmploymentType}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "otherEmploymentType",
+                              e.target.value,
+                            )
+                          }
+                          className="mt-2.5 emp-clean-input"
+                        />
+                      )}
+                      {errors.employmentType && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.employmentType}
+                        </p>
+                      )}
                     </div>
 
-                    <div className="space-y-5">
-                      {/* Employment Type */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Total Years of Experience */}
                       <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-2">
-                          Current Profession & Employment Type <span className="text-red-500">*</span>
+                        <label className="emp-clean-label">
+                          Total Years of Experience in Fitness Industry{" "}
+                          <span className="text-[#ef4444]">*</span>
                         </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                          {EMPLOYMENT_TYPES.map((type, idx) => (
-                            <label
-                              key={idx}
-                              className={`p-3.5 rounded-xl border flex items-center gap-3 cursor-pointer transition ${
-                                formData.employmentType === type
-                                  ? "border-[#95442c] bg-orange-50/40 text-gray-900 font-semibold shadow-xs"
-                                  : "border-gray-200 hover:bg-gray-50 text-gray-700"
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="employmentType"
-                                value={type}
-                                checked={formData.employmentType === type}
-                                onChange={(e) => handleInputChange("employmentType", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
-                              />
-                              <span className="text-xs sm:text-sm font-modelica">{type}</span>
-                            </label>
-                          ))}
-                        </div>
-                        {formData.employmentType === "Other" && (
-                          <input
-                            type="text"
-                            placeholder="Please specify your profession"
-                            value={formData.otherEmploymentType}
-                            onChange={(e) =>
-                              handleInputChange("otherEmploymentType", e.target.value)
-                            }
-                            className="mt-2.5 w-full border border-gray-300 rounded-xl px-4 py-2.5 font-modelica text-sm"
-                          />
+                        <input
+                          type="number"
+                          id="experienceYears"
+                          min="0"
+                          step="0.5"
+                          placeholder="e.g. 5"
+                          value={formData.experienceYears}
+                          onChange={(e) =>
+                            handleInputChange("experienceYears", e.target.value)
+                          }
+                          className={`emp-clean-input ${
+                            errors.experienceYears ? "is-invalid" : ""
+                          }`}
+                        />
+                        {errors.experienceYears && (
+                          <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                            {errors.experienceYears}
+                          </p>
                         )}
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {/* Total Years of Experience */}
-                        <div>
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            Total Years of Experience in Fitness Industry <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            step="0.5"
-                            placeholder="e.g. 5"
-                            value={formData.experienceYears}
-                            onChange={(e) => handleInputChange("experienceYears", e.target.value)}
-                            className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                              errors.experienceYears ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                          {errors.experienceYears && (
-                            <p className="text-red-500 text-xs mt-1 font-modelica">
-                              {errors.experienceYears}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Number of Active Clients Currently */}
-                        <div>
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            Number of Active Clients Currently <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder="e.g. 25"
-                            value={formData.activeClients}
-                            onChange={(e) => handleInputChange("activeClients", e.target.value)}
-                            className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                              errors.activeClients ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                          {errors.activeClients && (
-                            <p className="text-red-500 text-xs mt-1 font-modelica">
-                              {errors.activeClients}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Recommend or Sell Supplements */}
-                      <div className="p-4 bg-gray-50 rounded-2xl border border-gray-200">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-2">
-                          Do You Currently Recommend or Sell Supplements to Your Clients? <span className="text-red-500">*</span>
-                        </label>
-                        <div className="flex gap-4">
-                          {["Yes", "No"].map((choice) => (
-                            <label
-                              key={choice}
-                              className={`px-5 py-2.5 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
-                                formData.recommendSupplements === choice
-                                  ? "border-[#95442c] bg-white text-[#95442c] font-bold shadow-xs"
-                                  : "border-gray-300 bg-white text-gray-700"
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="recommendSupplements"
-                                value={choice}
-                                checked={formData.recommendSupplements === choice}
-                                onChange={(e) =>
-                                  handleInputChange("recommendSupplements", e.target.value)
-                                }
-                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
-                              />
-                              <span className="font-modelica text-sm">{choice}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Supplement Brands */}
-                      {formData.recommendSupplements === "Yes" && (
-                        <div>
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            Which Supplement Brands Do You Currently Recommend or Sell? <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="e.g. Optimum Nutrition, MuscleBlaze, MyProtein, GNC, etc."
-                            value={formData.supplementBrands}
-                            onChange={(e) => handleInputChange("supplementBrands", e.target.value)}
-                            className={`w-full border rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] ${
-                              errors.supplementBrands ? "border-red-500" : "border-gray-300"
-                            }`}
-                          />
-                          {errors.supplementBrands && (
-                            <p className="text-red-500 text-xs mt-1 font-modelica">
-                              {errors.supplementBrands}
-                            </p>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Approximately How Many Supplements Do Your Clients Purchase */}
+                      {/* Number of Active Clients Currently */}
                       <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Approximately How Many Supplements Do Your Clients Purchase Per Month Through Your Recommendations?
+                        <label className="emp-clean-label">
+                          Number of Active Clients Currently{" "}
+                          <span className="text-[#ef4444]">*</span>
+                        </label>
+                        <input
+                          type="number"
+                          id="activeClients"
+                          min="0"
+                          placeholder="e.g. 25"
+                          value={formData.activeClients}
+                          onChange={(e) =>
+                            handleInputChange("activeClients", e.target.value)
+                          }
+                          className={`emp-clean-input ${
+                            errors.activeClients ? "is-invalid" : ""
+                          }`}
+                        />
+                        {errors.activeClients && (
+                          <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                            {errors.activeClients}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Recommend or Sell Supplements */}
+                    <div
+                      id="recommendSupplements"
+                      className="p-4 sm:p-5 bg-white rounded-xl border-[1.5px] border-[#e2e8f0]"
+                    >
+                      <label className="emp-clean-label !mb-3">
+                        Do You Currently Recommend or Sell Supplements to Your
+                        Clients? <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <div className="flex flex-wrap gap-3">
+                        {["Yes", "No"].map((choice) => (
+                          <label
+                            key={choice}
+                            className={`px-5 py-2.5 rounded-lg border-[1.5px] flex items-center gap-2 cursor-pointer transition ${
+                              formData.recommendSupplements === choice
+                                ? "border-[#95442c] bg-[#fdf5f2] text-[#95442c] font-bold shadow-xs"
+                                : "border-[#cbd5e1] bg-white text-[#334155] hover:border-[#94a3b8]"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="recommendSupplements"
+                              value={choice}
+                              checked={formData.recommendSupplements === choice}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "recommendSupplements",
+                                  e.target.value,
+                                )
+                              }
+                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                            />
+                            <span className="text-sm font-semibold">
+                              {choice}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                      {errors.recommendSupplements && (
+                        <p className="text-[#ef4444] text-xs mt-2 font-medium">
+                          {errors.recommendSupplements}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Supplement Brands */}
+                    {formData.recommendSupplements === "Yes" && (
+                      <div>
+                        <label className="emp-clean-label">
+                          Which Supplement Brands Do You Currently Recommend or
+                          Sell? <span className="text-[#ef4444]">*</span>
                         </label>
                         <input
                           type="text"
-                          placeholder="e.g. 10 - 20 tubs / products"
-                          value={formData.monthlySupplementPurchases}
+                          id="supplementBrands"
+                          placeholder="e.g. Optimum Nutrition, MuscleBlaze, MyProtein, GNC, etc."
+                          value={formData.supplementBrands}
                           onChange={(e) =>
-                            handleInputChange("monthlySupplementPurchases", e.target.value)
+                            handleInputChange(
+                              "supplementBrands",
+                              e.target.value,
+                            )
                           }
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
+                          className={`emp-clean-input ${
+                            errors.supplementBrands ? "is-invalid" : ""
+                          }`}
                         />
-                      </div>
-
-                      {/* Primary Client Category */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-2">
-                          What Is Your Primary Client Category? <span className="text-red-500">*</span>
-                        </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
-                          {CLIENT_CATEGORIES.map((cat, idx) => (
-                            <label
-                              key={idx}
-                              className={`p-3 rounded-xl border flex items-center gap-2.5 cursor-pointer transition ${
-                                formData.clientCategory === cat
-                                  ? "border-[#95442c] bg-orange-50/40 text-gray-900 font-semibold shadow-xs"
-                                  : "border-gray-200 hover:bg-gray-50 text-gray-700"
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="clientCategory"
-                                value={cat}
-                                checked={formData.clientCategory === cat}
-                                onChange={(e) => handleInputChange("clientCategory", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
-                              />
-                              <span className="text-xs sm:text-sm font-modelica">{cat}</span>
-                            </label>
-                          ))}
-                        </div>
-                        {formData.clientCategory === "Other" && (
-                          <input
-                            type="text"
-                            placeholder="Please specify client category"
-                            value={formData.otherClientCategory}
-                            onChange={(e) =>
-                              handleInputChange("otherClientCategory", e.target.value)
-                            }
-                            className="mt-2.5 w-full border border-gray-300 rounded-xl px-4 py-2.5 font-modelica text-sm"
-                          />
+                        {errors.supplementBrands && (
+                          <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                            {errors.supplementBrands}
+                          </p>
                         )}
                       </div>
+                    )}
+
+                    {/* Approximately How Many Supplements Do Your Clients Purchase */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Approximately How Many Supplements Do Your Clients
+                        Purchase Per Month Through Your Recommendations?
+                      </label>
+                      <input
+                        type="text"
+                        id="monthlySupplementPurchases"
+                        placeholder="e.g. 10 - 20 tubs / products"
+                        value={formData.monthlySupplementPurchases}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "monthlySupplementPurchases",
+                            e.target.value,
+                          )
+                        }
+                        className="emp-clean-input"
+                      />
+                    </div>
+
+                    {/* Primary Client Category */}
+                    <div id="clientCategory">
+                      <label className="emp-clean-label mb-2">
+                        What Is Your Primary Client Category?{" "}
+                        <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                        {CLIENT_CATEGORIES.map((cat, idx) => (
+                          <label
+                            key={idx}
+                            className={`p-3 rounded-lg border-[1.5px] flex items-center gap-2.5 cursor-pointer transition ${
+                              formData.clientCategory === cat
+                                ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-semibold shadow-xs"
+                                : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="clientCategory"
+                              value={cat}
+                              checked={formData.clientCategory === cat}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "clientCategory",
+                                  e.target.value,
+                                )
+                              }
+                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                            />
+                            <span className="text-xs sm:text-sm font-medium">
+                              {cat}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                      {formData.clientCategory === "Other" && (
+                        <input
+                          type="text"
+                          placeholder="Please specify client category"
+                          value={formData.otherClientCategory}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "otherClientCategory",
+                              e.target.value,
+                            )
+                          }
+                          className="mt-2.5 emp-clean-input"
+                        />
+                      )}
+                      {errors.clientCategory && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.clientCategory}
+                        </p>
+                      )}
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* ========================================================
                     SECTION 4: SOCIAL MEDIA & ONLINE PRESENCE
                    ======================================================== */}
-                {currentStep === 4 && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-center gap-2 text-[#95442c] font-toma text-sm font-bold uppercase tracking-wider mb-1">
-                        <Share2 className="w-4 h-4" /> Section 4 of 6
-                      </div>
-                      <h2 className="font-toma text-2xl font-bold text-gray-900">
+                <div
+                  id="section-4"
+                  className="emp-card-box p-5 sm:p-8 mb-6 sm:mb-8"
+                >
+                  {/* Metronic / gomzi-admin Section Header */}
+                  <div className="flex items-center gap-3.5 pb-5 mb-6 border-b border-[#f1f5f9]">
+                    <div
+                      className="flex items-center justify-center rounded-lg flex-shrink-0"
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        backgroundColor: "rgba(149, 68, 44, 0.1)",
+                        color: "#95442c",
+                        border: "1.5px solid rgba(149, 68, 44, 0.2)",
+                      }}
+                    >
+                      <Share2 className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
                         Social Media & Online Presence
-                      </h2>
-                      <p className="font-modelica text-gray-500 text-sm">
-                        Connect your digital profiles and social presence.
-                      </p>
+                      </h3>
+                      <span className="text-xs sm:text-sm text-[#64748b]">
+                        Connect your digital profiles and social presence
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Platform Selector Dropdown */}
+                    <div>
+                      <label className="emp-clean-label flex items-center gap-2">
+                        <Share2 className="text-[#95442c] w-3.5 h-3.5" /> Select
+                        Social Media Platform
+                      </label>
+                      <CustomSelect
+                        id="socialPlatform"
+                        value={formData.socialPlatform}
+                        onChange={(e) =>
+                          handleInputChange("socialPlatform", e.target.value)
+                        }
+                        options={SOCIAL_PLATFORM_OPTIONS}
+                        placeholder="Select Platform"
+                      />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Platform Selector Dropdown */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
-                          <Share2 className="text-[#95442c] w-4 h-4" /> Select Social Media Platform
-                        </label>
-                        <CustomSelect
-                          value={formData.socialPlatform}
-                          onChange={(e) => handleInputChange("socialPlatform", e.target.value)}
-                          options={SOCIAL_PLATFORM_OPTIONS}
-                          placeholder="Select Platform"
-                        />
-                      </div>
-
-                      {/* Dynamic Link Input Based on Selected Platform */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
-                          {formData.socialPlatform === "Instagram" && (
-                            <FaInstagram className="text-pink-600 w-4 h-4 flex-shrink-0" />
-                          )}
-                          {formData.socialPlatform === "Facebook" && (
-                            <FaFacebook className="text-blue-600 w-4 h-4 flex-shrink-0" />
-                          )}
-                          {formData.socialPlatform === "YouTube" && (
-                            <FaYoutube className="text-red-600 w-4 h-4 flex-shrink-0" />
-                          )}
-                          {formData.socialPlatform === "LinkedIn" && (
-                            <FaLinkedin className="text-blue-700 w-4 h-4 flex-shrink-0" />
-                          )}
-                          {!["Instagram", "Facebook", "YouTube", "LinkedIn"].includes(formData.socialPlatform) && (
-                            <Share2 className="text-[#95442c] w-4 h-4 flex-shrink-0" />
-                          )}
-                          <span>
-                            {formData.socialPlatform === "Instagram" && "Instagram Profile Link"}
-                            {formData.socialPlatform === "Facebook" && "Facebook Profile / Page Link"}
-                            {formData.socialPlatform === "YouTube" && "YouTube Channel Link"}
-                            {formData.socialPlatform === "LinkedIn" && "LinkedIn Profile Link"}
-                            {!["Instagram", "Facebook", "YouTube", "LinkedIn"].includes(formData.socialPlatform) && "Profile / Channel Link"}
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={
-                            formData.socialPlatform === "Instagram"
-                              ? "https://instagram.com/your_handle or @handle"
-                              : formData.socialPlatform === "Facebook"
+                    {/* Dynamic Link Input Based on Selected Platform */}
+                    <div>
+                      <label className="emp-clean-label flex items-center gap-2">
+                        {formData.socialPlatform === "Instagram" && (
+                          <FaInstagram className="text-pink-600 w-3.5 h-3.5 flex-shrink-0" />
+                        )}
+                        {formData.socialPlatform === "Facebook" && (
+                          <FaFacebook className="text-blue-600 w-3.5 h-3.5 flex-shrink-0" />
+                        )}
+                        {formData.socialPlatform === "YouTube" && (
+                          <FaYoutube className="text-red-600 w-3.5 h-3.5 flex-shrink-0" />
+                        )}
+                        {formData.socialPlatform === "LinkedIn" && (
+                          <FaLinkedin className="text-blue-700 w-3.5 h-3.5 flex-shrink-0" />
+                        )}
+                        {![
+                          "Instagram",
+                          "Facebook",
+                          "YouTube",
+                          "LinkedIn",
+                        ].includes(formData.socialPlatform) && (
+                          <Share2 className="text-[#95442c] w-3.5 h-3.5 flex-shrink-0" />
+                        )}
+                        <span>
+                          {formData.socialPlatform === "Instagram" &&
+                            "Instagram Profile Link"}
+                          {formData.socialPlatform === "Facebook" &&
+                            "Facebook Profile / Page Link"}
+                          {formData.socialPlatform === "YouTube" &&
+                            "YouTube Channel Link"}
+                          {formData.socialPlatform === "LinkedIn" &&
+                            "LinkedIn Profile Link"}
+                          {![
+                            "Instagram",
+                            "Facebook",
+                            "YouTube",
+                            "LinkedIn",
+                          ].includes(formData.socialPlatform) &&
+                            "Profile / Channel Link"}
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        id="socialLink"
+                        placeholder={
+                          formData.socialPlatform === "Instagram"
+                            ? "https://instagram.com/your_handle or @handle"
+                            : formData.socialPlatform === "Facebook"
                               ? "https://facebook.com/your_page"
                               : formData.socialPlatform === "YouTube"
-                              ? "https://youtube.com/@channel"
-                              : formData.socialPlatform === "LinkedIn"
-                              ? "https://linkedin.com/in/profile"
-                              : "Enter your profile or channel link"
-                          }
-                          value={formData.socialLink}
-                          onChange={(e) => handleInputChange("socialLink", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        />
-                      </div>
+                                ? "https://youtube.com/@channel"
+                                : formData.socialPlatform === "LinkedIn"
+                                  ? "https://linkedin.com/in/profile"
+                                  : "Enter your profile or channel link"
+                        }
+                        value={formData.socialLink}
+                        onChange={(e) =>
+                          handleInputChange("socialLink", e.target.value)
+                        }
+                        className="emp-clean-input"
+                      />
+                    </div>
 
-                      {/* Website */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Website / Online Coaching Profile (if applicable)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="https://yourfitnessbrand.com"
-                          value={formData.website}
-                          onChange={(e) => handleInputChange("website", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        />
-                      </div>
+                    {/* Website */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Website / Online Coaching Profile (if applicable)
+                      </label>
+                      <input
+                        type="text"
+                        id="website"
+                        placeholder="https://yourfitnessbrand.com"
+                        value={formData.website}
+                        onChange={(e) =>
+                          handleInputChange("website", e.target.value)
+                        }
+                        className="emp-clean-input"
+                      />
+                    </div>
 
-                      {/* Any Other Link */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Any Other Professional Social Media Link
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Twitter, Linktree, etc."
-                          value={formData.otherSocial}
-                          onChange={(e) => handleInputChange("otherSocial", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        />
-                      </div>
+                    {/* Any Other Link */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Any Other Professional Social Media Link
+                      </label>
+                      <input
+                        type="text"
+                        id="otherSocial"
+                        placeholder="Twitter, Linktree, etc."
+                        value={formData.otherSocial}
+                        onChange={(e) =>
+                          handleInputChange("otherSocial", e.target.value)
+                        }
+                        className="emp-clean-input"
+                      />
+                    </div>
 
-                      {/* Instagram Followers */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Instagram Followers (Approximate)
-                        </label>
-                        <CustomSelect
-                          value={formData.instagramFollowers}
-                          onChange={(e) => handleInputChange("instagramFollowers", e.target.value)}
-                          options={FOLLOWER_RANGES}
-                          placeholder="Select Range"
-                        />
-                      </div>
+                    {/* Instagram Followers */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Instagram Followers (Approximate)
+                      </label>
+                      <CustomSelect
+                        id="instagramFollowers"
+                        value={formData.instagramFollowers}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "instagramFollowers",
+                            e.target.value,
+                          )
+                        }
+                        options={FOLLOWER_RANGES}
+                        placeholder="Select Range"
+                      />
+                    </div>
 
-                      {/* Monthly Reach */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          Average Monthly Reach or Engagement (if available)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. 50k views/month"
-                          value={formData.monthlyReach}
-                          onChange={(e) => handleInputChange("monthlyReach", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        />
-                      </div>
+                    {/* Monthly Reach */}
+                    <div>
+                      <label className="emp-clean-label">
+                        Average Monthly Reach or Engagement (if available)
+                      </label>
+                      <input
+                        type="text"
+                        id="monthlyReach"
+                        placeholder="e.g. 50k views/month"
+                        value={formData.monthlyReach}
+                        onChange={(e) =>
+                          handleInputChange("monthlyReach", e.target.value)
+                        }
+                        className="emp-clean-input"
+                      />
+                    </div>
 
-                      {/* Post Regularly */}
-                      <div className="md:col-span-2 p-4 bg-gray-50 rounded-2xl border border-gray-200">
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-2">
-                          Do You Regularly Post Fitness or Nutrition-Related Content?
-                        </label>
-                        <div className="flex gap-4">
-                          {["Yes", "No"].map((choice) => (
-                            <label
-                              key={choice}
-                              className={`px-5 py-2 rounded-xl border flex items-center gap-2 cursor-pointer transition ${
-                                formData.regularPosts === choice
-                                  ? "border-[#95442c] bg-white text-[#95442c] font-bold shadow-xs"
-                                  : "border-gray-300 bg-white text-gray-700"
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name="regularPosts"
-                                value={choice}
-                                checked={formData.regularPosts === choice}
-                                onChange={(e) => handleInputChange("regularPosts", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
-                              />
-                              <span className="font-modelica text-sm">{choice}</span>
-                            </label>
-                          ))}
-                        </div>
+                    {/* Post Regularly */}
+                    <div className="md:col-span-2 p-4 sm:p-5 bg-white rounded-xl border-[1.5px] border-[#e2e8f0]">
+                      <label className="emp-clean-label !mb-3">
+                        Do You Regularly Post Fitness or Nutrition-Related
+                        Content?
+                      </label>
+                      <div className="flex flex-wrap gap-3">
+                        {["Yes", "No"].map((choice) => (
+                          <label
+                            key={choice}
+                            className={`px-5 py-2.5 rounded-lg border-[1.5px] flex items-center gap-2 cursor-pointer transition ${
+                              formData.regularPosts === choice
+                                ? "border-[#95442c] bg-[#fdf5f2] text-[#95442c] font-bold shadow-xs"
+                                : "border-[#cbd5e1] bg-white text-[#334155] hover:border-[#94a3b8]"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="regularPosts"
+                              value={choice}
+                              checked={formData.regularPosts === choice}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "regularPosts",
+                                  e.target.value,
+                                )
+                              }
+                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                            />
+                            <span className="text-sm font-semibold">
+                              {choice}
+                            </span>
+                          </label>
+                        ))}
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* ========================================================
                     SECTION 5: BUSINESS POTENTIAL & SUPPLEMENT SALES
                    ======================================================== */}
-                {currentStep === 5 && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-center gap-2 text-[#95442c] font-toma text-sm font-bold uppercase tracking-wider mb-1">
-                        <TrendingUp className="w-4 h-4" /> Section 5 of 6
-                      </div>
-                      <h2 className="font-toma text-2xl font-bold text-gray-900">
-                        Business Potential & Supplement Sales
-                      </h2>
-                      <p className="font-modelica text-gray-500 text-sm">
-                        Help us tailor your wholesale tier and partner support team.
-                      </p>
+                <div
+                  id="section-5"
+                  className="emp-card-box p-5 sm:p-8 mb-6 sm:mb-8"
+                >
+                  {/* Metronic / gomzi-admin Section Header */}
+                  <div className="flex items-center gap-3.5 pb-5 mb-6 border-b border-[#f1f5f9]">
+                    <div
+                      className="flex items-center justify-center rounded-lg flex-shrink-0"
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        backgroundColor: "rgba(149, 68, 44, 0.1)",
+                        color: "#95442c",
+                        border: "1.5px solid rgba(149, 68, 44, 0.2)",
+                      }}
+                    >
+                      <TrendingUp className="w-5 h-5" />
                     </div>
+                    <div>
+                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                        Business Potential & Supplement Sales
+                      </h3>
+                      <span className="text-xs sm:text-sm text-[#64748b]">
+                        Help us tailor your wholesale tier and partner support
+                        team
+                      </span>
+                    </div>
+                  </div>
 
-                    <div className="space-y-6">
-                      {/* How Do You Currently Acquire Clients? */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-2">
-                          How Do You Currently Acquire Clients? <span className="text-red-500">*</span>
-                        </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
-                          {CLIENT_ACQUISITION_CHANNELS.map((ch, idx) => {
-                            const isChecked = formData.clientAcquisition.includes(ch);
-                            return (
-                              <label
-                                key={idx}
-                                className={`p-3 rounded-xl border flex items-center gap-2.5 cursor-pointer transition ${
-                                  isChecked
-                                    ? "border-[#95442c] bg-orange-50/40 text-gray-900 font-semibold shadow-xs"
-                                    : "border-gray-200 hover:bg-gray-50 text-gray-700"
-                                }`}
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={isChecked}
-                                  onChange={() => handleAcquisitionToggle(ch)}
-                                  className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
-                                />
-                                <span className="text-xs sm:text-sm font-modelica">{ch}</span>
-                              </label>
-                            );
-                          })}
-                        </div>
-                        {formData.clientAcquisition.includes("Other") && (
-                          <input
-                            type="text"
-                            placeholder="Please specify other acquisition channel"
-                            value={formData.otherClientAcquisition}
-                            onChange={(e) =>
-                              handleInputChange("otherClientAcquisition", e.target.value)
-                            }
-                            className="mt-2.5 w-full border border-gray-300 rounded-xl px-4 py-2.5 font-modelica text-sm"
-                          />
-                        )}
-                        {errors.clientAcquisition && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">
-                            {errors.clientAcquisition}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {/* Monthly Interactions */}
-                        <div className="flex flex-col justify-between">
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            Approximately How Many Clients Do You Interact With Every Month?
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder="e.g. 50"
-                            value={formData.monthlyInteractions}
-                            onChange={(e) =>
-                              handleInputChange("monthlyInteractions", e.target.value)
-                            }
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] mt-auto"
-                          />
-                        </div>
-
-                        {/* How Many Clients Currently Use Supplements */}
-                        <div className="flex flex-col justify-between">
-                          <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                            How Many of Your Clients Currently Use Supplements?
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder="e.g. 35"
-                            value={formData.clientsUsingSupplements}
-                            onChange={(e) =>
-                              handleInputChange("clientsUsingSupplements", e.target.value)
-                            }
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c] mt-auto"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Most Common Supplement Purchased */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-1.5">
-                          What Is the Most Common Supplement Purchased by Your Clients?
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Whey Protein Isolate, Creatine Monohydrate, Multivitamins, Peanut Butter"
-                          value={formData.commonSupplement}
-                          onChange={(e) => handleInputChange("commonSupplement", e.target.value)}
-                          className="w-full border border-gray-300 rounded-xl px-4 py-3 font-modelica text-sm text-gray-900 bg-white transition focus:outline-none focus:ring-2 focus:ring-[#95442c]"
-                        />
-                      </div>
-
-                      {/* Estimated Monthly Supplement Sales Potential */}
-                      <div>
-                        <label className="block font-modelica text-sm font-semibold text-gray-800 mb-2">
-                          Estimated Monthly Supplement Sales Potential <span className="text-red-500">*</span>
-                        </label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          {SALES_POTENTIAL_OPTIONS.map((opt, idx) => (
+                  <div className="space-y-6">
+                    {/* How Do You Currently Acquire Clients? */}
+                    <div id="clientAcquisition">
+                      <label className="emp-clean-label mb-2">
+                        How Do You Currently Acquire Clients?{" "}
+                        <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                        {CLIENT_ACQUISITION_CHANNELS.map((ch, idx) => {
+                          const isChecked =
+                            formData.clientAcquisition.includes(ch);
+                          return (
                             <label
                               key={idx}
-                              className={`p-3.5 rounded-xl border flex items-center gap-3 cursor-pointer transition ${
-                                formData.salesPotential === opt
-                                  ? "border-[#95442c] bg-orange-50/50 text-gray-900 font-bold shadow-xs ring-1 ring-[#95442c]"
-                                  : "border-gray-200 hover:bg-gray-50 text-gray-700"
+                              className={`p-3 rounded-lg border-[1.5px] flex items-center gap-2.5 cursor-pointer transition ${
+                                isChecked
+                                  ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-semibold shadow-xs"
+                                  : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
                               }`}
                             >
                               <input
-                                type="radio"
-                                name="salesPotential"
-                                value={opt}
-                                checked={formData.salesPotential === opt}
-                                onChange={(e) => handleInputChange("salesPotential", e.target.value)}
-                                className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => handleAcquisitionToggle(ch)}
+                                className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
                               />
-                              <span className="font-modelica text-sm">{opt}</span>
+                              <span className="text-xs sm:text-sm font-medium">
+                                {ch}
+                              </span>
                             </label>
-                          ))}
-                        </div>
-                        {errors.salesPotential && (
-                          <p className="text-red-500 text-xs mt-1 font-modelica">
-                            {errors.salesPotential}
-                          </p>
-                        )}
+                          );
+                        })}
+                      </div>
+                      {formData.clientAcquisition.includes("Other") && (
+                        <input
+                          type="text"
+                          placeholder="Please specify other acquisition channel"
+                          value={formData.otherClientAcquisition}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "otherClientAcquisition",
+                              e.target.value,
+                            )
+                          }
+                          className="mt-2.5 emp-clean-input"
+                        />
+                      )}
+                      {errors.clientAcquisition && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.clientAcquisition}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Monthly Interactions */}
+                      <div className="flex flex-col justify-between">
+                        <label className="emp-clean-label">
+                          Approximately How Many Clients Do You Interact With
+                          Every Month?
+                        </label>
+                        <input
+                          type="number"
+                          id="monthlyInteractions"
+                          min="0"
+                          placeholder="e.g. 50"
+                          value={formData.monthlyInteractions}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "monthlyInteractions",
+                              e.target.value,
+                            )
+                          }
+                          className="emp-clean-input mt-auto"
+                        />
+                      </div>
+
+                      {/* How Many Clients Currently Use Supplements */}
+                      <div className="flex flex-col justify-between">
+                        <label className="emp-clean-label">
+                          How Many of Your Clients Currently Use Supplements?
+                        </label>
+                        <input
+                          type="number"
+                          id="clientsUsingSupplements"
+                          min="0"
+                          placeholder="e.g. 35"
+                          value={formData.clientsUsingSupplements}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "clientsUsingSupplements",
+                              e.target.value,
+                            )
+                          }
+                          className="emp-clean-input mt-auto"
+                        />
                       </div>
                     </div>
+
+                    {/* Most Common Supplement Purchased */}
+                    <div>
+                      <label className="emp-clean-label">
+                        What Is the Most Common Supplement Purchased by Your
+                        Clients?
+                      </label>
+                      <input
+                        type="text"
+                        id="commonSupplement"
+                        placeholder="e.g. Whey Protein Isolate, Creatine Monohydrate, Multivitamins, Peanut Butter"
+                        value={formData.commonSupplement}
+                        onChange={(e) =>
+                          handleInputChange("commonSupplement", e.target.value)
+                        }
+                        className="emp-clean-input"
+                      />
+                    </div>
+
+                    {/* Estimated Monthly Supplement Sales Potential */}
+                    <div id="salesPotential">
+                      <label className="emp-clean-label mb-2">
+                        Estimated Monthly Supplement Sales Potential{" "}
+                        <span className="text-[#ef4444]">*</span>
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        {SALES_POTENTIAL_OPTIONS.map((opt, idx) => (
+                          <label
+                            key={idx}
+                            className={`p-3 rounded-lg border-[1.5px] flex items-center gap-3 cursor-pointer transition ${
+                              formData.salesPotential === opt
+                                ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-bold shadow-xs ring-1 ring-[#95442c]"
+                                : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="salesPotential"
+                              value={opt}
+                              checked={formData.salesPotential === opt}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  "salesPotential",
+                                  e.target.value,
+                                )
+                              }
+                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                            />
+                            <span className="text-xs sm:text-sm font-semibold">
+                              {opt}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                      {errors.salesPotential && (
+                        <p className="text-[#ef4444] text-xs mt-1.5 font-medium">
+                          {errors.salesPotential}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                )}
+                </div>
 
                 {/* ========================================================
                     SECTION 6: VERIFICATION & DECLARATION
                    ======================================================== */}
-                {currentStep === 6 && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="border-b border-gray-200 pb-4">
-                      <div className="flex items-center gap-2 text-[#95442c] font-toma text-sm font-bold uppercase tracking-wider mb-1">
-                        <ShieldCheck className="w-4 h-4" /> Section 6 of 6
-                      </div>
-                      <h2 className="font-toma text-2xl font-bold text-gray-900">
+                <div
+                  id="section-6"
+                  className="emp-card-box p-5 sm:p-8 mb-6 sm:mb-8"
+                >
+                  {/* Metronic / gomzi-admin Section Header */}
+                  <div className="flex items-center gap-3.5 pb-5 mb-6 border-b border-[#f1f5f9]">
+                    <div
+                      className="flex items-center justify-center rounded-lg flex-shrink-0"
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        backgroundColor: "rgba(149, 68, 44, 0.1)",
+                        color: "#95442c",
+                        border: "1.5px solid rgba(149, 68, 44, 0.2)",
+                      }}
+                    >
+                      <ShieldCheck className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
                         Verification & Declaration
-                      </h2>
-                      <p className="font-modelica text-gray-500 text-sm">
-                        Review your application details and sign the partner agreement declarations.
-                      </p>
-                    </div>
-
-                    {/* Summary Quick Card */}
-                    <div className="bg-gray-50/80 rounded-2xl p-4 sm:p-5 border border-gray-200 text-sm">
-                      <h4 className="font-toma font-bold text-gray-900 mb-3 flex items-center justify-between">
-                        <span>Application Summary Overview</span>
-                        <span className="text-xs text-[#95442c] font-semibold">
-                          All 5 Sections Completed
-                        </span>
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 text-xs font-modelica text-gray-600">
-                        <div>
-                          <strong className="text-gray-800">Applicant:</strong>{" "}
-                          <span className="break-words">{formData.fullName} ({formData.gender}, {formData.dob})</span>
-                        </div>
-                        <div>
-                          <strong className="text-gray-800">Contact:</strong>{" "}
-                          <span className="break-all">{formData.mobile} | {formData.email}</span>
-                        </div>
-                        <div>
-                          <strong className="text-gray-800">Location:</strong>{" "}
-                          <span className="break-words">{formData.city}, {formData.state} - {formData.pincode}</span>
-                        </div>
-                        <div>
-                          <strong className="text-gray-800">Experience:</strong>{" "}
-                          <span>{formData.experienceYears} Years | {formData.activeClients} Active Clients</span>
-                        </div>
-                        <div>
-                          <strong className="text-gray-800">Profession:</strong>{" "}
-                          <span className="break-words">{formData.employmentType}</span>
-                        </div>
-                        <div>
-                          <strong className="text-gray-800">Est. Sales Potential:</strong>{" "}
-                          <span className="font-semibold text-[#95442c]">{formData.salesPotential}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Declarations Checkboxes */}
-                    <div className="space-y-3.5 pt-2">
-                      {/* Declaration 1 */}
-                      <label
-                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
-                          formData.declarationAccurate
-                            ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
-                            : "border-gray-300 hover:bg-gray-50"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.declarationAccurate}
-                          onChange={(e) =>
-                            handleInputChange("declarationAccurate", e.target.checked)
-                          }
-                          className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <span className="font-modelica text-xs sm:text-sm font-semibold text-gray-900 block leading-snug mb-0.5">
-                            I confirm that the information submitted is accurate.
-                          </span>
-                          <span className="text-[11px] sm:text-xs text-gray-500 font-modelica block leading-relaxed">
-                            All personal, professional, certification, and business information provided is true to the best of my knowledge.
-                          </span>
-                        </div>
-                      </label>
-                      {errors.declarationAccurate && (
-                        <p className="text-red-500 text-xs font-modelica pl-2">
-                          {errors.declarationAccurate}
-                        </p>
-                      )}
-
-                      {/* Declaration 2 */}
-                      <label
-                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
-                          formData.declarationVerify
-                            ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
-                            : "border-gray-300 hover:bg-gray-50"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.declarationVerify}
-                          onChange={(e) =>
-                            handleInputChange("declarationVerify", e.target.checked)
-                          }
-                          className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <span className="font-modelica text-xs sm:text-sm font-semibold text-gray-900 block leading-snug mb-0.5">
-                            I authorize RAG Nutrition to verify my professional certifications and submitted profile details.
-                          </span>
-                          <span className="text-[11px] sm:text-xs text-gray-500 font-modelica block leading-relaxed">
-                            RAG Nutrition and Gomzi Life Sciences may conduct partner background and credential verifications.
-                          </span>
-                        </div>
-                      </label>
-                      {errors.declarationVerify && (
-                        <p className="text-red-500 text-xs font-modelica pl-2">
-                          {errors.declarationVerify}
-                        </p>
-                      )}
-
-                      {/* Declaration 3 */}
-                      <label
-                        className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
-                          formData.declarationPrivacy
-                            ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
-                            : "border-gray-300 hover:bg-gray-50"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.declarationPrivacy}
-                          onChange={(e) =>
-                            handleInputChange("declarationPrivacy", e.target.checked)
-                          }
-                          className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <span className="font-modelica text-xs sm:text-sm font-semibold text-gray-900 block leading-snug mb-0.5">
-                            I consent to the handling of my information in accordance with the program’s privacy policy.
-                          </span>
-                          <span className="text-[11px] sm:text-xs text-gray-500 font-modelica block leading-relaxed">
-                            Data collected is strictly used for partner onboarding, commission disbursements, and account operations.
-                          </span>
-                        </div>
-                      </label>
-                      {errors.declarationPrivacy && (
-                        <p className="text-red-500 text-xs font-modelica pl-2">
-                          {errors.declarationPrivacy}
-                        </p>
-                      )}
+                      </h3>
+                      <span className="text-xs sm:text-sm text-[#64748b]">
+                        Review your application details and sign the partner
+                        agreement declarations
+                      </span>
                     </div>
                   </div>
-                )}
 
-                {/* ========================================================
-                    NAVIGATION BUTTONS
-                   ======================================================== */}
-                <div className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-gray-200 flex flex-row items-center justify-between gap-2.5 sm:gap-4">
-                  {currentStep > 1 ? (
-                    <button
-                      type="button"
-                      onClick={goToPrevStep}
-                      disabled={submitting}
-                      className="flex-1 sm:flex-initial sm:w-auto px-4 sm:px-6 py-3 sm:py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-toma font-bold rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base"
-                    >
-                      <ChevronLeft className="w-4 h-4 flex-shrink-0" /> Back
-                    </button>
-                  ) : (
-                    <div className="hidden sm:block" />
-                  )}
+                  {/* Summary Quick Card */}
+                  <div className="bg-white rounded-xl p-4 sm:p-5 border-[1.5px] border-[#e2e8f0] text-sm mb-6 shadow-2xs">
+                    <h4 className="font-bold text-[#0f172a] mb-3 flex items-center justify-between">
+                      <span>Application Summary Overview</span>
+                      <span className="text-xs text-[#95442c] font-semibold">
+                        Ready for Submission
+                      </span>
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-4 text-xs text-[#475569]">
+                      <div>
+                        <strong className="text-[#0f172a] font-semibold">
+                          Applicant:
+                        </strong>{" "}
+                        <span className="break-words">
+                          {formData.fullName || "—"} ({formData.gender},{" "}
+                          {formData.dob || "—"})
+                        </span>
+                      </div>
+                      <div>
+                        <strong className="text-[#0f172a] font-semibold">
+                          Contact:
+                        </strong>{" "}
+                        <span className="break-all">
+                          {formData.mobile || "—"} | {formData.email || "—"}
+                        </span>
+                      </div>
+                      <div>
+                        <strong className="text-[#0f172a] font-semibold">
+                          Location:
+                        </strong>{" "}
+                        <span className="break-words">
+                          {formData.city || "—"}, {formData.state || "—"}{" "}
+                          {formData.pincode ? `- ${formData.pincode}` : ""}
+                        </span>
+                      </div>
+                      <div>
+                        <strong className="text-[#0f172a] font-semibold">
+                          Experience:
+                        </strong>{" "}
+                        <span>
+                          {formData.experienceYears || "0"} Years |{" "}
+                          {formData.activeClients || "0"} Active Clients
+                        </span>
+                      </div>
+                      <div>
+                        <strong className="text-[#0f172a] font-semibold">
+                          Profession:
+                        </strong>{" "}
+                        <span className="break-words">
+                          {formData.employmentType}
+                        </span>
+                      </div>
+                      <div>
+                        <strong className="text-[#0f172a] font-semibold">
+                          Est. Sales Potential:
+                        </strong>{" "}
+                        <span className="font-semibold text-[#95442c]">
+                          {formData.salesPotential}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
-                  {currentStep < 6 ? (
-                    <button
-                      key="step-continue-btn"
-                      type="button"
-                      onClick={goToNextStep}
-                      className={`flex-1 sm:flex-initial sm:w-auto px-4 sm:px-8 py-3 sm:py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-2 shadow-md shadow-[#95442c]/20 text-sm sm:text-base ${
-                        currentStep === 1 ? "w-full sm:w-auto sm:ml-auto" : ""
+                  {/* Declarations Checkboxes */}
+                  <div className="space-y-3 pt-2">
+                    {/* Declaration 1 */}
+                    <label
+                      className={`p-3.5 sm:p-4 rounded-lg border-[1.5px] flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
+                        formData.declarationAccurate
+                          ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
+                          : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white"
                       }`}
                     >
-                      Continue <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                    </button>
-                  ) : (
+                      <input
+                        type="checkbox"
+                        id="declarationAccurate"
+                        checked={formData.declarationAccurate}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "declarationAccurate",
+                            e.target.checked,
+                          )
+                        }
+                        className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <span className="text-xs sm:text-sm font-semibold text-[#0f172a] block leading-snug mb-0.5">
+                          I confirm that the information submitted is accurate.
+                        </span>
+                        <span className="text-[11px] sm:text-xs text-[#64748b] block leading-relaxed">
+                          All personal, professional, certification, and
+                          business information provided is true to the best of
+                          my knowledge.
+                        </span>
+                      </div>
+                    </label>
+                    {errors.declarationAccurate && (
+                      <p className="text-[#ef4444] text-xs font-medium pl-2">
+                        {errors.declarationAccurate}
+                      </p>
+                    )}
+
+                    {/* Declaration 2 */}
+                    <label
+                      className={`p-3.5 sm:p-4 rounded-lg border-[1.5px] flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
+                        formData.declarationVerify
+                          ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
+                          : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        id="declarationVerify"
+                        checked={formData.declarationVerify}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "declarationVerify",
+                            e.target.checked,
+                          )
+                        }
+                        className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <span className="text-xs sm:text-sm font-semibold text-[#0f172a] block leading-snug mb-0.5">
+                          I authorize RAG Nutrition to verify my professional
+                          certifications and submitted profile details.
+                        </span>
+                        <span className="text-[11px] sm:text-xs text-[#64748b] block leading-relaxed">
+                          RAG Nutrition and Gomzi Life Sciences may conduct
+                          partner background and credential verifications.
+                        </span>
+                      </div>
+                    </label>
+                    {errors.declarationVerify && (
+                      <p className="text-[#ef4444] text-xs font-medium pl-2">
+                        {errors.declarationVerify}
+                      </p>
+                    )}
+
+                    {/* Declaration 3 */}
+                    <label
+                      className={`p-3.5 sm:p-4 rounded-lg border-[1.5px] flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
+                        formData.declarationPrivacy
+                          ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
+                          : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        id="declarationPrivacy"
+                        checked={formData.declarationPrivacy}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "declarationPrivacy",
+                            e.target.checked,
+                          )
+                        }
+                        className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <span className="text-xs sm:text-sm font-semibold text-[#0f172a] block leading-snug mb-0.5">
+                          I consent to the handling of my information in
+                          accordance with the program’s privacy policy.
+                        </span>
+                        <span className="text-[11px] sm:text-xs text-[#64748b] block leading-relaxed">
+                          Data collected is strictly used for partner
+                          onboarding, commission disbursements, and account
+                          operations.
+                        </span>
+                      </div>
+                    </label>
+                    {errors.declarationPrivacy && (
+                      <p className="text-[#ef4444] text-xs font-medium pl-2">
+                        {errors.declarationPrivacy}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Primary Submit Partner Application Action Button - ALWAYS VISIBLE, DISABLED UNTIL ALL 3 CHECKBOXES ARE CHECKED */}
+                  <div className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t-[1.5px] border-[#f1f5f9] flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-xs text-[#64748b] text-center sm:text-left">
+                      <span>
+                        By submitting, an instant verification OTP will be
+                        sent to your email.
+                      </span>
+                    </div>
                     <button
-                      key="step-submit-btn"
+                      key="form-submit-btn"
                       type="submit"
-                      disabled={submitting || sendingOtp}
-                      className="flex-1 sm:flex-initial sm:w-auto px-2.5 sm:px-10 py-3 sm:py-4 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold sm:font-black rounded-xl transition flex items-center justify-center gap-1.5 sm:gap-3 shadow-lg shadow-[#95442c]/30 disabled:opacity-50 text-xs sm:text-base"
+                      disabled={
+                        !formData.declarationAccurate ||
+                        !formData.declarationVerify ||
+                        !formData.declarationPrivacy ||
+                        submitting ||
+                        sendingOtp
+                      }
+                      className="w-full sm:w-auto h-[48px] px-8 sm:px-10 bg-[#95442c] hover:bg-[#7d3824] text-white font-bold rounded-lg transition flex items-center justify-center gap-2.5 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#95442c] text-sm sm:text-base cursor-pointer"
                     >
                       {submitting ? (
                         <>
-                          <div className="w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
-                          <span className="truncate">Submitting...</span>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                          <span className="truncate">
+                            Submitting Application...
+                          </span>
                         </>
                       ) : sendingOtp ? (
                         <>
-                          <div className="w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
-                          <span className="truncate">Sending OTP...</span>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                          <span className="truncate">
+                            Sending Verification OTP...
+                          </span>
                         </>
                       ) : (
                         <>
-                          <span>Submit Application</span> <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 flex-shrink-0" />
+                          <span>Submit Partner Application</span>
+                          <ArrowRight className="w-5 h-5 flex-shrink-0" />
                         </>
                       )}
                     </button>
-                  )}
+                  </div>
                 </div>
               </form>
             </div>
           )}
+        </div>
+
+        {/* Clean Minimalist Portal Footer */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 mt-12 sm:mt-16 text-center text-xs text-[#94a3b8]">
+          <p>© {new Date().getFullYear()} RAG Nutrition. All rights reserved.</p>
         </div>
       </div>
 
@@ -2173,27 +2722,27 @@ export default function Inquiry() {
             if (e.target === e.currentTarget) setShowOtpModal(false);
           }}
         >
-          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-gray-100 relative text-center">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-[#e2e8f0] relative text-center">
             {/* Close Button */}
             <button
               type="button"
               onClick={() => setShowOtpModal(false)}
-              className="absolute top-5 right-5 text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition"
+              className="absolute top-5 right-5 text-[#94a3b8] hover:text-[#0f172a] p-2 rounded-lg hover:bg-slate-100 transition cursor-pointer"
               aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Email Icon Badge */}
-            <div className="w-16 h-16 bg-[#fdf5f2] text-[#95442c] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#95442c]/20 shadow-sm">
-              <Mail className="w-8 h-8 text-[#95442c]" />
+            <div className="w-14 h-14 bg-[#fdf5f2] text-[#95442c] rounded-xl flex items-center justify-center mx-auto mb-4 border border-[#95442c]/20 shadow-xs">
+              <Mail className="w-7 h-7 text-[#95442c]" />
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-toma font-bold text-gray-900 mb-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#0f172a] mb-2">
               Verify Your Email Address
             </h3>
 
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-sm text-[#64748b] mb-2">
               We've sent a 6-digit OTP code to:
             </p>
             <div className="inline-flex items-center gap-2 bg-[#fdf5f2] text-[#95442c] font-bold px-3.5 py-1.5 rounded-full text-sm mb-3 border border-[#95442c]/20">
@@ -2201,15 +2750,19 @@ export default function Inquiry() {
               {formData.email}
             </div>
 
-            <p className="text-xs text-gray-400 mb-6">
+            <p className="text-xs text-[#94a3b8] mb-6">
               Wrong email?{" "}
               <button
                 type="button"
                 onClick={() => {
                   setShowOtpModal(false);
-                  setCurrentStep(1);
+                  const el =
+                    document.getElementById("email") ||
+                    document.getElementById("section-1");
+                  el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                  el?.focus?.();
                 }}
-                className="text-[#95442c] font-semibold underline hover:text-[#d26a4a]"
+                className="text-[#95442c] font-semibold underline hover:text-[#7d3824] cursor-pointer"
               >
                 Change in Section 1
               </button>
@@ -2231,7 +2784,7 @@ export default function Inquiry() {
                   }}
                   placeholder="Enter 6-digit OTP"
                   autoFocus
-                  className="w-full text-center text-xl sm:text-2xl font-mono tracking-[0.25em] sm:tracking-[0.4em] py-3 sm:py-3.5 px-3 sm:px-4 bg-gray-50 border-2 border-gray-200 focus:border-[#95442c] focus:bg-white rounded-xl outline-none transition font-bold text-gray-800 placeholder:tracking-normal placeholder:font-sans placeholder:text-sm sm:placeholder:text-base placeholder:text-gray-400"
+                  className="w-full text-center text-xl sm:text-2xl font-mono tracking-[0.25em] sm:tracking-[0.4em] py-3 px-3 bg-white border-[1.5px] border-[#cbd5e1] focus:border-[#95442c] rounded-lg outline-none transition font-bold text-[#0f172a] placeholder:tracking-normal placeholder:font-sans placeholder:text-sm placeholder:text-[#94a3b8]"
                 />
               </div>
 
@@ -2245,7 +2798,7 @@ export default function Inquiry() {
               <button
                 type="submit"
                 disabled={verifyingOtp || otpValue.length < 4}
-                className="w-full py-3.5 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-md shadow-[#95442c]/20 disabled:opacity-50 text-base"
+                className="w-full h-[44px] bg-[#95442c] hover:bg-[#7d3824] text-white font-bold rounded-lg transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 text-sm cursor-pointer"
               >
                 {verifyingOtp ? (
                   <>
@@ -2254,17 +2807,18 @@ export default function Inquiry() {
                   </>
                 ) : (
                   <>
-                    Verify & Submit Application <ArrowRight className="w-4 h-4" />
+                    Verify & Submit Application{" "}
+                    <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
             </form>
 
             {/* Resend Action */}
-            <div className="mt-5 pt-4 border-t border-gray-100 text-xs text-gray-500 flex items-center justify-center gap-2">
+            <div className="mt-5 pt-4 border-t border-[#f1f5f9] text-xs text-[#64748b] flex items-center justify-center gap-2">
               <span>Didn't receive code?</span>
               {resendCooldown > 0 ? (
-                <span className="font-semibold text-gray-400">
+                <span className="font-semibold text-[#94a3b8]">
                   Resend in {resendCooldown}s
                 </span>
               ) : (
@@ -2272,7 +2826,7 @@ export default function Inquiry() {
                   type="button"
                   disabled={sendingOtp}
                   onClick={handleSendEmailOtp}
-                  className="font-bold text-[#95442c] hover:underline disabled:opacity-50"
+                  className="font-bold text-[#95442c] hover:underline disabled:opacity-50 cursor-pointer"
                 >
                   {sendingOtp ? "Sending..." : "Resend OTP"}
                 </button>

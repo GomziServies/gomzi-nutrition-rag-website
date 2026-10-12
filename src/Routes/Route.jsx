@@ -84,16 +84,6 @@ export const Route = createBrowserRouter([
       },
 
       {
-        path: "/inquiry",
-        element: <Inquiry />,
-      },
-
-      {
-        path: "/contact-us/inquiry",
-        element: <Inquiry />,
-      },
-
-      {
         path: "/cart",
         element: <Cart />,
       },
@@ -143,6 +133,16 @@ export const Route = createBrowserRouter([
         element: <CategoriesSection />,
       },
     ],
+  },
+
+  // Standalone Inquiry Portal (outside Wrapper without site header & footer)
+  {
+    path: "/inquiry",
+    element: <Inquiry />,
+  },
+  {
+    path: "/contact-us/inquiry",
+    element: <Inquiry />,
   },
 
   // Checkout intentionally outside Wrapper
