@@ -1,0 +1,1113 @@
+import PageHeading from "../../HOC/Header/PageHeading";
+import LegalSection from "../../component/ui/LegalSection";
+
+const TermsConditions = () => {
+  return (
+    <>
+      <PageHeading head="Terms & Conditions" />
+
+      <LegalSection title="Terms & Conditions">
+        {/* 1. INTRODUCTION */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">1. INTRODUCTION</h3>
+
+          <p>
+            <strong>A.</strong> Welcome to www.ragnutrition.in, an online
+            website (including its mobile version) and mobile application
+            (collectively the "Website"), which is operated and managed by RAG
+            Strength & Nutrition, having its office at G-23, Time Square, Gaurav
+            Path Road, Beside Gajera Global School, Pal Gam, Surat 394510
+            (hereinafter referred to as the "Company", "we", "our" or "us").
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> The "Services" we provide or make available
+            include: (i) the Website; (ii) the services provided by the Website
+            and by client software made available through the Website; and (iii)
+            all information, linked pages, features, data, text, images,
+            photographs, graphics, music, sounds, video, messages, tags,
+            content, programming, software, application services (including any
+            mobile application services) or other materials made available
+            through the Website or its related services ("Content"). These Terms
+            and Conditions govern your use of the Services provided by us.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> If you are using the Services (the "User", "you"
+            or "your") by using, accessing or browsing the Website and/or
+            registering an account with us, you acknowledge and agree that you
+            have read, understood and agree to be bound by these Terms and
+            Conditions in addition to the applicable laws and regulations of
+            India, and the policies referenced herein and/or accessible by
+            hyperlink hereto, such as the Return, Refund and Cancellation Policy
+            and the Privacy Policy on the Website (collectively, the "User
+            Agreement").
+          </p>
+
+          <p className="mt-3">
+            <strong>D.</strong> We reserve the right, at our sole discretion, to
+            change, modify, add or remove these Terms and Conditions from time
+            to time without any prior notification to you, and it is your
+            responsibility to review them as soon as possible. Your continued
+            use of the Website and/or the Services following the posting of
+            changes shall mean that you accept and agree to such revisions.
+          </p>
+
+          <p className="mt-3">
+            <strong>E.</strong> The version of the User Agreement that will
+            apply to your order will be that uploaded on the Website at the time
+            you access, browse, use or place your order. The User Agreement does
+            not alter in any way the terms or conditions of any other written
+            agreement you may have with the Company for other products or
+            services.
+          </p>
+
+          <p className="mt-3">
+            <strong>F.</strong> Please read this User Agreement carefully before
+            using the Website or opening a user account ("Account") so that you
+            are aware of your legal rights and obligations with respect to the
+            Company and the use of the Services. The Website is available for
+            your use only on the condition that you agree to all the terms and
+            conditions of the User Agreement. If you do not agree to all of the
+            terms and conditions of the User Agreement, do not access the
+            Website or use the Services. You are also responsible for ensuring
+            that all persons who access the Website through your Account comply
+            with the User Agreement.
+          </p>
+
+          <p className="mt-3">
+            <strong>G.</strong> It is your responsibility to ascertain and obey
+            all applicable local, state, federal and international laws
+            (including minimum age requirements) with regard to the possession
+            and use of any item purchased from the Website. By placing an order,
+            you represent that the Products ordered will be used only in a
+            lawful manner and subject to the provisions of the User Agreement.
+          </p>
+
+          <p className="mt-3">
+            <strong>H.</strong> This document is an electronic record in terms
+            of the Information Technology Act, 2000 and the rules thereunder, as
+            applicable, and the amended provisions pertaining to electronic
+            records in various statutes as amended by the Information Technology
+            Act, 2000. This electronic record is generated by a computer system
+            and does not require any physical or digital signature.
+          </p>
+        </div>
+
+        {/* 2. LIMITED LICENCE */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">2. LIMITED LICENCE</h3>
+
+          <p>
+            <strong>A.</strong> We hereby grant you a non-exclusive,
+            non-transferable, limited and revocable licence, without the right
+            to sub-license, in accordance with the provisions of the User
+            Agreement, to access and use the Services subject to the terms and
+            conditions of the User Agreement. No right or licence is granted,
+            directly or indirectly, in any proprietary Content, trademarks,
+            service marks, brand names, logos and other intellectual property
+            displayed on or accessible via the Website (the "Intellectual
+            Property") to any party accessing the Website, and no party
+            accessing the Website shall claim any right, title or interest
+            therein. All such materials on the Website are subject to and
+            protected by intellectual property laws and rights applicable in
+            India. By using or accessing the Services, you agree to comply with
+            the copyright, trademark, service mark and all other applicable laws
+            that protect the Services, the Website and its Content. You agree
+            not to copy, distribute, republish, transmit, publicly display,
+            publicly perform, modify, adapt, rent, sell, or create derivative
+            works of any portion of the Services, the Website or its Content.
+            You also may not, without our prior written consent, mirror or frame
+            any part or whole of the Website or Content on any other server or
+            as part of any other website. You further agree not to use any
+            robot, spider or other automatic device or manual process to monitor
+            or copy our Content without our prior written consent (such consent
+            is deemed given for standard search engine technology used by
+            Internet search websites to direct users to the Website).
+          </p>
+        </div>
+
+        {/* 3. ELIGIBILITY TO USE */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">3. ELIGIBILITY TO USE</h3>
+
+          <p>
+            <strong>A.</strong> In accordance with applicable Indian laws,
+            please do not enter this Website if you are under the age of 18.
+            Exit the Website immediately if you are under 18, as the Website is
+            not designed for the purpose of attracting or marketing to users
+            under 18. By entering our Website, you represent that you are at
+            least 18 years of age and are capable, competent and able to
+            comprehend the User Agreement. We do not knowingly authorise or
+            collect information from any person under the age of 18. If you are
+            under 18, you are not permitted to disclose or send us any personal
+            information. Any transaction made through this Website by a person
+            under the age of 18 shall be void, and the Company shall not be
+            responsible for compensating any such transaction or payment made
+            for Products or subscriptions on the Website. This Website and all
+            its Content are regulated and operated from India, and any personal
+            or other information provided during use of this Website is governed
+            by the privacy laws of India.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> An individual representing a company,
+            partnership firm or sole proprietorship shall be eligible to access
+            the Website and place an order on its behalf only if such individual
+            has been duly authorised by way of necessary corporate action, as
+            prescribed statutorily and/or under the charter documents of such
+            entity.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> We reserve the right, with prior notice, to: (i)
+            suspend or terminate your Account; (ii) revoke your access to the
+            Website; (iii) remove any Content associated with your Account; (iv)
+            cancel or suspend any transactions associated with your Account; (v)
+            withhold refunds; and/or (vi) take any other action we deem
+            necessary if you are found in contravention of the User Agreement
+            and/or applicable Indian laws and regulations.
+          </p>
+
+          <p className="mt-3">
+            <strong>D.</strong> Notwithstanding anything contained herein, if
+            you breach the User Agreement, the Company reserves the right to
+            take any legal or other action against you, including but not
+            limited to denying or revoking access to the Website and referral to
+            the appropriate authorities.
+          </p>
+
+          <p className="mt-3">
+            <strong>E.</strong> You may only access the Website for lawful
+            purposes. You are solely responsible for the knowledge of, and
+            adherence to, any and all laws, rules and regulations pertaining to
+            your use of the Website.
+          </p>
+        </div>
+
+        {/* 4. AVAILABILITY */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">
+            4. AVAILABILITY OF THE WEBSITE AND THE SERVICES
+          </h3>
+
+          <p>
+            <strong>A.</strong> The Company does not guarantee that the Website
+            or Services will be compatible with all hardware and software you
+            may use. The Company shall not be responsible for issues connected
+            with equipment, intermediary platforms, browsers or applications
+            used to access the Website and the Services.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> As the Website depends on third-party service
+            providers for certain operational aspects (such as domain hosts and
+            payment service providers), and due to the nature of the Internet,
+            the Company makes no warranty that access to the Website or use of
+            the Services will be uninterrupted, timely, error-free, or free of
+            viruses, worms or other harmful elements. We shall not be liable
+            where access to the Website or provision of Services is disrupted
+            for reasons outside the Company's control.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> We may, from time to time, upgrade, modify,
+            suspend or discontinue, in whole or in part, the Website or any
+            Services. In such cases, we shall ensure this does not impact your
+            rights in respect of Services already availed by you.
+          </p>
+
+          <p className="mt-3">
+            <strong>D.</strong> The Website undergoes ad-hoc maintenance as the
+            Company deems necessary, and we shall notify you accordingly. During
+            maintenance, you may be unable to avail the Service; however, we
+            will ensure this does not impact your rights in respect of Services
+            already availed by you.
+          </p>
+
+          <p className="mt-3">
+            <strong>E.</strong> While the Company will use commercially
+            reasonable efforts to make the Services available without
+            interruption, it does not guarantee fault-free Services. If a fault
+            occurs, you should report it to us, and we will attempt to correct
+            it as soon as practicable.
+          </p>
+        </div>
+
+        {/* 5. PRODUCTS */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">5. PRODUCTS</h3>
+
+          <p>
+            <strong>A.</strong> We sell certain products through the Website
+            (the "Product(s)"). The Products, or any samples thereof, are for
+            personal use only, and you may not sell or resell any Products or
+            samples received from us unless agreed otherwise.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> We make no representation that the Products are
+            appropriate for a particular use or available for purchase at any
+            given time. The inclusion of any Product or service on the Website
+            at a particular time does not imply that it will remain available.
+            You use the Website and purchase Products solely at your own risk.
+            The Products comply with applicable laws and regulations on safety
+            and quality. Except where Product-specific additional terms are
+            provided, the terms of the User Agreement supersede all previous
+            representations, understandings and/or agreements and shall prevail
+            notwithstanding any variance with other order terms.
+          </p>
+        </div>
+
+        {/* 6. PURCHASE AND PAYMENT */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">6. PURCHASE AND PAYMENT</h3>
+
+          <p>
+            <strong>A.</strong> Card payments are processed through third-party
+            payment channels, and the types of cards accepted may vary by
+            jurisdiction. We provide secure digital payment methods and channels
+            in accordance with applicable technical and regulatory standards.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> For all charges relating to Products ordered
+            through the Website, we will bill your bank card or other offered
+            payment method, and you agree to pay all such charges. By providing
+            card or account information, you represent that you are the
+            authorised user of the payment method used. Should legal action
+            become necessary to collect balances due, you agree to reimburse us
+            for expenses incurred, including attorneys' fees. We shall issue
+            invoices in compliance with applicable Indian rules and regulations.
+            Additional applicable tax may apply to online transactions.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> We take no responsibility and assume no
+            liability for loss or damage arising from shipping or payment
+            information entered by you. We reserve the right to verify your
+            authorisation to use certain payment methods and may suspend or
+            cancel a transaction pending such confirmation.
+          </p>
+        </div>
+
+        {/* 7. SHIPPING AND DELIVERY */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">7. SHIPPING AND DELIVERY</h3>
+
+          <p>
+            <strong>A.</strong> All Products purchased from the Website shall be
+            delivered by the Company through its logistics partner(s) via
+            standard courier services to the shipping address designated by you,
+            provided that address complies with shipping restrictions.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> You may return and claim a refund or replacement
+            for a Product purchased from the Website in accordance with our
+            Return, Refund and Cancellation Policy available on the Website.
+            Nothing herein limits your statutory return or cancellation rights.
+          </p>
+
+          <h4 className="font-semibold text-xl mt-5 mb-3">
+            Delivery Conditions
+          </h4>
+
+          <ol className="list-decimal pl-6 space-y-2">
+            <li>
+              We may require verification of information prior to accepting
+              and/or shipping any order.
+            </li>
+
+            <li>
+              If a User is unreachable or does not accept delivery, the Company
+              reserves the right to cancel the order and issue a refund (if
+              payment was made), without liability, and shall inform the User
+              accordingly.
+            </li>
+
+            <li>
+              Orders placed Monday to Friday (excluding public holidays) will
+              have an estimated delivery time of fourteen (14) working days from
+              confirmation of payment, subject to variation for reasons such as
+              security checks, force majeure, shipping restrictions, payment
+              authorisation, and packing/dispatch. An email confirmation will be
+              sent for all orders received.
+            </li>
+
+            <li>
+              Expected delivery times may vary from those estimated on the
+              Website.
+            </li>
+
+            <li>
+              An estimated delivery time is displayed on the order summary page,
+              and an order-confirmation email including this estimate will be
+              sent to you.
+            </li>
+
+            <li>
+              Delivery may take longer due to factors including bad weather,
+              flight delays, political disruptions, force majeure, logistical
+              impediments, or other unforeseen circumstances.
+            </li>
+
+            <li>
+              No deliveries shall be made or accepted outside the territorial
+              boundaries of India.
+            </li>
+
+            <li>
+              Where a User purchases multiple Products in one transaction, the
+              Company may deliver them together, subject to stock availability
+              and logistical restrictions.
+            </li>
+
+            <li>
+              A User requiring delivery to different addresses must place
+              separate transactions with separate delivery addresses. Delivery
+              may be made to any person present at the shipping address
+              provided.
+            </li>
+          </ol>
+
+          <p className="mt-4">
+            <strong>D.</strong> We shall not be responsible or liable for delays
+            in delivery. If delayed receipt prevents you from benefiting from
+            the Products, you have the right to return them and claim a refund
+            in accordance with our Return, Refund and Cancellation Policy.
+          </p>
+
+          <p className="mt-3">
+            <strong>E.</strong> You may cancel an order before it is shipped.
+            For prepaid orders, the price will be refunded to the original
+            payment source or wallet used, in accordance with the options chosen
+            by you, after successful cancellation.
+          </p>
+
+          <p className="mt-3">
+            <strong>F.</strong> While it is our practice to confirm orders by
+            email, receipt of an order confirmation email does not constitute
+            our acceptance of an order. We reserve the right, with notice to
+            you, to limit order quantities on any Product and/or refuse service
+            to any customer.
+          </p>
+
+          <p className="mt-3">
+            <strong>G.</strong> For queries relating to returns, refunds or
+            cancellations, please refer to our Return, Refund and Cancellation
+            Policy available on the Website.
+          </p>
+        </div>
+
+        {/* 8. USER REGISTRATION */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">8. USER REGISTRATION</h3>
+
+          <p>
+            <strong>A.</strong> Access to, and use of, password-protected and/or
+            secure areas of the Website and/or the Services is restricted to
+            Users with a registered Account. You may create and hold only one
+            (1) Account. You are responsible for maintaining the confidentiality
+            of your Account and password and for controlling access to it, and
+            you accept responsibility for all activity occurring under your
+            Account. Each Account is non-transferable and may not be sold,
+            traded, combined or shared with any other person.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> When registering, you shall provide accurate and
+            complete registration information. We reserve the right to request
+            additional information or supporting documents to verify the
+            veracity of information provided. You shall ensure your Account
+            information remains accurate and up to date; such personal
+            information will be stored securely. If you refuse to provide such
+            information, or if we have reasonable grounds to suspect you have
+            provided inaccurate, misleading or fraudulent information, we
+            reserve the right to suspend or terminate your Account and/or refuse
+            use of the Services, following notice to you.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> If you access, browse or use the Website on
+            someone else's behalf, you represent that you have the authority to
+            bind that person to the User Agreement. Should that person refuse to
+            be bound, you agree to accept liability and indemnify the Company
+            against any harm caused by such wrongful use.
+          </p>
+
+          <p className="mt-3">
+            <strong>D.</strong> You may not obtain, or attempt to obtain,
+            unauthorised access to any part of the Website and/or Services, or
+            to any protected information, through means not intentionally made
+            available by us. A breach of this provision may constitute an
+            offence under applicable Indian law.
+          </p>
+
+          <p className="mt-3">
+            <strong>E.</strong> If you know or have reason to believe that the
+            security of your Account has been breached, you should contact us
+            immediately. If we identify a breach or suspected breach, we may
+            require you to change your password, or we may temporarily or
+            permanently block or suspend your Account, following notice to you,
+            without liability to the Company.
+          </p>
+
+          <p className="mt-3">
+            <strong>F.</strong> You are solely responsible for all information
+            or Comments you upload, post, email or otherwise transmit via the
+            Website. Information provided to us shall be maintained in
+            accordance with our Privacy Policy and other applicable laws.
+          </p>
+
+          <p className="mt-3">
+            <strong>G.</strong> You are fully responsible for all activities
+            occurring under your Account, even if not committed by you
+            personally. We will not be liable for any loss or damage arising
+            from unauthorised use of your password or your failure to comply
+            with this section.
+          </p>
+        </div>
+
+        {/* 9. ACCURACY */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">
+            9. ACCURACY OF CONTENT AND INVITATION TO OFFER
+          </h3>
+
+          <p>
+            <strong>A.</strong> We endeavour to describe our Products and other
+            information on the Website as accurately as possible, particularly
+            regarding pricing at the time of publication and fair description of
+            Products. However, negligible differences, including typographical
+            errors, may occur and may relate to pricing or availability. We do
+            not warrant that Products will conform exactly to the pictures
+            displayed, or that the Content is accurate, complete, reliable,
+            current or error-free. Product images are indicative and may not
+            match the actual Product. While we make reasonable efforts to
+            accurately display Product attributes, including colour, actual
+            colours seen will depend on your device display, which we cannot
+            guarantee to render accurately. All Content is subject to change at
+            any time without notice. Prices are displayed inclusive of Goods and
+            Services Tax ("GST"). Product packaging may vary from that shown on
+            the Website.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> All Products and information displayed on the
+            Website constitute an invitation to offer. Your order for purchase
+            constitutes your offer, subject to the terms of the User Agreement.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> We reserve the right to accept or reject your
+            offer, in part or in full, at our sole discretion, and such decision
+            shall be final and shall not give rise to any liability. Our
+            acceptance of your order takes place upon dispatch of the ordered
+            Product(s); dispatch of all ordered Products may not occur
+            simultaneously, and only the dispatched portion is deemed accepted,
+            with the balance remaining on offer and subject to our right to
+            accept or reject it. No act or omission prior to actual dispatch
+            constitutes acceptance of your offer. Where you have supplied an
+            email address or phone number, we will notify you to confirm receipt
+            and, subsequently, dispatch (and therefore acceptance) of your
+            order. We may change, suspend or discontinue availability of any
+            Product at any time, without notice or liability, and prices may be
+            subject to change without notice or liability.
+          </p>
+
+          <p className="mt-3">
+            <strong>D.</strong> You must evaluate, and bear all risks associated
+            with, the use of any Content, including reliance on its accuracy,
+            completeness or usefulness. You acknowledge that, to the maximum
+            extent permitted by law, you may not rely on any Content created by
+            us.
+          </p>
+        </div>
+
+        {/* 10. USAGE RESTRICTIONS */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">10. USAGE RESTRICTIONS</h3>
+
+          <p>
+            <strong>A.</strong> The Company is not responsible for damages
+            resulting from your use of the Website. You shall not use the
+            Website for any of the following purposes, or any purpose expressly
+            prohibited under applicable law:
+          </p>
+
+          <ol className="list-decimal pl-6 mt-3 space-y-2">
+            <li>
+              Disseminating any unlawful, harassing, libellous, abusive,
+              threatening, harmful, vulgar, obscene, or otherwise objectionable
+              material.
+            </li>
+
+            <li>
+              Transmitting material that encourages conduct constituting a
+              criminal offence, civil liability, or breach of any relevant laws,
+              regulations or code of practice.
+            </li>
+
+            <li>
+              Gaining unauthorised access to other computer or network systems.
+            </li>
+
+            <li>
+              Interfering with any other person's use or enjoyment of the
+              Website.
+            </li>
+
+            <li>Breaching any applicable laws.</li>
+
+            <li>
+              Interfering with or disrupting networks or websites connected to
+              the Services.
+            </li>
+
+            <li>
+              Making, transmitting or storing electronic copies of
+              copyright-protected materials without the owner's permission.
+            </li>
+
+            <li>Harming minors in any way.</li>
+
+            <li>
+              Infringing any patent, trademark, copyright or other proprietary
+              right.
+            </li>
+
+            <li>
+              Deceiving or misleading recipients about the origin of messages,
+              or communicating information that is grossly offensive or
+              menacing.
+            </li>
+
+            <li>
+              Impersonating another person or using a fraudulent computer
+              network protocol address.
+            </li>
+
+            <li>
+              Deploying software viruses or other code designed to interrupt,
+              destroy or limit the functionality of any computer resource,
+              including the Website.
+            </li>
+
+            <li>
+              Threatening the unity, integrity, defence, security or sovereignty
+              of India, friendly relations with foreign states, or public order,
+              or inciting the commission of a cognisable offence.
+            </li>
+          </ol>
+
+          <p className="mt-5">
+            <strong>B.</strong> You shall not host, display, upload, modify,
+            publish, transmit, store, update or share any Content or information
+            that:
+          </p>
+
+          <ol className="list-decimal pl-6 mt-3 space-y-2">
+            <li>
+              Belongs to another person to which you have no right of access.
+            </li>
+
+            <li>
+              Is harmful, harassing, blasphemous, defamatory, obscene,
+              pornographic, paedophilic, libellous, invasive of privacy, or
+              racially or ethnically objectionable.
+            </li>
+
+            <li>
+              Is threatening, abusive, alarming, distressing, tortious, vulgar
+              or hateful to any person or group, including minors.
+            </li>
+
+            <li>
+              Infringes any patent, trademark, copyright or other proprietary
+              right.
+            </li>
+
+            <li>
+              Violates any applicable law, including laws against money
+              laundering, terrorism-financing or gambling.
+            </li>
+
+            <li>
+              Deceives or misleads recipients about the origin of a message, or
+              knowingly communicates false or misleading information presented
+              as fact.
+            </li>
+
+            <li>Impersonates another person.</li>
+
+            <li>
+              Threatens the unity, integrity, defence, security or sovereignty
+              of India, or public order.
+            </li>
+
+            <li>Contains a software virus or other harmful code.</li>
+
+            <li>
+              Is false and published with intent to mislead or harass a person,
+              entity or agency for financial gain or to cause injury, or is
+              otherwise prohibited under applicable laws on combatting rumours
+              and cybercrime.
+            </li>
+          </ol>
+
+          <p className="mt-5">
+            <strong>C.</strong> You are also prohibited from:
+          </p>
+
+          <ol className="list-decimal pl-6 mt-3 space-y-2">
+            <li>
+              Violating or attempting to violate the integrity or security of
+              the Website or its Content.
+            </li>
+
+            <li>
+              Transmitting information that is disruptive or competitive to the
+              Company's provision of services.
+            </li>
+
+            <li>
+              Submitting incomplete, false or inaccurate information, or
+              otherwise using the Website in a fraudulent, misleading or
+              deceptive manner.
+            </li>
+
+            <li>
+              Using the Services in violation of, or to circumvent, applicable
+              sanctions or embargoes (including those administered by OFAC, the
+              UN Security Council, the EU or UK HM Treasury).
+            </li>
+
+            <li>Making unsolicited communications to other Users.</li>
+
+            <li>
+              Using any automated tool (spiders, robots, or intelligent agents)
+              to navigate or search the Website.
+            </li>
+
+            <li>
+              Harvesting or collecting information about other Account holders,
+              including personal data.
+            </li>
+
+            <li>
+              Attempting to decipher, decompile, disassemble or reverse-engineer
+              any part of the Website.
+            </li>
+
+            <li>
+              Copying or duplicating any Content or other information from the
+              Website.
+            </li>
+
+            <li>Framing, hotlinking or deep-linking any Content.</li>
+
+            <li>
+              Taking any action that could damage, disable, overburden or impair
+              the Services or connected servers/networks.
+            </li>
+
+            <li>
+              Acting in contravention of applicable laws on combatting rumours
+              and cybercrime.
+            </li>
+          </ol>
+        </div>
+
+        {/* 11. QUANTITY RESTRICTIONS */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">11. QUANTITY RESTRICTIONS</h3>
+
+          <p>
+            <strong>A.</strong> We reserve the right, at our sole discretion, to
+            limit the quantity of Products purchased per person, household or
+            order. These restrictions may apply to orders placed using the same
+            account, credit/debit card, or the same billing/shipping address.
+            Users will be notified should such limits apply. We also reserve the
+            right to prohibit sales to any person as we deem fit.
+          </p>
+        </div>
+
+        {/* 12. PRICING INFORMATION */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">12. PRICING INFORMATION</h3>
+
+          <p>
+            <strong>A.</strong> Prices and availability of Products, offers and
+            Services are subject to change at the Company's sole discretion
+            without prior notice or liability. Where a Product is listed at an
+            incorrect price or with incorrect information due to a pricing or
+            informational error, we reserve the right to refuse or cancel orders
+            placed for that Product, unless already dispatched. Where an item is
+            mis-priced, we may, at our discretion, contact you for instructions
+            or cancel and notify you of the cancellation. Unless dispatched,
+            your offer is not deemed accepted, and we may modify the price and
+            contact you, or cancel the order and notify you. Payment may be
+            processed prior to dispatch; if we cancel after processing payment,
+            the amount will be refunded to your original payment source.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> Promotional offers and discounts may be limited
+            to selected categories or limited stock, and coupon codes may not
+            apply to all Products or Services, at the Company's sole discretion.
+            Promotional prices are valid only for the specified promotional
+            period. The Company may modify, extend, update or withdraw offers
+            without prior notice, and revisions will be updated on the Website.
+            A promo code, once used, is non-refundable upon cancellation of the
+            order by either the User or the Company. Cash-back offers extended
+            by banks are additionally governed by the relevant bank's/card
+            issuer's terms.
+          </p>
+        </div>
+
+        {/* 13. INDEMNITY */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">13. INDEMNITY</h3>
+
+          <p>
+            <strong>A.</strong> You agree to release, defend, indemnify and hold
+            harmless the Company (including its licensors) and their respective
+            employees, directors, officers, agents and successors and assigns,
+            from and against any claims, liabilities, damages, losses, costs and
+            expenses (including attorneys' fees) arising from your actions or
+            inactions, including breach of any warranty or obligation under the
+            User Agreement, violation of applicable laws (including intellectual
+            property rights, statutory dues and taxes), claims of libel,
+            defamation, or violation of privacy or publicity rights, and
+            infringement of intellectual property or other rights.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> Where the Company is threatened with, or subject
+            to, a third-party suit, it may seek written assurances from you
+            regarding your indemnification obligations; failure to provide such
+            assurances may be treated as a material breach. The Company may
+            participate in the defence of any third-party claim related to your
+            use of Content or Products, at its own expense, and may reasonably
+            cooperate in your defence at your request and expense. You bear sole
+            responsibility for defending the Company against any such claim but
+            must obtain our prior written consent for any related settlement.
+            This clause survives expiry or termination of the User Agreement.
+          </p>
+        </div>
+
+        {/* 14. PRIVACY */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">14. PRIVACY</h3>
+
+          <p>
+            <strong>A.</strong> The Company is committed to protecting Users'
+            privacy. Please refer to our Privacy Policy accessible on the
+            Website for details of our privacy practices.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> Please review the Privacy Policy to understand
+            how we collect and use information associated with your Account
+            and/or your use of the Services.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> You acknowledge, consent to and agree that we
+            may access, preserve and/or disclose your Account information and
+            Content in accordance with applicable laws, which may permit
+            processing of personal data without consent in certain
+            circumstances.
+          </p>
+        </div>
+
+        {/* 15. FINANCIAL DETAILS */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">15. FINANCIAL DETAILS</h3>
+
+          <p>
+            <strong>A.</strong> You confirm that any credit/debit card or other
+            financial details provided for the Products or Services will be
+            correct and accurate, and that you will not use any card or
+            financial facility not lawfully owned or obtained by you. Financial
+            information submitted is received directly by our bank/payment
+            service provider(s), and not by us, and you discharge us from
+            liability for any related card or financial fraud. Liability for
+            fraudulent card use rests with you, and the onus of proving
+            otherwise rests exclusively on you, as the Company does not access,
+            store or retain card or other financial data. We and our associated
+            banks/financial institutions reserve the right to recover the cost
+            of goods, collection charges and legal fees from persons using the
+            Website fraudulently, and to initiate legal proceedings for
+            fraudulent use or other unlawful acts in breach of these terms.
+          </p>
+        </div>
+
+        {/* 16. COMMUNICATION */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">16. COMMUNICATION</h3>
+
+          <p>
+            <strong>A.</strong> When you visit the Website or send us emails,
+            you are communicating with us electronically. You agree that all
+            agreements, notices, disclosures and other communications provided
+            to you electronically satisfy any legal requirement that such
+            communications be in writing.
+          </p>
+        </div>
+
+        {/* 17. FEEDBACK */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">
+            17. WEBSITE FEEDBACK, USER COMMENTS AND USER-GENERATED CONTENT
+          </h3>
+
+          <p>
+            <strong>A.</strong> Other than personally identifiable information
+            (governed by our Privacy Policy), all reviews, comments, feedback,
+            suggestions, ideas and other submissions made to us via the Website
+            (collectively, "Comments") shall be and remain our property.
+            Submission of Comments constitutes an assignment to us of all
+            worldwide rights, title and interest in the copyrights and other
+            intellectual property therein. We may use, reproduce, disclose,
+            modify, adapt, create derivative works from, publish, display and
+            distribute any Comments for any purpose, without restriction and
+            without compensating you. We are under no obligation to maintain
+            Comments in confidence, to compensate you for them, or to respond to
+            them. You represent that your Comments will not violate the User
+            Agreement or any third-party rights (including copyright, trademark
+            or privacy rights), will not cause injury to any person or entity,
+            and will not contain unlawful, threatening, abusive or obscene
+            material, software viruses, political campaigning, commercial
+            solicitation, chain letters, mass mailings or spam.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> We do not regularly review posted Comments but
+            reserve the right (without obligation) to monitor, edit or remove
+            any Comments. You grant us the right to use the name you submit in
+            connection with your Comments and agree not to use a false email
+            address, impersonate any person or entity, or otherwise mislead as
+            to the origin of your Comments. You remain solely responsible for
+            your Comments and agree to indemnify us and our affiliates against
+            all related claims. We and our affiliates assume no responsibility
+            or liability for Comments submitted by you or any third party, and
+            you acknowledge that the Company cannot control the nature of
+            Comments generated on the Website.
+          </p>
+        </div>
+
+        {/* 18. INTELLECTUAL PROPERTY */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">
+            18. OWNERSHIP OF INTELLECTUAL PROPERTY; COPYRIGHT AND TRADEMARK
+          </h3>
+
+          <p>
+            <strong>A.</strong> The Intellectual Property in and to the Website,
+            Services and Content is owned, licensed to, or controlled by us, our
+            licensors, or our service providers. We reserve the right to enforce
+            our rights over this Intellectual Property to the fullest extent
+            permitted by applicable law.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> All Content may be used as a shopping resource
+            only. Any other use, including copying or storing the Content in
+            whole or part, is strictly prohibited without the Company's explicit
+            permission. Access to the Services does not authorise use of the
+            Content in any manner other than downloading or copying Content for
+            personal, non-commercial use; no title or interest in downloaded
+            Content transfers to you as a result. Save as stated above, you
+            shall not modify, publish, transmit, transfer, update, share,
+            distribute, display, reproduce, create derivative works from,
+            repost, sell or exploit, in whole or part, any Content, the Website
+            and/or the Services.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> Access to this Website does not confer any
+            licence to use the Company's or any third party's Intellectual
+            Property. All rights in the Intellectual Property and Content are
+            owned by, or licensed to, us and, where applicable, identified
+            third-party proprietors. All software used on the Website is the
+            property of the Company or its licensors and may be used only as a
+            shopping resource. All Content and software are protected under
+            applicable Indian and international intellectual property laws, as
+            is the compilation of Content on the Website, which is the exclusive
+            property of the Company or its licensors.
+          </p>
+
+          <p className="mt-3">
+            <strong>D.</strong> References to third-party names, marks,
+            products, services, or hypertext links to third-party websites, are
+            provided solely as a convenience and do not imply affiliation with,
+            or endorsement, sponsorship or recommendation by, the Company.
+          </p>
+
+          <p className="mt-3">
+            <strong>E.</strong> The Website also offers information, directly or
+            via links to third-party websites, about nutritional and dietary
+            supplements. The Company does not always create this content, which
+            is often gathered from other sources, and does not endorse it. The
+            Company expressly disclaims all liability in connection with such
+            information or content, and is not responsible for any damage or
+            loss resulting from access to, or reliance on, it.
+          </p>
+        </div>
+
+        {/* 19. TERMINATION */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">19. TERMINATION</h3>
+
+          <p>
+            <strong>A.</strong> The User Agreement remains effective unless and
+            until terminated by either you or us. You may terminate your Account
+            (and thereby the User Agreement) at any time by notifying us in
+            writing at{" "}
+            <a
+              href="mailto:ragstrengthnutrition@gmail.com"
+              className="underline"
+            >
+              ragstrengthnutrition@gmail.com
+            </a>
+            . We may terminate your Account at any time by providing twenty-four
+            (24) hours' advance notice, and accordingly deny you access to the
+            Website and/or Services, without liability to the Company. Upon
+            termination, you must promptly destroy all materials downloaded or
+            otherwise obtained from the Website, and all copies thereof. Our
+            rights in your Comments survive termination. Termination does not
+            cancel your obligation to pay for Products already ordered, nor
+            affect any liability arising prior to termination.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> Following termination, you will not be permitted
+            to use the Website or the Services, and the Company may, at its sole
+            discretion and after notifying you, cancel any outstanding orders.
+            If your access is terminated, the Company reserves the right to take
+            whatever action it deems necessary to prevent unauthorised access to
+            the Website or use of the Services.
+          </p>
+        </div>
+
+        {/* 20. LIABILITY */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">
+            20. LIMITATION OF LIABILITY AND DISCLAIMERS
+          </h3>
+
+          <p>
+            <strong>A.</strong> This disclaimer constitutes an essential part of
+            the User Agreement.
+          </p>
+
+          <p className="mt-3">
+            <strong>B.</strong> The Website, and all Content and Services
+            included or otherwise made available through the Website, are
+            provided "as is" and without warranties, claims or representations
+            of any kind, whether express or implied, including warranties of
+            quality, performance, non-infringement, merchantability or fitness
+            for a particular purpose, and no warranties arise from course of
+            dealing, course of performance or trade usage. You agree to bear all
+            risks associated with use of the Website and any Content.
+          </p>
+
+          <p className="mt-3">
+            <strong>C.</strong> Without limiting the foregoing, and to the
+            maximum extent permitted by applicable law, the Company makes no
+            representation or warranty, express or implied: (i) that the
+            Services, Website, Content or their functions will be available,
+            accessible, uninterrupted, timely, secure, accurate, complete or
+            error-free; (ii) that the Website or its servers are free of viruses
+            or other harmful code; (iii) that any advice or information obtained
+            from the Website creates any warranty not expressly stated herein;
+            or (iv) as to results obtainable from use of the Products.
+          </p>
+
+          <p className="mt-3">
+            <strong>D.</strong> The inclusion of any Product or offer on the
+            Website at a particular time does not imply that it will be
+            available at any other time.
+          </p>
+
+          <p className="mt-3">
+            <strong>E.</strong> To the maximum extent permitted by applicable
+            law, the Company (including its licensors) shall not be liable,
+            whether in contract, tort (including negligence, product liability
+            or strict liability) or otherwise, for any indirect, incidental,
+            special, consequential or exemplary damages (including loss of
+            profits, goodwill, revenue, use, data or other intangible losses)
+            arising out of or in connection with: (a) use of, or inability to
+            use, any Product, Content or Service; (b) the cost of procuring
+            substitute Products; (c) Products purchased or transactions entered
+            into through the Website; or (d) any expected results from use of
+            the Products, even where the Company has been advised of the
+            possibility of such damages.
+          </p>
+        </div>
+
+        {/* 21. CONTACT DETAILS */}
+        <div>
+          <h3 className="font-bold text-2xl mb-3">21. CONTACT DETAILS</h3>
+
+          <div className="space-y-3">
+            <p>
+              <strong>Business Name:</strong>
+              <br />
+              RAG STRENGTH & NUTRITION
+            </p>
+
+            <p>
+              <strong>Brand:</strong>
+              <br />
+              Gomzi Supplements
+            </p>
+
+            <p>
+              <strong>Registered Address:</strong>
+              <br />
+              G-23, Time Square, Gaurav Path Road, Beside Gajera Global School,
+              Pal Gam, Surat 394510, Gujarat, India
+            </p>
+
+            <p>
+              <strong>Email:</strong>
+              <br />
+              <a
+                href="mailto:ragstrengthnutrition@gmail.com"
+                className="underline"
+              >
+                ragstrengthnutrition@gmail.com
+              </a>
+            </p>
+
+            <p>
+              <strong>Phone:</strong>
+              <br />
+              <a href="tel:+919875270200" className="underline">
+                +91 98752 70200
+              </a>
+            </p>
+
+            <p>
+              <strong>Website:</strong>
+              <br />
+              <a
+                href="https://www.ragnutrition.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                www.ragnutrition.in
+              </a>
+            </p>
+          </div>
+        </div>
+      </LegalSection>
+    </>
+  );
+};
+
+export default TermsConditions;

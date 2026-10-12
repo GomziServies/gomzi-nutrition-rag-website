@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* =========================
+   CUSTOM FONTS
+========================= */
+
+@font-face {
+  font-family: Modelica;
+  src: url("/font-family/Modelica/BwModelicaCyrillicDEMO-Regular.ttf");
+}
+
+@font-face {
+  font-family: TomaGrotesk;
+  src: url("/font-family/Tomato-Grotesk-Font-Family/TomatoGrotesk-Black.otf");
+
+  font-weight: 400;
+}
+
+/* =========================
+   TAILWIND THEME
+========================= */
+
+@theme {
+  /* ===== Fonts ===== */
+
+  --font-modelica: Modelica, sans-serif;
+  --font-toma: TomaGrotesk, sans-serif;
+
+  /* ===== Main Colors ===== */
+
+  --color-primary: #000000;
+  --color-secondary: #111111;
+
+  --color-accent: #2563eb;
+
+  /* ===== Background Colors ===== */
+
+  --color-bg: #ffffff;
+  --color-bg-light: #f8f9fb;
+  --color-section: #f3f4f6;
+
+  /* ===== Text Colors ===== */
+
+  --color-text: #111111;
+  --color-text-light: #6b7280;
+
+  /* ===== Buttons ===== */
+
+  --color-btn-dark: #000000;
+  --color-btn-light: #ffffff;
+
+  /* ===== Borders ===== */
+
+  --color-border: #e5e7eb;
+
+  /* ===== Hover ===== */
+
+  --color-hover: #222222;
+
+  /* ===== Radius ===== */
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* ===== Shadows ===== */
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  /* ===== Container ===== */
+
+  --container-width: 1440px;
+}
+
+/* globals.css */
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
