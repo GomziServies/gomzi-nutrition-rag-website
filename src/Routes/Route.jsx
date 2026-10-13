@@ -8,6 +8,7 @@ import Ingredients from "../pages/Ingredients";
 import Ambassador from "../pages/About/Ambassador";
 import About from "../pages/About/About";
 import ContactUs from "../pages/About/Contact-Us";
+import Inquiry from "../pages/Inquiry/Inquiry";
 import Cart from "../component/ui/Cart";
 import Checkouts from "../pages/Checkouts";
 import Blog from "../pages/Blog";
@@ -132,6 +133,16 @@ export const Route = createBrowserRouter([
         element: <CategoriesSection />,
       },
     ],
+  },
+
+  // Standalone Inquiry Portal (outside Wrapper without site header & footer)
+  {
+    path: "/inquiry",
+    element: <Inquiry />,
+  },
+  {
+    path: "/contact-us/inquiry",
+    element: <Inquiry />,
   },
 
   // Checkout intentionally outside Wrapper
