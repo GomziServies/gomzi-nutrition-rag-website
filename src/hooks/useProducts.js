@@ -28,7 +28,6 @@ const useProducts = ({
         sortOrder,
         slug,
       });
-      console.log("Offer products result:", result);
 
       if (result.success) {
         if (slug) {
