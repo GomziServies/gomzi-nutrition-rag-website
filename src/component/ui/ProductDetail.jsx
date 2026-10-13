@@ -33,6 +33,8 @@ import {
 
 const categorySlugMap = {
   "Whey Protein": "whey-protein",
+  "Plant Protein": "plant-protein",
+  BCAA: "bcaa",
   Creatine: "creatine",
   "Mass Gainer": "mass-gainer",
   "Pre Workout": "pre-workout",
@@ -260,7 +262,11 @@ export default function NARAProductPage() {
 
             <span className="flex items-center gap-2">
               <Link
-                to={`/gomzi-supplement/${categorySlugMap[product.categories?.[0]]}`}
+                to={
+                  categorySlugMap[product.categories?.[0]]
+                    ? `/gomzi-supplement/${categorySlugMap[product.categories[0]]}`
+                    : `/gomzi-supplement?category=${encodeURIComponent(product.categories?.[0] || "")}`
+                }
                 className="hover:underline font-modelica"
               >
                 {product.categories?.[0]}

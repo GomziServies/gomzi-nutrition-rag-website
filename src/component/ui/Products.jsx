@@ -34,12 +34,28 @@ const websiteCategories = [
     backendCategories: ["Whey Protein"],
   },
   {
-    name: "Mass Gainer",
-    backendCategories: ["Mass Gainer"],
+    name: "Whey Protein Isolate",
+    backendCategories: ["Whey Protein Isolate"],
+  },
+  {
+    name: "Casein Protein",
+    backendCategories: ["Casein Protein"],
   },
   {
     name: "Plant Protein",
     backendCategories: ["Plant Protein"],
+  },
+  {
+    name: "Yeast Protein",
+    backendCategories: ["Yeast Protein"],
+  },
+  {
+    name: "Mass Gainer",
+    backendCategories: ["Mass Gainer"],
+  },
+  {
+    name: "Creatine",
+    backendCategories: ["Creatine"],
   },
   {
     name: "Pre Workout",
@@ -50,19 +66,49 @@ const websiteCategories = [
     backendCategories: ["BCAA"],
   },
   {
-    name: "Creatine",
-    backendCategories: ["Creatine"],
+    name: "EAA",
+    backendCategories: ["EAA"],
+  },
+  {
+    name: "Protein Bars & Snacks",
+    backendCategories: ["Protein Bars & Snacks"],
+  },
+  {
+    name: "Meal Replacement",
+    backendCategories: ["Meal Replacement"],
+  },
+  {
+    name: "Electrolytes & Hydration",
+    backendCategories: ["Electrolytes & Hydration"],
   },
   {
     name: "Wellness & Health",
-    backendCategories: [
-      // Add backend categories here if they belong
-      // to Wellness & Health.
-      //
-      // Example:
-      // "Fat Burner",
-    ],
+    backendCategories: ["Wellness & Health"],
   },
+  {
+    name: "Combos & Stacks",
+    backendCategories: ["Combos & Stacks"],
+  },
+  {
+    name: "Accessories",
+    backendCategories: ["Accessories"],
+  },
+];
+
+// Secondary labels some products carry alongside their real category.
+// They are not shopping categories, so they stay out of the menu.
+const hiddenBackendCategories = [
+  "Protein",
+  "Protein Supplement",
+  "Sports Nutrition",
+  "Muscle Building",
+  "Muscle Recovery",
+  "Lean Muscle",
+  "Weight Gain",
+  "Fat Burner",
+  "Strength Supplement",
+  "Amino Acid Supplement",
+  "Intra Workout",
 ];
 
 const categorySlugMap = {
@@ -132,6 +178,25 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   }, [categoryData]);
 
   const categories = useMemo(() => {
+    const listedBackendCategories = websiteCategories.flatMap(
+      (websiteCategory) => websiteCategory.backendCategories,
+    );
+
+    // Any category that exists in the database but is not in the list above
+    // still gets a menu entry, so a new category never needs a code change.
+    const extraCategories = Object.keys(backendCategoryCounts)
+      .filter(
+        (backendCategory) =>
+          !listedBackendCategories.includes(backendCategory) &&
+          !hiddenBackendCategories.includes(backendCategory),
+      )
+      .sort((a, b) => a.localeCompare(b))
+      .map((backendCategory) => ({
+        name: backendCategory,
+        backendCategories: [backendCategory],
+        count: backendCategoryCounts[backendCategory],
+      }));
+
     return [
       {
         name: "All Products",
@@ -152,6 +217,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           count,
         };
       }),
+
+      ...extraCategories,
     ];
   }, [backendCategoryCounts, totalProducts]);
 
