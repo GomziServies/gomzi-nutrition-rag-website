@@ -76,6 +76,18 @@ export default function NutritionPromoBannerSlider() {
       isMounted = false;
     };
   }, []);
+  const handleBannerClick = (rawUrl) => {
+    const url = (rawUrl || "/gomzi-supplement").trim();
+    if (!url) return;
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    } else if (url.startsWith("www.")) {
+      window.open(`https://${url}`, "_blank", "noopener,noreferrer");
+    } else {
+      navigate(url.startsWith("/") ? url : `/${url}`);
+    }
+  };
+
 
   return (
     <section className="w-full py-6 sm:py-8 bg-[#faf8f6] overflow-hidden" aria-label="Nutrition Promo Discount Carousel">
@@ -103,7 +115,7 @@ export default function NutritionPromoBannerSlider() {
                   {hasCustomImage ? (
                     /* ── FULL UPLOADED BANNER FROM ADMIN PORTAL ── */
                     <div
-                      onClick={() => navigate(slide.url || "/gomzi-supplement")}
+                      onClick={() => handleBannerClick(slide.url)}
                       className="relative w-full cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl border border-emerald-200/60 bg-emerald-50 flex items-center justify-center select-none shadow-xs hover:shadow-md transition-shadow"
                     >
                       <img
@@ -118,7 +130,7 @@ export default function NutritionPromoBannerSlider() {
                   ) : (
                     /* ── FALLBACK GRADIENT STYLED CARD (When no image is uploaded) ── */
                     <div
-                      onClick={() => navigate(slide.url || "/gomzi-supplement")}
+                      onClick={() => handleBannerClick(slide.url)}
                       className="relative w-full min-h-[200px] sm:min-h-[220px] md:min-h-[240px] cursor-pointer flex items-center justify-between px-6 sm:px-12 md:px-16 py-6 sm:py-8 overflow-hidden select-none"
                       style={{ background: gradient }}
                     >

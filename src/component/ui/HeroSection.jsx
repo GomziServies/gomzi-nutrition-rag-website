@@ -60,11 +60,13 @@ export default function HeroSectionWithIcons() {
   const currentBanner = banners[activeIndex] || banners[0] || DEFAULT_BANNER;
 
   const handleShopNow = () => {
-    const link = currentBanner.shop_link || "/gomzi-supplement";
+    const link = (currentBanner.shop_link || "/gomzi-supplement").trim();
     if (link.startsWith("http://") || link.startsWith("https://")) {
       window.open(link, "_blank", "noopener,noreferrer");
+    } else if (link.startsWith("www.")) {
+      window.open(`https://${link}`, "_blank", "noopener,noreferrer");
     } else {
-      navigate(link);
+      navigate(link.startsWith("/") ? link : `/${link}`);
     }
   };
 

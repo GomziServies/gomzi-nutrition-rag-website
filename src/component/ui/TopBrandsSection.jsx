@@ -35,42 +35,46 @@ const CATEGORY_SLUG_MAP = {
 export default function TopBrandsSection() {
   const [activeCategory, setActiveCategory] = useState("Whey Protein");
   const [wishlist, setWishlist] = useState({});
-  const [apiProducts, setApiProducts] = useState([]);
-  const [isLoadingApi, setIsLoadingApi] = useState(true);
+  const [productsByCategory, setProductsByCategory] = useState({});
+  const [isLoadingApi, setIsLoadingApi] = useState(false);
   const swiperRef = useRef(null);
   const navigate = useNavigate();
 
-  // Load real products from RAG API (http://localhost:3005)
+  // Load real products per active category from RAG API (http://localhost:3005)
   useEffect(() => {
     let isMounted = true;
-    const loadRagProducts = async () => {
+    const loadCategoryProducts = async () => {
+      if (productsByCategory[activeCategory]) return;
       try {
         setIsLoadingApi(true);
-        const res = await getProductsApi({ limit: 100, page: 1 });
+        const res = await getProductsApi({
+          category: activeCategory,
+          limit: 50,
+          page: 1,
+        });
         if (isMounted && res.data?.data && Array.isArray(res.data.data)) {
           const normalized = res.data.data
             .filter((p) => p && p.name && isRealProduct(p))
             .map((p) => normalizeProduct(p));
-          setApiProducts(normalized);
+          setProductsByCategory((prev) => ({
+            ...prev,
+            [activeCategory]: normalized,
+          }));
         }
       } catch (err) {
-        console.error("Error fetching products from RAG app:", err);
+        console.error(`Error fetching ${activeCategory} from RAG app:`, err);
       } finally {
         if (isMounted) setIsLoadingApi(false);
       }
     };
 
-    loadRagProducts();
+    loadCategoryProducts();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [activeCategory, productsByCategory]);
 
-  const filteredApiProducts = useMemo(() => {
-    return filterProductsByCategory(apiProducts, activeCategory);
-  }, [apiProducts, activeCategory]);
-
-  const currentProducts = filteredApiProducts;
+  const currentProducts = productsByCategory[activeCategory] || [];
   const currentSlug = CATEGORY_SLUG_MAP[activeCategory] || "whey-protein";
 
   const toggleWishlist = (id) => {

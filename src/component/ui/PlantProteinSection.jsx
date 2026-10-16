@@ -25,18 +25,11 @@ export default function PlantProteinSection() {
     let isMounted = true;
     const loadPlantProtein = async () => {
       try {
-        const res = await getProductsApi({ limit: 50, page: 1 });
+        // Query category directly from backend RAG API (returns all 17 plant protein items)
+        const res = await getProductsApi({ category: "Plant Protein", limit: 50, page: 1 });
         if (isMounted && res.data?.data && Array.isArray(res.data.data)) {
           const plantItems = res.data.data
-            .filter((p) => {
-              if (!p || !p.name || !isRealProduct(p)) return false;
-              const nameLower = p.name.toLowerCase();
-              return (
-                nameLower.includes("plant") ||
-                nameLower.includes("vegan") ||
-                nameLower.includes("organic")
-              );
-            })
+            .filter((p) => p && p.name && isRealProduct(p))
             .map((p) => normalizeProduct(p, "plant-protein"));
 
           if (plantItems.length > 0) {

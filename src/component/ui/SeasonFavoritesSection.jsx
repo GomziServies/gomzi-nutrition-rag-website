@@ -1,266 +1,214 @@
-import { useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useRef } from "react";
+import { Link } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight, FiArrowRight } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import Wavyheading from "../common/Wavyheading";
 
-const swiperStyles = `
-.product-swiper{
-    overflow:hidden;
-}
-
-.product-swiper .swiper-wrapper{
-    align-items:stretch;
-}
-
-.product-swiper .swiper-slide{
-    height:auto;
-}
-
-/* Hide Default Navigation */
-
-.product-swiper .swiper-button-prev,
-.product-swiper .swiper-button-next{
-    display:none;
-}
-
-/* Custom Navigation */
-
-.slider-btn{
-    width:48px;
-    height:48px;
-    border-radius:999px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#fff;
-    border:1px solid #dbdee9;
-    color:#5C3124;
-    transition:.3s;
-    box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
-
-.slider-btn:hover{
-    background:#5C3124;
-    color:#fff;
-    transform:translateY(-2px);
-    border-color:#5C3124;
-}
-
-/* Pagination */
-
-.product-swiper .swiper-pagination{
-    position:relative;
-    margin-top:24px;
-}
-
-.product-swiper .swiper-pagination-bullet{
-    width:10px;
-    height:10px;
-    border-radius:20px;
-    background:#dbdee9;
-    opacity:1;
-    transition:.3s;
-    margin:0 5px !important;
-}
-
-.product-swiper .swiper-pagination-bullet-active{
-    width:34px;
-    background:#5C3124;
-}
-
-/* Mobile */
-
-@media(max-width:1024px){
-
-    .slider-btn{
-        display:none;
-    }
-
-}
-`;
-
-const categories = [
+const CATEGORIES = [
   {
-    id: 1,
+    id: "cat-whey",
     title: "Whey Protein",
-    subtitle:
-      "Premium protein blends, isolates, and concentrates designed to support muscle growth, recovery, and daily protein needs.",
+    subtitle: "Ultra-filtered isolates & concentrates for lean muscle repair and accelerated recovery.",
+    badge: "Most Popular",
     image: "/images/product-category/whey-protein.webp",
     url: "/gomzi-supplement/whey-protein",
-    cta: "Explore More",
+    tagCount: "5 Products",
   },
   {
-    id: 2,
+    id: "cat-gainer",
     title: "Mass Gainer",
-    subtitle:
-      "High-calorie formulas to help you build quality size, strength, and lean muscle mass.",
+    subtitle: "High-density complex carb & protein matrix to build clean size, weight, and strength.",
+    badge: "Mass & Size",
     image: "/images/product-category/mass-gainer.webp",
     url: "/gomzi-supplement/mass-gainer",
-    cta: "Explore More",
+    tagCount: "3 Products",
   },
   {
-    id: 3,
+    id: "cat-plant",
     title: "Plant Protein",
-    subtitle:
-      "A premium 100% vegan protein blend made from pea, peanut, soya, and brown rice protein to support muscle recovery, growth, and daily protein needs.",
+    subtitle: "100% vegan hypoallergenic blend of pea, soya & brown rice protein with zero bloating.",
+    badge: "100% Vegan",
     image: "/images/product-category/plant-protein.webp",
     url: "/gomzi-supplement/plant-protein",
-    cta: "Explore More",
+    tagCount: "4 Products",
   },
   {
-    id: 4,
+    id: "cat-preworkout",
     title: "Pre Workout",
-    subtitle:
-      "Advanced performance formulas to boost energy, focus, endurance, and training intensity.",
+    subtitle: "Clinical performance formulas to ignite explosive energy, vascular pumps, and focus.",
+    badge: "Peak Energy",
     image: "/images/product-category/pre-workout.webp",
     url: "/gomzi-supplement/pre-workout",
-    cta: "Explore More",
+    tagCount: "4 Products",
   },
   {
-    id: 5,
-    title: "BCAA",
-    subtitle:
-      "Essential amino acids to support muscle recovery, reduce fatigue, and enhance performance.",
+    id: "cat-bcaa",
+    title: "BCAA & Amino",
+    subtitle: "Fermented 2:1:1 BCAAs with key electrolytes to prevent muscle breakdown mid-workout.",
+    badge: "Intra-Workout",
     image: "/images/product-category/Bcaa-tangy-orange.webp",
     url: "/gomzi-supplement/bcaa",
-    cta: "Explore More",
+    tagCount: "3 Products",
   },
   {
-    id: 6,
-    title: "Creatine",
-    subtitle:
-      "Scientifically formulated creatine supplements to improve strength, power, and muscle performance.",
+    id: "cat-creatine",
+    title: "Pure Creatine",
+    subtitle: "100% micronized monohydrate to replenish cellular ATP, boosting strength and explosive power.",
+    badge: "Strength & Power",
     image: "/images/product-category/creatine.webp",
     url: "/gomzi-supplement/creatine",
-    cta: "Explore More",
+    tagCount: "2 Products",
   },
   {
-    id: 7,
-    title: "Wellness & Health",
-    subtitle:
-      "Everyday wellness supplements designed to support immunity, recovery, and a healthier lifestyle.",
+    id: "cat-wellness",
+    title: "Daily Wellness",
+    subtitle: "Essential multivitamins, omega-3, and immunity boosters to support overall longevity.",
+    badge: "Daily Vitality",
     image: "/images/product-category/Multivitamins.webp",
     url: "/gomzi-supplement/wellness-health",
-    cta: "Explore More",
+    tagCount: "6 Products",
   },
 ];
 
-/* ── Inline Product Card ── */
-function CategoryCard({ category }) {
-  const [expanded, setExpanded] = useState(false);
-
-  const words = category.subtitle.split(" ");
-  const isLong = words.length > 13;
-  const displayText =
-    expanded || !isLong
-      ? category.subtitle
-      : words.slice(0, 13).join(" ") + "...";
-
-  return (
-    <div className="group relative flex flex-col bg-white rounded-xl overflow-hidden border border-[#dbdee9] shadow-sm hover:shadow-md hover:border-[#5C3124]/50 transition-all duration-300 h-full">
-      {/* Image Area */}
-      <div className="relative overflow-hidden aspect-[4/4.2] bg-[#f8fafc]">
-        <img
-          src={category.image}
-          alt={category.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-        />
-      </div>
-
-      {/* Card Body */}
-      <div className="flex flex-col flex-1 p-5">
-        <h3 className="text-base font-bold text-[#1c1c28] group-hover:text-[#5C3124] transition-colors leading-snug">
-          {category.title}
-        </h3>
-
-        <p className="text-xs text-[#77777e] leading-relaxed mt-1">
-          {displayText}
-          {isLong && (
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="ml-1 font-semibold text-[#5C3124] hover:underline cursor-pointer bg-transparent border-none p-0"
-            >
-              {expanded ? "Read Less" : "Read More"}
-            </button>
-          )}
-        </p>
-
-        <div className="flex-1" />
-
-        <a
-          href={category.url}
-          className="mt-4 w-full py-2.5 text-center px-4 rounded-lg text-white text-xs font-bold tracking-wide uppercase active:scale-[0.98] transition-all duration-200 bg-[#5C3124] hover:bg-[#48261c] shadow-xs"
-        >
-          {category.cta}
-        </a>
-      </div>
-    </div>
-  );
-}
-
-/* ── Main Section ── */
 export default function SeasonFavoritesSection() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+  const swiperRef = useRef(null);
+
   return (
-    <section className="w-full bg-white py-8 md:py-8 lg:py-10">
-      <style>{swiperStyles}</style>
-      <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-18">
-        <div className="flex items-end justify-between mb-10">
-          <Wavyheading text1="Science Based Sport Supplements" />
+    <section className="w-full py-12 sm:py-16 bg-white overflow-hidden" aria-label="Shop By Category">
+      <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+          <div>
+            <div className="inline-block text-xs font-bold uppercase tracking-wider text-[#5C3124] bg-[#fdf6f4] border border-[#ebdcd7] px-3 py-1 rounded-full mb-2">
+              Explore Our Range
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1c1c28] tracking-tight">
+              Shop by Category
+            </h2>
+            <p className="text-sm text-gray-500 mt-1 max-w-xl">
+              Target your fitness goals with pure, lab-certified nutrition formulated for clean muscle growth and peak athletic recovery.
+            </p>
+          </div>
 
-          <div className="hidden lg:flex items-center gap-3">
-            <button ref={prevRef} className="slider-btn">
-              <ChevronLeft size={20} />
-            </button>
+          {/* Right Header Actions */}
+          <div className="flex items-center gap-3 self-start sm:self-end">
+            <Link
+              to="/categories"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#5C3124] hover:text-[#3d1e15] transition-colors group mr-2"
+            >
+              <span>View All Categories</span>
+              <FiArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
 
-            <button ref={nextRef} className="slider-btn">
-              <ChevronRight size={20} />
-            </button>
+            {/* Slider Navigation Arrows */}
+            <div className="hidden sm:flex items-center gap-2">
+              <button
+                onClick={() => swiperRef.current?.slidePrev()}
+                className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:text-white hover:border-[#5C3124] text-[#5C3124] flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer active:scale-95"
+                aria-label="Previous Category"
+              >
+                <FiChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => swiperRef.current?.slideNext()}
+                className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:text-white hover:border-[#5C3124] text-[#5C3124] flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer active:scale-95"
+                aria-label="Next Category"
+              >
+                <FiChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="mt-10">
+        {/* Category Swiper Slider */}
+        <div className="relative">
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={30}
-            slidesPerView={1}
-            navigation={{
-              prevEl: prevRef.current,
-              nextEl: nextRef.current,
+            spaceBetween={16}
+            slidesPerView={1.25}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
             }}
-            onBeforeInit={(swiper) => {
-              swiper.params.navigation.prevEl = prevRef.current;
-              swiper.params.navigation.nextEl = nextRef.current;
-            }}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            loop
-            speed={700}
             autoplay={{
-              delay: 3500,
+              delay: 4000,
               disableOnInteraction: false,
               pauseOnMouseEnter: true,
             }}
+            loop
+            speed={600}
             breakpoints={{
-              640: {
+              540: {
                 slidesPerView: 2,
+                spaceBetween: 18,
+              },
+              768: {
+                slidesPerView: 2.75,
+                spaceBetween: 20,
               },
               1024: {
-                slidesPerView: 3,
+                slidesPerView: 3.25,
+                spaceBetween: 22,
+              },
+              1280: {
+                slidesPerView: 4,
+                spaceBetween: 24,
               },
             }}
-            className="product-swiper pb-14"
+            className="pb-2"
           >
-            {categories.map((category) => (
-              <SwiperSlide key={category.id} className="h-auto mb-5">
-                <CategoryCard category={category} />
+            {CATEGORIES.map((cat) => (
+              <SwiperSlide key={cat.id} className="h-auto">
+                <Link
+                  to={cat.url}
+                  className="group flex flex-col h-full bg-[#fcfbf9] hover:bg-white rounded-2xl overflow-hidden border border-[#ebdcd7]/80 hover:border-[#5C3124]/50 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                >
+                  {/* Category Image Area */}
+                  <div className="relative w-full aspect-[4/3.2] overflow-hidden bg-gradient-to-b from-[#f5f1ed] to-[#ede6df]">
+                    <img
+                      src={cat.image}
+                      alt={cat.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500 ease-out"
+                    />
+
+                    {/* Badge Pill */}
+                    <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs text-[#5C3124] text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs border border-[#5C3124]/10">
+                      {cat.badge}
+                    </div>
+
+                    {/* Subtle Overlay Vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+
+                  {/* Category Content Area */}
+                  <div className="flex flex-col flex-1 p-5">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-base font-extrabold text-[#1c1c28] group-hover:text-[#5C3124] transition-colors leading-snug">
+                        {cat.title}
+                      </h3>
+                      <span className="text-[11px] font-semibold text-gray-400 whitespace-nowrap">
+                        {cat.tagCount}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-gray-500 leading-relaxed mt-1.5 line-clamp-2">
+                      {cat.subtitle}
+                    </p>
+
+                    <div className="flex-1 min-h-[14px]" />
+
+                    {/* Interactive Action Bar */}
+                    <div className="mt-3.5 pt-3 border-t border-[#ebdcd7]/60 flex items-center justify-between text-xs font-bold text-[#5C3124] group-hover:text-[#3d1e15]">
+                      <span>Explore Range</span>
+                      <div className="w-7 h-7 rounded-full bg-[#fdf6f4] group-hover:bg-[#5C3124] group-hover:text-white flex items-center justify-center transition-all duration-200">
+                        <FiArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>

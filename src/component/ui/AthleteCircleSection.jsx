@@ -1,83 +1,92 @@
 import React, { useState } from "react";
-import { Sparkles, Mail, Send, CheckCircle2 } from "lucide-react";
-import { errorToast, successToast } from "../../utils/toast";
+import { Link } from "react-router-dom";
+import { FiCopy, FiCheck, FiTag, FiArrowRight, FiPercent } from "react-icons/fi";
+import { successToast } from "../../utils/toast";
 
 export default function AthleteCircleSection() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+  const couponCode = "GOMZI10";
 
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (!email || !email.includes("@")) {
-      errorToast("Please enter a valid email address");
-      return;
+  const handleCopyCode = () => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(couponCode);
     }
-
-    successToast("Welcome to Gomzi Athlete Circle! Check your inbox for your 10% coupon code.");
-    setSubmitted(true);
-    setEmail("");
+    setIsCopied(true);
+    successToast(`Coupon code ${couponCode} copied! Apply at checkout for 10% off.`);
+    setTimeout(() => setIsCopied(false), 3000);
   };
 
   return (
-    <section className="w-full py-6 sm:py-8 bg-[#faf8f6] overflow-hidden" aria-label="Gomzi Athlete Circle VIP Club">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
-        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#5C3124]/30 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] shadow-2xl">
-          {/* Decorative Corner Glow */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#5C3124]/30 to-transparent rounded-full blur-2xl pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-            {/* Left Column: Heading and Value Proposition */}
-            <div className="max-w-2xl text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 bg-[#5C3124]/30 border border-[#ebdcd7]/30 text-amber-200 text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full mb-3 shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>GOMZI ATHLETE CIRCLE</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                Get 10% Off Your First Order
-              </h2>
-              <p className="text-sm sm:text-base text-gray-300 mt-2 leading-relaxed">
-                Join 50,000+ athletes. Receive science-backed training protocols, secret restock alerts, and member-only pricing.
-              </p>
-            </div>
-
-            {/* Right Column: Interactive Subscription Form */}
-            <div className="w-full lg:w-auto">
-              <form
-                onSubmit={handleSubscribe}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 max-w-md mx-auto lg:mx-0 w-full"
-              >
-                <div className="relative flex-1">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="w-full h-12 pl-11 pr-4 rounded-xl bg-black/60 border border-white/15 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#ff8914] focus:ring-2 focus:ring-[#ff8914]/30 transition-all"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="h-12 px-7 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#733d2d] to-[#5C3124] hover:from-[#733d2d] hover:to-[#5C3124] text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#5C3124]/30 hover:scale-[1.02] active:scale-[0.98] shrink-0"
-                >
-                  <span>Claim 10% Off</span>
-                  <Send className="w-4 h-4" />
-                </button>
-              </form>
-
-              {/* Trust & Guarantee Indicators */}
-              <div className="flex items-center justify-center lg:justify-start gap-4 mt-3 text-[11px] text-gray-400">
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  Instant Coupon Delivery
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  No Spam Guarantee
-                </span>
-              </div>
-            </div>
+    <section
+      className="w-full bg-gradient-to-r from-[#1c100a] via-[#2c1810] to-[#1c100a] border-b border-[#5C3124]/40 select-none py-2.5 sm:py-3 relative z-10 shadow-xs"
+      aria-label="First Order Promo Ticker"
+    >
+      <div className="max-w-[var(--container-width)] mx-auto px-3 sm:px-6 md:px-8 lg:px-12">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-5 gap-y-2 text-center">
+          {/* Eyebrow Chip */}
+          <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[10px] sm:text-[11px] font-black uppercase tracking-wider">
+            <FiPercent className="w-3 h-3 text-amber-300" />
+            <span>WELCOME OFFER</span>
           </div>
+
+          {/* Main 1-Line Offer Statement */}
+          <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-white tracking-tight">
+            <span>Get Flat</span>
+            <span className="text-amber-300 font-extrabold underline decoration-amber-400/50 decoration-2 underline-offset-2">
+              10% OFF
+            </span>
+            <span className="hidden sm:inline">Your First Order With Code</span>
+            <span className="sm:hidden">With</span>
+          </div>
+
+          {/* Interactive 1-Click Copy Coupon Pill */}
+          <button
+            type="button"
+            onClick={handleCopyCode}
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-dashed transition-all duration-200 cursor-pointer shadow-2xs active:scale-95 ${
+              isCopied
+                ? "bg-emerald-500/20 border-emerald-400 text-emerald-300"
+                : "bg-white/10 hover:bg-white/15 border-amber-400/60 hover:border-amber-300 text-white"
+            }`}
+            title="Click to copy coupon code"
+          >
+            <FiTag className="w-3 h-3 text-amber-300" />
+            <span className="font-mono text-xs sm:text-sm font-black tracking-wider text-amber-200">
+              {couponCode}
+            </span>
+            <span
+              className={`text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded transition-colors ${
+                isCopied
+                  ? "bg-emerald-500 text-white"
+                  : "bg-amber-400 text-gray-950 group-hover:bg-amber-300"
+              }`}
+            >
+              {isCopied ? (
+                <span className="inline-flex items-center gap-0.5">
+                  <FiCheck className="w-2.5 h-2.5" /> COPIED!
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-0.5">
+                  <FiCopy className="w-2.5 h-2.5" /> COPY
+                </span>
+              )}
+            </span>
+          </button>
+
+          {/* Secondary Perk (Desktop only) */}
+          <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-gray-300">
+            <span className="text-white/30">•</span>
+            <span>Free Shipping on Orders Above ₹999</span>
+          </div>
+
+          {/* Direct Shop Action */}
+          <Link
+            to="/gomzi-supplement"
+            className="inline-flex items-center gap-1 text-xs font-bold text-amber-300 hover:text-white transition-colors group ml-1"
+          >
+            <span>Shop Now</span>
+            <FiArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
     </section>

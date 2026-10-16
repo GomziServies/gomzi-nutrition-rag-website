@@ -181,6 +181,18 @@ export default function BankOffersBannerSlider() {
       </div>
     );
   };
+  const handleBannerClick = (rawUrl) => {
+    const url = (rawUrl || "/gomzi-supplement").trim();
+    if (!url) return;
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    } else if (url.startsWith("www.")) {
+      window.open(`https://${url}`, "_blank", "noopener,noreferrer");
+    } else {
+      navigate(url.startsWith("/") ? url : `/${url}`);
+    }
+  };
+
 
   return (
     <section className="w-full py-6 sm:py-8 bg-[#faf8f6] overflow-hidden" aria-label="Bank Partner Offers Carousel">
@@ -205,7 +217,7 @@ export default function BankOffersBannerSlider() {
               return (
                 <SwiperSlide key={offerId}>
                   <div
-                    onClick={() => navigate(offer.url || "/gomzi-supplement")}
+                    onClick={() => handleBannerClick(offer.url)}
                     className="relative w-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] cursor-pointer flex flex-col justify-between overflow-hidden select-none"
                     style={{ background: gradient }}
                   >

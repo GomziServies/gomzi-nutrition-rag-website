@@ -1,136 +1,154 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiCheckCircle, FiPackage, FiTruck, FiShield, FiPercent } from "react-icons/fi";
+import {
+  FiArrowRight,
+  FiPercent,
+  FiTruck,
+  FiShield,
+  FiPackage,
+  FiCheckCircle,
+  FiPhoneCall,
+} from "react-icons/fi";
 
 const B2B_BENEFITS = [
   {
-    icon: <FiPercent className="w-4 h-4 text-amber-400" />,
-    text: "Direct Factory Wholesale Margins",
+    icon: <FiPercent className="w-5 h-5 text-[#5C3124]" />,
+    title: "Direct Factory Margins",
+    desc: "Maximized profit margins with zero intermediary markups or broker fees.",
   },
   {
-    icon: <FiTruck className="w-4 h-4 text-amber-400" />,
-    text: "Priority Pan-India Logistics & Dispatch",
+    icon: <FiTruck className="w-5 h-5 text-[#5C3124]" />,
+    title: "Pan-India Bulk Logistics",
+    desc: "Insured, temperature-stable priority freight dispatched within 24-48 hours.",
   },
   {
-    icon: <FiShield className="w-4 h-4 text-amber-400" />,
-    text: "100% FSSAI-Certified & Lab-Tested Stock",
+    icon: <FiShield className="w-5 h-5 text-[#5C3124]" />,
+    title: "100% Certified Stock",
+    desc: "FSSAI & NABL lab-tested batches with anti-counterfeit QR codes on every tub.",
   },
   {
-    icon: <FiPackage className="w-4 h-4 text-amber-400" />,
-    text: "Low MOQ for Gyms, Stores & Dealerships",
+    icon: <FiPackage className="w-5 h-5 text-[#5C3124]" />,
+    title: "Flexible Low MOQs",
+    desc: "Custom starter tiers tailored specifically for gyms, trainers, and retailers.",
   },
 ];
 
 export default function TrustExpertsSection() {
   return (
-    <section className="w-full py-12 sm:py-16 md:py-20 bg-[#faf8f6] overflow-hidden">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-12">
-        {/* Main Card Container */}
-        <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#5C3124]/20 bg-gradient-to-br from-[#1c120c] via-[#2a170f] to-[#120a06]">
-          {/* Ambient Radial Glows */}
-          <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#5C3124]/40 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-600/15 rounded-full blur-3xl pointer-events-none" />
+    <section
+      className="w-full py-12 sm:py-16 lg:py-20 bg-white border-t border-[#ebdcd7]/60 overflow-hidden"
+      aria-label="B2B Wholesale and Distribution Partnerships"
+    >
+      <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
+        {/* Main Enterprise Showcase Card */}
+        <div className="relative rounded-3xl bg-[#fdfbf9] border border-[#ebdcd7] p-6 sm:p-10 lg:p-14 shadow-sm overflow-hidden">
+          {/* Subtle Accent Glow */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#5C3124]/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between">
-            {/* ── LEFT: Content Area ── */}
-            <div className="flex-1 flex flex-col p-8 sm:p-10 md:p-12 lg:p-14 lg:border-r border-white/10">
-              {/* Top Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-xs border border-white/15 w-fit mb-5">
-                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                <span className="text-xs font-extrabold uppercase tracking-widest text-amber-300">
-                  B2B & Distribution Partnership
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* ── LEFT: Content & Advantage Grid (7 cols) ── */}
+            <div className="lg:col-span-7 flex flex-col items-start">
+              {/* Eyebrow Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fdf6f4] border border-[#ebdcd7] mb-3">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-extrabold uppercase tracking-widest text-[#5C3124]">
+                  B2B Wholesale & Gym Supply
                 </span>
               </div>
 
-              {/* Heading */}
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-                Looking for Bulk Orders or{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-200 to-amber-400">
-                  Distribution Partnerships?
-                </span>
+              {/* Main Heading */}
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1c1c28] tracking-tight leading-tight">
+                Equip Your Gym or Retail Store with{" "}
+                <span className="text-[#5C3124]">Certified Nutrition</span>
               </h2>
 
-              {/* Description */}
-              <p className="mt-4 text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed max-w-2xl font-normal">
-                Unlock exclusive wholesale pricing on certified premium sports nutrition for your business. Partner with Gomzi Nutrition for bulk supply, dealership rights, and dedicated tier-1 account management.
+              {/* Subtitle */}
+              <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl">
+                Partner directly with Gomzi Nutrition for wholesale distribution, franchise supply, and bulk inventory. Get factory-direct pricing, guaranteed batch authenticity, and dedicated priority account management.
               </p>
 
-              {/* Benefit Grid / Trust Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 pt-6 border-t border-white/10">
-                {B2B_BENEFITS.map((b, i) => (
-                  <div key={i} className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-200 font-medium">
-                    <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
-                      {b.icon}
+              {/* 4 Benefits 2x2 Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 w-full max-w-xl">
+                {B2B_BENEFITS.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 rounded-xl bg-white border border-[#ebdcd7]/80 shadow-2xs hover:border-[#5C3124]/40 transition-colors"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-[#fdf6f4] flex items-center justify-center mb-2.5">
+                      {item.icon}
                     </div>
-                    <span>{b.text}</span>
+                    <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
                 ))}
               </div>
 
-              {/* CTA Action Area */}
-              <div className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3.5">
+              {/* Action Buttons */}
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                 <Link
                   to="/inquiry"
-                  className="h-11 sm:h-12 px-6 rounded-xl bg-white hover:bg-[#fdf6f4] text-gray-950 font-extrabold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02] group cursor-pointer whitespace-nowrap"
+                  className="h-12 px-7 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-md shadow-[#5C3124]/20 active:scale-[0.98] cursor-pointer whitespace-nowrap"
                 >
-                  <span>Apply for Bulk Inquiry</span>
-                  <FiArrowRight className="w-4 h-4 text-[#5C3124] group-hover:translate-x-1 transition-transform" />
+                  <span>Apply for Wholesale Account</span>
+                  <FiArrowRight className="w-4 h-4" />
                 </Link>
 
                 <Link
                   to="/contact-us"
-                  className="h-11 sm:h-12 px-5 sm:px-6 rounded-xl border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 text-white font-bold text-sm flex items-center justify-center transition-all duration-200 text-center whitespace-nowrap"
+                  className="h-12 px-6 rounded-xl border border-gray-300 hover:border-[#5C3124] bg-white text-gray-800 hover:text-[#5C3124] font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 text-center whitespace-nowrap"
                 >
-                  Contact Sales Team
+                  <FiPhoneCall className="w-4 h-4 text-gray-500" />
+                  <span>Contact Corporate Sales</span>
                 </Link>
               </div>
 
-              {/* Micro Subtext */}
-              <p className="mt-3 text-[11px] text-gray-400 font-medium">
-                ⚡ Dedicated wholesale coordinator assigned within 2 business hours.
-              </p>
+              {/* Bottom Micro Trust Indicators */}
+              <div className="mt-4 flex items-center gap-2 text-[11px] text-gray-500 font-medium">
+                <FiCheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Dedicated wholesale representative assigned within 2 business hours.</span>
+              </div>
             </div>
 
-            {/* ── RIGHT: Warehouse & Pallets Image ── */}
-            <div className="w-full lg:w-[42%] flex-shrink-0 p-6 sm:p-10 md:p-12 flex items-center justify-center">
-              <div className="relative w-full max-w-md lg:max-w-none rounded-2xl overflow-hidden border border-white/15 shadow-2xl group">
+            {/* ── RIGHT: Professional Warehouse & Partner Graphic (5 cols) ── */}
+            <div className="lg:col-span-5 flex items-center justify-center">
+              <div className="relative w-full max-w-md rounded-2xl overflow-hidden border border-[#ebdcd7] shadow-lg group bg-white">
                 <img
                   src="/images/product-export.webp"
                   alt="Gomzi Nutrition Wholesale Logistics & Pallet Orders"
-                  className="w-full h-72 sm:h-80 md:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-80 sm:h-96 object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                   onError={(e) => {
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/images/product-placeholder.webp";
+                    e.currentTarget.src = "/images/product-category/whey-protein.webp";
                   }}
                 />
 
-                {/* Subtle Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none" />
+                {/* Ambient Image Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
-                {/* Floating Stat Badge */}
-                <div className="absolute bottom-4 left-4 right-4 sm:right-auto bg-white/95 backdrop-blur-md border border-white/80 rounded-2xl p-3 sm:py-3.5 sm:px-4 shadow-[0_12px_32px_rgba(0,0,0,0.22)] flex items-center justify-between gap-3.5 sm:gap-4 transition-transform duration-300 hover:scale-[1.02]">
-                  {/* Left: Branded Stat Circle */}
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#5C3124] to-[#3a1d15] text-white flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-white">
-                    <span className="text-xs sm:text-sm font-black tracking-tight text-amber-300">
+                {/* Floating Partner Credibility Chip */}
+                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-white/80 rounded-xl p-3.5 shadow-xl flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#5C3124] text-white flex items-center justify-center font-black text-xs shadow-xs">
                       500+
-                    </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-extrabold text-gray-900 leading-tight">
+                        Active B2B Partners
+                      </span>
+                      <span className="text-[11px] text-gray-500 leading-tight mt-0.5">
+                        Gyms & Stores Pan-India
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Middle: Title & Subtitle */}
-                  <div className="flex flex-col justify-center min-w-0 pr-1">
-                    <span className="text-xs sm:text-sm font-black text-gray-950 tracking-tight leading-tight whitespace-nowrap">
-                      Active B2B Partners
-                    </span>
-                    <span className="text-[11px] text-gray-500 font-semibold leading-tight mt-0.5 whitespace-nowrap">
-                      Gyms & Retailers Pan-India
-                    </span>
-                  </div>
-
-                  {/* Right: Verified Pill Badge */}
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-extrabold flex-shrink-0 shadow-2xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>Verified</span>
-                  </div>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-extrabold uppercase">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    Verified
+                  </span>
                 </div>
               </div>
             </div>

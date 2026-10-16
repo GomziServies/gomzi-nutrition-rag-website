@@ -25,27 +25,32 @@ export default function WellnessHealthSection() {
     let isMounted = true;
     const loadWellness = async () => {
       try {
-        const res = await getProductsApi({ limit: 100, page: 1 });
-        if (isMounted && res.data?.data && Array.isArray(res.data.data)) {
-          const wellnessItems = res.data.data
-            .filter((p) => {
-              if (!p || !p.name || !isRealProduct(p)) return false;
-              const nameLower = p.name.toLowerCase();
-              return (
-                nameLower.includes("peanut") ||
-                nameLower.includes("butter") ||
-                nameLower.includes("vitamin") ||
-                nameLower.includes("omega") ||
-                nameLower.includes("wellness") ||
-                nameLower.includes("drink") ||
-                nameLower.includes("bar") ||
-                nameLower.includes("chia")
-              );
-            })
+        const res = await getProductsApi({ category: "Wellness & Health", limit: 50, page: 1 });
+        if (isMounted && res.data?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+          const items = res.data.data
+            .filter((p) => p && p.name && isRealProduct(p))
             .map((p) => normalizeProduct(p, "wellness-health"));
-
-          if (wellnessItems.length > 0) {
-            setApiProducts(wellnessItems);
+          setApiProducts(items);
+        } else {
+          const fallbackRes = await getProductsApi({ limit: 100, page: 1 });
+          if (isMounted && fallbackRes.data?.data && Array.isArray(fallbackRes.data.data)) {
+            const wellnessItems = fallbackRes.data.data
+              .filter((p) => {
+                if (!p || !p.name || !isRealProduct(p)) return false;
+                const nameLower = p.name.toLowerCase();
+                return (
+                  nameLower.includes("peanut") ||
+                  nameLower.includes("butter") ||
+                  nameLower.includes("vitamin") ||
+                  nameLower.includes("omega") ||
+                  nameLower.includes("wellness") ||
+                  nameLower.includes("drink") ||
+                  nameLower.includes("bar") ||
+                  nameLower.includes("chia")
+                );
+              })
+              .map((p) => normalizeProduct(p, "wellness-health"));
+            if (wellnessItems.length > 0) setApiProducts(wellnessItems);
           }
         }
       } catch (err) {
