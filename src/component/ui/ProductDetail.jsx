@@ -608,9 +608,10 @@ export default function NARAProductPage() {
               <button
                 onClick={handleAddToCart}
                 disabled={cartLoading}
-                className="w-full bg-[#5C3124] hover:bg-[#48261c] text-white font-bold py-4 sm:py-5 cursor-pointer rounded-xl transition-all duration-200 text-sm tracking-widest font-toma shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 uppercase"
+                className="group relative overflow-hidden w-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold py-4 sm:py-5 cursor-pointer rounded-xl transition-all duration-300 text-sm tracking-widest font-toma shadow-md shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0 uppercase"
               >
-                {cartLoading ? "ADDING..." : "ADD TO CART"}
+                <span>{cartLoading ? "ADDING..." : "ADD TO CART"}</span>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
               {/* Benefit chips */}
               <div className="flex flex-wrap gap-2.5">

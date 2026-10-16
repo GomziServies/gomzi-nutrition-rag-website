@@ -128,7 +128,7 @@ export default function ProductCard({ product, onAddToCart }) {
             }
           }}
         >
-          <span className="w-full py-2.5 text-white bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] font-bold text-sm rounded-xl transition-all duration-200 tracking-wide text-center flex items-center justify-center gap-2 shadow-2xs hover:shadow-md active:scale-[0.98]">
+          <span className="group/btn relative overflow-hidden w-full py-2.5 text-white bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 font-bold text-sm rounded-xl transition-all duration-300 hover:-translate-y-0.5 tracking-wide text-center flex items-center justify-center gap-2 shadow-md shadow-[#5C3124]/20 hover:shadow-lg hover:shadow-[#5C3124]/35 active:scale-[0.98]">
             <svg
               width="18"
               height="18"
@@ -138,12 +138,14 @@ export default function ProductCard({ product, onAddToCart }) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className="text-amber-200 transition-transform duration-300 group-hover/btn:scale-110"
             >
               <circle cx="8" cy="21" r="1" />
               <circle cx="19" cy="21" r="1" />
               <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
             </svg>
-            Add to Cart
+            <span>Add to Cart</span>
+            <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </span>
         </button>
       </div>

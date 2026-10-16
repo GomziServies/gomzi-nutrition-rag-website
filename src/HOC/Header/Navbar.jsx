@@ -364,9 +364,11 @@ export default function Navbar() {
               ) : (
                 <button
                   onClick={() => handleNavigation("/login")}
-                  className="inline-flex items-center justify-center px-3.5 sm:px-4 py-1.5 sm:py-2 bg-[#5C3124] hover:bg-[#48261c] text-white font-bold text-xs sm:text-sm rounded-lg transition-all shadow-sm cursor-pointer border-none"
+                  className="group relative overflow-hidden inline-flex items-center justify-center px-4 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs sm:text-sm rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
                 >
-                  Login
+                  <span className="relative z-10">Login</span>
+                  {/* Sheen sweep highlight on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                 </button>
               )}
 

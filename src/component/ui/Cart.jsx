@@ -279,10 +279,11 @@ export default function Cart() {
               </div>
 
               <button
-                className="w-full py-4 bg-[#5C3124] hover:bg-[#48261c] text-white font-toma font-bold text-[15px] rounded-xl shadow-md hover:shadow-lg transition-all mb-3 cursor-pointer uppercase tracking-wider"
+                className="group relative overflow-hidden w-full py-4 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-[15px] rounded-xl shadow-md shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] mb-3 cursor-pointer uppercase tracking-wider"
                 onClick={handleCheckout}
               >
-                Check out
+                <span>Check out</span>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
 
               {/* <div className="grid grid-cols-2 gap-3 mb-3">

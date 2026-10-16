@@ -261,10 +261,11 @@ export default function TrendingDealsSection() {
                       e.stopPropagation();
                       handleCardClick(deal.url);
                     }}
-                    className="mt-3 w-full py-2.5 px-4 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 active:scale-[0.98] shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="group/btn relative overflow-hidden mt-3 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Claim Deal</span>
-                    <FiArrowRight className="w-3.5 h-3.5" />
+                    <FiArrowRight className="w-3.5 h-3.5 text-amber-300 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                    <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                   </button>
                 </div>
               </div>
