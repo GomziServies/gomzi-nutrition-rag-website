@@ -3,6 +3,7 @@ import useAuth from "./useAuth";
 import useCart from "./useCart";
 import { createOrder } from "../services/order.service";
 import { successToast, errorToast } from "../utils/toast";
+import { clearCart } from "../services/cartStorage.service";
 
 const useCheckout = (coupon) => {
   const { user } = useAuth();
@@ -98,6 +99,11 @@ const useCheckout = (coupon) => {
         };
       }
       localStorage.removeItem("checkout_coupon");
+      try {
+        await clearCart();
+      } catch (clearErr) {
+        console.warn("Cart clearing error:", clearErr);
+      }
       successToast(result.message);
       return {
         success: true,

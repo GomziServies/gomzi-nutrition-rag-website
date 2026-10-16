@@ -147,174 +147,87 @@ export default function RegisterPage() {
 
   return (
     <div className="h-screen max-h-screen w-full flex bg-[#faf8f6] font-modelica text-[#1c1c28] overflow-hidden">
-      {/* ── LEFT PANEL: Brand Visual Showcase (Desktop) ── */}
+      {/* ── LEFT PANEL: Authentic Athletic Brand Showcase (Desktop) ── */}
       <div
-        className="hidden lg:flex flex-col justify-between w-[48%] xl:w-[46%] h-full relative overflow-hidden p-8 xl:p-10 text-white select-none shrink-0"
+        className="hidden lg:flex flex-col justify-between w-[48%] xl:w-[46%] h-full relative overflow-hidden p-8 xl:p-12 text-white select-none shrink-0"
         style={{
           background:
-            "radial-gradient(ellipse 90% 70% at 75% 20%, #4a271c 0%, #1c0f0a 45%, #0d0705 100%)",
+            "linear-gradient(180deg, rgba(16, 10, 8, 0.55) 0%, rgba(16, 10, 8, 0.82) 55%, rgba(10, 6, 5, 0.96) 100%), url('/images/gym-owner.webp') center/cover no-repeat",
         }}
       >
-        {/* Ambient atmospheric glows */}
-        <div
-          className="absolute -top-32 -left-32 w-80 h-80 rounded-full pointer-events-none blur-3xl"
-          style={{ background: "rgba(92, 49, 36, 0.45)" }}
-        />
-        <div
-          className="absolute bottom-10 right-0 w-72 h-72 rounded-full pointer-events-none blur-3xl"
-          style={{ background: "rgba(255, 137, 20, 0.15)" }}
-        />
+        {/* Subtle Ambient Vignette & Warmth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 pointer-events-none" />
 
-        {/* Subtle grid pattern overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-            backgroundSize: "36px 36px",
-          }}
-        />
-
-        {/* Brand Accent Vertical Bar */}
-        <div
-          className="absolute left-0 top-10 bottom-10 w-[3px] rounded-r-full"
-          style={{
-            background:
-              "linear-gradient(to bottom, transparent 0%, #ff8914 25%, #5C3124 75%, transparent 100%)",
-            boxShadow: "0 0 16px 2px rgba(255,137,20,0.4)",
-          }}
-        />
-
-        {/* Top Header: Logo with #000 in place of #ffffff & Badge */}
+        {/* Top Header: Brand Logo & Official Badge */}
         <div className="relative z-10 flex items-center justify-between shrink-0">
           <Link to="/" className="inline-block transition-transform hover:scale-[1.02]">
             <img
-              src="/images/gomzi-supplements-dark.webp"
-              alt="Gomzi Supplements by RAG"
-              className="h-9 xl:h-10 object-contain object-left"
+              src="/images/whitelogo.webp"
+              alt="Gomzi Nutrition"
+              className="h-10 xl:h-11 object-contain object-left"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/images/rag-icon-logo.png";
+                e.currentTarget.className = "h-10 xl:h-11 object-contain filter brightness-0 invert";
+              }}
             />
           </Link>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-white/10 text-[#ffaa5a] border border-white/10 backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse" />
-            Official Store
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-white/10 text-amber-300 border border-white/20 backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Official Brand Store
           </span>
         </div>
 
-        {/* Center: Hero Statement & Compact Glass Showcase Card */}
-        <div className="relative z-10 flex flex-col gap-5 my-auto">
-          {/* Badge & Headline */}
-          <div className="flex flex-col gap-1.5 max-w-lg">
-            <div className="inline-flex items-center gap-1.5 text-[11px] tracking-widest uppercase font-semibold text-[#ffaa5a]">
-              <Sparkles size={13} className="text-[#ff8914]" />
-              <span>Certified Science-Backed Nutrition</span>
+        {/* Center: Hero Statement & Verified Review */}
+        <div className="relative z-10 flex flex-col gap-5 my-auto max-w-lg">
+          <div className="flex flex-col gap-2">
+            <div className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-extrabold text-amber-400">
+              <Sparkles size={14} className="text-amber-400" />
+              <span>Join Gomzi Athlete Club</span>
             </div>
 
-            <h1
-              className="font-toma text-white leading-[1.05]"
-              style={{
-                fontSize: "clamp(2rem, 3.2vw, 2.75rem)",
-                letterSpacing: "-1.2px",
-              }}
-            >
-              Start Your{" "}
-              <span
-                style={{
-                  background: "linear-gradient(90deg, #ffffff 0%, #ffaa5a 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                Transformation.
+            <h1 className="font-toma text-3xl xl:text-4xl font-black text-white tracking-tight leading-[1.1]">
+              START YOUR <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-orange-400">
+                TRANSFORMATION.
               </span>
             </h1>
 
-            <p className="font-modelica text-xs xl:text-sm leading-relaxed text-gray-300 max-w-md">
-              Join 500,000+ elite athletes fueled by pharmaceutical-grade purity, verified zero-doping standards, and clinical efficacy.
+            <p className="text-xs xl:text-sm text-gray-300 leading-relaxed font-normal mt-1">
+              Create your account to unlock member discounts, earn rewards on every order, and access certified sports nutrition.
             </p>
           </div>
 
-          {/* Elevated Glass Showcase Card */}
-          <div className="relative bg-white/[0.04] backdrop-blur-xl border border-white/[0.12] rounded-xl p-4 xl:p-5 shadow-2xl overflow-hidden group hover:border-[#ff8914]/40 transition-all duration-300">
-            {/* Soft inner glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#5C3124]/40 rounded-full blur-2xl pointer-events-none group-hover:bg-[#ff8914]/20 transition-all duration-500" />
-
-            <div className="relative z-10 flex items-center gap-4 xl:gap-5">
-              <div className="relative shrink-0 w-20 h-20 xl:w-24 xl:h-24 flex items-center justify-center">
-                <img
-                  src="/images/Gomzi_Protein_Product_HD.webp"
-                  alt="Gomzi Protein Isolate"
-                  className="max-h-full max-w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5 flex-1 min-w-0">
-                <div className="flex items-center gap-1 text-[#f59e0b]">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={11} fill="#f59e0b" strokeWidth={0} />
-                  ))}
-                  <span className="text-[11px] font-semibold text-white ml-1">4.9 / 5</span>
-                </div>
-
-                <p className="text-xs text-gray-200 italic leading-snug line-clamp-2 font-light">
-                  "The cleanest isolate I’ve used. Zero bloating, instant solubility, and noticeably faster muscle recovery."
-                </p>
-
-                <div className="flex items-center gap-2 pt-0.5">
-                  <span className="text-[10px] font-semibold text-[#ffaa5a]">
-                    Verified Athlete Review
-                  </span>
-                  <span className="text-gray-500 text-[10px]">•</span>
-                  <span className="text-[10px] text-gray-400">Batch Tested</span>
-                </div>
-              </div>
+          {/* Genuine Verified Customer Proof Card */}
+          <div className="relative bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-5 shadow-2xl">
+            <div className="flex items-center gap-1 text-amber-400 mb-2">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={14} fill="#fbbf24" strokeWidth={0} />
+              ))}
+              <span className="ml-2 text-xs font-bold text-white">4.9 / 5 Rating</span>
             </div>
-
-            {/* Quick Spec Pills */}
-            <div className="mt-3 pt-3 border-t border-white/[0.08] flex items-center justify-between text-[10px] text-gray-300 font-medium">
-              <span className="flex items-center gap-1">
-                <CheckCircle2 size={12} className="text-[#ff8914]" /> 24g Pure Isolate
-              </span>
-              <span className="flex items-center gap-1">
-                <CheckCircle2 size={12} className="text-[#ff8914]" /> 5.5g BCAAs
-              </span>
-              <span className="flex items-center gap-1">
-                <CheckCircle2 size={12} className="text-[#ff8914]" /> 0g Added Sugar
+            <p className="text-xs text-gray-200 italic leading-relaxed">
+              "The cleanest isolate I’ve used. Zero bloating, instant solubility, and noticeably faster muscle recovery."
+            </p>
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10 text-[11px]">
+              <span className="font-bold text-white">Verified Athlete Community</span>
+              <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                <CheckCircle2 size={12} /> 100% Authentic
               </span>
             </div>
-          </div>
-
-          {/* Quality Proof Points */}
-          <div className="grid grid-cols-3 gap-2.5">
-            {[
-              { title: "Informed-Choice", sub: "100% Dope-Free" },
-              { title: "Clinical Dosages", sub: "Bioavailable Form" },
-              { title: "Pan-India Shipping", sub: "Express 24-48h" },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white/[0.03] border border-white/[0.08] rounded-lg px-3 py-2 backdrop-blur-sm"
-              >
-                <div className="font-toma text-[11px] font-bold text-white tracking-wide">
-                  {item.title}
-                </div>
-                <div className="text-[9px] text-gray-400 font-modelica mt-0.5">
-                  {item.sub}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 
         {/* Bottom Footer / Copyright */}
-        <div className="relative z-10 flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400 font-modelica shrink-0">
-          <span>© 2026 Gomzi Supplement by RAG.</span>
-          <div className="flex items-center gap-3 text-gray-400">
+        <div className="relative z-10 flex items-center justify-between pt-4 border-t border-white/15 text-[11px] text-gray-300 shrink-0">
+          <span>© 2026 Gomzi Supplement by RAG</span>
+          <div className="flex items-center gap-3 text-gray-300">
             <Link to="/privacy-policy" className="hover:text-white transition-colors">
-              Privacy Policy
+              Privacy
             </Link>
             <span>•</span>
             <Link to="/terms-and-conditions" className="hover:text-white transition-colors">
-              Terms & Conditions
+              Terms
             </Link>
           </div>
         </div>

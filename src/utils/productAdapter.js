@@ -7,21 +7,46 @@
 export const getProductImageUrl = (product) => {
   if (!product) return "/images/product-placeholder.webp";
 
+  // Check direct resolved image
+  if (typeof product.resolvedImage === "string" && product.resolvedImage.trim()) {
+    if (product.resolvedImage.startsWith("http") || product.resolvedImage.startsWith("/")) {
+      return product.resolvedImage;
+    }
+    return `https://files.fggroup.in/${product.resolvedImage}`;
+  }
+
   // Check displayImages array
   if (Array.isArray(product.displayImages) && product.displayImages.length > 0) {
     const img = product.displayImages[0];
-    if (img && typeof img === "string") {
-      if (img.startsWith("http")) return img;
+    if (img && typeof img === "string" && img.trim()) {
+      if (img.startsWith("http") || img.startsWith("/")) return img;
       return `https://files.fggroup.in/${img}`;
     }
   }
 
-  // Check display_image array
+  // Check display_image array or string
   if (Array.isArray(product.display_image) && product.display_image.length > 0) {
     const img = product.display_image[0];
-    if (img && typeof img === "string") {
-      if (img.startsWith("http")) return img;
+    if (img && typeof img === "string" && img.trim()) {
+      if (img.startsWith("http") || img.startsWith("/")) return img;
       return `https://files.fggroup.in/${img}`;
+    }
+  } else if (typeof product.display_image === "string" && product.display_image.trim()) {
+    if (product.display_image.startsWith("http") || product.display_image.startsWith("/")) {
+      return product.display_image;
+    }
+    return `https://files.fggroup.in/${product.display_image}`;
+  }
+
+  // Check variation images (both variations array and single variation object)
+  const firstVariation = Array.isArray(product.variations) ? product.variations[0] : product.variation;
+  if (firstVariation) {
+    const varImg =
+      (Array.isArray(firstVariation.displayImages) && firstVariation.displayImages[0]) ||
+      firstVariation.image;
+    if (typeof varImg === "string" && varImg.trim()) {
+      if (varImg.startsWith("http") || varImg.startsWith("/")) return varImg;
+      return `https://files.fggroup.in/${varImg}`;
     }
   }
 
@@ -33,11 +58,11 @@ export const getProductImageUrl = (product) => {
     return `https://files.fggroup.in/${product.image}`;
   }
 
-  // Check variations images
-  if (Array.isArray(product.variations) && product.variations[0]?.image) {
-    const img = product.variations[0].image;
-    if (img && typeof img === "string") {
-      if (img.startsWith("http")) return img;
+  // Check images array (e.g. [{ image_url: "..." }] or ["..."])
+  if (Array.isArray(product.images) && product.images.length > 0) {
+    const img = product.images[0]?.image_url || product.images[0];
+    if (typeof img === "string" && img.trim()) {
+      if (img.startsWith("http") || img.startsWith("/")) return img;
       return `https://files.fggroup.in/${img}`;
     }
   }

@@ -9,6 +9,7 @@ import {
   getGuestCart,
   removeGuestCartItem,
   updateGuestCartQuantity,
+  clearCart,
 } from "../services/cartStorage.service";
 
 const useCart = () => {
@@ -151,6 +152,12 @@ const useCart = () => {
     };
   }, [isAuthenticated]);
 
+  const clearAllCart = async () => {
+    setItems([]);
+    await clearCart();
+    await fetchCart();
+  };
+
   return {
     cartId,
     items,
@@ -158,6 +165,7 @@ const useCart = () => {
     fetchCart,
     deleteItem,
     changeQuantity,
+    clearCart: clearAllCart,
   };
 };
 

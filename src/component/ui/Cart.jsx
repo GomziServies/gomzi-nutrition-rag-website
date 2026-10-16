@@ -26,7 +26,7 @@ const ProductImg = ({ src, alt, bg, label, className }) => {
 
 export default function Cart() {
   const navigate = useNavigate();
-  const { items, deleteItem, cartId, changeQuantity } = useCart();
+  const { items, deleteItem, cartId, changeQuantity, clearCart } = useCart();
   const [showLogin, setShowLogin] = useState(false);
   const { isAuthenticated, fetchProfile } = useAuth();
   const totalQty = items.reduce((s, i) => s + i.quantity, 0);
@@ -107,14 +107,25 @@ export default function Cart() {
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 py-6 sm:py-8">
           {/* ════ LEFT - Cart Items ════ */}
           <div className="flex-1 min-w-0">
-            {/* Heading */}
-            <div className="flex items-center gap-3 mb-4">
-              <h1 className="font-toma font-bold text-xl sm:text-2xl text-primary">
-                Your cart
-              </h1>
-              <span className="w-7 h-7 rounded-full bg-[#ff8914] text-white text-xs font-bold flex items-center justify-center">
-                {totalQty}
-              </span>
+            {/* Heading & Clear All Button */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <h1 className="font-toma font-bold text-xl sm:text-2xl text-primary">
+                  Your cart
+                </h1>
+                <span className="w-7 h-7 rounded-full bg-[#ff8914] text-white text-xs font-bold flex items-center justify-center">
+                  {totalQty}
+                </span>
+              </div>
+
+              {items.length > 0 && (
+                <button
+                  onClick={clearCart}
+                  className="text-xs font-bold text-red-500 hover:text-red-700 hover:underline px-2.5 py-1 rounded-lg hover:bg-red-50 transition-colors cursor-pointer bg-transparent border-none"
+                >
+                  Clear All
+                </button>
+              )}
             </div>
 
             {/* ── Item List ── */}

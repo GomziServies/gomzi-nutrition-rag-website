@@ -1,4 +1,4 @@
-import { addToCartApi } from "../api/product.api";
+import { addToCartApi, getCartApi, removeCartItemApi } from "../api/product.api";
 import { successToast, errorToast } from "../utils/toast";
 import { getToken } from "../utils/storage";
 
@@ -151,3 +151,59 @@ export const updateGuestCartQuantity = (id, quantity) => {
   saveGuestCart(items);
   return items;
 };
+
+export const clearCart = async () => {
+  // 1. Immediately and synchronously wipe local guest cart and coupon
+  try {
+    localStorage.removeItem("guest_cart");
+    localStorage.setItem("guest_cart", "[]");
+    localStorage.removeItem("checkout_coupon");
+  } catch (e) {
+    console.error("Failed to clear local cart storage:", e);
+  }
+
+  // Synchronously dispatch cartUpdated so React state drops to 0 immediately
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("cartUpdated"));
+    window.dispatchEvent(new Event("storage"));
+  }
+
+  // 2. Clear backend database cart for authenticated users
+  try {
+    const token =
+      getToken() ||
+      localStorage.getItem("authorization") ||
+      localStorage.getItem("auth_token") ||
+      localStorage.getItem("token");
+
+    if (token) {
+      const res = await getCartApi();
+      const cartData = res?.data?.data;
+      if (Array.isArray(cartData) && cartData.length > 0) {
+        const cart = cartData[0];
+        const cart_id = cart?._id;
+        if (cart_id && Array.isArray(cart.items) && cart.items.length > 0) {
+          await Promise.allSettled(
+            cart.items.map(async (item) => {
+              if (item._id) {
+                await removeCartItemApi(cart_id, item._id);
+              }
+              if (item.item_id && item.item_id !== item._id) {
+                await removeCartItemApi(cart_id, item.item_id);
+              }
+            })
+          );
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Backend cart clear warning:", err);
+  }
+
+  // Dispatch again after backend sync
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("cartUpdated"));
+    window.dispatchEvent(new Event("storage"));
+  }
+};
+

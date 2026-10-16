@@ -1,37 +1,52 @@
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ShoppingCart, ArrowRight } from "lucide-react";
+import useCart from "../../../hooks/useCart";
 
 function CartSection() {
-  const [cart, setCart] = useState([]);
-
-  // useEffect(() => {
-  //   loadCart();
-  // }, []);
-
-  // const loadCart = async () => {
-  //   try {
-  //     // const response = await getCartApi();
-  //     // setCart(response.data.data);
-
-  //     setCart([]);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const { items } = useCart();
+  const itemCount = items?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
 
   return (
-    <>
-      <h1 className="text-3xl font-bold mb-8">My Cart</h1>
-
-      {cart.length === 0 ? (
-        <div className="text-center py-20 text-gray-500">Cart is empty</div>
-      ) : (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-[#ebdcd7]">
         <div>
-          {cart.map((item) => (
-            <div key={item.id}>Cart Item</div>
-          ))}
+          <h2 className="font-toma text-2xl sm:text-3xl font-black text-[#1c1c28] tracking-tight">
+            Shopping Cart
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+            Review active items in your cart and proceed to secure checkout.
+          </p>
         </div>
-      )}
-    </>
+
+        <span className="text-xs font-bold text-[#5C3124] bg-[#f5eeeb] px-3.5 py-1.5 rounded-xl border border-[#ebdcd7] self-start sm:self-auto">
+          {itemCount} {itemCount === 1 ? "Item" : "Items"} in Cart
+        </span>
+      </div>
+
+      <div className="bg-[#faf8f6] rounded-2xl md:rounded-3xl border border-[#ebdcd7] p-8 sm:p-12 text-center flex flex-col items-center">
+        <div className="w-16 h-16 rounded-2xl bg-white border border-[#ebdcd7] flex items-center justify-center text-[#5C3124] mb-4 shadow-sm">
+          <ShoppingCart size={28} />
+        </div>
+
+        <h3 className="font-toma text-xl sm:text-2xl font-black text-[#1c1c28] mb-2">
+          {itemCount > 0 ? "You have items in your cart" : "Your cart is currently empty"}
+        </h3>
+
+        <p className="text-xs sm:text-sm text-gray-500 max-w-md leading-relaxed mb-6">
+          {itemCount > 0
+            ? `You have ${itemCount} items waiting. Head to the full cart to adjust quantities, apply athlete promo codes, and complete checkout.`
+            : "Browse our lab-tested whey isolate, creatine, and daily wellness formulas to power your training."}
+        </p>
+
+        <Link
+          to="/cart"
+          className="inline-flex items-center gap-2 bg-[#5C3124] hover:bg-[#48261c] text-white px-6 py-3.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all shadow-md shadow-[#5C3124]/20 cursor-pointer"
+        >
+          <span>{itemCount > 0 ? "Go to Cart & Checkout" : "Explore Supplements"}</span>
+          <ArrowRight size={15} />
+        </Link>
+      </div>
+    </div>
   );
 }
 
