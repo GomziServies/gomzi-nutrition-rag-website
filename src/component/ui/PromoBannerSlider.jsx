@@ -117,12 +117,12 @@ export default function PromoBannerSlider() {
                     /* ── FULL UPLOADED BANNER FROM ADMIN PORTAL ── */
                     <div
                       onClick={() => handleBannerClick(slide.url)}
-                      className="relative w-full cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl border border-gray-200/60 bg-gray-50 flex items-center justify-center select-none shadow-xs hover:shadow-md transition-shadow"
+                      className="relative w-full cursor-pointer overflow-hidden rounded-2xl sm:rounded-3xl border border-gray-200/60 bg-gray-50 select-none shadow-xs hover:shadow-md transition-shadow"
                     >
                       <img
                         src={resolveImageUrl(slide.image)}
                         alt={slide.title || "Promotional Banner"}
-                        className="w-full h-auto max-h-[220px] sm:max-h-[260px] md:max-h-[300px] object-cover sm:object-fill rounded-2xl sm:rounded-3xl"
+                        className="w-full h-auto block rounded-2xl sm:rounded-3xl select-none"
                         onError={(e) => {
                           e.target.style.display = "none";
                         }}
