@@ -510,38 +510,40 @@ export default function LoginPage() {
                   type="button"
                   onClick={handleSendOTP}
                   disabled={loading}
-                  className="w-full mt-1 py-3.5 rounded-xl text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-200 bg-[#5C3124] hover:bg-[#45241a] active:scale-[0.99] shadow-md shadow-[#5C3124]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl font-toma text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.99] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Sending Code...</span>
+                      <span className="relative z-10">Sending Code...</span>
                     </>
                   ) : (
                     <>
-                      <span>Get Verification Code</span>
-                      <ArrowRight size={16} />
+                      <span className="relative z-10">Get Verification Code</span>
+                      <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                   )}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={handleVerifyOTP}
                   disabled={loading}
-                  className="w-full mt-1 py-3.5 rounded-xl text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-200 bg-[#5C3124] hover:bg-[#45241a] active:scale-[0.99] shadow-md shadow-[#5C3124]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl font-toma text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.99] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Verifying...</span>
+                      <span className="relative z-10">Verifying...</span>
                     </>
                   ) : (
                     <>
-                      <span>Verify & Sign In</span>
-                      <ArrowRight size={16} />
+                      <span className="relative z-10">Verify & Sign In</span>
+                      <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                   )}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </button>
               )}
             </div>
@@ -620,19 +622,20 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-1 py-3.5 rounded-xl text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-200 bg-[#5C3124] hover:bg-[#45241a] active:scale-[0.99] shadow-md shadow-[#5C3124]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl font-toma text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.99] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Signing In...</span>
+                    <span className="relative z-10">Signing In...</span>
                   </>
                 ) : (
                   <>
-                    <span>Sign In to Account</span>
-                    <ArrowRight size={16} />
+                    <span className="relative z-10">Sign In to Account</span>
+                    <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                   </>
                 )}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
             </form>
           )}

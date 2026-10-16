@@ -91,10 +91,11 @@ export default function TrustExpertsSection() {
               <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                 <Link
                   to="/inquiry"
-                  className="h-12 px-7 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-md shadow-[#5C3124]/20 active:scale-[0.98] cursor-pointer whitespace-nowrap"
+                  className="group relative overflow-hidden h-12 px-7 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer whitespace-nowrap"
                 >
                   <span>Apply for Wholesale Account</span>
-                  <FiArrowRight className="w-4 h-4" />
+                  <FiArrowRight className="w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </Link>
 
                 <Link
@@ -130,13 +131,14 @@ export default function TrustExpertsSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
                 {/* Floating Partner Credibility Chip */}
-                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-white/80 rounded-xl p-3.5 shadow-xl flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#5C3124] text-white flex items-center justify-center font-black text-xs shadow-xs">
-                      500+
+                <div className="group/chip relative overflow-hidden absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-white/80 hover:border-amber-400/40 rounded-xl p-3.5 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-between gap-3">
+                  <div className="relative z-10 flex items-center gap-3">
+                    <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white flex items-center justify-center font-black text-xs shadow-md shadow-[#5C3124]/25 group-hover/chip:scale-105 group-hover/chip:border-amber-400/60 transition-all duration-300">
+                      <span className="relative z-10 text-amber-100">500+</span>
+                      <div className="absolute inset-0 -translate-x-full group-hover/chip:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-xs font-extrabold text-gray-900 leading-tight">
+                      <span className="text-xs font-extrabold text-gray-900 leading-tight group-hover/chip:text-[#5C3124] transition-colors">
                         Active B2B Partners
                       </span>
                       <span className="text-[11px] text-gray-500 leading-tight mt-0.5">
@@ -145,10 +147,12 @@ export default function TrustExpertsSection() {
                     </div>
                   </div>
 
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-extrabold uppercase">
+                  <span className="relative z-10 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-extrabold uppercase">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     Verified
                   </span>
+                  {/* Subtle sheen highlight across chip on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover/chip:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.04] to-transparent pointer-events-none" />
                 </div>
               </div>
             </div>

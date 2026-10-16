@@ -44,13 +44,16 @@ function FAQItemCard({ faq, isOpen, onToggle }) {
   return (
     <div
       onClick={onToggle}
-      className={`rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden border ${
+      className={`group relative overflow-hidden rounded-2xl transition-all duration-300 cursor-pointer border ${
         isOpen
-          ? "border-[#5C3124]/50 bg-gradient-to-br from-[#fdfbf9] to-white shadow-md p-4 sm:p-5"
-          : "border-[#ebdcd7]/80 bg-white hover:border-[#5C3124]/40 hover:bg-[#fdf6f4]/40 p-4 sm:p-4.5 shadow-2xs"
+          ? "border-amber-400/40 bg-gradient-to-br from-[#fdfbf9] to-white shadow-md p-4 sm:p-5"
+          : "border-[#ebdcd7]/80 bg-white hover:border-amber-400/40 hover:bg-[#fdf6f4]/40 p-4 sm:p-4.5 shadow-2xs"
       }`}
     >
-      <div className="w-full flex items-center justify-between gap-4 text-left">
+      {/* Subtle moving sheen highlight across FAQ card on hover */}
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.03] to-transparent pointer-events-none" />
+
+      <div className="relative z-10 w-full flex items-center justify-between gap-4 text-left">
         <h3
           className={`text-base sm:text-lg font-bold leading-snug transition-colors pr-2 ${
             isOpen ? "text-[#5C3124]" : "text-gray-900 group-hover:text-[#5C3124]"
@@ -60,13 +63,16 @@ function FAQItemCard({ faq, isOpen, onToggle }) {
         </h3>
 
         <span
-          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+          className={`group/btn relative overflow-hidden flex-shrink-0 w-8.5 h-8.5 rounded-full flex items-center justify-center transition-all duration-300 ${
             isOpen
-              ? "bg-[#5C3124] text-white rotate-180 shadow-xs"
-              : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7]"
+              ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white rotate-180 shadow-md shadow-[#5C3124]/25"
+              : "bg-[#fdf6f4] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white text-[#5C3124] border border-[#ebdcd7]"
           }`}
         >
-          {isOpen ? <Minus size={15} /> : <Plus size={15} />}
+          <span className="relative z-10">
+            {isOpen ? <Minus size={15} className="text-amber-100" /> : <Plus size={15} />}
+          </span>
+          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
         </span>
       </div>
 
@@ -172,8 +178,9 @@ export default function FAQSection() {
               {/* Bottom Social Proof Pill */}
               <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-white/80 shadow-2xl flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5C3124] to-[#3a1d15] text-white flex items-center justify-center font-black text-sm flex-shrink-0 shadow-sm ring-2 ring-[#ebdcd7]">
-                    ★
+                  <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-amber-200 flex items-center justify-center font-black text-sm flex-shrink-0 shadow-md shadow-[#5C3124]/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
+                    <span className="relative z-10">★</span>
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs sm:text-sm font-black text-gray-950 leading-tight truncate">

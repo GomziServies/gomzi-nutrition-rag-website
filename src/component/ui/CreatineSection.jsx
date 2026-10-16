@@ -197,10 +197,11 @@ export default function CreatineSection() {
                     {/* Action Button */}
                     <button
                       onClick={() => handleAddToCart(item)}
-                      className="mt-4 w-full py-2.5 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
+                      className="group/btn relative overflow-hidden mt-4 w-full py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
                     >
-                      <FiShoppingCart className="w-4 h-4" />
+                      <FiShoppingCart className="w-4 h-4 text-amber-200 transition-transform duration-300 group-hover/btn:scale-110" />
                       <span>Add to Cart</span>
+                      <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                     </button>
                   </div>
                 </SwiperSlide>

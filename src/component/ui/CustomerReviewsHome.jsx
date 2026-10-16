@@ -189,7 +189,9 @@ export default function CustomerReviews() {
 
             return (
               <SwiperSlide key={review.name} className="h-auto">
-                <div className="h-full min-h-[380px] rounded-3xl border border-[#ebdcd7]/90 bg-white p-6 sm:p-7 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-[#5C3124]/50 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+                <div className="h-full min-h-[380px] rounded-3xl border border-[#ebdcd7]/90 bg-white p-6 sm:p-7 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+                  {/* Subtle moving card sheen sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.03] to-transparent pointer-events-none" />
                   {/* Decorative Quotation Mark Watermark */}
                   <div className="absolute top-3 right-5 text-6xl font-serif font-black text-[#5C3124]/5 group-hover:text-[#5C3124]/12 transition-colors select-none pointer-events-none leading-none">
                     “
@@ -250,8 +252,9 @@ export default function CustomerReviews() {
                   <div className="pt-5 mt-6 border-t border-gray-100 flex items-center justify-between gap-3 relative z-10">
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Initials Avatar */}
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#5C3124] to-[#3a1d15] text-white flex items-center justify-center font-black text-xs flex-shrink-0 shadow-sm ring-2 ring-[#ebdcd7]">
-                        {getInitials(review.name)}
+                      <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white flex items-center justify-center font-black text-xs flex-shrink-0 shadow-md shadow-[#5C3124]/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
+                        <span className="relative z-10 text-amber-100">{getInitials(review.name)}</span>
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                       </div>
 
                       <div className="flex flex-col min-w-0">

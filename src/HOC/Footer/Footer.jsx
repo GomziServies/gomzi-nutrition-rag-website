@@ -107,19 +107,21 @@ export default function Footer() {
               return (
                 <div
                   key={idx}
-                  className="flex items-start gap-4 p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:border-[#5C3124]/40 hover:bg-white/[0.04] transition-all duration-300 group"
+                  className="group relative overflow-hidden flex items-start gap-4 p-3.5 rounded-2xl bg-white/[0.02] hover:bg-gradient-to-r hover:from-[#5C3124]/40 hover:via-[#6d3a2b]/35 hover:to-[#48261c]/30 border border-white/[0.06] hover:border-amber-400/40 hover:shadow-lg hover:shadow-[#5C3124]/25 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#5C3124] to-[#3a1e16] flex items-center justify-center shrink-0 shadow-md shadow-[#5C3124]/20 group-hover:scale-105 transition-transform duration-300">
-                    <Icon className="w-6 h-6 text-amber-100" />
+                  <div className="relative z-10 w-12 h-12 rounded-xl bg-gradient-to-br from-[#5C3124] via-[#6d3a2b] to-[#3a1e16] border border-amber-400/30 flex items-center justify-center shrink-0 shadow-md shadow-[#5C3124]/30 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#5C3124]/40 transition-all duration-300">
+                    <Icon className="w-6 h-6 text-amber-200 group-hover:text-amber-100 transition-colors" />
                   </div>
-                  <div>
+                  <div className="relative z-10 min-w-0 flex-1">
                     <h4 className="text-white text-sm font-bold tracking-tight group-hover:text-amber-200 transition-colors">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+                    <p className="text-xs text-gray-400 mt-1 leading-relaxed group-hover:text-gray-200 transition-colors">
                       {item.sub}
                     </p>
                   </div>
+                  {/* Sheen sweep highlight on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
                 </div>
               );
             })}
@@ -129,9 +131,11 @@ export default function Footer() {
 
       {/* ── 2. VIP CLUB & NEWSLETTER SECTION ── */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14">
-        <div className="relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#5C3124]/30 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] shadow-2xl">
+        <div className="group/newsletter relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#5C3124]/40 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 shadow-2xl transition-all duration-500">
           {/* Decorative Corner Glow */}
           <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#5C3124]/30 to-transparent rounded-full blur-2xl pointer-events-none" />
+          {/* Subtle sheen highlight across banner on hover */}
+          <div className="absolute inset-0 -translate-x-full group-hover/newsletter:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="max-w-2xl text-center lg:text-left">
@@ -164,10 +168,11 @@ export default function Footer() {
                 </div>
                 <button
                   type="submit"
-                  className="h-12 px-7 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#733d2d] to-[#5C3124] hover:from-[#733d2d] hover:to-[#5C3124] text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#5C3124]/30 hover:scale-[1.02] active:scale-[0.98] shrink-0"
+                  className="group/btn relative overflow-hidden h-12 px-7 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#5C3124]/30 hover:shadow-xl hover:shadow-[#5C3124]/50 shrink-0"
                 >
                   <span>Claim 10% Off</span>
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4 text-amber-300 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                  <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </button>
               </form>
               <div className="flex items-center justify-center lg:justify-start gap-4 mt-3 text-[11px] text-gray-400">
@@ -346,7 +351,7 @@ export default function Footer() {
                   href="https://wa.me/919875270200"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-9 h-9 rounded-xl bg-white/[0.06] hover:bg-emerald-700 text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-xs"
+                  className="w-9 h-9 rounded-xl bg-white/[0.06] hover:bg-[#5C3124] text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-xs"
                   aria-label="WhatsApp"
                 >
                   <FaWhatsapp size={16} />
