@@ -1,22 +1,5 @@
 import Hookheading from "../common/Hookheading";
-import ProductCard from "../common/ProductCard";
 
-const product = {
-  id: 1,
-  badge: "LONGEVITY MONTH",
-  discount: "-40%",
-  image: "/images/p1off.webp",
-  stars: 5,
-  reviews: 17,
-  name: "Gomzi Supplement by RAG LONGEVITY CHOCOLATE",
-  category: "Longevity",
-  price: 4250,
-  originalPrice: 7080,
-};
-
-const handleAddToCart = (product) => {
-  console.log("Add to cart:", product);
-};
 
 export default function FuelingAthletesSection() {
   return (

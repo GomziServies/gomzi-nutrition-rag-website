@@ -72,13 +72,19 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
       const result = await sendOTP(payload);
 
       if (!result.success) {
-        errorToast(result.data.message);
+        errorToast(result.message || "Failed to send OTP");
         return;
       }
 
+      const devOtp = result?.data?.data?.OTP;
       setOtpSent(true);
 
-      successToast(result.data.message);
+      if (devOtp) {
+        setOtp(String(devOtp));
+        successToast(`OTP sent! (Dev Auto-fill: ${devOtp})`);
+      } else {
+        successToast(result.data?.message || "OTP has been sent");
+      }
     } catch {
       errorToast("Failed to send OTP");
     } finally {

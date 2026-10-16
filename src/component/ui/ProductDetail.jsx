@@ -60,8 +60,14 @@ export default function NARAProductPage() {
   }, [product?._id]);
 
   const recentlyViewed = useRecentlyViewed(product?._id);
+  const primaryCategory = Array.isArray(product?.categories)
+    ? product.categories[0]
+    : typeof product?.categories === "string"
+    ? product.categories
+    : "";
+
   const { products: relatedRaw, loading: relatedLoading } = useProducts({
-    category: product?.categories?.[0] || "",
+    category: primaryCategory,
     limit: 10,
   });
   const recentLoading = loading || !product?._id || !recentlyViewed;
@@ -85,6 +91,12 @@ export default function NARAProductPage() {
   if (!product) {
     return <div>Product not found</div>;
   }
+
+  const categoryName = Array.isArray(product.categories)
+    ? product.categories[0] || "Supplement"
+    : typeof product.categories === "string" && product.categories.trim()
+    ? product.categories
+    : "Supplement";
 
   const PRODUCT_PLACEHOLDER = "/images/product-placeholder.webp";
 
@@ -263,13 +275,13 @@ export default function NARAProductPage() {
             <span className="flex items-center gap-2">
               <Link
                 to={
-                  categorySlugMap[product.categories?.[0]]
-                    ? `/gomzi-supplement/${categorySlugMap[product.categories[0]]}`
-                    : `/gomzi-supplement?category=${encodeURIComponent(product.categories?.[0] || "")}`
+                  categorySlugMap[categoryName]
+                    ? `/gomzi-supplement/${categorySlugMap[categoryName]}`
+                    : `/gomzi-supplement?category=${encodeURIComponent(categoryName)}`
                 }
                 className="hover:underline font-modelica"
               >
-                {product.categories?.[0]}
+                {categoryName}
               </Link>
               <span className="text-gray-400 text-lg">›</span>
             </span>
@@ -300,9 +312,9 @@ export default function NARAProductPage() {
                       <div
                         key={i}
                         onClick={() => desktopSwiperRef.current?.slideToLoop(i)}
-                        className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all duration-200 hover:border-black hover:shadow-md p-2 ${
+                        className={`aspect-square rounded-xl overflow-hidden border bg-white cursor-pointer transition-all duration-200 hover:border-[#5C3124] hover:shadow-md p-2 ${
                           activeIndex === i
-                            ? "border-black shadow-md"
+                            ? "border-[#5C3124] ring-2 ring-[#5C3124]/25 shadow-md"
                             : "border-gray-200"
                         }`}
                       >
@@ -362,13 +374,24 @@ export default function NARAProductPage() {
             <div className="w-full lg:w-[54%] xl:w-[52%] flex flex-col gap-6">
               {/* Rating + category */}
               <div className="flex items-center gap-2.5 flex-wrap">
-                <Stars count={Math.round(product.rating.average)} />
+                <Stars
+                  count={Math.round(
+                    product.rating?.average ??
+                      (typeof product.rating === "number"
+                        ? product.rating
+                        : 5)
+                  )}
+                />
                 <span className="text-sm text-[var(--color-text)] font-semibold font-modelica">
-                  {product.rating.totalReviews} reviews
+                  {product.rating?.totalReviews ??
+                    (Array.isArray(product.reviews)
+                      ? product.reviews.length
+                      : 0)}{" "}
+                  reviews
                 </span>
                 <span className="w-1 h-1 rounded-full bg-gray-300" />
                 <span className="text-sm text-[var(--color-text-light)] font-modelica uppercase tracking-wide">
-                  {product.categories?.[0]}
+                  {categoryName}
                 </span>
               </div>
               {/* Title + description */}
@@ -383,11 +406,11 @@ export default function NARAProductPage() {
               {/* Flavour / weight / stock chip row */}
               <div className="flex items-center gap-3 flex-wrap">
                 {/* Product Info */}
-                <div className="inline-flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-white px-3.5 py-2.5 shadow-sm">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#eef4f0]">
+                <div className="inline-flex items-center gap-2.5 rounded-xl border border-[#dbdee9] bg-white px-3.5 py-2.5 shadow-sm">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#fdf6f4] border border-[#ebdcd7]">
                     <FiPackage
                       size={16}
-                      className="text-[var(--color-btn-dark)]"
+                      className="text-[#5C3124]"
                     />
                   </div>
 
@@ -477,7 +500,7 @@ export default function NARAProductPage() {
                           isOutOfStock
                             ? "border-gray-200 bg-gray-50 opacity-60 cursor-not-allowed"
                             : selected
-                              ? "border-[var(--color-btn-dark)] bg-[#f5f8f6] shadow-sm cursor-pointer"
+                              ? "border-[#5C3124] bg-[#fdf6f4] shadow-sm cursor-pointer"
                               : "border-gray-200 hover:border-gray-300 cursor-pointer"
                         }`}
                       >
@@ -498,12 +521,12 @@ export default function NARAProductPage() {
                                 isOutOfStock
                                   ? "border-gray-300"
                                   : selected
-                                    ? "border-[var(--color-btn-dark)]"
+                                    ? "border-[#5C3124]"
                                     : "border-gray-300"
                               }`}
                             >
                               {selected && !isOutOfStock && (
-                                <div className="h-2.5 w-2.5 rounded-full bg-[var(--color-btn-dark)]" />
+                                <div className="h-2.5 w-2.5 rounded-full bg-[#5C3124]" />
                               )}
                             </div>
 
@@ -526,7 +549,7 @@ export default function NARAProductPage() {
                                 className={`mt-1 text-xs font-semibold ${
                                   isOutOfStock
                                     ? "text-red-500"
-                                    : "text-green-600"
+                                    : "text-[#5C3124]"
                                 }`}
                               >
                                 {isOutOfStock
@@ -539,7 +562,7 @@ export default function NARAProductPage() {
                           <div className="text-right flex-shrink-0">
                             <div className="flex items-center justify-end gap-2">
                               {savePct > 0 && !isOutOfStock && (
-                                <span className="text-[11px] font-bold text-green-700 bg-green-50 px-1.5 py-0.5 rounded">
+                                <span className="text-[11px] font-bold text-[#ff8914] bg-[#fff9ef] border border-[#ffdfb3] px-1.5 py-0.5 rounded">
                                   -{savePct}%
                                 </span>
                               )}
@@ -570,9 +593,9 @@ export default function NARAProductPage() {
                 </div>
               </div>
               {/* Delivery banner */}
-              <div className="flex items-center gap-3 bg-[#f5f8f6] rounded-xl px-4 py-3.5">
-                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                  <FiTruck className="text-[var(--color-btn-dark)]" size={18} />
+              <div className="flex items-center gap-3 bg-[#fdf6f4]/70 border border-[#ebdcd7] rounded-xl px-4 py-3.5">
+                <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm border border-[#ebdcd7]">
+                  <FiTruck className="text-[#5C3124]" size={18} />
                 </div>
                 <p className="text-sm text-[var(--color-text)] font-modelica">
                   <span className="font-bold">Order now</span> - arrives by{" "}
@@ -585,7 +608,7 @@ export default function NARAProductPage() {
               <button
                 onClick={handleAddToCart}
                 disabled={cartLoading}
-                className="w-full bg-[var(--color-btn-dark)] hover:bg-[var(--color-hover)] text-white font-bold py-4 sm:py-5 cursor-pointer rounded-[var(--radius-md)] transition-all duration-200 text-sm tracking-widest font-toma shadow-[var(--shadow-md)] hover:shadow-[var(--shadow-lg)] hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
+                className="w-full bg-[#5C3124] hover:bg-[#48261c] text-white font-bold py-4 sm:py-5 cursor-pointer rounded-xl transition-all duration-200 text-sm tracking-widest font-toma shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 uppercase"
               >
                 {cartLoading ? "ADDING..." : "ADD TO CART"}
               </button>
@@ -594,10 +617,10 @@ export default function NARAProductPage() {
                 {product.benefits?.map((benefit, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2 text-xs font-semibold text-[var(--color-text)] bg-[#eef4f0] rounded-full pl-2 pr-3.5 py-2"
+                    className="flex items-center gap-2 text-xs font-semibold text-[var(--color-text)] bg-[#fdf6f4] border border-[#ebdcd7] rounded-full pl-2 pr-3.5 py-2"
                   >
-                    <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center flex-shrink-0">
-                      <FaHeart className="text-red-500" size={10} />
+                    <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                      <FaHeart className="text-[#5C3124]" size={10} />
                     </span>
                     {benefit.title}
                   </div>
@@ -631,7 +654,7 @@ export default function NARAProductPage() {
         <ProductCarouselSection
           id="related"
           title="You Might Also Like"
-          subtitle={`More from ${product.categories?.[0]}`}
+          subtitle={`More from ${categoryName}`}
           products={relatedProducts}
           loading={relatedLoading}
         />

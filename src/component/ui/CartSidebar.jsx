@@ -105,14 +105,17 @@ export default function CartSidebar({ open, onClose }) {
 
           <button
             onClick={handleCheckout}
-            className="w-full bg-black text-white py-4 rounded-lg font-bold"
+            className="w-full bg-[#5C3124] hover:bg-[#48261c] text-white py-3.5 rounded-xl font-bold transition-colors cursor-pointer shadow-md"
           >
             Checkout
           </button>
 
           <button
-            onClick={() => navigate("/cart")}
-            className="w-full mt-3 border py-3 rounded-lg"
+            onClick={() => {
+              onClose();
+              navigate("/cart");
+            }}
+            className="w-full mt-2.5 border border-[#dbdee9] hover:border-[#5C3124] hover:text-[#5C3124] py-3 rounded-xl font-semibold transition-colors cursor-pointer"
           >
             View Cart
           </button>

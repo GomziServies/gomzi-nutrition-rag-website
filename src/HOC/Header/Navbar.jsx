@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { fetchProducts } from "../../services/product.service";
+import useCart from "../../hooks/useCart";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/gomzi-supplement" },
@@ -88,6 +89,9 @@ export default function Navbar() {
   const [navTop, setNavTop] = useState(0);
   const [navHeight, setNavHeight] = useState(64);
   const { isAuthenticated, user, logout } = useAuth();
+  const { items: cartItems } = useCart();
+  const cartCount =
+    cartItems?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
   const [productSuggestions, setProductSuggestions] = useState([]);
 
   // ── Track navbar top + height dynamically (scroll + resize) ──
@@ -178,22 +182,22 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── MAIN NAV BAR ── */}
+      {/* ── HEALTHKART STYLE MAIN NAV BAR ── */}
       <nav
         ref={navRef}
-        className="w-full bg-bg border-b border-border sticky top-0 z-50 shadow-sm font-modelica"
+        className="w-full bg-white border-b border-[#dbdee9] sticky top-0 z-50 shadow-[0_2px_6px_rgba(0,0,0,0.06)] font-modelica"
       >
-        <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-18 py-1.5">
-          <div className="relative flex items-center justify-between h-16">
-            {/* LEFT */}
-            <div className="flex items-center gap-8">
-              {/* Hamburger */}
+        {/* Unified Single-Tier Main Navigation Bar */}
+        <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-[72px] gap-4 lg:gap-6">
+            {/* LEFT: Logo & Mobile Hamburger */}
+            <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
               <button
                 onClick={() => {
                   setDrawerOpen((p) => !p);
                   setSearchOpen(false);
                 }}
-                className="lg:hidden text-text hover:text-hover transition-colors p-1 bg-transparent border-none cursor-pointer"
+                className="lg:hidden text-[#1c1c28] hover:text-[#5C3124] transition-colors p-1 bg-transparent border-none cursor-pointer"
                 aria-label={drawerOpen ? "Close menu" : "Open menu"}
               >
                 {drawerOpen ? (
@@ -227,135 +231,184 @@ export default function Navbar() {
                 )}
               </button>
 
-              {/* Logo - desktop */}
               <button
                 onClick={() => handleNavigation("/")}
-                className="hidden lg:flex flex-shrink-0 bg-transparent border-none cursor-pointer p-0"
+                className="flex items-center bg-transparent border-none cursor-pointer p-0"
               >
                 <img
                   src="/images/rag-icon-logo.png"
                   alt="Gomzi Supplement by RAG"
-                  className="h-12 w-auto object-contain"
+                  className="h-9 sm:h-11 w-auto object-contain"
                 />
               </button>
             </div>
 
-            {/* CENTER: Desktop nav links */}
-            <ul className="hidden lg:flex items-center gap-7 list-none m-0 p-0">
-              {navLinks.map((link) =>
-                link.dropdown ? (
-                  <li key={link.label} className="relative">
-                    <DropdownButton
-                      label={link.label}
-                      isOpen={aboutOpen}
-                      onClick={() => setAboutOpen((p) => !p)}
-                    />
-                    {aboutOpen && (
-                      <div className="absolute top-full left-0 mt-2 bg-bg border border-border shadow-md rounded-md py-2 min-w-[160px] z-50">
-                        {link.dropdown.map((item) => (
-                          <button
-                            key={item.label}
-                            onClick={() => handleNavigation(item.href)}
-                            className={`block w-full text-left px-4 py-2.5 text-sm font-bold transition-colors duration-150 font-modelica bg-transparent border-none cursor-pointer ${
-                              isActive(item.href)
-                                ? "bg-secondary text-white"
-                                : "text-text-light hover:bg-bg-light hover:text-text"
-                            }`}
-                          >
-                            {item.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </li>
-                ) : (
-                  <li key={link.label}>
-                    <NavLink
-                      href={link.href}
-                      label={link.label}
-                      onClick={handleNavigation}
-                      isActive={isActive(link.href)}
-                    />
-                  </li>
-                ),
-              )}
+            {/* CENTER: Primary Navigation Links */}
+            <ul className="hidden lg:flex items-center gap-5 xl:gap-7 list-none m-0 p-0">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  <button
+                    onClick={() => handleNavigation(link.href)}
+                    className={`text-sm font-bold transition-colors duration-150 py-1 bg-transparent border-none cursor-pointer ${
+                      isActive(link.href)
+                        ? "text-[#5C3124] border-b-2 border-[#5C3124]"
+                        : "text-[#2b2b36] hover:text-[#5C3124]"
+                    }`}
+                  >
+                    {link.label}
+                  </button>
+                </li>
+              ))}
             </ul>
 
-            {/* CENTER: Logo - mobile */}
-            <button
-              onClick={() => handleNavigation("/")}
-              className="absolute left-1/2 -translate-x-1/2 lg:hidden bg-transparent border-none cursor-pointer p-0"
-            >
-              <img
-                src="/images/rag-icon-logo.png"
-                alt="Gomzi Supplement by RAG"
-                className="h-12 w-auto object-contain"
-              />
-            </button>
+            {/* RIGHT: Compact Search, Login, & Cart */}
+            <div className="flex items-center gap-2.5 sm:gap-4 flex-shrink-0">
+              {/* Compact Search Input */}
+              <div className="hidden md:flex relative w-44 lg:w-52 xl:w-60">
+                <div className="w-full relative flex items-center bg-[#f7f7f7] border border-[#dbdee9] focus-within:border-[#5C3124] focus-within:bg-white rounded-full h-9 lg:h-10 transition-all duration-200">
+                  <span className="pl-3 pr-1.5 text-[#8b8b8b] flex items-center pointer-events-none">
+                    <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                      <path
+                        d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M19 19L15 15"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    type="search"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Search..."
+                    className="w-full bg-transparent border-none outline-none text-xs text-[#1c1c28] placeholder:text-[#8b8b8b] pr-2.5 h-full"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => {
+                        setSearchQuery("");
+                        setProductSuggestions([]);
+                      }}
+                      className="pr-2.5 text-xs text-gray-400 hover:text-gray-600 cursor-pointer bg-transparent border-none"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
 
-            {/* RIGHT: Icons */}
-            <div className="flex items-center gap-3 sm:gap-4">
-              <IconBtn
-                label="Search"
+                {/* Suggestions Dropdown */}
+                {productSuggestions.length > 0 && (
+                  <div className="absolute top-full right-0 w-72 mt-1.5 bg-white border border-[#dbdee9] rounded-xl shadow-lg overflow-hidden z-50">
+                    {productSuggestions.map((product) => (
+                      <button
+                        key={product._id}
+                        onClick={() => handleSuggestionClick(product.name)}
+                        className="w-full text-left px-4 py-2 hover:bg-[#fdf6f4] text-xs text-gray-800 flex items-center justify-between border-b border-gray-100 last:border-none cursor-pointer bg-transparent"
+                      >
+                        <span className="font-medium line-clamp-1">{product.name}</span>
+                        <span className="text-[10px] text-[#5C3124] font-bold">View</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Search Toggle Button */}
+              <button
                 onClick={() => {
                   setSearchOpen((p) => !p);
                   setDrawerOpen(false);
-                  setSearchQuery("");
-                  setSuggestions([]);
                 }}
+                className="md:hidden text-gray-700 hover:text-[#5C3124] p-1.5 cursor-pointer bg-transparent border-none"
+                aria-label="Search"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 sm:h-6"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth={1.5}
+                  strokeWidth={1.8}
                   viewBox="0 0 24 24"
                 >
                   <circle cx="11" cy="11" r="7" />
                   <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
                 </svg>
-              </IconBtn>
+              </button>
 
-              <IconBtn
-                label="Account"
-                className="hidden lg:flex"
-                onClick={() =>
-                  handleNavigation(isAuthenticated ? "/profile" : "/login")
-                }
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  viewBox="0 0 24 24"
+              {/* Login / Profile Button */}
+              {isAuthenticated ? (
+                <button
+                  onClick={() => handleNavigation("/profile")}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#dbdee9] hover:border-[#5C3124] rounded-lg text-xs font-bold text-[#1c1c28] hover:text-[#5C3124] transition-colors cursor-pointer bg-transparent"
                 >
-                  <circle cx="12" cy="8" r="4" />
-                  <path strokeLinecap="round" d="M5 20c0-4 3-6 7-6s7 2 7 6" />
-                </svg>
-              </IconBtn>
+                  <svg
+                    className="w-4 h-4 text-[#5C3124]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <circle cx="12" cy="8" r="4" />
+                    <path strokeLinecap="round" d="M5 20c0-4 3-6 7-6s7 2 7 6" />
+                  </svg>
+                  <span className="hidden sm:inline">{user?.name || "Account"}</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleNavigation("/login")}
+                  className="inline-flex items-center justify-center px-3.5 sm:px-4 py-1.5 sm:py-2 bg-[#5C3124] hover:bg-[#48261c] text-white font-bold text-xs sm:text-sm rounded-lg transition-all shadow-sm cursor-pointer border-none"
+                >
+                  Login
+                </button>
+              )}
 
+              {/* Cart Button with Orange Badge */}
               <button
                 onClick={() => handleNavigation("/cart")}
                 aria-label="Cart"
-                className="relative text-text-light hover:text-text transition-colors duration-200 p-1 flex items-center justify-center bg-transparent border-none cursor-pointer"
+                className="relative p-1.5 sm:p-2 text-[#1c1c28] hover:text-[#5C3124] transition-colors flex items-center justify-center bg-transparent border-none cursor-pointer"
               >
                 <svg
-                  className="w-6 h-6"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 29 27"
                   fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  viewBox="0 0 24 24"
                 >
                   <path
+                    d="M11 26C11.5523 26 12 25.3284 12 24.5C12 23.6716 11.5523 23 11 23C10.4477 23 10 23.6716 10 24.5C10 25.3284 10.4477 26 11 26Z"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.6 8M17 13l1.6 8"
                   />
-                  <circle cx="8" cy="21" r="1" />
-                  <circle cx="17" cy="21" r="1" />
+                  <path
+                    d="M24 26C24.5523 26 25 25.3284 25 24.5C25 23.6716 24.5523 23 24 23C23.4477 23 23 23.6716 23 24.5C23 25.3284 23.4477 26 24 26Z"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M1 1H5.90909L9.19818 17.9603C9.31041 18.5434 9.6178 19.0672 10.0665 19.4401C10.5153 19.8129 11.0768 20.0109 11.6527 19.9995H23.5818C24.1578 20.0109 24.7193 19.8129 25.168 19.4401C25.6168 19.0672 25.9241 18.5434 26.0364 17.9603L28 7.33318H7.13636"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
-                <span className="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full" />
+                {cartCount > 0 && (
+                  <span className="absolute top-0 right-0 bg-[#ff8914] text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center shadow-xs">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
               </button>
             </div>
           </div>

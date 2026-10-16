@@ -1,13 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 
 import SEO from "../../component/SEO";
-import { blogs } from "../../data/blogs";
+import { blogs as staticBlogs } from "../../data/blogs";
+import { getBlogBySlugApi } from "../../api/blog.api";
+
+const resolveImageUrl = (img) => {
+  if (!img) return "/images/blog-1.webp";
+  if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/")) {
+    return img;
+  }
+  return `https://files.fggroup.in/${img}`;
+};
 
 const BlogDetail = () => {
   const { slug } = useParams();
+  const initialBlog = staticBlogs.find((item) => item.slug === slug) || null;
+  const [blog, setBlog] = useState(initialBlog);
+  const [loading, setLoading] = useState(!initialBlog);
 
-  const blog = blogs.find((item) => item.slug === slug);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBlog = async () => {
+      try {
+        const res = await getBlogBySlugApi(slug);
+        if (isMounted && res.data?.data?.blog) {
+          setBlog(res.data.data.blog);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch live article by slug:", err.message);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchBlog();
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  if (loading && !blog) {
+    return (
+      <div className="min-h-screen bg-[#faf8f6] flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-[#5C3124] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!blog) {
     return <Navigate to="/blog" replace />;
@@ -88,7 +127,7 @@ const BlogDetail = () => {
           <div className="max-w-[var(--container-width)] mx-auto px-4">
             <div className="overflow-hidden rounded-2xl md:rounded-3xl bg-white">
               <img
-                src={blog.image}
+                src={resolveImageUrl(blog.image)}
                 alt={blog.title}
                 className="w-full h-auto object-cover"
               />

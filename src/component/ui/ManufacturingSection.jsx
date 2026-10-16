@@ -117,7 +117,7 @@ export default function ManufacturingSection() {
                     sm:tracking-[3px]
                     text-[10px]
                     sm:text-xs
-                    text-[#B66B1E]
+                    text-[#5C3124]
                     font-semibold
                   "
                 >

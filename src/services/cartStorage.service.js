@@ -1,5 +1,20 @@
+import { addToCartApi } from "../api/product.api";
+import { successToast, errorToast } from "../utils/toast";
+import { getToken } from "../utils/storage";
+
 export const getGuestCart = () => {
-  return JSON.parse(localStorage.getItem("guest_cart") || "[]");
+  try {
+    return JSON.parse(localStorage.getItem("guest_cart") || "[]");
+  } catch {
+    return [];
+  }
+};
+
+export const saveGuestCart = (items) => {
+  localStorage.setItem("guest_cart", JSON.stringify(items));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("cartUpdated"));
+  }
 };
 
 export const addGuestCartItem = ({
@@ -8,46 +23,49 @@ export const addGuestCartItem = ({
   selectedVariation,
 }) => {
   const cart = getGuestCart();
-
-  const variationId = selectedVariation?._id || null;
+  const rawProduct = product?.raw || product || {};
+  const productId = rawProduct._id || product?._id || product?.id;
+  const variationId = selectedVariation?._id || (rawProduct.variations?.[0]?._id) || null;
 
   const existingItem = cart.find(
     (item) =>
-      item.item_id === product._id &&
+      item.item_id === productId &&
       (item.notes?.variation_id || null) === variationId,
   );
 
   if (existingItem) {
     existingItem.quantity += quantity;
-
     saveGuestCart(cart);
-
     return cart;
   }
 
+  const primaryImage =
+    rawProduct.displayImages?.[0] ||
+    rawProduct.display_image?.[0] ||
+    product?.image ||
+    (Array.isArray(product?.displayImages) ? product.displayImages[0] : null) ||
+    "/images/product-placeholder.webp";
+
+  const price = Number(product?.originalPrice || rawProduct.price || product?.price || 999);
+  const discountPrice = Number(product?.price || rawProduct.sellingPrice || rawProduct.discountPrice || product?.discountPrice || price);
+
   cart.push({
-    _id: crypto.randomUUID(),
-
-    item_id: product._id,
-
+    _id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+    item_id: productId,
     item_type: "FG_MEAL_PRODUCT",
-
     quantity,
-
     notes: variationId
       ? {
           variation_id: variationId,
         }
       : {},
-
     item_details: {
-      _id: product._id,
-      name: product.name,
-      price: product.price,
-      discountPrice: product.discountPrice,
-      flavour: product.flavour,
-      displayImages: product.displayImages,
-
+      _id: productId,
+      name: product?.name || rawProduct.name || "Product",
+      price,
+      discountPrice,
+      flavour: product?.flavour || rawProduct.flavour || "Standard",
+      displayImages: [primaryImage],
       variation: selectedVariation
         ? {
             _id: selectedVariation._id,
@@ -55,26 +73,69 @@ export const addGuestCartItem = ({
             price: selectedVariation.price,
             discountPrice: selectedVariation.discountPrice,
             flavour: selectedVariation.flavour,
-            displayImages: selectedVariation.displayImages,
+            displayImages: selectedVariation.displayImages || [primaryImage],
           }
         : null,
     },
   });
 
   saveGuestCart(cart);
-
   return cart;
 };
 
-export const saveGuestCart = (items) => {
-  localStorage.setItem("guest_cart", JSON.stringify(items));
+export const addProductToCart = async (product, quantity = 1, selectedVariation = null) => {
+  try {
+    const token = getToken() || localStorage.getItem("authorization") || localStorage.getItem("auth_token") || localStorage.getItem("token");
+    const rawProduct = product?.raw || product || {};
+    const productId = rawProduct._id || product?._id || product?.id;
+    const variationId = selectedVariation?._id || (rawProduct.variations?.[0]?._id) || null;
+    const productName = product?.name || rawProduct?.name || "Product";
+
+    if (token) {
+      const payload = {
+        item_id: productId,
+        item_type: "FG_MEAL_PRODUCT",
+        quantity,
+        notes: variationId ? { variation_id: variationId } : {},
+      };
+      try {
+        const response = await addToCartApi(payload);
+        if (response && (response.status === 200 || response.status === 201 || response.data?.status === 200)) {
+          successToast(`Added ${productName} to cart!`);
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new Event("cartUpdated"));
+          }
+          return true;
+        }
+      } catch (apiErr) {
+        console.warn("API addToCart failed, saving to guest cart:", apiErr);
+      }
+    }
+
+    addGuestCartItem({
+      product,
+      quantity,
+      selectedVariation,
+    });
+    successToast(`Added ${productName} to cart!`);
+    return true;
+  } catch (err) {
+    console.error("Failed to add to cart:", err);
+    try {
+      addGuestCartItem({ product, quantity, selectedVariation });
+      const fallbackName = product?.name || "Product";
+      successToast(`Added ${fallbackName} to cart!`);
+      return true;
+    } catch {
+      errorToast("Failed to add to cart");
+      return false;
+    }
+  }
 };
 
 export const removeGuestCartItem = (id) => {
   const items = getGuestCart().filter((item) => item._id !== id);
-
   saveGuestCart(items);
-
   return items;
 };
 
@@ -87,8 +148,6 @@ export const updateGuestCartQuantity = (id, quantity) => {
         }
       : item,
   );
-
   saveGuestCart(items);
-
   return items;
 };

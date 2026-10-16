@@ -1,8 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 /* =========================
    CUSTOM FONTS
 ========================= */
+
+/* Standard, clean ampersand override for custom fonts */
+@font-face {
+  font-family: Modelica;
+  src: local("Inter"), local("Segoe UI"), local("Arial"), sans-serif;
+  unicode-range: U+0026;
+}
 
 @font-face {
   font-family: Modelica;
@@ -11,8 +19,13 @@
 
 @font-face {
   font-family: TomaGrotesk;
-  src: url("/font-family/Tomato-Grotesk-Font-Family/TomatoGrotesk-Black.otf");
+  src: local("Inter"), local("Segoe UI"), local("Arial"), sans-serif;
+  unicode-range: U+0026;
+}
 
+@font-face {
+  font-family: TomaGrotesk;
+  src: url("/font-family/Tomato-Grotesk-Font-Family/TomatoGrotesk-Black.otf");
   font-weight: 400;
 }
 
@@ -23,56 +36,67 @@
 @theme {
   /* ===== Fonts ===== */
 
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-modelica: Modelica, sans-serif;
   --font-toma: TomaGrotesk, sans-serif;
 
   /* ===== Main Colors ===== */
 
-  --color-primary: #000000;
-  --color-secondary: #111111;
+  --color-primary: #5C3124;
+  --color-primary-hover: #48261c;
+  --color-primary-light: #fdf6f4;
+  --color-secondary: #131313;
 
-  --color-accent: #2563eb;
+  --color-accent: #ff8914;
+  --color-accent-hover: #f97913;
 
   /* ===== Background Colors ===== */
 
   --color-bg: #ffffff;
-  --color-bg-light: #f8f9fb;
-  --color-section: #f3f4f6;
+  --color-bg-page: #f4f4f4;
+  --color-bg-light: #f7f7f7;
+  --color-section: #f7fafc;
 
   /* ===== Text Colors ===== */
 
-  --color-text: #111111;
-  --color-text-light: #6b7280;
+  --color-text: #1c1c28;
+  --color-text-light: #77777e;
+  --color-text-muted: #8b8b8b;
 
   /* ===== Buttons ===== */
 
-  --color-btn-dark: #000000;
+  --color-btn-brand: #5C3124;
+  --color-btn-brand-hover: #48261c;
+  --color-btn-dark: #131313;
   --color-btn-light: #ffffff;
 
   /* ===== Borders ===== */
 
-  --color-border: #e5e7eb;
+  --color-border: #dbdee9;
+  --color-border-light: #e3e3e3;
 
   /* ===== Hover ===== */
 
-  --color-hover: #222222;
+  --color-hover: #5C3124;
 
   /* ===== Radius ===== */
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
 
   /* ===== Shadows ===== */
 
-  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-header: 0 3px 6px rgba(0, 0, 0, 0.08);
 
   /* ===== Container ===== */
 
-  --container-width: 1440px;
+  --container-width: 1250px;
 }
 
 /* globals.css */
@@ -89,6 +113,48 @@
 /* Form inputs brand theme */
 input[type="checkbox"],
 input[type="radio"] {
-  accent-color: #95442c;
+  accent-color: #5C3124;
 }
+
+/* Global Font Defaults: Inter, sans-serif */
+:root,
+html,
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* =========================================
+   HERO SWIPER CUSTOM PAGINATION STYLING
+========================================= */
+.hero-swiper .swiper-pagination {
+  bottom: 14px !important;
+  z-index: 25 !important;
+}
+
+@media (max-width: 1023px) {
+  .hero-swiper .swiper-pagination {
+    bottom: 58px !important;
+  }
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.75) !important;
+  opacity: 0.8 !important;
+  width: 9px !important;
+  height: 9px !important;
+  margin: 0 4px !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  background: #f59e0b !important;
+  opacity: 1 !important;
+  width: 28px !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.6) !important;
+}
+
+
 

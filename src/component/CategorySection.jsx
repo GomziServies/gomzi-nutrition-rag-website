@@ -8,6 +8,8 @@ import useProducts from "../hooks/useProducts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import { Pagination } from "swiper/modules";
+import { isRealProduct } from "../utils/productAdapter";
+import { addProductToCart } from "../services/cartStorage.service";
 
 const swiperStyles = `
 .category-swiper{
@@ -31,7 +33,7 @@ const swiperStyles = `
 .category-swiper .swiper-pagination-bullet{
     width:10px;
     height:10px;
-    background:#D9C8B6;
+    background:#dbdee9;
     opacity:1;
     margin:0 5px !important;
     border-radius:999px;
@@ -40,7 +42,7 @@ const swiperStyles = `
 
 .category-swiper .swiper-pagination-bullet-active{
     width:32px;
-    background:#95442c;
+    background:#5C3124;
 }
 
 /* Custom Buttons */
@@ -52,17 +54,17 @@ const swiperStyles = `
     display:flex;
     align-items:center;
     justify-content:center;
-    border:1px solid #E8D9C8;
+    border:1px solid #dbdee9;
     background:#fff;
-    color:#95442c;
+    color:#5C3124;
     transition:.3s;
-    box-shadow:0 8px 24px rgba(0,0,0,.08);
+    box-shadow:0 4px 12px rgba(0,0,0,.06);
 }
 
 .slider-btn:hover{
-    background:#95442c;
+    background:#5C3124;
     color:#fff;
-    border-color:#95442c;
+    border-color:#5C3124;
     transform:translateY(-2px);
 }
 
@@ -73,15 +75,25 @@ const swiperStyles = `
 }
 `;
 
-const CategorySection = ({ category }) => {
+const CategorySection = ({ category = "Whey Protein", title = "Top Protein Picks" }) => {
   const swiperRef = useRef(null);
+
+  const isProteinOrSports =
+    !category ||
+    category.toLowerCase().includes("whey") ||
+    category.toLowerCase().includes("sports") ||
+    category.toLowerCase().includes("protein");
+
   const { products, loading } = useProducts({
     page: 1,
-    limit: 8,
-    category,
+    limit: 12,
+    search: isProteinOrSports ? "Whey" : "",
+    category: isProteinOrSports ? "" : category,
   });
 
-  if (loading || products.length === 0) return null;
+  const validProducts = (products || []).filter(isRealProduct);
+
+  if (loading || validProducts.length === 0) return null;
   return (
     <>
       <style>{swiperStyles}</style>
@@ -89,8 +101,8 @@ const CategorySection = ({ category }) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="font-toma text-3xl md:text-4xl font-bold">
-              Best Selling
+            <h2 className="font-toma text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+              {title}
             </h2>
 
             <p className="mt-2 text-gray-500">
@@ -150,9 +162,12 @@ const CategorySection = ({ category }) => {
           }}
           className="category-swiper"
         >
-          {products.map((product) => (
+          {validProducts.map((product) => (
             <SwiperSlide key={product._id}>
-              <ProductCard product={product} />
+              <ProductCard
+                product={product}
+                onAddToCart={(p) => addProductToCart(p)}
+              />
             </SwiperSlide>
           ))}
         </Swiper>

@@ -1,707 +1,794 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser, sendOTP, verifyOTP } from "../../services/auth.service";
 import { setToken } from "../../utils/storage";
 import { successToast, errorToast } from "../../utils/toast";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleLogin } from "../../api/auth.api";
-import { Lock, MessageSquare } from "lucide-react";
-// import LoginModal from "../../component/auth/LoginModal";
+import {
+  Lock,
+  Smartphone,
+  Mail,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ArrowLeft,
+  ShieldCheck,
+  Truck,
+  RefreshCw,
+  Star,
+  CheckCircle2,
+  Sparkles,
+} from "lucide-react";
 
 export default function LoginPage() {
-  // const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginType, setLoginType] = useState("password"); // "password" | "otp"
+
+  // Password Login State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [emailAndMobileFocused, setEmailAndMobileFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
-  const [loginType, setLoginType] = useState("password");
+
+  // OTP Login State
   const [identifier, setIdentifier] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [verificationId, setVerificationId] = useState(null);
+  const [, setVerificationId] = useState(null);
+  const [resendCountdown, setResendCountdown] = useState(0);
 
-  const isEmailFloated = emailFocused || email.length > 0;
-  const isEMailAndMobileFloated =
-    emailAndMobileFocused || identifier.length > 0;
-  const isPasswordFloated = passwordFocused || password.length > 0;
+  // Focus states
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [identifierFocused, setIdentifierFocused] = useState(false);
+  const [otpFocused, setOtpFocused] = useState(false);
 
-  const handleLogin = async () => {
+  // Countdown timer for OTP Resend
+  useEffect(() => {
+    let timer;
+    if (resendCountdown > 0) {
+      timer = setInterval(() => {
+        setResendCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [resendCountdown]);
+
+  // Email / Password Login Handler
+  const handleLogin = async (e) => {
+    if (e) e.preventDefault();
+    if (!email.trim() || !password) {
+      errorToast("Please enter both email and password");
+      return;
+    }
+
     try {
       setLoading(true);
 
       const result = await loginUser({
-        email,
+        email: email.trim(),
         password,
       });
 
       if (!result.success) {
-        errorToast(result.message);
+        errorToast(result.message || "Invalid credentials");
         return;
       }
 
       const response = result.data;
 
-      if (response.errorCode === "ERR#VERIFICATION-REQUIRED") {
-        navigate("/verify-account");
+      if (response?.errorCode === "ERR#VERIFICATION-REQUIRED") {
+        navigate("/verify-email");
+        return;
       }
-      setToken(response.data.authorization);
 
-      successToast("Login successful");
-
-      window.location.replace("/");
-    } catch (error) {
-      errorToast("Something went wrong");
+      const token = response?.data?.authorization;
+      if (token) {
+        setToken(token);
+        successToast("Welcome back! Login successful");
+        window.location.replace("/");
+      } else {
+        errorToast("Authorization token not received");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      errorToast("Something went wrong during sign in");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSendOTP = async () => {
+  // OTP Request Handler
+  const handleSendOTP = async (e) => {
+    if (e) e.preventDefault();
+    const cleanId = identifier.trim();
+    if (!cleanId) {
+      errorToast("Please enter your email or mobile number");
+      return;
+    }
+
     try {
       setLoading(true);
-
-      const isEmail = identifier.includes("@");
+      const isEmail = cleanId.includes("@");
 
       const payload = isEmail
-        ? {
-            email: identifier,
-          }
+        ? { email: cleanId }
         : {
-            mobile: identifier,
+            mobile: cleanId.replace(/^\+91/, ""),
             country_code: "+91",
           };
 
       const result = await sendOTP(payload);
 
       if (!result.success) {
-        errorToast(result.data.message);
+        errorToast(result.message || "Failed to send verification code");
         return;
       }
 
       const verificationId = result?.data?.data?.verification_id;
+      const devOtp = result?.data?.data?.OTP;
 
       setVerificationId(verificationId);
-
       setOtpSent(true);
+      setResendCountdown(30);
 
-      successToast(result.data.message);
-    } catch (error) {
-      errorToast("Failed to send OTP");
+      if (devOtp) {
+        setOtp(String(devOtp));
+        successToast(`OTP sent! (Dev Auto-fill: ${devOtp})`);
+      } else {
+        successToast(result.data?.message || "Verification code sent successfully");
+      }
+    } catch (err) {
+      console.error("Send OTP error:", err);
+      errorToast("Failed to send verification code");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleVerifyOTP = async () => {
+  // OTP Verification Handler
+  const handleVerifyOTP = async (e) => {
+    if (e) e.preventDefault();
+    const cleanOtp = otp.trim();
+    if (!cleanOtp) {
+      errorToast("Please enter the verification code");
+      return;
+    }
+
     try {
       setLoading(true);
-
-      const isEmail = identifier.includes("@");
+      const cleanId = identifier.trim();
+      const isEmail = cleanId.includes("@");
 
       const payload = isEmail
         ? {
-            email: identifier,
-            otp,
+            email: cleanId,
+            otp: cleanOtp,
           }
         : {
-            mobile: identifier,
+            mobile: cleanId.replace(/^\+91/, ""),
             country_code: "+91",
-            otp,
+            otp: cleanOtp,
           };
 
       const result = await verifyOTP(payload);
 
-      const token = result.data.data.authorization;
+      if (!result.success) {
+        errorToast(result.message || "Invalid or expired OTP");
+        return;
+      }
 
-      setToken(token);
-
-      successToast("Login successful");
-
-      window.location.replace("/");
-    } catch (error) {
-      errorToast("Invalid OTP");
+      const token = result?.data?.data?.authorization;
+      if (token) {
+        setToken(token);
+        successToast("Verification successful! Welcome back");
+        window.location.replace("/");
+      } else {
+        errorToast("Unable to authenticate session");
+      }
+    } catch (err) {
+      console.error("Verify OTP error:", err);
+      errorToast("Invalid verification code");
     } finally {
       setLoading(false);
     }
   };
 
+  // Google OAuth Success Handler
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       setLoading(true);
-
-      console.log("Google Credential:", credentialResponse);
-
       const result = await googleLogin(credentialResponse.credential);
 
-      console.log("API RESULT:", result);
+      if (!result.success && !result.data?.data?.authorization) {
+        errorToast(result.message || "Google sign in failed");
+        return;
+      }
 
-      const token = result.data.data.authorization;
-
-      setToken(token);
-
-      successToast("Login successful");
-
-      window.location.replace("/");
+      const token = result?.data?.data?.authorization;
+      if (token) {
+        setToken(token);
+        successToast("Google login successful!");
+        window.location.replace("/");
+      } else {
+        errorToast("Google authorization failed");
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Google login error:", error);
       errorToast("Google login failed");
     } finally {
       setLoading(false);
     }
   };
 
+  const isIdentifierEmail = identifier.includes("@");
+
   return (
-    <div className="min-h-screen w-full flex font-modelica bg-bg">
-      {/* ── LEFT PANEL - Brand Visual ── */}
+    <div className="h-screen max-h-screen w-full flex bg-[#faf8f6] font-modelica text-[#1c1c28] overflow-hidden">
+      {/* ── LEFT PANEL: Brand Visual Showcase (Desktop) ── */}
       <div
-        className="hidden lg:flex flex-col justify-between w-[45%] relative overflow-hidden p-12"
-        style={{ background: "#000000" }}
+        className="hidden lg:flex flex-col justify-between w-[48%] xl:w-[46%] h-full relative overflow-hidden p-8 xl:p-10 text-white select-none shrink-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 70% at 75% 20%, #4a271c 0%, #1c0f0a 45%, #0d0705 100%)",
+        }}
       >
-        {/* Background gradient accent */}
+        {/* Ambient atmospheric glows */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute -top-32 -left-32 w-80 h-80 rounded-full pointer-events-none blur-3xl"
+          style={{ background: "rgba(92, 49, 36, 0.45)" }}
+        />
+        <div
+          className="absolute bottom-10 right-0 w-72 h-72 rounded-full pointer-events-none blur-3xl"
+          style={{ background: "rgba(255, 137, 20, 0.15)" }}
+        />
+
+        {/* Subtle grid pattern overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.04]"
           style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 60% 110%, #95442c 0%, transparent 65%)",
-            opacity: 0.18,
+            backgroundImage:
+              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+            backgroundSize: "36px 36px",
           }}
         />
 
-        {/* Teal vertical accent line */}
+        {/* Brand Accent Vertical Bar */}
         <div
-          className="absolute left-0 top-8 bottom-8 w-[3px] rounded-full"
+          className="absolute left-0 top-10 bottom-10 w-[3px] rounded-r-full"
           style={{
             background:
-              "linear-gradient(to bottom, transparent 0%, #95442c 25%, #95442c 75%, transparent 100%)",
-            boxShadow: "0 0 12px 2px rgba(125,217,217,0.35)",
+              "linear-gradient(to bottom, transparent 0%, #ff8914 25%, #5C3124 75%, transparent 100%)",
+            boxShadow: "0 0 16px 2px rgba(255,137,20,0.4)",
           }}
         />
 
-        {/* Top - Logo */}
-        <div className="relative z-10">
-          <img
-            src="/images/whitelogo.webp"
-            alt="Gomzi Supplement by RAG"
-            className="h-11 object-contain object-left"
-          />
-        </div>
-
-        {/* Center - Hero text only */}
-        <div className="relative z-10 flex flex-col gap-6">
-          {/* Badge */}
-          <div className="flex items-center gap-2">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: "#95442c" }}
+        {/* Top Header: Logo & Badge */}
+        <div className="relative z-10 flex items-center justify-between shrink-0">
+          <Link to="/" className="inline-block transition-transform hover:scale-[1.02]">
+            <img
+              src="/images/gomzi-supplements-dark.webp"
+              alt="Gomzi Supplements by RAG"
+              className="h-9 xl:h-10 object-contain object-left"
             />
-            <span
-              className="text-xs tracking-widest uppercase font-modelica"
-              style={{ color: "#95442c" }}
-            >
-              Premium Nutrition
-            </span>
-          </div>
-
-          {/* Heading */}
-          <h1
-            className="font-toma text-white leading-none"
-            style={{
-              fontSize: "clamp(2.8rem, 4.5vw, 4rem)",
-              letterSpacing: "-2px",
-            }}
-          >
-            Fuel Your
-            <br />
-            <span style={{ color: "#95442c" }}>Best Self.</span>
-          </h1>
-
-          {/* Subtext */}
-          <p
-            className="font-modelica text-base leading-relaxed max-w-xs"
-            style={{ color: "#9ca3af" }}
-          >
-            Science-backed, super-delicious nutrition for your busy days.
-          </p>
+          </Link>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-white/10 text-[#ffaa5a] border border-white/10 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse" />
+            Official Store
+          </span>
         </div>
 
-        {/* Bottom - just divider and copyright */}
-        <div className="relative z-10 flex flex-col gap-4">
-          <div className="h-px w-full" style={{ background: "#1f1f1f" }} />
-          <p className="font-modelica text-xs" style={{ color: "#4b5563" }}>
-            ©2026 Gomzi Supplement by RAG. All rights reserved.
-          </p>
-        </div>
-      </div>
+        {/* Center: Hero Statement & Compact Glass Showcase Card */}
+        <div className="relative z-10 flex flex-col gap-5 my-auto">
+          {/* Badge & Headline */}
+          <div className="flex flex-col gap-1.5 max-w-lg">
+            <div className="inline-flex items-center gap-1.5 text-[11px] tracking-widest uppercase font-semibold text-[#ffaa5a]">
+              <Sparkles size={13} className="text-[#ff8914]" />
+              <span>Certified Science-Backed Nutrition</span>
+            </div>
 
-      {/* ── RIGHT PANEL - Login Form ── */}
-      <div className="flex-1 flex flex-col justify-center items-center px-5 py-12 sm:px-10 bg-white relative">
-        {/* Mobile Logo */}
-        <div className="lg:hidden mb-10">
-          <img
-            src="/images/rag-icon-logo.png"
-            alt="Gomzi Supplement by RAG"
-            className="h-10 object-contain"
-          />
-        </div>
-        {/* <button
-          onClick={() => setShowLogin(true)}
-          className="bg-black text-white px-5 py-2 rounded-lg"
-        >
-          Login
-        </button>
-
-        <LoginModal
-          isOpen={showLogin}
-          onClose={() => setShowLogin(false)}
-          onSuccess={() => {
-            console.log("logged in");
-          }}
-        /> */}
-
-        {/* Card */}
-        <div className="w-full max-w-[420px] flex flex-col gap-7">
-          {/* Heading */}
-          <div className="flex flex-col gap-2">
-            <h2
-              className="font-toma text-text leading-tight"
+            <h1
+              className="font-toma text-white leading-[1.05]"
               style={{
-                fontSize: "clamp(2rem, 5vw, 2.6rem)",
-                letterSpacing: "-1px",
+                fontSize: "clamp(2rem, 3.2vw, 2.75rem)",
+                letterSpacing: "-1.2px",
               }}
             >
-              Welcome back.
-            </h2>
-            <p className="font-modelica text-sm" style={{ color: "#6b7280" }}>
-              Don't have an account?{" "}
-              <button
-                onClick={() => navigate("/register")}
-                className="font-modelica font-semibold underline underline-offset-2 transition-colors bg-transparent border-none cursor-pointer"
-                style={{ color: "#111111" }}
+              Fuel Your{" "}
+              <span
+                style={{
+                  background: "linear-gradient(90deg, #ffffff 0%, #ffaa5a 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
               >
-                Sign up free
-              </button>
+                Highest Ambition.
+              </span>
+            </h1>
+
+            <p className="font-modelica text-xs xl:text-sm leading-relaxed text-gray-300 max-w-md">
+              Pharmaceutical-grade purity, clinical dosages, and verified zero-doping standards for athletes who demand the absolute best.
             </p>
           </div>
 
-          {/* Social Login */}
-          <div className="flex flex-col gap-3">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => {
-                errorToast("Google login failed");
-              }}
-            />
+          {/* Elevated Glass Showcase Card */}
+          <div className="relative bg-white/[0.04] backdrop-blur-xl border border-white/[0.12] rounded-xl p-4 xl:p-5 shadow-2xl overflow-hidden group hover:border-[#ff8914]/40 transition-all duration-300">
+            {/* Soft inner glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#5C3124]/40 rounded-full blur-2xl pointer-events-none group-hover:bg-[#ff8914]/20 transition-all duration-500" />
+
+            <div className="relative z-10 flex items-center gap-4 xl:gap-5">
+              <div className="relative shrink-0 w-20 h-20 xl:w-24 xl:h-24 flex items-center justify-center">
+                <img
+                  src="/images/Gomzi_Protein_Product_HD.webp"
+                  alt="Gomzi Protein Isolate"
+                  className="max-h-full max-w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+                <div className="flex items-center gap-1 text-[#f59e0b]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={11} fill="#f59e0b" strokeWidth={0} />
+                  ))}
+                  <span className="text-[11px] font-semibold text-white ml-1">4.9 / 5</span>
+                </div>
+
+                <p className="text-xs text-gray-200 italic leading-snug line-clamp-2 font-light">
+                  "The cleanest isolate I’ve used. Zero bloating, instant solubility, and noticeably faster muscle recovery."
+                </p>
+
+                <div className="flex items-center gap-2 pt-0.5">
+                  <span className="text-[10px] font-semibold text-[#ffaa5a]">
+                    Verified Athlete Review
+                  </span>
+                  <span className="text-gray-500 text-[10px]">•</span>
+                  <span className="text-[10px] text-gray-400">Batch Tested</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Spec Pills */}
+            <div className="mt-3 pt-3 border-t border-white/[0.08] flex items-center justify-between text-[10px] text-gray-300 font-medium">
+              <span className="flex items-center gap-1">
+                <CheckCircle2 size={12} className="text-[#ff8914]" /> 24g Pure Isolate
+              </span>
+              <span className="flex items-center gap-1">
+                <CheckCircle2 size={12} className="text-[#ff8914]" /> 5.5g BCAAs
+              </span>
+              <span className="flex items-center gap-1">
+                <CheckCircle2 size={12} className="text-[#ff8914]" /> 0g Added Sugar
+              </span>
+            </div>
           </div>
 
-          {/* Divider */}
-          <div className="flex items-center gap-4">
-            <div className="flex-1 h-px" style={{ background: "#e5e7eb" }} />
-            <span
-              className="font-modelica text-xs"
-              style={{ color: "#9ca3af" }}
-            >
-              or sign in with email
-            </span>
-            <div className="flex-1 h-px" style={{ background: "#e5e7eb" }} />
+          {/* Quality Proof Points */}
+          <div className="grid grid-cols-3 gap-2.5">
+            {[
+              { title: "Informed-Choice", sub: "100% Dope-Free" },
+              { title: "Clinical Dosages", sub: "Bioavailable Form" },
+              { title: "Pan-India Shipping", sub: "Express 24-48h" },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-white/[0.03] border border-white/[0.08] rounded-lg px-3 py-2 backdrop-blur-sm"
+              >
+                <div className="font-toma text-[11px] font-bold text-white tracking-wide">
+                  {item.title}
+                </div>
+                <div className="text-[9px] text-gray-400 font-modelica mt-0.5">
+                  {item.sub}
+                </div>
+              </div>
+            ))}
           </div>
-          <div
-            className="relative flex p-1 rounded-xl mb-2"
-            style={{
-              background: "#f3f4f6",
-              border: "1px solid #e5e7eb",
-            }}
+        </div>
+
+        {/* Bottom Footer / Copyright */}
+        <div className="relative z-10 flex items-center justify-between pt-4 border-t border-white/10 text-[11px] text-gray-400 font-modelica shrink-0">
+          <span>© 2026 Gomzi Supplement by RAG.</span>
+          <div className="flex items-center gap-3 text-gray-400">
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link to="/terms-and-conditions" className="hover:text-white transition-colors">
+              Terms & Conditions
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ── RIGHT PANEL: Interactive Authentication Card (No Scroll) ── */}
+      <div className="flex-1 h-full flex flex-col justify-center items-center px-4 sm:px-8 py-3 lg:py-4 relative overflow-y-auto lg:overflow-hidden">
+        {/* Top Navigation Row: Back to store & Mobile Logo */}
+        <div className="w-full max-w-[420px] flex items-center justify-between mb-3 shrink-0">
+          <button
+            onClick={() => navigate("/")}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-[#5C3124] transition-colors py-1 px-2 rounded-lg hover:bg-black/[0.03] cursor-pointer"
           >
+            <ArrowLeft size={14} />
+            Back to store
+          </button>
+
+          <Link to="/" className="lg:hidden">
+            <img
+              src="/images/gomzi-supplements-dark.webp"
+              alt="Gomzi Supplements"
+              className="h-7 object-contain"
+            />
+          </Link>
+        </div>
+
+        {/* Auth Card Container */}
+        <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-xl shadow-black/[0.03] border border-[#eee6e2] p-6 xl:p-7 flex flex-col gap-3.5 xl:gap-4 shrink-0">
+          {/* Header */}
+          <div className="flex flex-col gap-1">
+            <h2
+              className="font-toma text-[#1c1c28] leading-tight font-extrabold"
+              style={{
+                fontSize: "clamp(1.5rem, 2.8vw, 1.95rem)",
+                letterSpacing: "-0.6px",
+              }}
+            >
+              Welcome back
+            </h2>
+            <p className="font-modelica text-xs text-gray-500">
+              New to Gomzi Nutrition?{" "}
+              <Link
+                to="/register"
+                className="font-semibold text-[#5C3124] hover:text-[#48261c] underline underline-offset-2 decoration-[#5C3124]/40 hover:decoration-[#5C3124] transition-all"
+              >
+                Create an account
+              </Link>
+            </p>
+          </div>
+
+          {/* Social Sign In (Google) */}
+          <div className="flex flex-col gap-1.5">
+            <div className="w-full flex justify-center [&>div]:w-full [&>div>iframe]:!w-full [&>div>iframe]:!rounded-xl">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => {
+                  errorToast("Google login could not be initialized");
+                }}
+                shape="rectangular"
+                theme="outline"
+                size="large"
+                text="continue_with"
+                width="100%"
+              />
+            </div>
+
+            <div className="flex items-center gap-3 my-0.5">
+              <div className="flex-1 h-px bg-gray-200" />
+              <span className="font-modelica text-[10px] uppercase tracking-wider text-gray-400 font-medium">
+                or continue with
+              </span>
+              <div className="flex-1 h-px bg-gray-200" />
+            </div>
+          </div>
+
+          {/* Auth Mode Toggle Pill */}
+          <div className="relative flex p-1 rounded-xl bg-[#f5f1ee] border border-[#ebdcd7]">
             <button
+              type="button"
               onClick={() => {
                 setLoginType("password");
                 setOtpSent(false);
               }}
-              className={`relative z-10 flex-1 py-3 rounded-lg text-sm font-modelica font-medium transition-all duration-300 ${
-                loginType === "password" ? "text-white" : "text-gray-500"
+              className={`relative z-10 flex-1 py-2 rounded-lg text-xs font-modelica font-semibold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
+                loginType === "password"
+                  ? "text-white shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              <span className="flex items-center justify-center gap-2">
-                <Lock size={14} />
-                Password Login
-              </span>
+              <Lock size={13} />
+              Password Login
             </button>
 
             <button
+              type="button"
               onClick={() => {
                 setLoginType("otp");
               }}
-              className={`relative z-10 flex-1 py-3 rounded-lg text-sm font-modelica font-medium transition-all duration-300 ${
-                loginType === "otp" ? "text-white" : "text-gray-500"
+              className={`relative z-10 flex-1 py-2 rounded-lg text-xs font-modelica font-semibold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
+                loginType === "otp"
+                  ? "text-white shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
-              <span className="flex items-center justify-center gap-2">
-                <MessageSquare size={14} />
-                OTP Login
-              </span>
+              <Smartphone size={13} />
+              OTP Login
             </button>
 
+            {/* Sliding Pill Indicator */}
             <div
-              className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg transition-all duration-300"
+              className="absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg transition-all duration-300 ease-out shadow-sm"
               style={{
-                background: "#111111",
+                background: "#5C3124",
                 left: loginType === "password" ? "4px" : "50%",
               }}
             />
           </div>
 
-          {/* Form */}
+          {/* Form Section */}
           {loginType === "password" ? (
-            <div className="flex flex-col gap-4">
-              {/* Email */}
-              <div
-                className="relative w-full rounded-[10px] border transition-all duration-150"
-                style={{
-                  borderColor: emailFocused ? "#111111" : "#e5e7eb",
-                  boxShadow: emailFocused
-                    ? "0 0 0 3px rgba(17,17,17,0.06)"
-                    : "none",
-                  background: "#ffffff",
-                }}
-              >
-                <label
-                  className="absolute left-4 transition-all duration-150 pointer-events-none font-modelica"
-                  style={{
-                    top: isEmailFloated ? "8px" : "50%",
-                    transform: isEmailFloated ? "none" : "translateY(-50%)",
-                    fontSize: isEmailFloated ? "10px" : "14px",
-                    color: "#9ca3af",
-                    fontWeight: isEmailFloated ? 500 : 400,
-                  }}
-                >
-                  Email address
+            <form onSubmit={handleLogin} className="flex flex-col gap-3">
+              {/* Email Input */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-gray-700 font-modelica">
+                  Email Address
                 </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setEmailFocused(true)}
-                  onBlur={() => setEmailFocused(false)}
-                  className="w-full bg-transparent outline-none font-modelica text-sm px-4 pb-3"
-                  style={{
-                    paddingTop: isEmailFloated ? "22px" : "14px",
-                    color: "#111111",
-                  }}
-                />
-              </div>
-              {/* Password */}
-              <div
-                className="relative w-full rounded-[10px] border transition-all duration-150"
-                style={{
-                  borderColor: passwordFocused ? "#111111" : "#e5e7eb",
-                  boxShadow: passwordFocused
-                    ? "0 0 0 3px rgba(17,17,17,0.06)"
-                    : "none",
-                  background: "#ffffff",
-                }}
-              >
-                <label
-                  className="absolute left-4 transition-all duration-150 pointer-events-none font-modelica"
-                  style={{
-                    top: isPasswordFloated ? "8px" : "50%",
-                    transform: isPasswordFloated ? "none" : "translateY(-50%)",
-                    fontSize: isPasswordFloated ? "10px" : "14px",
-                    color: "#9ca3af",
-                    fontWeight: isPasswordFloated ? 500 : 400,
-                  }}
+                <div
+                  className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
+                    emailFocused
+                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
                 >
-                  Password
-                </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setPasswordFocused(true)}
-                  onBlur={() => setPasswordFocused(false)}
-                  className="w-full bg-transparent outline-none font-modelica text-sm px-4 pb-3 pr-12"
-                  style={{
-                    paddingTop: isPasswordFloated ? "22px" : "14px",
-                    color: "#111111",
-                  }}
-                />
-                <button
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-60"
-                  style={{ color: "#9ca3af" }}
-                >
-                  {showPassword ? (
-                    <svg
-                      width="17"
-                      height="17"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                      <line x1="1" y1="1" x2="23" y2="23" />
-                    </svg>
-                  ) : (
-                    <svg
-                      width="17"
-                      height="17"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  )}
-                </button>
+                  <div className="pl-3 text-gray-400">
+                    <Mail size={15} className={emailFocused ? "text-[#5C3124]" : ""} />
+                  </div>
+                  <input
+                    type="email"
+                    required
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setEmailFocused(true)}
+                    onBlur={() => setEmailFocused(false)}
+                    className="w-full bg-transparent outline-none font-modelica text-xs px-2.5 py-2.5 text-gray-900 placeholder:text-gray-400"
+                  />
+                </div>
               </div>
 
-              {/* Remember me + Forgot */}
-              <div className="flex items-center justify-between">
-                {/* <label
-                className="flex items-center gap-2.5 cursor-pointer select-none"
-                onClick={() => setRememberMe(!rememberMe)}
-              >
-                <div
-                  className="w-4 h-4 rounded flex items-center justify-center shrink-0 transition-all duration-150 border"
-                  style={{
-                    background: rememberMe ? "#111111" : "#ffffff",
-                    borderColor: rememberMe ? "#111111" : "#d1d5db",
-                  }}
-                >
-                  {rememberMe && (
-                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-                      <path
-                        d="M2 6l3 3 5-5"
-                        stroke="white"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
+              {/* Password Input */}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 font-modelica">
+                    Password
+                  </label>
+                  <span className="text-[10px] text-gray-400 hover:text-[#5C3124] transition-colors cursor-pointer select-none">
+                    Forgot password?
+                  </span>
                 </div>
-                <span
-                  className="font-modelica text-xs"
-                  style={{ color: "#6b7280" }}
+                <div
+                  className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
+                    passwordFocused
+                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
                 >
-                  Remember me
-                </span>
-              </label> */}
-                {/* <a
-                  href="/forgot-password"
-                  className="font-modelica text-xs underline underline-offset-2 transition-colors hover:opacity-70"
-                  style={{ color: "#111111" }}
-                >
-                  Forgot password?
-                </a> */}
+                  <div className="pl-3 text-gray-400">
+                    <Lock size={15} className={passwordFocused ? "text-[#5C3124]" : ""} />
+                  </div>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    placeholder="••••••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                    className="w-full bg-transparent outline-none font-modelica text-xs px-2.5 py-2.5 pr-9 text-gray-900 placeholder:text-gray-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2.5 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                  >
+                    {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
               </div>
 
               {/* Submit Button */}
               <button
-                onClick={handleLogin}
+                type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-[10px] font-toma text-white text-base tracking-wide transition-all duration-150 hover:opacity-85 active:scale-[0.98] shadow-md"
-                style={{ background: "#000000", letterSpacing: "0.3px" }}
+                className="w-full mt-1 py-3 rounded-xl font-toma text-white text-xs font-bold tracking-wide uppercase transition-all duration-200 bg-[#5C3124] hover:bg-[#48261c] active:scale-[0.99] shadow-md shadow-[#5C3124]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {loading ? "Signing In..." : "Sign In"}
+                {loading ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Signing In...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Sign In to Account</span>
+                    <ArrowRight size={15} />
+                  </>
+                )}
               </button>
-            </div>
+            </form>
           ) : (
-            <>
-              <div
-                className="relative w-full rounded-[10px] border transition-all duration-150"
-                style={{
-                  borderColor: emailFocused ? "#111111" : "#e5e7eb",
-                  boxShadow: emailFocused
-                    ? "0 0 0 3px rgba(17,17,17,0.06)"
-                    : "none",
-                  background: "#ffffff",
-                }}
-              >
-                <label
-                  className="absolute left-4 transition-all duration-150 pointer-events-none font-modelica"
-                  style={{
-                    top: isEMailAndMobileFloated ? "8px" : "50%",
-                    transform: isEMailAndMobileFloated
-                      ? "none"
-                      : "translateY(-50%)",
-                    fontSize: isEMailAndMobileFloated ? "10px" : "14px",
-                    color: "#9ca3af",
-                    fontWeight: isEMailAndMobileFloated ? 500 : 400,
-                  }}
+            <div className="flex flex-col gap-3">
+              {/* Identifier Input */}
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-gray-700 font-modelica">
+                    Email or Mobile Number
+                  </label>
+                  {otpSent && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOtpSent(false);
+                        setOtp("");
+                      }}
+                      className="text-[10px] text-[#5C3124] font-semibold hover:underline cursor-pointer"
+                    >
+                      Change
+                    </button>
+                  )}
+                </div>
+
+                <div
+                  className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
+                    identifierFocused
+                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
                 >
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  onFocus={() => setEmailAndMobileFocused(true)}
-                  onBlur={() => setEmailAndMobileFocused(false)}
-                  className="w-full bg-transparent outline-none font-modelica text-sm px-4 pb-3"
-                  style={{
-                    paddingTop: isEmailFloated ? "22px" : "14px",
-                    color: "#111111",
-                  }}
-                />
+                  <div className="pl-3 text-gray-400">
+                    {isIdentifierEmail ? (
+                      <Mail size={15} className={identifierFocused ? "text-[#5C3124]" : ""} />
+                    ) : (
+                      <Smartphone size={15} className={identifierFocused ? "text-[#5C3124]" : ""} />
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    disabled={otpSent}
+                    placeholder="e.g. 9876543210 or user@example.com"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    onFocus={() => setIdentifierFocused(true)}
+                    onBlur={() => setIdentifierFocused(false)}
+                    className="w-full bg-transparent outline-none font-modelica text-xs px-2.5 py-2.5 text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50 disabled:text-gray-500 rounded-xl"
+                  />
+                </div>
               </div>
+
+              {/* OTP Field (Visible when code is sent) */}
               {otpSent && (
-                <input
-                  type="text"
-                  placeholder="Enter OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="w-full border rounded px-4 py-3"
-                />
+                <div className="flex flex-col gap-1.5 animate-fadeIn">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-gray-700 font-modelica">
+                      Verification Code (OTP)
+                    </label>
+                    {resendCountdown > 0 ? (
+                      <span className="text-[10px] text-gray-400 font-medium">
+                        Resend in {resendCountdown}s
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleSendOTP}
+                        disabled={loading}
+                        className="text-[10px] text-[#5C3124] font-bold hover:underline cursor-pointer"
+                      >
+                        Resend Code
+                      </button>
+                    )}
+                  </div>
+
+                  <div
+                    className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
+                      otpFocused
+                        ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <input
+                      type="text"
+                      maxLength={6}
+                      autoFocus
+                      placeholder="••••••"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      onFocus={() => setOtpFocused(true)}
+                      onBlur={() => setOtpFocused(false)}
+                      className="w-full bg-transparent outline-none font-mono text-center text-base tracking-[0.35em] font-bold py-2.5 text-gray-900 placeholder:text-gray-300"
+                    />
+                  </div>
+                </div>
               )}
 
+              {/* Action Buttons for OTP */}
               {!otpSent ? (
                 <button
+                  type="button"
                   onClick={handleSendOTP}
                   disabled={loading}
-                  className="w-full py-4 rounded-[10px] font-toma text-white text-base tracking-wide transition-all duration-150 hover:opacity-85 active:scale-[0.98] shadow-md"
-                  style={{ background: "#000000", letterSpacing: "0.3px" }}
+                  className="w-full mt-1 py-3 rounded-xl font-toma text-white text-xs font-bold tracking-wide uppercase transition-all duration-200 bg-[#5C3124] hover:bg-[#48261c] active:scale-[0.99] shadow-md shadow-[#5C3124]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {loading ? "Sending OTP..." : "Send OTP"}
+                  {loading ? (
+                    <>
+                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Sending Code...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Send Verification Code</span>
+                      <ArrowRight size={15} />
+                    </>
+                  )}
                 </button>
               ) : (
                 <button
+                  type="button"
                   onClick={handleVerifyOTP}
                   disabled={loading}
-                  className="w-full py-4 rounded-[10px] font-toma text-white text-base tracking-wide transition-all duration-150 hover:opacity-85 active:scale-[0.98] shadow-md"
-                  style={{ background: "#000000", letterSpacing: "0.3px" }}
+                  className="w-full mt-1 py-3 rounded-xl font-toma text-white text-xs font-bold tracking-wide uppercase transition-all duration-200 bg-[#5C3124] hover:bg-[#48261c] active:scale-[0.99] shadow-md shadow-[#5C3124]/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {loading ? "Verifying..." : "Verify OTP"}
+                  {loading ? (
+                    <>
+                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Verifying...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Verify & Continue</span>
+                      <ArrowRight size={15} />
+                    </>
+                  )}
                 </button>
               )}
-            </>
+            </div>
           )}
 
-          {/* Stats row - moved from left panel */}
-          <div
-            className="flex items-center justify-between rounded-[10px] px-5 py-4"
-            style={{ background: "#f8f9fb", border: "1px solid #e5e7eb" }}
-          >
-            {[
-              { val: "300+", label: "Reviews" },
-              { val: "5★", label: "Rating" },
-              { val: "100%", label: "Natural" },
-            ].map((s, i) => (
-              <div key={s.label} className="flex flex-col items-center gap-0.5">
-                <span
-                  className="font-toma text-xl leading-none"
-                  style={{ color: "#111111", letterSpacing: "-0.5px" }}
-                >
-                  {s.val}
-                </span>
-                <span
-                  className="font-modelica text-xs"
-                  style={{ color: "#9ca3af" }}
-                >
-                  {s.label}
-                </span>
+          {/* Social Proof & Trust Strip */}
+          <div className="pt-1">
+            <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-[#faf7f5] border border-[#eee4e0]">
+              <div className="flex flex-col items-center text-center">
+                <span className="font-toma text-xs font-bold text-[#1c1c28]">500k+</span>
+                <span className="text-[9px] text-gray-500 font-medium">Athletes</span>
               </div>
-            ))}
+              <div className="flex flex-col items-center text-center border-x border-[#ebdcd7]">
+                <div className="flex items-center gap-0.5">
+                  <Star size={10} fill="#f59e0b" strokeWidth={0} className="text-[#f59e0b]" />
+                  <span className="font-toma text-xs font-bold text-[#1c1c28]">4.9</span>
+                </div>
+                <span className="text-[9px] text-gray-500 font-medium">12k+ Reviews</span>
+              </div>
+              <div className="flex flex-col items-center text-center">
+                <span className="font-toma text-xs font-bold text-[#5C3124]">100%</span>
+                <span className="text-[9px] text-gray-500 font-medium">Authentic</span>
+              </div>
+            </div>
+
+            {/* Micro Trust Guarantee Icons */}
+            <div className="flex items-center justify-between text-[10px] text-gray-500 pt-2.5 px-1">
+              <span className="flex items-center gap-1">
+                <ShieldCheck size={13} className="text-[#5C3124]" /> 256-Bit SSL
+              </span>
+              <span className="flex items-center gap-1">
+                <Truck size={13} className="text-[#5C3124]" /> Free Shipping
+              </span>
+              <span className="flex items-center gap-1">
+                <RefreshCw size={13} className="text-[#5C3124]" /> Easy Returns
+              </span>
+            </div>
           </div>
 
-          {/* Trust badges - moved from left panel */}
-          <div className="flex items-center justify-center gap-6 flex-wrap">
-            {[
-              {
-                icon: (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#111111"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
-                ),
-                text: "Secure & Encrypted",
-              },
-              {
-                icon: (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#111111"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
-                    <circle cx="12" cy="12" r="2" />
-                  </svg>
-                ),
-                text: "Free Shipping",
-              },
-              {
-                icon: (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#111111"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                ),
-                text: "30-Day Returns",
-              },
-            ].map((b) => (
-              <div key={b.text} className="flex items-center gap-1.5">
-                {b.icon}
-                <span
-                  className="font-modelica text-xs"
-                  style={{ color: "#6b7280" }}
-                >
-                  {b.text}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Bottom note */}
-          <p
-            className="font-modelica text-xs text-center leading-relaxed"
-            style={{ color: "#9ca3af" }}
-          >
-            By signing in, you agree to our{" "}
-            <a
-              href="/terms"
-              className="underline underline-offset-1"
-              style={{ color: "#6b7280" }}
+          {/* Terms Agreement Footer */}
+          <p className="font-modelica text-[10px] text-center text-gray-400 leading-relaxed border-t border-gray-100 pt-2.5">
+            By signing in, you agree to Gomzi's{" "}
+            <Link
+              to="/terms-and-conditions"
+              className="text-gray-600 underline hover:text-[#5C3124] transition-colors"
             >
               Terms of Service
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a
-              href="/privacy"
-              className="underline underline-offset-1"
-              style={{ color: "#6b7280" }}
+            <Link
+              to="/privacy-policy"
+              className="text-gray-600 underline hover:text-[#5C3124] transition-colors"
             >
               Privacy Policy
-            </a>
+            </Link>
             .
           </p>
         </div>

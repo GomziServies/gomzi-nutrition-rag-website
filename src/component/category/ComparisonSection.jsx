@@ -91,15 +91,15 @@ const ComparisonSection = ({ data }) => {
             Comparison Table
         =========================== */}
 
-      <div className="mt-8 overflow-hidden rounded-3xl border border-[#9d5a48] bg-white">
-        <div className="px-5 sm:px-6 py-5 border-b border-[#E8D9C8]">
+      <div className="mt-8 overflow-hidden rounded-3xl border border-[#5C3124] bg-white">
+        <div className="px-5 sm:px-6 py-5 border-b border-[#dbdee9]">
           <h3 className="font-bold text-lg">{data.table.title}</h3>
         </div>
 
         <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full">
             <thead>
-              <tr className="bg-[#9d5a48] text-white uppercase tracking-widest text-xs">
+              <tr className="bg-[#5C3124] text-white uppercase tracking-widest text-xs">
                 {data.table.headers.map((header, index) => (
                   <th
                     key={index}
@@ -113,7 +113,7 @@ const ComparisonSection = ({ data }) => {
 
             <tbody>
               {data.table.rows.map((row, index) => (
-                <tr key={index} className="border-t border-[#E8D9C8]">
+                <tr key={index} className="border-t border-[#dbdee9]">
                   {row.map((cell, i) => (
                     <td
                       key={i}
@@ -138,10 +138,10 @@ const ComparisonSection = ({ data }) => {
           {data.table.rows.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className="rounded-2xl border border-[#E8D9C8] bg-white overflow-hidden"
+              className="rounded-2xl border border-[#dbdee9] bg-white overflow-hidden"
             >
               {/* Feature / first column */}
-              <div className="bg-[#9d5a48] text-white px-4 py-3">
+              <div className="bg-[#5C3124] text-white px-4 py-3">
                 <p className="text-xs uppercase tracking-widest opacity-80">
                   {data.table.headers[0]}
                 </p>
@@ -150,10 +150,10 @@ const ComparisonSection = ({ data }) => {
               </div>
 
               {/* Remaining columns */}
-              <div className="divide-y divide-[#E8D9C8]">
+              <div className="divide-y divide-[#dbdee9]">
                 {row.slice(1).map((cell, cellIndex) => (
                   <div key={cellIndex} className="px-4 py-4">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-[#9d5a48]">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3124]">
                       {data.table.headers[cellIndex + 1]}
                     </p>
 

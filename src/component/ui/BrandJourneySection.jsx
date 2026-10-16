@@ -35,7 +35,7 @@ export default function BrandJourney() {
           {/* LEFT */}
 
           <div>
-            <span className="uppercase tracking-[5px] text-xs font-semibold text-[#B66B1E]">
+            <span className="uppercase tracking-[5px] text-xs font-semibold text-[#5C3124]">
               OUR JOURNEY
             </span>
 
@@ -46,17 +46,17 @@ export default function BrandJourney() {
             </p>
 
             <div className="relative mt-5 md:mt-14">
-              <div className="absolute left-[13px] top-0 bottom-0 w-[2px] bg-[#E9D8C6]" />
+              <div className="absolute left-[13px] top-0 bottom-0 w-[2px] bg-[#dbdee9]" />
 
               <div className="space-y-10">
                 {timeline.map((item) => (
                   <div key={item.title} className="relative flex gap-6">
                     <div className="relative z-10 flex-shrink-0">
-                      <div className="w-7 h-7 rounded-full bg-[#B66B1E] border-[6px] border-white shadow-sm" />
+                      <div className="w-7 h-7 rounded-full bg-[#5C3124] border-[6px] border-white shadow-sm" />
                     </div>
 
                     <div className="pb-2">
-                      <p className="uppercase tracking-[2px] text-xs font-semibold text-[#B66B1E]">
+                      <p className="uppercase tracking-[2px] text-xs font-semibold text-[#5C3124]">
                         {item.tag}
                       </p>
 

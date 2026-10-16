@@ -24,23 +24,24 @@ const useCart = () => {
         const guestItems = getGuestCart();
 
         const normalizedGuestItems = guestItems.map((cartItem) => {
-          const variation = cartItem.item_details.variation;
+          const details = cartItem.item_details || {};
+          const variation = details.variation;
 
           return {
             _id: cartItem._id,
             item_id: cartItem.item_id,
             variation_id: variation?._id || null,
-            quantity: cartItem.quantity,
-            name: cartItem.item_details.name,
+            quantity: cartItem.quantity || 1,
+            name: details.name || "Product",
             variationName: variation?.name || null,
-            flavour:
-              variation?.flavour ?? cartItem.item_details.flavour ?? null,
-            price: variation?.price ?? cartItem.item_details.price,
+            flavour: variation?.flavour ?? details.flavour ?? null,
+            price: variation?.price ?? details.price ?? 999,
             discountPrice:
-              variation?.discountPrice ?? cartItem.item_details.discountPrice,
+              variation?.discountPrice ?? details.discountPrice ?? 999,
             image:
               variation?.displayImages?.[0] ??
-              cartItem.item_details.displayImages?.[0],
+              details.displayImages?.[0] ??
+              "/images/product-placeholder.webp",
           };
         });
 
@@ -136,6 +137,18 @@ const useCart = () => {
 
   useEffect(() => {
     fetchCart();
+
+    const handleCartUpdated = () => {
+      fetchCart();
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdated);
+    window.addEventListener("storage", handleCartUpdated);
+
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdated);
+      window.removeEventListener("storage", handleCartUpdated);
+    };
   }, [isAuthenticated]);
 
   return {

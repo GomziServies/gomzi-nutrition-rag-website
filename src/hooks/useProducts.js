@@ -9,6 +9,7 @@ const useProducts = ({
   sort = "",
   sortOrder = "",
   slug = "",
+  id = "",
 }) => {
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState(null);
@@ -27,10 +28,11 @@ const useProducts = ({
         sort,
         sortOrder,
         slug,
+        id,
       });
 
       if (result.success) {
-        if (slug) {
+        if (slug || id) {
           setProduct(result.data || null);
         } else {
           setProducts(result.data || []);
@@ -42,7 +44,7 @@ const useProducts = ({
     };
 
     loadProducts();
-  }, [page, limit, category, sort, search, sortOrder, slug]);
+  }, [page, limit, category, sort, search, sortOrder, slug, id]);
 
   return {
     products,

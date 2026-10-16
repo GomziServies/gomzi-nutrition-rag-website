@@ -37,17 +37,17 @@ const swiperStyles = `
     align-items:center;
     justify-content:center;
     background:#fff;
-    border:1px solid #E7D9C8;
-    color:#95442c;
+    border:1px solid #dbdee9;
+    color:#5C3124;
     transition:.3s;
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
+    box-shadow:0 4px 12px rgba(0,0,0,.06);
 }
 
 .slider-btn:hover{
-    background:#95442c;
+    background:#5C3124;
     color:#fff;
     transform:translateY(-2px);
-    border-color:#95442c;
+    border-color:#5C3124;
 }
 
 /* Pagination */
@@ -61,7 +61,7 @@ const swiperStyles = `
     width:10px;
     height:10px;
     border-radius:20px;
-    background:#D8C7B4;
+    background:#dbdee9;
     opacity:1;
     transition:.3s;
     margin:0 5px !important;
@@ -69,7 +69,7 @@ const swiperStyles = `
 
 .product-swiper .swiper-pagination-bullet-active{
     width:34px;
-    background:#95442c;
+    background:#5C3124;
 }
 
 /* Mobile */
@@ -91,7 +91,7 @@ const categories = [
       "Premium protein blends, isolates, and concentrates designed to support muscle growth, recovery, and daily protein needs.",
     image: "/images/product-category/whey-protein.webp",
     url: "/gomzi-supplement/whey-protein",
-    cta: "Whey Protein",
+    cta: "Explore More",
   },
   {
     id: 2,
@@ -103,7 +103,7 @@ const categories = [
     cta: "Explore More",
   },
   {
-    id: 8,
+    id: 3,
     title: "Plant Protein",
     subtitle:
       "A premium 100% vegan protein blend made from pea, peanut, soya, and brown rice protein to support muscle recovery, growth, and daily protein needs.",
@@ -112,16 +112,7 @@ const categories = [
     cta: "Explore More",
   },
   {
-    id: 6,
-    title: "Meal Replacement",
-    subtitle:
-      "Convenient, nutrient-rich meal solutions for busy lifestyles, weight management, and balanced nutrition.",
-    image: "/images/product-category/whey-protein.webp",
-    url: "/gomzi-supplement/meal-replacement",
-    cta: "Explore More",
-  },
-  {
-    id: 3,
+    id: 4,
     title: "Pre Workout",
     subtitle:
       "Advanced performance formulas to boost energy, focus, endurance, and training intensity.",
@@ -130,16 +121,16 @@ const categories = [
     cta: "Explore More",
   },
   {
-    id: 4,
-    title: "BCAA & Amino Acids",
+    id: 5,
+    title: "BCAA",
     subtitle:
       "Essential amino acids to support muscle recovery, reduce fatigue, and enhance performance.",
     image: "/images/product-category/Bcaa-tangy-orange.webp",
-    url: "/gomzi-supplement/meal-replacement",
+    url: "/gomzi-supplement/bcaa",
     cta: "Explore More",
   },
   {
-    id: 5,
+    id: 6,
     title: "Creatine",
     subtitle:
       "Scientifically formulated creatine supplements to improve strength, power, and muscle performance.",
@@ -147,7 +138,6 @@ const categories = [
     url: "/gomzi-supplement/creatine",
     cta: "Explore More",
   },
-
   {
     id: 7,
     title: "Wellness & Health",
@@ -171,9 +161,9 @@ function CategoryCard({ category }) {
       : words.slice(0, 13).join(" ") + "...";
 
   return (
-    <div className="group relative flex flex-col bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 h-full">
+    <div className="group relative flex flex-col bg-white rounded-xl overflow-hidden border border-[#dbdee9] shadow-sm hover:shadow-md hover:border-[#5C3124]/50 transition-all duration-300 h-full">
       {/* Image Area */}
-      <div className="relative overflow-hidden aspect-[4/4.2] bg-[#f5f5f5]">
+      <div className="relative overflow-hidden aspect-[4/4.2] bg-[#f8fafc]">
         <img
           src={category.image}
           alt={category.title}
@@ -182,18 +172,17 @@ function CategoryCard({ category }) {
       </div>
 
       {/* Card Body */}
-      <div className="flex flex-col flex-1 p-6">
-        <h3 className="text-[15px] font-semibold text-gray-900 leading-snug">
+      <div className="flex flex-col flex-1 p-5">
+        <h3 className="text-base font-bold text-[#1c1c28] group-hover:text-[#5C3124] transition-colors leading-snug">
           {category.title}
         </h3>
 
-        <p className="text-[13px] text-gray-500 leading-relaxed">
+        <p className="text-xs text-[#77777e] leading-relaxed mt-1">
           {displayText}
           {isLong && (
             <button
               onClick={() => setExpanded(!expanded)}
-              className="ml-1 font-semibold hover:underline cursor-pointer"
-              style={{ color: "#003873" }}
+              className="ml-1 font-semibold text-[#5C3124] hover:underline cursor-pointer bg-transparent border-none p-0"
             >
               {expanded ? "Read Less" : "Read More"}
             </button>
@@ -204,14 +193,7 @@ function CategoryCard({ category }) {
 
         <a
           href={category.url}
-          className="mt-3 w-full py-2.5 text-center px-4 rounded-xl text-white text-[13px] font-semibold tracking-wide uppercase active:scale-[0.98] transition-all duration-200"
-          style={{ backgroundColor: "#95442c" }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = "#95442c")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = "#95442c")
-          }
+          className="mt-4 w-full py-2.5 text-center px-4 rounded-lg text-white text-xs font-bold tracking-wide uppercase active:scale-[0.98] transition-all duration-200 bg-[#5C3124] hover:bg-[#48261c] shadow-xs"
         >
           {category.cta}
         </a>

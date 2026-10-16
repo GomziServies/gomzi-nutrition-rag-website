@@ -69,7 +69,7 @@ export default function Cart() {
 
           <button
             onClick={() => navigate("/gomzi-supplement")}
-            className="px-6 py-3 bg-btn-dark hover:bg-hover text-btn-light rounded-md font-semibold transition-colors"
+            className="px-6 py-3 bg-[#5C3124] hover:bg-[#48261c] text-white rounded-xl font-semibold transition-colors cursor-pointer shadow-md"
           >
             Start Shopping
           </button>
@@ -112,7 +112,7 @@ export default function Cart() {
               <h1 className="font-toma font-bold text-xl sm:text-2xl text-primary">
                 Your cart
               </h1>
-              <span className="w-7 h-7 rounded-full bg-[#95442c] text-white text-xs font-bold flex items-center justify-center">
+              <span className="w-7 h-7 rounded-full bg-[#ff8914] text-white text-xs font-bold flex items-center justify-center">
                 {totalQty}
               </span>
             </div>
@@ -243,7 +243,7 @@ export default function Cart() {
 
           {/* ════ RIGHT - Order Summary ════ */}
           <div className="w-full lg:w-[380px] xl:w-[410px] shrink-0">
-            <div className="bg-bg-light border border-border rounded-lg shadow-md p-4 sm:p-6 lg:sticky lg:top-6">
+            <div className="bg-white border border-[#dbdee9] rounded-2xl shadow-sm p-4 sm:p-6 lg:sticky lg:top-6">
               <h2 className="font-toma font-extrabold text-xl text-primary mb-4">
                 Order summary
               </h2>
@@ -279,7 +279,7 @@ export default function Cart() {
               </div>
 
               <button
-                className="w-full py-4 bg-btn-dark hover:bg-hover text-btn-light font-toma font-bold text-[15px] rounded-md transition-colors mb-3"
+                className="w-full py-4 bg-[#5C3124] hover:bg-[#48261c] text-white font-toma font-bold text-[15px] rounded-xl shadow-md hover:shadow-lg transition-all mb-3 cursor-pointer uppercase tracking-wider"
                 onClick={handleCheckout}
               >
                 Check out

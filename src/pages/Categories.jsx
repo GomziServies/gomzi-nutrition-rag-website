@@ -1,397 +1,413 @@
-import { ArrowRight, Plus, X } from "lucide-react";
-import BlackFeatureBar from "../component/common/Black-Feature-Bar";
-import PageHeading from "../HOC/Header/PageHeading";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  Plus,
+  X,
+  FlaskConical,
+  BadgeCheck,
+  Truck,
+  Crown,
+  Sparkles,
+  ShieldCheck,
+  Zap,
+  Layers,
+} from "lucide-react";
 import SEO from "../component/SEO";
-import { useState } from "react";
-import { FlaskConical, BadgeCheck, Truck, Crown } from "lucide-react";
+import { getCategoriesApi } from "../api/category.api";
 
-const categories = [
-  {
-    id: 1,
-    tag: "MOST POPULAR",
-    title: "Whey Protein",
-    subtitle:
-      "Isolate, concentrate and blend formulas with 24–27g protein per scoop. Built for muscle growth and recovery.",
-    image: "/images/product-category/whey-protein.webp",
-    bg: "#1b1308",
-    accent: "#D4AF37",
-    url: "/gomzi-supplement/whey-protein",
-  },
-
-  {
-    id: 2,
-    tag: "BULK SEASON",
-    title: "Mass Gainer",
-    subtitle:
-      "High-calorie weight gainer with quality carbs and protein for lean muscle mass gains.",
-    image: "/images/product-category/mass-gainer.webp",
-    bg: "#071c12",
-    accent: "#2f8f5b",
-    url: "/gomzi-supplement/mass-gainer",
-  },
-
-  // NEW PLANT PROTEIN
-  {
-    id: 3,
-    tag: "100% VEGAN",
-    title: "Plant Protein",
-    subtitle:
-      "A premium 100% vegan protein blend made from pea, peanut, soya and brown rice protein to support muscle recovery, growth and daily protein needs.",
-    image: "/images/product-category/plant-protein.webp",
-    bg: "#172016",
-    accent: "#6f9b5b",
-    url: "/gomzi-supplement/plant-protein",
-  },
-
-  {
-    id: 4,
-    tag: "ENERGY BOOST",
-    title: "Pre Workout",
-    subtitle:
-      "Explosive energy, focus and endurance for every workout session.",
-    image: "/images/product-category/pre-workout.webp",
-    bg: "#1b0d10",
-    accent: "#d94a64",
-    url: "/gomzi-supplement/pre-workout",
-  },
-
-  {
-    id: 5,
-    tag: "RECOVERY",
-    title: "BCAA & Amino Acids",
-    subtitle:
-      "Essential amino acids for faster recovery and reduced muscle fatigue.",
-    image: "/images/product-category/Bcaa-tangy-orange.webp",
-    bg: "#111625",
-    accent: "#6387ff",
-    url: "/gomzi-supplement/bcaa",
-  },
-
-  {
-    id: 6,
-    tag: "STRENGTH",
-    title: "Creatine",
-    subtitle: "Increase strength, power output and muscle performance.",
-    image: "/images/product-category/creatine.webp",
-    bg: "#151515",
-    accent: "#8f8f8f",
-    url: "/gomzi-supplement/creatine",
-  },
-
-  {
-    id: 7,
-    tag: "MEAL SOLUTIONS",
-    title: "Meal Replacement",
-    subtitle:
-      "Balanced nutrition for busy lifestyles and healthy weight management.",
-    image: "/images/product-category/whey-protein.webp",
-    bg: "#0d1022",
-    accent: "#5568ff",
-    url: "/gomzi-supplement/meal-replacement",
-  },
-
-  {
-    id: 8,
-    tag: "DAILY HEALTH",
-    title: "Wellness & Health",
-    subtitle: "Multivitamins and wellness supplements for everyday health.",
-    image: "/images/product-category/Multivitamins.webp",
-    bg: "#16140d",
-    accent: "#d8b65f",
-    url: "/gomzi-supplement/wellness-health",
-  },
-];
+const resolveImageUrl = (img) => {
+  if (!img) return "/images/product-placeholder.webp";
+  if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/")) {
+    return img;
+  }
+  return `https://files.fggroup.in/${img}`;
+};
 
 const standards = [
   {
     number: "01",
     title: "LAB TESTED FORMULAS",
     description:
-      "Every product is third-party tested for purity, potency and accuracy. What the label says is what you get - nothing hidden, nothing added.",
+      "Every product is third-party tested for purity, potency, and label accuracy. What the label states is exactly what you consume—zero hidden spikes, zero fillers.",
   },
   {
     number: "02",
-    title: "ZERO FILLERS",
+    title: "ZERO PROTEIN SPIKING",
     description:
-      "No protein spiking, no artificial bulking agents, no misleading claims. Pure ingredients, honest nutrition, real results.",
+      "No amino spiking, no cheap bulking agents, and no proprietary blend trickery. Genuine bioavailable protein verified by certified independent laboratory assays.",
   },
   {
     number: "03",
-    title: "FSSAI APPROVED",
+    title: "FSSAI & GMP APPROVED",
     description:
-      "Fully FSSAI certified and manufactured in GMP-compliant facilities. Every batch meets India's highest food safety standards.",
+      "Fully compliant with FSSAI regulations and produced exclusively in GMP-certified, ISO 22000:2018 facilities to guarantee peak pharmaceutical-grade safety.",
   },
   {
     number: "04",
-    title: "THE RAG LEGACY",
+    title: "THE LEGACY OF RAG",
     description:
-      "Built from the legacy of Gomzi Supplement by RAG - a brand trusted by athletes. Every Gomzi formula carries that same standard forward.",
+      "Forged from the athletic legacy of Gomzi Supplement by RAG. Built on 15+ years of athlete feedback, clinical formulation, and uncompromising quality standards.",
   },
 ];
 
 const highlights = [
   {
     text: "LAB TESTED",
+    sub: "100% Third-Party Verified",
     icon: FlaskConical,
   },
   {
     text: "FSSAI CERTIFIED",
+    sub: "GMP Compliant Facility",
     icon: BadgeCheck,
   },
   {
-    text: "FREE SHIPPING ABOVE ₹999",
+    text: "FREE SHIPPING",
+    sub: "Pan-India on Orders ₹999+",
     icon: Truck,
   },
   {
     text: "THE LEGACY OF RAG",
+    sub: "Trusted by 500k+ Athletes",
     icon: Crown,
   },
 ];
 
 const faqs = [
   {
-    question: "Which Gomzi product is right for me?",
+    question: "Which Gomzi supplement should I begin with?",
     answer:
-      "If your goal is muscle gain, start with Whey Protein and Creatine. For weight gain, choose Mass Gainer. For general health, Multivitamin combined with Whey Protein is the best starting stack. Use the goal finder above to get a personalised recommendation.",
+      "For lean muscle development and recovery, start with our 100% Whey Protein combined with Micronized Creatine. For individuals aiming to increase body weight and caloric intake, Mass Gainer is ideal. For overall vitality and immune support, daily Multivitamins pair seamlessly with any fitness regimen.",
   },
   {
-    question: "Are Gomzi supplements FSSAI certified?",
+    question: "Are Gomzi supplements tested and FSSAI certified?",
     answer:
-      "Yes. Every Gomzi Supplement product is manufactured in GMP-certified facilities and follows FSSAI guidelines to ensure quality, safety, and authenticity.",
+      "Yes. Every Gomzi Supplement batch is manufactured strictly in FSSAI-licensed, GMP-certified, and ISO-compliant facilities in India. Every single batch undergoes third-party testing to guarantee zero heavy metal contamination and 100% label accuracy.",
   },
   {
-    question: "Do Gomzi supplements contain banned substances?",
+    question: "Do Gomzi supplements contain any banned substances or dope agents?",
     answer:
-      "Our products are manufactured using high-quality ingredients and are tested for purity. Always check product labels if you're a competitive athlete following specific regulations.",
+      "No. All formulations are manufactured in compliance with international anti-doping standards, completely free from prohibited anabolic steroids, stimulants, or adulterants, making them fully safe for competitive national athletes.",
   },
   {
-    question:
-      "What is the difference between Other Brands Supplement and Gomzi Supplement by RAG?",
+    question: "Whey Protein Isolate vs Whey Concentrate - which is right for me?",
     answer:
-      "Gomzi Supplement continues the legacy of Gomzi Supplement by RAG with premium formulations, transparent ingredients, and athlete-focused supplements.",
+      "Choose Whey Isolate if you want ultra-fast absorption with near-zero carbs, lactose, and fat. Choose Whey Concentrate if you seek a rich, creamy everyday protein with balanced macronutrients at exceptional value.",
   },
   {
-    question: "Does Gomzi Supplement offer free shipping across India?",
+    question: "How long does shipping take across India?",
     answer:
-      "Yes. We offer free shipping on qualifying prepaid orders across India. Shipping offers may change during promotions.",
-  },
-  {
-    question: "Whey Protein Isolate vs Concentrate - which should I buy?",
-    answer:
-      "Choose Whey Isolate if you prefer higher protein with lower carbs and fat. Whey Concentrate is ideal for everyday fitness and offers excellent value.",
-  },
-  {
-    question:
-      "Can beginners take Mass Gainer or should they start with Whey Protein?",
-    answer:
-      "Most beginners should start with Whey Protein. Mass Gainer is better suited for individuals who struggle to meet their daily calorie requirements.",
+      "We offer priority dispatch on all prepaid orders. Metro cities typically receive deliveries within 24 to 48 hours, while all other locations across 19,000+ pin codes are serviced in 3 to 4 business days.",
   },
 ];
 
 function CategoryCard({ category }) {
+  const imageUrl = resolveImageUrl(category.image);
+  const targetUrl = category.url || `/gomzi-supplement/${category.slug}`;
+
   return (
-    <div className="group relative overflow-hidden rounded-[32px] cursor-pointer">
+    <Link
+      to={targetUrl}
+      className="group relative overflow-hidden rounded-[22px] cursor-pointer bg-[#140e0c] border border-black/5 hover:border-[#5C3124]/40 shadow-md hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[360px] sm:min-h-[390px]"
+    >
+      {/* Background Image with Zoom Effect */}
       <img
-        src={category.image}
+        src={imageUrl}
         alt={category.title}
-        className="h-[450px] w-full object-cover transition duration-700 group-hover:scale-110"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+        decoding="async"
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/100 via-black/40 to-transparent" />
+      {/* Atmospheric Vignette & Gradient Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent opacity-90 group-hover:opacity-95 transition-opacity duration-300" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
 
-      {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col gap-3 text-white">
-        {/* <span className="text-sm uppercase tracking-[3px] opacity-80">
-          {category.products}
-        </span> */}
-
-        <h3 className="font-toma text-3xl">{category.title}</h3>
-
-        {/* <p className="font-modelica text-white/80">{category.subtitle}</p> */}
-
-        <a
-          href={category.url}
-          className="mt-2 flex items-center gap-2 text-sm uppercase tracking-widest font-semibold"
-        >
-          Shop Now
-          <ArrowRight
-            size={18}
-            className="transition group-hover:translate-x-2"
-          />
-        </a>
+      {/* Top Tag & Specification Pill */}
+      <div className="relative z-10 p-5 flex items-start justify-between">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-black/60 text-[#ffaa5a] border border-white/15 backdrop-blur-md">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914]" />
+          {category.tag || "PREMIUM"}
+        </span>
+        {category.spec && (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-medium text-white/90 bg-white/10 backdrop-blur-md border border-white/10">
+            {category.spec}
+          </span>
+        )}
       </div>
-    </div>
+
+      {/* Bottom Content Area */}
+      <div className="relative z-10 p-5 sm:p-6 flex flex-col gap-2 text-white">
+        <div className="flex items-center gap-2">
+          <h3 className="font-toma text-2xl sm:text-3xl font-extrabold tracking-tight group-hover:text-[#ffaa5a] transition-colors duration-200">
+            {category.title}
+          </h3>
+          {category.productCount > 0 && (
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#ff8914]/20 text-[#ffaa5a] border border-[#ff8914]/30">
+              {category.productCount} {category.productCount === 1 ? "Product" : "Products"}
+            </span>
+          )}
+        </div>
+
+        <p className="font-modelica text-xs sm:text-sm text-gray-300 leading-relaxed line-clamp-2 font-light">
+          {category.subtitle}
+        </p>
+
+        {/* Action Link to Category Shop Collection */}
+        <div className="pt-2 flex items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#ffaa5a] transition-colors">
+            <span>Explore Collection</span>
+            <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[#5C3124] group-hover:translate-x-1.5 transition-all duration-300">
+              <ArrowRight size={13} className="text-white" />
+            </div>
+          </span>
+
+          <span className="text-[11px] text-gray-300 group-hover:text-white underline underline-offset-4 tracking-wide font-light">
+            Shop Category →
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }
 
 export default function CategoriesSection() {
-  const [active, setActive] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalProducts, setTotalProducts] = useState(153);
+  const [activeFaq, setActiveFaq] = useState(0);
+
+  // Fetch dynamic categories from the API on mount
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const res = await getCategoriesApi();
+        if (isMounted && res.data?.data) {
+          const data = res.data.data;
+          if (Array.isArray(data.categories) && data.categories.length > 0) {
+            setCategories(data.categories);
+            if (data.totalProducts) setTotalProducts(data.totalProducts);
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to fetch dynamic categories:", err.message);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchCategories();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
-    <>
+    <div className="bg-[#faf8f6] font-modelica text-[#1c1c28]">
       <SEO
-        title="Shop by Category | Whey Protein, Peanut Butter & Supplements | Gomzi Supplement"
-        description="Explore Gomzi Supplement categories including whey protein, peanut butter, sports supplements, multivitamins and daily wellness essentials for every lifestyle."
+        title="Shop by Category | Whey Protein, Mass Gainer & Supplements | Gomzi Nutrition"
+        description="Explore Gomzi Nutrition categories: 100% Whey Protein Isolate, Mass Gainer, Plant Protein, Pre-Workout, BCAA and Essential Health Supplements."
       />
 
-      <section className="relative overflow-hidden bg-[#090909] py-15 py-md-28">
-        <div className="max-w-[1500px] mx-auto px-6 relative">
-          {/* Background Word */}
+      {/* ── 1. LUXURY HERO SECTION (COMPACT & MODERN) ── */}
+      <section
+        className="relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
+        }}
+      >
+        {/* Ambient Atmospheric Lighting */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px]"
+          style={{ background: "rgba(92, 49, 36, 0.45)" }}
+        />
+        <div
+          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px]"
+          style={{ background: "rgba(255, 137, 20, 0.12)" }}
+        />
+        <div
+          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+          style={{ background: "rgba(92, 49, 36, 0.3)" }}
+        />
 
-          <h2 className="absolute inset-0 flex justify-center items-center pointer-events-none select-none">
-            <span className="font-toma text-[220px] md:text-[340px] font-black uppercase leading-none text-white/[0.04]">
-              LEGACY
+        {/* Subtle Geometric Grid Texture */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+
+        {/* Ambient Legacy Background Typographic Watermark */}
+        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
+          <span
+            className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+            style={{ fontSize: "clamp(80px, 16vw, 200px)" }}
+          >
+            LEGACY
+          </span>
+        </div>
+
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          {/* Top Live Status Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a]">
+            <Sparkles size={12} className="text-[#ff8914]" />
+            <span>
+              {loading
+                ? "Connecting to Live Catalog..."
+                : `${totalProducts}+ Verified Formulations Across ${categories.length} Categories`}
             </span>
-          </h2>
-
-          {/* Content */}
-
-          <div className="relative z-10 text-center">
-            <span className="uppercase tracking-[5px] text-[#9d5a48] text-sm font-semibold">
-              SHOP BY CATEGORY
-            </span>
-
-            <h1 className="mt-8 font-toma text-white uppercase leading-[0.9]">
-              <span className="block text-6xl md:text-8xl">FIND YOUR</span>
-
-              <span className="block text-6xl md:text-8xl">
-                <span className="text-[#9d5a48]">PERFECT</span> NUTRITION
-              </span>
-            </h1>
-
-            <p className="max-w-3xl mx-auto mt-10 text-xl leading-10 text-white/65">
-              Buy whey protein, mass gainer, sports supplements, multivitamins
-              and peanut butter online in India - whether you're building
-              muscle, improving recovery, or supporting everyday wellness,
-              explore products tailored to your goals.
-            </p>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
           </div>
 
-          {/* Bottom Bar */}
-
-          <div className="relative z-10 mt-10 md:mt-24 w-full">
-            <div
-              className="
-      mx-auto
-      w-full
-      max-w-[1400px]
-      grid
-      grid-cols-2
-      md:grid-cols-4
-      bg-white/10
-      backdrop-blur-sm
-      border border-white/10
-    "
+          {/* Headline */}
+          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+            FIND YOUR{" "}
+            <span
+              style={{
+                background: "linear-gradient(90deg, #ffaa5a 0%, #ff8914 50%, #f3a055 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
             >
-              {highlights.map(({ text, icon: Icon }, index) => (
-                <div
-                  key={text}
-                  className={`
-          flex
-          flex-col
-          sm:flex-row
-          items-center
-          justify-center
-          gap-2
-          sm:gap-2.5
-          md:gap-3
-          min-h-[78px]
-          sm:min-h-[72px]
-          md:min-h-[78px]
-          px-2
-          sm:px-3
-          md:px-5
-          lg:px-6
-          text-center
+              PERFECT
+            </span>{" "}
+            NUTRITION
+          </h1>
 
-          border-white/10
+          {/* Subtext */}
+          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light">
+            Engineered for peak performance, muscle synthesis, and daily vitality. Explore clinical-grade sports supplements tailored to your athletic ambitions.
+          </p>
 
-          ${index % 2 === 0 ? "border-r" : ""}
-          ${index < 2 ? "border-b" : ""}
-
-          md:border-b-0
-          md:border-r
-          ${index === highlights.length - 1 ? "md:border-r-0" : ""}
-        `}
-                >
-                  <Icon
-                    size={22}
-                    strokeWidth={1.7}
-                    className="text-[#9d5a48] shrink-0"
-                  />
-
-                  <span
-                    className="
-            text-[10px]
-            xs:text-[10px]
-            sm:text-xs
-            md:text-sm
-            lg:text-base
-            uppercase
-            tracking-wide
-            font-semibold
-            text-white/80
-            text-center
-            leading-tight
-          "
+          {/* High-Tech Trust Highlights Bar */}
+          <div className="mt-6 sm:mt-8 w-full max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 p-2 sm:p-2.5 rounded-xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-xl">
+              {highlights.map((item) => {
+                const HighlightIcon = item.icon;
+                return (
+                  <div
+                    key={item.text}
+                    className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.06] hover:border-[#ff8914]/30 transition-all duration-300 group text-left"
                   >
-                    {text}
-                  </span>
-                </div>
-              ))}
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5C3124] to-[#26130d] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                      <HighlightIcon size={15} className="text-[#ffaa5a]" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-toma text-xs font-bold uppercase tracking-wider text-white">
+                        {item.text}
+                      </span>
+                      <span className="text-[10px] text-gray-400 font-modelica leading-tight">
+                        {item.sub}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-12 bg-[var(--color-bg)]">
-        <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-16">
-          {/* Grid */}
-          <div className="grid md:grid-cols-3 gap-8">
-            {categories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
+      {/* ── 2. DYNAMIC CATEGORY CARDS GRID ── */}
+      <section className="py-8 sm:py-12 bg-[#faf8f6]">
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
+          {/* Section Header with 100% Dynamic Count */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 pb-4 border-b border-[#ebdcd7]">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#5C3124] mb-1">
+                <Layers size={14} />
+                <span>Explore Formulations</span>
+              </div>
+              <h2 className="font-toma text-2xl sm:text-3xl text-[#1c1c28] font-extrabold tracking-tight">
+                Product Categories ({categories.length || 7})
+              </h2>
+            </div>
           </div>
+
+          {/* Cards Grid or Skeletons */}
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-[22px] bg-gray-200 animate-pulse min-h-[360px] sm:min-h-[390px]"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+              {categories.map((category) => (
+                <CategoryCard
+                  key={category._id || category.id}
+                  category={category}
+                />
+              ))}
+            </div>
+          )}
+
+          {!loading && categories.length === 0 && (
+            <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-300">
+              <p className="text-gray-500 text-sm">
+                No product categories available at this moment.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="bg-[#090909] py-12 sm:py-16 md:py-24 md:mt-24">
-        <div className="max-w-[var(--container-width)] mx-auto px-5 sm:px-6 lg:px-16">
-          {/* Heading */}
-          <div className="max-w-5xl">
-            <span className="uppercase tracking-[3px] sm:tracking-[5px] text-[#9d5a48] text-xs sm:text-sm font-semibold">
-              THE GOMZI STANDARD
-            </span>
 
-            <h2 className="font-toma text-3xl sm:text-4xl md:text-6xl leading-[1.05] text-white mt-4 sm:mt-6">
-              WHY SERIOUS ATHLETES
+
+      {/* ── 4. THE GOMZI STANDARD SECTION ── */}
+      <section
+        className="py-16 sm:py-24 text-white relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, #120b08 0%, #1a0f0a 50%, #0d0705 100%)",
+        }}
+      >
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#ffaa5a] mb-2">
+              <Zap size={13} className="text-[#ff8914]" />
+              <span>The Gomzi Quality Standard</span>
+            </div>
+            <h2 className="font-toma text-3xl sm:text-5xl lg:text-6xl uppercase leading-tight font-black tracking-tight text-white">
+              Why Serious Athletes
               <br />
-              CHOOSE GOMZI SUPPLEMENT
+              <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                Trust Gomzi Nutrition
+              </span>
             </h2>
           </div>
 
-          {/* Features */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-10 sm:gap-12 xl:gap-10 mt-12 sm:mt-16 md:mt-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-12 sm:mt-16">
             {standards.map((item) => (
               <div
                 key={item.number}
-                className="group transition-all duration-500"
+                className="group p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-[#ff8914]/40 hover:bg-white/[0.05] transition-all duration-300"
               >
-                {/* Top Line */}
-                <div className="h-[2px] bg-[#9d5a48] mb-6 sm:mb-8 w-full group-hover:w-4/5 transition-all duration-500" />
-
-                {/* Number */}
-                <div className="text-5xl sm:text-6xl md:text-[72px] leading-none font-black text-white/30 group-hover:text-white/80 transition">
-                  {item.number}
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-toma text-4xl sm:text-5xl font-black text-[#5C3124] group-hover:text-[#ffaa5a] transition-colors">
+                    {item.number}
+                  </span>
+                  <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
+                    <ShieldCheck size={16} className="text-gray-400 group-hover:text-[#ff8914]" />
+                  </div>
                 </div>
 
-                {/* Title */}
-                <h3 className="font-toma text-xl sm:text-2xl uppercase leading-tight text-white mt-3">
+                <div className="h-[2px] w-12 bg-[#ff8914] mb-4 group-hover:w-full transition-all duration-500" />
+
+                <h3 className="font-toma text-base sm:text-lg uppercase font-bold text-white leading-snug">
                   {item.title}
                 </h3>
 
-                {/* Description */}
-                <p className="mt-4 sm:mt-5 text-sm sm:text-[15px] leading-7 sm:leading-8 text-white/60 group-hover:text-white/80 transition">
+                <p className="mt-3 text-xs sm:text-sm text-gray-300 leading-relaxed font-light">
                   {item.description}
                 </p>
               </div>
@@ -400,59 +416,58 @@ export default function CategoriesSection() {
         </div>
       </section>
 
-      <section className="py-16 bg-[var(--color-bg)]">
-        <div className="max-w-[1200px] mx-auto px-5">
-          {/* Heading */}
+      {/* ── 5. FAQS ACCORDION SECTION ── */}
+      <section className="py-16 sm:py-24 bg-[#faf8f6]">
+        <div className="max-w-[1000px] mx-auto px-5 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
+              Got Questions?
+            </span>
+            <h2 className="font-toma text-3xl sm:text-5xl uppercase font-black tracking-tight text-[#1c1c28] mt-1">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500 max-w-lg mx-auto mt-2">
+              Everything you need to know about our sourcing, verification, and supplement recommendations.
+            </p>
+          </div>
 
-          <span className="uppercase tracking-[4px] text-sm text-[#9d5a48] font-semibold">
-            FAQs
-          </span>
-
-          <h2 className="font-toma text-5xl md:text-6xl uppercase mt-3 text-[var(--color-text)]">
-            Common Questions
-          </h2>
-
-          <div className="mt-10 border-t border-neutral-200">
+          <div className="flex flex-col gap-3">
             {faqs.map((faq, index) => {
-              const open = active === index;
+              const open = activeFaq === index;
               return (
-                <div key={index} className="border-b border-neutral-200">
+                <div
+                  key={index}
+                  className="rounded-2xl bg-white border border-[#ebdcd7] overflow-hidden shadow-sm transition-all duration-200"
+                >
                   <button
-                    onClick={() => setActive(open ? null : index)}
-                    className="w-full flex justify-between items-center py-3 text-left group"
+                    onClick={() => setActiveFaq(open ? null : index)}
+                    className="w-full flex justify-between items-center px-6 py-4 text-left cursor-pointer group"
                   >
-                    <h3 className="font-semibold text-lg text-black group-hover:text-[#9d5a48] transition">
+                    <span className="font-modelica font-semibold text-sm sm:text-base text-gray-900 group-hover:text-[#5C3124] transition-colors pr-4">
                       {faq.question}
-                    </h3>
-
+                    </span>
                     <div
-                      className={`w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         open
-                          ? "bg-black text-white border-black rotate-180"
-                          : "border-neutral-300 text-neutral-500"
+                          ? "bg-[#5C3124] text-white rotate-180"
+                          : "bg-gray-100 text-gray-500 group-hover:bg-[#ebdcd7]"
                       }`}
                     >
-                      {open ? <X size={18} /> : <Plus size={18} />}
+                      {open ? <X size={15} /> : <Plus size={15} />}
                     </div>
                   </button>
 
-                  <div
-                    className={`grid transition-all duration-500 ease-in-out ${
-                      open ? "grid-rows-[1fr] pb-8" : "grid-rows-[0fr]"
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="max-w-3xl text-base leading-7 text-neutral-600">
-                        {faq.answer}
-                      </p>
+                  {open && (
+                    <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed font-light border-t border-gray-100 animate-fadeIn">
+                      {faq.answer}
                     </div>
-                  </div>
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

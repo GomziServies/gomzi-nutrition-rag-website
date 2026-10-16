@@ -18,18 +18,50 @@ export const fetchProducts = async ({
   sort = "",
   sortOrder = "",
   slug,
+  id,
 } = {}) => {
   try {
-    const response = await getProductsApi({
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug || id || "");
+    const singleProductLookup = Boolean(slug || id);
+
+    const params = {
       page,
-      limit,
+      limit: singleProductLookup ? 1 : limit,
       search,
       category,
       tag,
       sort,
       sortOrder,
-      slug,
-    });
+    };
+
+    if (id) {
+      params.id = id;
+    } else if (slug) {
+      if (isObjectId) {
+        params.id = slug;
+      } else {
+        params.slug = slug;
+      }
+    }
+
+    let response = await getProductsApi(params);
+
+    // Fallback if ObjectId didn't match an _id, try as literal slug
+    if (
+      (!response?.data?.data ||
+        (Array.isArray(response.data.data) && response.data.data.length === 0)) &&
+      isObjectId &&
+      slug
+    ) {
+      const fallbackResponse = await getProductsApi({
+        ...params,
+        id: undefined,
+        slug,
+      });
+      if (fallbackResponse?.data?.data) {
+        response = fallbackResponse;
+      }
+    }
 
     return {
       success: true,

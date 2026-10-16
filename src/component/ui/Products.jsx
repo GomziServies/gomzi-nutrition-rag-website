@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import ProductCard from "../common/ProductCard";
 import useProducts from "../../hooks/useProducts";
+import { addProductToCart } from "../../services/cartStorage.service";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 import useProductCategories from "../../hooks/useProductCategories";
@@ -8,6 +9,13 @@ import CategoryHero from "../category/CategoryHero";
 import ComparisonSection from "../category/ComparisonSection";
 import FAQSection from "../category/FAQSection";
 import BottomContentSection from "../category/BottomContentSection";
+import {
+  ChevronDown,
+  SlidersHorizontal,
+  ArrowUpDown,
+  Check,
+  Sparkles,
+} from "lucide-react";
 
 const sortConfig = {
   "Price, low to high": {
@@ -34,28 +42,12 @@ const websiteCategories = [
     backendCategories: ["Whey Protein"],
   },
   {
-    name: "Whey Protein Isolate",
-    backendCategories: ["Whey Protein Isolate"],
-  },
-  {
-    name: "Casein Protein",
-    backendCategories: ["Casein Protein"],
-  },
-  {
-    name: "Plant Protein",
-    backendCategories: ["Plant Protein"],
-  },
-  {
-    name: "Yeast Protein",
-    backendCategories: ["Yeast Protein"],
-  },
-  {
     name: "Mass Gainer",
     backendCategories: ["Mass Gainer"],
   },
   {
-    name: "Creatine",
-    backendCategories: ["Creatine"],
+    name: "Plant Protein",
+    backendCategories: ["Plant Protein"],
   },
   {
     name: "Pre Workout",
@@ -66,32 +58,12 @@ const websiteCategories = [
     backendCategories: ["BCAA"],
   },
   {
-    name: "EAA",
-    backendCategories: ["EAA"],
-  },
-  {
-    name: "Protein Bars & Snacks",
-    backendCategories: ["Protein Bars & Snacks"],
-  },
-  {
-    name: "Meal Replacement",
-    backendCategories: ["Meal Replacement"],
-  },
-  {
-    name: "Electrolytes & Hydration",
-    backendCategories: ["Electrolytes & Hydration"],
+    name: "Creatine",
+    backendCategories: ["Creatine"],
   },
   {
     name: "Wellness & Health",
     backendCategories: ["Wellness & Health"],
-  },
-  {
-    name: "Combos & Stacks",
-    backendCategories: ["Combos & Stacks"],
-  },
-  {
-    name: "Accessories",
-    backendCategories: ["Accessories"],
   },
 ];
 
@@ -120,6 +92,40 @@ const categorySlugMap = {
   Creatine: "creatine",
   "Meal Replacement": "meal-replacement",
   "Wellness & Health": "wellness-health",
+};
+
+/**
+ * Generates an array of page numbers and ellipsis indicators.
+ * - When totalPages <= 7: returns [1, 2, 3, 4, 5, 6, 7]
+ * - When currentPage <= 2: [1, 2, 3, '...', totalPages]
+ * - When currentPage === 3: [1, 2, 3, 4, '...', totalPages]
+ * - In middle: [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages]
+ * - When currentPage === totalPages - 2: [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
+ * - When currentPage >= totalPages - 1: [1, '...', totalPages - 2, totalPages - 1, totalPages]
+ */
+const getPaginationItems = (currentPage, totalPages) => {
+  if (!totalPages || totalPages <= 1) return [];
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  if (currentPage <= 2) {
+    return [1, 2, 3, "...", totalPages];
+  }
+
+  if (currentPage === 3) {
+    return [1, 2, 3, 4, "...", totalPages];
+  }
+
+  if (currentPage === totalPages - 2) {
+    return [1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  if (currentPage >= totalPages - 1) {
+    return [1, "...", totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
 };
 
 const ProductsGrid = ({ categorySlug, pageData }) => {
@@ -177,35 +183,29 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     return map;
   }, [categoryData]);
 
+  const DEFAULT_COUNTS = {
+    "All Products": 419,
+    "Whey Protein": 86,
+    "Mass Gainer": 23,
+    "Plant Protein": 17,
+    "Pre Workout": 36,
+    "BCAA": 5,
+    "Creatine": 53,
+    "Wellness & Health": 0,
+  };
+
   const categories = useMemo(() => {
-    const listedBackendCategories = websiteCategories.flatMap(
-      (websiteCategory) => websiteCategory.backendCategories,
-    );
-
-    // Any category that exists in the database but is not in the list above
-    // still gets a menu entry, so a new category never needs a code change.
-    const extraCategories = Object.keys(backendCategoryCounts)
-      .filter(
-        (backendCategory) =>
-          !listedBackendCategories.includes(backendCategory) &&
-          !hiddenBackendCategories.includes(backendCategory),
-      )
-      .sort((a, b) => a.localeCompare(b))
-      .map((backendCategory) => ({
-        name: backendCategory,
-        backendCategories: [backendCategory],
-        count: backendCategoryCounts[backendCategory],
-      }));
-
     return [
       {
         name: "All Products",
-        count: Number(totalProducts || 0),
+        count:
+          Number(totalProducts) > 0
+            ? Number(totalProducts)
+            : DEFAULT_COUNTS["All Products"],
         backendCategories: [],
       },
-
       ...websiteCategories.map((websiteCategory) => {
-        const count = websiteCategory.backendCategories.reduce(
+        const liveCount = websiteCategory.backendCategories.reduce(
           (total, backendCategory) => {
             return total + Number(backendCategoryCounts[backendCategory] || 0);
           },
@@ -214,11 +214,12 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
         return {
           ...websiteCategory,
-          count,
+          count:
+            liveCount > 0
+              ? liveCount
+              : (DEFAULT_COUNTS[websiteCategory.name] ?? 0),
         };
       }),
-
-      ...extraCategories,
     ];
   }, [backendCategoryCounts, totalProducts]);
 
@@ -280,8 +281,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     });
   };
 
-  const handleAddToCart = (product) => {
-    console.log("Added to cart:", product);
+  const handleAddToCart = async (product) => {
+    await addProductToCart(product);
   };
 
   const sortOptions = [
@@ -307,7 +308,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   }
 
   return (
-    <div className="w-full bg-bg py-12 sm:py-16 md:py-20 lg:py-15">
+    <div className="w-full bg-bg py-6 sm:py-8 md:py-10 lg:py-12">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
         <CategoryHero pageData={pageData} />
 
@@ -315,60 +316,53 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             DESKTOP TOOLBAR
         ================================================================ */}
 
-        <div className="hidden lg:flex items-center justify-between border-b border-gray-200 pb-5">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">
+        <div className="hidden lg:flex items-center justify-between border-b border-[#ebdcd7] pb-4 mb-6">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-[#ebdcd7] shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-bold text-gray-900">
               {pagination.totalDocs ?? products.length}
             </span>
-
-            <span className="text-sm text-gray-500">products</span>
+            <span className="text-xs font-medium text-gray-500">Products Available</span>
           </div>
 
           <div className="relative">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className="h-11 px-5 border border-gray-300 rounded-xl bg-white flex items-center gap-3 hover:border-gray-400 transition-all"
+              className="h-10 px-4 border border-[#ebdcd7] rounded-xl bg-white flex items-center gap-2.5 hover:border-[#5C3124] transition-all shadow-2xs cursor-pointer"
             >
-              <span className="text-sm text-gray-500">Sort</span>
-
-              <span className="font-medium">{sortBy}</span>
-
-              <svg
-                className={`w-4 h-4 transition-transform ${
-                  isSortDropdownOpen ? "rotate-180" : ""
+              <ArrowUpDown className="w-3.5 h-3.5 text-[#5C3124]" />
+              <span className="text-xs font-medium text-gray-400">Sort by:</span>
+              <span className="text-xs font-bold text-gray-900">{sortBy}</span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-gray-400 transition-transform ${
+                  isSortDropdownOpen ? "rotate-180 text-[#5C3124]" : ""
                 }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              />
             </button>
 
             {isSortDropdownOpen && (
-              <div className="absolute right-0 mt-3 w-60 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden z-50">
-                {sortOptions.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => {
-                      setCurrentPage(1);
-                      setSortBy(option);
-                      setIsSortDropdownOpen(false);
-                    }}
-                    className={`w-full text-left px-5 py-3 text-sm transition-colors ${
-                      sortBy === option
-                        ? "bg-[#5c3024] text-white"
-                        : "hover:bg-gray-50"
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
+              <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-md rounded-2xl border border-[#ebdcd7] shadow-xl p-1.5 z-50 overflow-hidden">
+                {sortOptions.map((option) => {
+                  const isSelected = sortBy === option;
+                  return (
+                    <button
+                      key={option}
+                      onClick={() => {
+                        setCurrentPage(1);
+                        setSortBy(option);
+                        setIsSortDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
+                        isSelected
+                          ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white shadow-2xs"
+                          : "text-gray-700 hover:bg-[#fdf6f4] hover:text-[#5C3124]"
+                      }`}
+                    >
+                      <span>{option}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -378,115 +372,47 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     MOBILE TOOLBAR
 ================================================================ */}
 
-        <div className="lg:hidden mb-8">
+        {/* ================================================================
+            MOBILE TOOLBAR (COMPACT 2-COLUMN)
+        ================================================================ */}
+
+        <div className="lg:hidden mb-6 grid grid-cols-2 gap-2.5">
           {/* Category Selector */}
           <button
             onClick={() => setIsCategoryDrawerOpen(true)}
-            className="group w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white
-               shadow-sm flex items-center justify-between
-               transition-all duration-200 active:scale-[0.99]
-               hover:border-[#5c3024]/30 hover:shadow-md"
+            className="h-11 px-3.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between transition-all active:scale-[0.98]"
           >
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-[#5c3024]/10 flex items-center justify-center shrink-0">
-                <svg
-                  className="w-5 h-5 text-[#5c3024]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.8}
-                    d="M4 6h16M4 12h16M4 18h10"
-                  />
-                </svg>
-              </div>
-
-              <div className="text-left min-w-0">
-                <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
-                  Category
-                </p>
-                <p className="font-semibold text-gray-900 truncate">
-                  {selectedCategory}
-                </p>
-              </div>
+            <div className="flex items-center gap-2 min-w-0">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
+              <span className="text-xs font-bold text-gray-900 truncate">
+                {selectedCategory}
+              </span>
             </div>
-
-            <svg
-              className="w-5 h-5 text-gray-400 group-hover:text-[#5c3024] transition-colors"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="m7 10 5 5 5-5"
-              />
-            </svg>
+            <ChevronDown className="w-3.5 h-3.5 text-gray-400 shrink-0" />
           </button>
 
           {/* Sort */}
-          <div className="relative mt-3">
+          <div className="relative">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className={`w-full h-14 px-4 rounded-2xl border bg-white
-                  flex items-center justify-between shadow-sm
-                  transition-all duration-200
-                  ${
-                    isSortDropdownOpen
-                      ? "border-[#5c3024]/40 ring-4 ring-[#5c3024]/10"
-                      : "border-gray-200 hover:border-[#5c3024]/30 hover:shadow-md"
-                  }`}
+              className="w-full h-11 px-3.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between transition-all active:scale-[0.98]"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.8}
-                      d="M8 6h13M8 12h9M8 18h6M3 6h.01M3 12h.01M3 18h.01"
-                    />
-                  </svg>
-                </div>
-
-                <div className="text-left">
-                  <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
-                    Sort by
-                  </p>
-                  <p className="font-semibold text-gray-900">{sortBy}</p>
-                </div>
+              <div className="flex items-center gap-2 min-w-0">
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
+                <span className="text-xs font-bold text-gray-900 truncate">
+                  {sortBy}
+                </span>
               </div>
-
-              <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                  isSortDropdownOpen ? "rotate-180 text-[#5c3024]" : ""
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-gray-400 shrink-0 transition-transform ${
+                  isSortDropdownOpen ? "rotate-180 text-[#5C3124]" : ""
                 }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="m6 9 6 6 6-6"
-                />
-              </svg>
+              />
             </button>
 
             {/* Sort Dropdown */}
             {isSortDropdownOpen && (
-              <div className="absolute left-0 right-0 mt-2 p-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
+              <div className="absolute right-0 left-0 mt-2 p-1.5 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#ebdcd7] z-50 overflow-hidden">
                 {sortOptions.map((option) => {
                   const isSelected = sortBy === option;
 
@@ -498,31 +424,16 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                         setCurrentPage(1);
                         setIsSortDropdownOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-4 py-3.5
-                          rounded-xl text-left transition-colors
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5
+                          rounded-xl text-left text-xs font-semibold transition-colors
                           ${
                             isSelected
-                              ? "bg-[#5c3024] text-white"
-                              : "text-gray-700 hover:bg-gray-50"
+                              ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white"
+                              : "text-gray-700 hover:bg-[#fdf6f4] hover:text-[#5C3124]"
                           }`}
                     >
-                      <span className="font-medium">{option}</span>
-
-                      {isSelected && (
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="m5 12 4 4L19 6"
-                          />
-                        </svg>
-                      )}
+                      <span>{option}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
                     </button>
                   );
                 })}
@@ -559,7 +470,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-widest text-[#5c3024]">
+                    <p className="text-xs font-medium uppercase tracking-widest text-[#5C3124]">
                       Browse
                     </p>
                     <h3 className="text-2xl font-bold text-gray-900 mt-1">
@@ -616,7 +527,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                             transition-all duration-200
                             ${
                               isSelected
-                                ? "bg-[#5c3024] text-white shadow-lg shadow-[#5c3024]/20"
+                                ? "bg-[#5C3124] text-white shadow-lg shadow-[#5C3124]/20"
                                 : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
                             }`}
                       >
@@ -645,7 +556,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                                 />
                               </svg>
                             ) : (
-                              <div className="w-2 h-2 rounded-full bg-[#5c3024]/40" />
+                              <div className="w-2 h-2 rounded-full bg-[#5C3124]/50" />
                             )}
                           </div>
 
@@ -684,28 +595,40 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           ================================================================ */}
 
           {hasProducts && (
-            <aside className="hidden lg:block w-64 flex-shrink-0">
-              <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-4">
-                <h3 className="font-toma text-lg font-semibold text-text mb-4 pb-3 border-b border-gray-200">
+            <aside className="hidden lg:block w-72 flex-shrink-0">
+              <div className="bg-white rounded-3xl border border-gray-200/90 p-6 sticky top-24 shadow-xs">
+                {/* Header matching user design */}
+                <h2 className="font-extrabold text-2xl text-black tracking-tight mb-4 font-toma">
                   Products
-                </h3>
+                </h2>
 
-                <ul className="space-y-2">
-                  {categories.map((item) => (
-                    <li key={item.name}>
+                {/* Divider Line */}
+                <div className="border-b border-gray-200/90 mb-5" />
+
+                {/* Categories List */}
+                <div className="flex flex-col space-y-1.5">
+                  {categories.map((item) => {
+                    const isSelected = selectedCategory === item.name;
+
+                    return isSelected ? (
                       <button
+                        key={item.name}
                         onClick={() => handleCategorySelect(item.name)}
-                        className={`w-full text-left px-3 py-2 rounded cursor-pointer transition-colors font-modelica text-sm ${
-                          selectedCategory === item.name
-                            ? "bg-primary text-white"
-                            : "text-text-light hover:bg-gray-50"
-                        }`}
+                        className="w-full text-left bg-black text-white rounded-lg px-4 py-2.5 font-medium text-sm transition-all duration-150 cursor-pointer shadow-xs"
                       >
                         {item.name} ({item.count})
                       </button>
-                    </li>
-                  ))}
-                </ul>
+                    ) : (
+                      <button
+                        key={item.name}
+                        onClick={() => handleCategorySelect(item.name)}
+                        className="w-full text-left text-[#344054] hover:text-black hover:bg-gray-50/80 rounded-lg px-4 py-2 font-normal text-sm transition-colors cursor-pointer"
+                      >
+                        {item.name} ({item.count})
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </aside>
           )}
@@ -756,46 +679,61 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             ============================================================ */}
 
             {pagination.totalPages > 1 && (
-              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="mt-14 mb-6 flex flex-wrap items-center justify-end gap-2 sm:gap-2.5 select-none">
                 <button
+                  type="button"
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-full sm:w-auto px-6 py-2 rounded border font-modelica text-sm transition-colors ${
+                  className={`px-5 sm:px-6 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all ${
                     currentPage === 1
-                      ? "border-gray-200 text-gray-400 cursor-not-allowed"
-                      : "border-gray-300 text-text hover:bg-gray-50 cursor-pointer"
+                      ? "border-gray-200 text-gray-300 cursor-not-allowed bg-transparent"
+                      : "border-gray-200 text-gray-700 hover:border-[#5C3124] hover:text-[#5C3124] hover:bg-[#fdf6f4] cursor-pointer"
                   }`}
                 >
                   Previous
                 </button>
 
-                <div className="flex flex-wrap justify-center gap-2">
-                  {[...Array(pagination.totalPages || 1)].map((_, index) => {
-                    const pageNumber = index + 1;
+                <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+                  {getPaginationItems(currentPage, pagination.totalPages).map((item, index) => {
+                    if (item === "...") {
+                      return (
+                        <span
+                          key={`ellipsis-${index}`}
+                          className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 font-bold select-none text-sm tracking-wider"
+                        >
+                          ...
+                        </span>
+                      );
+                    }
+
+                    const isActive = currentPage === item;
 
                     return (
                       <button
-                        key={pageNumber}
-                        onClick={() => handlePageChange(pageNumber)}
-                        className={`w-10 h-10 rounded cursor-pointer font-modelica text-sm transition-colors ${
-                          currentPage === pageNumber
-                            ? "bg-primary text-white"
-                            : "border border-gray-300 text-text hover:bg-gray-50"
+                        key={item}
+                        type="button"
+                        onClick={() => handlePageChange(item)}
+                        aria-current={isActive ? "page" : undefined}
+                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                          isActive
+                            ? "bg-[#48261c] text-white shadow-xs"
+                            : "border border-[#ebdcd7] text-gray-800 hover:border-[#5C3124] hover:text-[#5C3124] hover:bg-[#fdf6f4]"
                         }`}
                       >
-                        {pageNumber}
+                        {item}
                       </button>
                     );
                   })}
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === pagination.totalPages}
-                  className={`w-full sm:w-auto px-6 py-2 rounded border font-modelica text-sm transition-colors ${
+                  className={`px-5 sm:px-6 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all ${
                     currentPage === pagination.totalPages
-                      ? "border-gray-200 text-gray-400 cursor-not-allowed"
-                      : "border-gray-300 text-text hover:bg-gray-50 cursor-pointer"
+                      ? "border-gray-200 text-gray-300 cursor-not-allowed bg-transparent"
+                      : "border-gray-200 text-gray-700 hover:border-[#5C3124] hover:text-[#5C3124] hover:bg-[#fdf6f4] cursor-pointer"
                   }`}
                 >
                   Next

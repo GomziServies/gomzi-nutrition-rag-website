@@ -20,17 +20,20 @@ import SEO from "../component/SEO";
 import BrandPromiseSection from "../component/ui/BrandPromiseSection";
 import TrustAndGoalSection from "../component/ui/TrustAndGoalSection";
 import CustomerReviewsHome from "../component/ui/CustomerReviewsHome";
+import TopBrandsSection from "../component/ui/TopBrandsSection";
+import TrendingDealsSection from "../component/ui/TrendingDealsSection";
+import BestSellingSection from "../component/ui/BestSellingSection";
+import PromoBannerSlider from "../component/ui/PromoBannerSlider";
+import PlantProteinSection from "../component/ui/PlantProteinSection";
+import BankOffersBannerSlider from "../component/ui/BankOffersBannerSlider";
+import CreatineSection from "../component/ui/CreatineSection";
+import NutritionPromoBannerSlider from "../component/ui/NutritionPromoBannerSlider";
+import WellnessHealthSection from "../component/ui/WellnessHealthSection";
+import AthleteCircleSection from "../component/ui/AthleteCircleSection";
 
 const Landing = () => {
   const categories = [
-    "Sports Nutrition",
-    // "Peanut Butter",
-    // "Daily Wellness",
-    // "Weight Management",
-    // "Immunity Support",
-    // "Women's Health",
-    // "Kids Nutrition",
-    // "Bone & Joint Health",
+    "Whey Protein",
   ];
   return (
     <>
@@ -39,16 +42,26 @@ const Landing = () => {
         {/* <AnnouncementBanner/> */}
         {/* <Navbar/> */}
         <HeroSectionWithIcons />
+        <AthleteCircleSection />
         <NaraHealthSection />
+        <TopBrandsSection />
         <SeasonFavoritesSection />
-        <TrustExpertsSection />
-        <section className="py-12 w-full overflow-hidden">
+        <TrendingDealsSection />
+        <BestSellingSection />
+        <PromoBannerSlider />
+        <PlantProteinSection />
+        <CreatineSection />
+        <NutritionPromoBannerSlider />
+        <WellnessHealthSection />
+        <BankOffersBannerSlider />
+        <section className="py-8 w-full overflow-hidden">
           <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-18">
             {categories.map((category) => (
-              <CategorySection key={category} category={category} />
+              <CategorySection key={category} category={category} title="Top Protein Picks" />
             ))}
           </div>
         </section>
+        <TrustExpertsSection />
         <BrandPromiseSection />
         <TrustAndGoalSection />
         <CustomerReviewsHome />
