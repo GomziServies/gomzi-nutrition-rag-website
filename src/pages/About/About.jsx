@@ -185,17 +185,18 @@ export default function AboutPage() {
             {stats.map((s, idx) => (
               <div
                 key={idx}
-                className="flex flex-col items-center justify-center p-3 sm:p-3.5 rounded-xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-lg"
+                className="group relative overflow-hidden flex flex-col items-center justify-center p-3 sm:p-3.5 rounded-xl bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-amber-400/30 hover:bg-white/[0.07] hover:-translate-y-0.5 shadow-lg transition-all duration-300"
               >
-                <span className="font-toma text-xl sm:text-2xl md:text-3xl font-extrabold text-[#ffaa5a] tracking-tight">
+                <span className="relative z-10 font-toma text-xl sm:text-2xl md:text-3xl font-extrabold text-[#ffaa5a] tracking-tight group-hover:scale-105 transition-transform duration-300">
                   {s.value}
                 </span>
-                <span className="font-toma text-[11px] sm:text-xs font-bold text-white uppercase mt-0.5">
+                <span className="relative z-10 font-toma text-[11px] sm:text-xs font-bold text-white uppercase mt-0.5">
                   {s.label}
                 </span>
-                <span className="text-[10px] text-gray-400 font-modelica mt-0.5 hidden sm:block">
+                <span className="relative z-10 text-[10px] text-gray-400 font-modelica mt-0.5 hidden sm:block">
                   {s.sub}
                 </span>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
             ))}
           </div>
@@ -244,10 +245,11 @@ export default function AboutPage() {
               <div className="pt-4 flex items-center gap-4">
                 <Link
                   to="/gomzi-supplement"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-toma font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#5C3124]/20 active:scale-[0.98]"
+                  className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
                 >
-                  <span>Explore Certified Catalog</span>
-                  <ArrowRight size={15} />
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <span className="relative z-10">Explore Certified Catalog</span>
+                  <ArrowRight size={15} className="relative z-10 text-amber-200 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
 
                 <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
@@ -317,11 +319,11 @@ export default function AboutPage() {
             {founders.map((founder) => (
               <div
                 key={founder.name}
-                className="p-6 sm:p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] hover:border-[#ff8914]/40 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between group"
+                className="group relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/40 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5C3124]/30 transition-all duration-300 flex flex-col justify-between"
               >
-                <div>
+                <div className="relative z-10">
                   <div className="flex items-center gap-5 mb-6">
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#ff8914]/40 shadow-xl shrink-0 bg-[#1c120e]">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#ff8914]/40 group-hover:border-amber-400 group-hover:shadow-lg group-hover:shadow-[#ffaa5a]/20 shrink-0 bg-[#1c120e] transition-all duration-300">
                       <img
                         src={founder.image}
                         alt={founder.name}
@@ -329,7 +331,7 @@ export default function AboutPage() {
                       />
                     </div>
                     <div>
-                      <h3 className="font-toma text-xl sm:text-2xl font-bold text-white tracking-tight">
+                      <h3 className="font-toma text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-amber-100 transition-colors">
                         {founder.name}
                       </h3>
                       <p className="text-xs sm:text-sm text-[#ffaa5a] font-semibold mt-0.5">
@@ -342,21 +344,22 @@ export default function AboutPage() {
                     {founder.bio}
                   </p>
 
-                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] italic text-xs text-gray-200 leading-relaxed mb-6">
+                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] italic text-xs text-gray-200 leading-relaxed mb-6 group-hover:border-white/10 transition-colors">
                     "{founder.quote}"
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-white/[0.08]">
+                <div className="relative z-10 flex flex-wrap gap-2 pt-4 border-t border-white/[0.08]">
                   {founder.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 rounded-full text-[11px] font-medium bg-white/[0.05] text-gray-300 border border-white/10"
+                      className="px-3 py-1 rounded-full text-[11px] font-medium bg-white/[0.05] text-gray-300 border border-white/10 group-hover:border-amber-400/30 group-hover:text-white transition-colors"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
             ))}
           </div>
@@ -394,21 +397,24 @@ export default function AboutPage() {
                   >
                     {/* Content Card */}
                     <div className="w-full md:w-1/2">
-                      <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-md transition-all">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-toma text-lg font-black text-[#5C3124]">
-                            {item.year}
-                          </span>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-[#fdf6f4] px-2.5 py-0.5 rounded-full border border-[#ebdcd7]">
-                            {item.tag}
-                          </span>
+                      <div className="group relative overflow-hidden p-6 sm:p-8 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300">
+                        <div className="relative z-10">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-toma text-lg font-black text-[#5C3124]">
+                              {item.year}
+                            </span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-[#fdf6f4] px-2.5 py-0.5 rounded-full border border-[#ebdcd7]">
+                              {item.tag}
+                            </span>
+                          </div>
+                          <h3 className="font-toma text-lg sm:text-xl font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight mb-2">
+                            {item.title}
+                          </h3>
+                          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-light">
+                            {item.description}
+                          </p>
                         </div>
-                        <h3 className="font-toma text-lg sm:text-xl font-bold text-gray-900 tracking-tight mb-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-light">
-                          {item.description}
-                        </p>
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                       </div>
                     </div>
 
@@ -445,22 +451,23 @@ export default function AboutPage() {
               return (
                 <div
                   key={idx}
-                  className="p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] hover:border-[#5C3124]/40 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+                  className="group relative overflow-hidden p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                 >
-                  <div>
-                    <div className="w-12 h-12 rounded-xl bg-[#5C3124] text-white flex items-center justify-center mb-5 shadow-md">
-                      <Icon size={22} className="text-[#ffaa5a]" />
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-105 group-hover:border-amber-400/50 group-hover:shadow-lg group-hover:shadow-[#5C3124]/30 transition-all duration-300">
+                      <Icon size={22} />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-white px-2.5 py-1 rounded-md border border-[#ebdcd7]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-white px-2.5 py-1 rounded-md border border-[#ebdcd7] group-hover:border-[#5C3124]/30 transition-colors">
                       {p.tag}
                     </span>
-                    <h3 className="font-toma text-xl font-bold text-gray-900 mt-3 mb-2 tracking-tight">
+                    <h3 className="font-toma text-xl font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors mt-3 mb-2 tracking-tight">
                       {p.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-light">
                       {p.description}
                     </p>
                   </div>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                 </div>
               );
             })}
@@ -477,19 +484,20 @@ export default function AboutPage() {
               return (
                 <div
                   key={idx}
-                  className="flex items-start gap-3.5 p-5 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-md transition-all"
+                  className="group relative overflow-hidden flex items-start gap-3.5 p-5 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-lg hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] flex items-center justify-center shrink-0">
-                    <Icon size={18} className="text-[#5C3124]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-[#ffaa5a] group-hover:border-amber-400/30 transition-all duration-300 shadow-xs relative z-10">
+                    <Icon size={18} />
                   </div>
-                  <div>
-                    <h4 className="font-toma text-sm font-bold text-gray-900 tracking-tight">
+                  <div className="relative z-10">
+                    <h4 className="font-toma text-sm font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight">
                       {c.title}
                     </h4>
                     <p className="text-xs text-gray-500 mt-0.5 leading-relaxed font-light">
                       {c.sub}
                     </p>
                   </div>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                 </div>
               );
             })}
@@ -518,17 +526,19 @@ export default function AboutPage() {
             <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">
               <Link
                 to="/gomzi-supplement"
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-toma font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#5C3124]/30 active:scale-[0.98]"
+                className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 cursor-pointer"
               >
-                <span>Shop Catalog</span>
-                <ArrowRight size={15} />
+                <span className="relative z-10 tracking-wider">Shop Catalog</span>
+                <ArrowRight size={16} className="relative z-10 text-amber-200 transition-transform duration-300 group-hover:translate-x-1" />
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
               </Link>
 
               <Link
                 to="/faq"
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all active:scale-[0.98]"
+                className="group relative overflow-hidden inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] border border-white/20 hover:border-amber-400/40 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-black/20 cursor-pointer"
               >
-                <span>View FAQs</span>
+                <span className="relative z-10">View FAQs</span>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </Link>
             </div>
           </div>

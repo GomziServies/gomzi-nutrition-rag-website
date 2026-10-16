@@ -527,7 +527,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                             transition-all duration-200
                             ${
                               isSelected
-                                ? "bg-[#5C3124] text-white shadow-lg shadow-[#5C3124]/20"
+                                ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
                                 : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
                             }`}
                       >
@@ -614,9 +614,10 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       <button
                         key={item.name}
                         onClick={() => handleCategorySelect(item.name)}
-                        className="w-full text-left bg-black text-white rounded-lg px-4 py-2.5 font-medium text-sm transition-all duration-150 cursor-pointer shadow-xs"
+                        className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-4 py-2.5 font-bold text-sm transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 relative overflow-hidden group"
                       >
-                        {item.name} ({item.count})
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                        <span className="relative z-10">{item.name} ({item.count})</span>
                       </button>
                     ) : (
                       <button
@@ -716,7 +717,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                         aria-current={isActive ? "page" : undefined}
                         className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                           isActive
-                            ? "bg-[#48261c] text-white shadow-xs"
+                            ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
                             : "border border-[#ebdcd7] text-gray-800 hover:border-[#5C3124] hover:text-[#5C3124] hover:bg-[#fdf6f4]"
                         }`}
                       >

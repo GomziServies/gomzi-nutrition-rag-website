@@ -85,10 +85,10 @@ export default function TransparencySection() {
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <span
-                            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all flex-shrink-0 ${
+                            className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all duration-300 flex-shrink-0 relative overflow-hidden ${
                               isOpen
-                                ? "bg-[#5C3124] text-white shadow-xs"
-                                : "bg-[#fdf6f4] text-[#5C3124] group-hover:bg-[#5C3124] group-hover:text-white"
+                                ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white shadow-xs border border-amber-400/30"
+                                : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30"
                             }`}
                           >
                             {item.id}
@@ -111,10 +111,10 @@ export default function TransparencySection() {
                           </span>
 
                           <span
-                            className={`w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-300 ${
+                            className={`w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-300 relative overflow-hidden ${
                               isOpen
-                                ? "bg-[#5C3124] text-white rotate-180"
-                                : "bg-[#fdf6f4] text-[#5C3124] group-hover:bg-[#5C3124] group-hover:text-white"
+                                ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white rotate-180 border border-amber-400/30 shadow-xs"
+                                : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30"
                             }`}
                           >
                             <ChevronDown size={15} />

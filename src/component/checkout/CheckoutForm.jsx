@@ -451,7 +451,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             type="button"
             disabled={loading}
             onClick={handleOnlinePayment}
-            className="w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 bg-[#5C3124] hover:bg-[#48261c] active:scale-[0.99] shadow-lg shadow-[#5C3124]/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -460,18 +460,19 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
               </>
             ) : (
               <>
-                <Lock size={15} />
-                <span>Pay Securely ₹{finalTotal.toLocaleString()}</span>
-                <ArrowRight size={16} />
+                <Lock size={15} className="relative z-10 text-amber-300" />
+                <span className="relative z-10">Pay Securely ₹{finalTotal.toLocaleString()}</span>
+                <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
               </>
             )}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </button>
         ) : (
           <button
             type="button"
             disabled={loading}
             onClick={handleCodPayment}
-            className="w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 bg-[#5C3124] hover:bg-[#48261c] active:scale-[0.99] shadow-lg shadow-[#5C3124]/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -480,11 +481,12 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
               </>
             ) : (
               <>
-                <Banknote size={16} />
-                <span>Place Order (Cash On Delivery) ₹{finalTotal.toLocaleString()}</span>
-                <ArrowRight size={16} />
+                <Banknote size={16} className="relative z-10 text-amber-300" />
+                <span className="relative z-10">Place Order (Cash On Delivery) ₹{finalTotal.toLocaleString()}</span>
+                <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
               </>
             )}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </button>
         )}
 

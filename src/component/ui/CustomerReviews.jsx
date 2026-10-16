@@ -334,21 +334,29 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
             disabled={submitting || !body.trim()}
             onClick={handleSubmit}
             className="
+              relative overflow-hidden group
               px-7
               py-3
               rounded-xl
-              bg-primary
+              bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c]
+              hover:from-[#48261c] hover:to-[#381c14]
               text-white
               text-sm
-              font-semibold
-              hover:opacity-90
-              transition
+              font-bold
+              border border-amber-400/30
+              shadow-md shadow-[#5C3124]/25
+              hover:shadow-lg hover:shadow-[#5C3124]/40
+              hover:-translate-y-0.5 active:scale-[0.98]
+              transition-all duration-300
               disabled:opacity-50
               disabled:cursor-not-allowed
+              disabled:hover:translate-y-0
               font-modelica
+              cursor-pointer
             "
           >
-            {submitting ? "Posting..." : "Post Review"}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+            <span className="relative z-10">{submitting ? "Posting..." : "Post Review"}</span>
           </button>
         </div>
       </div>
@@ -492,9 +500,10 @@ export default function CustomerReviews(props) {
               <div className="flex-shrink-0 sm:pl-8 flex items-center justify-start sm:justify-center">
                 <button
                   onClick={handleWriteReview}
-                  className="bg-[var(--color-btn-dark)] text-[var(--color-btn-light)] font-semibold text-md px-15 py-3 w-full rounded-[var(--radius-md)] hover:bg-[var(--color-hover)] transition-colors duration-200 font-[var(--font-modelica)] whitespace-nowrap shadow-[var(--shadow-sm)]"
+                  className="relative overflow-hidden group bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white font-bold text-sm px-8 py-3.5 w-full rounded-xl border border-amber-400/30 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 font-modelica whitespace-nowrap cursor-pointer"
                 >
-                  {formState === "open" ? "Cancel" : "Write a review"}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <span className="relative z-10">{formState === "open" ? "Cancel Review" : "Write a Review"}</span>
                 </button>
               </div>
             </div>
@@ -562,7 +571,7 @@ export default function CustomerReviews(props) {
                   onClick={() => setCurrentPage(p)}
                   className={`w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] text-sm font-semibold transition-colors font-[var(--font-modelica)] border ${
                     currentPage === p
-                      ? "bg-[var(--color-btn-dark)] text-[var(--color-btn-light)] border-[var(--color-btn-dark)]"
+                      ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border-amber-400/30 shadow-xs"
                       : "border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-section)]"
                   }`}
                 >

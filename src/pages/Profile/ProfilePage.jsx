@@ -49,10 +49,11 @@ function ProfilePage() {
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xs">
           <button
             onClick={() => navigate("/login")}
-            className="w-full py-3.5 px-6 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#5C3124]/20 flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white font-extrabold text-xs uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 flex items-center justify-center gap-2 cursor-pointer relative overflow-hidden group"
           >
-            <span>Sign In Now</span>
-            <ArrowRight size={15} />
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+            <span className="relative z-10">Sign In Now</span>
+            <ArrowRight size={15} className="relative z-10 text-amber-200 group-hover:translate-x-0.5 transition-transform" />
           </button>
           <button
             onClick={() => navigate("/register")}

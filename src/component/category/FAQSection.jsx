@@ -40,11 +40,19 @@ const FAQSection = ({ faq = [] }) => {
                     {item.question}
                   </h3>
 
-                  {open ? (
-                    <Minus className="w-5 h-5 flex-shrink-0" />
-                  ) : (
-                    <Plus className="w-5 h-5 flex-shrink-0" />
-                  )}
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 relative overflow-hidden ${
+                      open
+                        ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-xs rotate-180"
+                        : "bg-gray-100 text-gray-500 hover:bg-[#ebdcd7] hover:text-[#5C3124]"
+                    }`}
+                  >
+                    {open ? (
+                      <Minus className="w-4 h-4 flex-shrink-0" />
+                    ) : (
+                      <Plus className="w-4 h-4 flex-shrink-0" />
+                    )}
+                  </div>
                 </button>
 
                 <div

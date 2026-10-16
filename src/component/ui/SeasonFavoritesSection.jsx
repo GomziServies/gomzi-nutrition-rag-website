@@ -107,14 +107,14 @@ export default function SeasonFavoritesSection() {
             <div className="hidden sm:flex items-center gap-2">
               <button
                 onClick={() => swiperRef.current?.slidePrev()}
-                className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:text-white hover:border-[#5C3124] text-[#5C3124] flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer active:scale-95"
+                className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-gradient-to-r hover:from-[#5C3124] hover:to-[#48261c] hover:text-white hover:border-amber-400/30 text-[#5C3124] flex items-center justify-center transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer active:scale-95"
                 aria-label="Previous Category"
               >
                 <FiChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={() => swiperRef.current?.slideNext()}
-                className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:text-white hover:border-[#5C3124] text-[#5C3124] flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer active:scale-95"
+                className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-gradient-to-r hover:from-[#5C3124] hover:to-[#48261c] hover:text-white hover:border-amber-400/30 text-[#5C3124] flex items-center justify-center transition-all duration-300 shadow-xs hover:shadow-md cursor-pointer active:scale-95"
                 aria-label="Next Category"
               >
                 <FiChevronRight className="w-5 h-5" />
@@ -203,7 +203,7 @@ export default function SeasonFavoritesSection() {
                     {/* Interactive Action Bar */}
                     <div className="mt-3.5 pt-3 border-t border-[#ebdcd7]/60 flex items-center justify-between text-xs font-bold text-[#5C3124] group-hover:text-[#3d1e15]">
                       <span>Explore Range</span>
-                      <div className="w-7 h-7 rounded-full bg-[#fdf6f4] group-hover:bg-[#5C3124] group-hover:text-white flex items-center justify-center transition-all duration-200">
+                      <div className="w-7 h-7 rounded-full bg-[#fdf6f4] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border group-hover:border-amber-400/30 flex items-center justify-center transition-all duration-300">
                         <FiArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>

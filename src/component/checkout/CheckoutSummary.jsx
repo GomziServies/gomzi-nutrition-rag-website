@@ -185,9 +185,10 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
             type="button"
             onClick={handleApplyCoupon}
             disabled={couponLoading || !discountCode.trim()}
-            className="px-5 py-3 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white text-xs font-bold uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="group relative overflow-hidden px-5 py-3 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-sm shadow-[#5C3124]/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
-            {couponLoading ? "Applying..." : "Apply"}
+            <span className="relative z-10">{couponLoading ? "Applying..." : "Apply"}</span>
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
           </button>
         </div>
 

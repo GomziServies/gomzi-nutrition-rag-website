@@ -12,16 +12,16 @@ function Sidebar({ activeTab, setActiveTab }) {
   };
 
   const menuClass = (tab) =>
-    `flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+    `flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer ${
       activeTab === tab
-        ? "bg-[#5C3124] text-white shadow-md shadow-[#5C3124]/20"
+        ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
         : "text-gray-700 hover:bg-[#faf5f3] hover:text-[#5C3124]"
     }`;
 
   const mobilePillClass = (tab) =>
-    `flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer shrink-0 ${
+    `flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer shrink-0 ${
       activeTab === tab
-        ? "bg-[#5C3124] text-white shadow-sm"
+        ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
         : "bg-white text-gray-700 border border-[#ebdcd7] hover:bg-[#faf5f3]"
     }`;
 

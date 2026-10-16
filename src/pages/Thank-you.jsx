@@ -339,10 +339,11 @@ export default function ThankYou() {
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <Link
             to="/gomzi-supplement"
-            className="flex-1 py-4 px-6 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white text-xs font-extrabold uppercase tracking-wider transition-all shadow-md shadow-[#5C3124]/20 flex items-center justify-center gap-2 cursor-pointer text-center"
+            className="group relative overflow-hidden flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-extrabold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer text-center"
           >
-            <span>Continue Shopping</span>
-            <ArrowRight size={15} />
+            <span className="relative z-10">Continue Shopping</span>
+            <ArrowRight size={15} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </Link>
 
           <Link

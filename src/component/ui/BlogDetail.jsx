@@ -289,22 +289,10 @@ const BlogDetail = () => {
             <div className="mt-14 flex justify-center">
               <Link
                 to="/blog"
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  px-6
-                  py-3
-                  rounded-xl
-                  bg-primary
-                  text-white
-                  font-modelica
-                  font-semibold
-                  hover:opacity-90
-                  transition
-                "
+                className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
               >
-                ← Back to Blog
+                <span className="relative z-10">← Back to Blog</span>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </Link>
             </div>
           </div>

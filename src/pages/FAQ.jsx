@@ -295,13 +295,16 @@ export default function FAQPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3.5 sm:px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                  className={`group relative overflow-hidden px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer ${
                     active
-                      ? "bg-[#5C3124] text-white shadow-md shadow-[#5C3124]/25 border border-[#ff8914]/40 scale-[1.02]"
-                      : "bg-white text-gray-600 hover:text-gray-900 border border-[#ebdcd7] hover:border-gray-300"
+                      ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30 scale-[1.02]"
+                      : "bg-white text-gray-600 hover:text-gray-900 border border-[#ebdcd7] hover:border-[#5C3124]/40 hover:bg-[#fffcf9]"
                   }`}
                 >
-                  {tab.label}
+                  <span className="relative z-10">{tab.label}</span>
+                  {active && (
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                  )}
                 </button>
               );
             })}
@@ -314,10 +317,10 @@ export default function FAQPage() {
               return (
                 <div
                   key={item.id}
-                  className={`rounded-2xl bg-white border transition-all duration-200 overflow-hidden ${
+                  className={`rounded-2xl bg-white border transition-all duration-300 overflow-hidden ${
                     isOpen
-                      ? "border-[#5C3124]/40 shadow-md ring-1 ring-[#5C3124]/10"
-                      : "border-[#eee4e0] hover:border-gray-300 shadow-sm"
+                      ? "border-[#5C3124]/50 shadow-md ring-1 ring-[#5C3124]/10"
+                      : "border-[#eee4e0] hover:border-[#5C3124]/30 hover:shadow-sm"
                   }`}
                 >
                   <button
@@ -334,9 +337,9 @@ export default function FAQPage() {
                     </div>
 
                     <div
-                      className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                      className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 relative overflow-hidden ${
                         isOpen
-                          ? "bg-[#5C3124] text-white shadow-sm rotate-180"
+                          ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-sm rotate-180"
                           : "bg-gray-100 text-gray-500 group-hover:bg-[#ebdcd7] group-hover:text-[#5C3124]"
                       }`}
                     >
@@ -365,9 +368,10 @@ export default function FAQPage() {
                     setSearchQuery("");
                     setActiveTab("all");
                   }}
-                  className="mt-4 px-4 py-2 rounded-xl bg-[#5C3124] text-white text-xs font-semibold cursor-pointer"
+                  className="mt-4 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold border border-amber-400/30 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 relative overflow-hidden group cursor-pointer inline-flex items-center justify-center"
                 >
-                  Reset Search Filter
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <span className="relative z-10">Reset Search Filter</span>
                 </button>
               </div>
             )}
@@ -376,9 +380,9 @@ export default function FAQPage() {
       </section>
 
       {/* ── 3. TRUST ACCREDITATION STRIP ── */}
-      <section className="py-12 bg-white border-y border-[#ebdcd7]">
+      <section className="py-12 sm:py-16 bg-white border-y border-[#ebdcd7]">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
               {
                 icon: ShieldCheck,
@@ -403,18 +407,22 @@ export default function FAQPage() {
             ].map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div key={idx} className="flex items-start gap-3.5 p-2">
-                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] flex items-center justify-center shrink-0">
-                    <Icon size={18} className="text-[#5C3124]" />
+                <div
+                  key={idx}
+                  className="group relative overflow-hidden flex items-start gap-3.5 p-5 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-lg hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-[#ffaa5a] group-hover:border-amber-400/30 transition-all duration-300 shadow-xs relative z-10">
+                    <Icon size={18} />
                   </div>
-                  <div>
-                    <h4 className="font-toma text-sm font-bold text-gray-900 tracking-tight">
+                  <div className="relative z-10">
+                    <h4 className="font-toma text-sm font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed font-light">
                       {item.sub}
                     </p>
                   </div>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                 </div>
               );
             })}
@@ -447,18 +455,20 @@ export default function FAQPage() {
                   href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team,%20I%20have%20a%20question%20regarding%20supplements."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md active:scale-[0.98]"
+                  className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 cursor-pointer"
                 >
-                  <MessageCircle size={16} />
-                  WhatsApp Us
+                  <MessageCircle size={16} className="relative z-10 text-amber-200" />
+                  <span className="relative z-10 tracking-wider">WhatsApp Us</span>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
                 </a>
 
                 <Link
                   to="/contact-us"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md active:scale-[0.98]"
+                  className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] border border-white/20 hover:border-amber-400/40 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-black/20 cursor-pointer"
                 >
-                  <Mail size={16} />
-                  Contact Support
+                  <Mail size={15} className="relative z-10 text-amber-200" />
+                  <span className="relative z-10">Contact Support</span>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </Link>
               </div>
             </div>

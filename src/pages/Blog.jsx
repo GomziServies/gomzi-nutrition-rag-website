@@ -297,15 +297,15 @@ export default function BlogPage() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap active:scale-[0.98] ${
+                    className={`group relative overflow-hidden inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap active:scale-[0.98] cursor-pointer ${
                       isActive
-                        ? "bg-[#5C3124] text-white shadow-md shadow-[#5C3124]/20"
+                        ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
                         : "bg-white text-gray-700 border border-[#ebdcd7] hover:border-[#5C3124]/40 hover:bg-[#fdfbf9]"
                     }`}
                   >
-                    <span>{cat.label}</span>
+                    <span className="relative z-10">{cat.label}</span>
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                      className={`relative z-10 text-[10px] px-1.5 py-0.5 rounded-full ${
                         isActive
                           ? "bg-white/20 text-white"
                           : "bg-gray-100 text-gray-600"
@@ -313,6 +313,9 @@ export default function BlogPage() {
                     >
                       {count}
                     </span>
+                    {isActive && (
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                    )}
                   </button>
                 );
               })}
@@ -361,7 +364,7 @@ export default function BlogPage() {
 
             <Link
               to={`/blog/${featuredBlog.slug}`}
-              className="group block rounded-3xl overflow-hidden border border-[#ebdcd7] bg-white shadow-xl hover:shadow-2xl transition-all duration-500"
+              className="group relative overflow-hidden block rounded-3xl border border-[#ebdcd7] bg-white shadow-xl hover:shadow-2xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-500"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                 {/* Image Half */}
@@ -429,12 +432,13 @@ export default function BlogPage() {
                     <span className="font-toma text-xs font-bold uppercase tracking-wider text-[#5C3124]">
                       Read Landmark Analysis
                     </span>
-                    <div className="w-10 h-10 rounded-full bg-[#5C3124] text-white flex items-center justify-center group-hover:translate-x-1.5 transition-transform shadow-md shadow-[#5C3124]/30">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white flex items-center justify-center group-hover:translate-x-1.5 transition-all shadow-md shadow-[#5C3124]/30 border border-amber-400/30">
                       <ArrowRight size={16} />
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
             </Link>
           </div>
         </section>
@@ -471,7 +475,7 @@ export default function BlogPage() {
                 <Link
                   key={blog._id || blog.id || blog.slug}
                   to={`/blog/${blog.slug}`}
-                  className="group flex flex-col h-full rounded-2xl bg-white border border-[#ebdcd7] overflow-hidden shadow-sm hover:shadow-xl hover:border-[#5C3124]/40 transition-all duration-300"
+                  className="group relative overflow-hidden flex flex-col h-full rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300"
                 >
                   {/* Article Thumbnail */}
                   <div className="relative h-56 sm:h-64 overflow-hidden bg-[#1c120e]">
@@ -533,11 +537,12 @@ export default function BlogPage() {
                         </span>
                       </div>
 
-                      <span className="w-8 h-8 rounded-full bg-[#fdf6f4] group-hover:bg-[#5C3124] text-[#5C3124] group-hover:text-white flex items-center justify-center transition-all shrink-0">
+                      <span className="w-8 h-8 rounded-full bg-[#fdf6f4] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] text-[#5C3124] group-hover:text-white flex items-center justify-center transition-all shrink-0 border border-[#ebdcd7] group-hover:border-amber-400/30 shadow-xs">
                         <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                       </span>
                     </div>
                   </div>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </Link>
               ))}
             </div>
@@ -558,9 +563,10 @@ export default function BlogPage() {
                   setSearchQuery("");
                   setSelectedCategory("all");
                 }}
-                className="px-5 py-2.5 rounded-xl bg-[#5C3124] text-white font-toma text-xs font-bold uppercase tracking-wider hover:bg-[#48261c] transition-all shadow-md"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white font-toma text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 relative overflow-hidden group inline-flex items-center justify-center cursor-pointer"
               >
-                Reset All Filters
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                <span className="relative z-10">Reset All Filters</span>
               </button>
             </div>
           )}
@@ -604,17 +610,20 @@ export default function BlogPage() {
               return (
                 <div
                   key={idx}
-                  className="p-6 sm:p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] hover:border-[#5C3124]/40 hover:shadow-lg transition-all"
+                  className="group relative overflow-hidden p-6 sm:p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-[#5C3124] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md">
-                    <Icon size={22} />
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-105 group-hover:border-amber-400/50 group-hover:shadow-lg group-hover:shadow-[#5C3124]/30 transition-all duration-300">
+                      <Icon size={22} />
+                    </div>
+                    <h3 className="font-toma text-lg font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors mb-2">
+                      {rule.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-relaxed font-light">
+                      {rule.desc}
+                    </p>
                   </div>
-                  <h3 className="font-toma text-lg font-bold text-gray-900 mb-2">
-                    {rule.title}
-                  </h3>
-                  <p className="text-xs text-gray-600 leading-relaxed font-light">
-                    {rule.desc}
-                  </p>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                 </div>
               );
             })}
@@ -643,8 +652,8 @@ export default function BlogPage() {
 
             <div className="relative z-10 w-full lg:w-auto shrink-0">
               {newsletterSubscribed ? (
-                <div className="p-4 rounded-xl bg-white/10 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-emerald-400" />
+                <div className="p-4 rounded-xl bg-white/10 border border-amber-400/40 text-amber-200 text-xs font-semibold flex items-center gap-2">
+                  <CheckCircle2 size={16} className="text-[#ffaa5a]" />
                   <span>You're subscribed! Check your inbox for the welcome guide.</span>
                 </div>
               ) : (
@@ -662,10 +671,11 @@ export default function BlogPage() {
                   />
                   <button
                     type="submit"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-toma font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#5C3124]/30 active:scale-[0.98] shrink-0"
+                    className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 shrink-0 cursor-pointer"
                   >
-                    <span>Subscribe</span>
-                    <Send size={13} />
+                    <span className="relative z-10 tracking-wider">Subscribe</span>
+                    <Send size={14} className="relative z-10 text-amber-200 transition-transform duration-300 group-hover:translate-x-1" />
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
                   </button>
                 </form>
               )}

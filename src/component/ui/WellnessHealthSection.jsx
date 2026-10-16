@@ -233,10 +233,11 @@ export default function WellnessHealthSection() {
         <div className="mt-8 flex justify-center">
           <button
             onClick={() => navigate("/gomzi-supplement/wellness-health")}
-            className="border-2 border-[#5C3124] text-[#5C3124] hover:bg-[#5C3124] hover:text-white rounded-full px-8 py-2.5 font-bold text-sm transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-sm hover:shadow-md hover:scale-105"
+            className="group relative overflow-hidden bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white rounded-full px-8 py-2.5 font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center gap-2 cursor-pointer"
           >
-            <span>View All Wellness & Health</span>
-            <FiChevronRight className="w-4 h-4" />
+            <span className="relative z-10">View All Wellness & Health</span>
+            <FiChevronRight className="relative z-10 w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </button>
         </div>
       </div>

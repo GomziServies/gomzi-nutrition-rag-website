@@ -109,7 +109,7 @@ function CategoryCard({ category }) {
   return (
     <Link
       to={targetUrl}
-      className="group relative overflow-hidden rounded-[22px] cursor-pointer bg-[#140e0c] border border-black/5 hover:border-[#5C3124]/40 shadow-md hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[360px] sm:min-h-[390px]"
+      className="group relative overflow-hidden rounded-[22px] cursor-pointer bg-[#140e0c] border border-[#ebdcd7]/60 hover:border-[#5C3124]/60 hover:-translate-y-1 shadow-md hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[360px] sm:min-h-[390px]"
     >
       {/* Background Image with Zoom Effect */}
       <img
@@ -157,7 +157,7 @@ function CategoryCard({ category }) {
         <div className="pt-2 flex items-center justify-between gap-3">
           <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white group-hover:text-[#ffaa5a] transition-colors">
             <span>Explore Collection</span>
-            <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-[#5C3124] group-hover:translate-x-1.5 transition-all duration-300">
+            <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:border group-hover:border-amber-400/30 group-hover:translate-x-1.5 transition-all duration-300">
               <ArrowRight size={13} className="text-white" />
             </div>
           </span>
@@ -167,6 +167,7 @@ function CategoryCard({ category }) {
           </span>
         </div>
       </div>
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none z-20" />
     </Link>
   );
 }
@@ -293,19 +294,20 @@ export default function CategoriesSection() {
                 return (
                   <div
                     key={item.text}
-                    className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.06] hover:border-[#ff8914]/30 transition-all duration-300 group text-left"
+                    className="group relative overflow-hidden flex items-center gap-2.5 p-2 sm:p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.07] hover:border-amber-400/40 hover:-translate-y-0.5 shadow-md transition-all duration-300 text-left cursor-default"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#5C3124] to-[#26130d] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                    <div className="relative z-10 w-8 h-8 rounded-lg bg-gradient-to-br from-[#5C3124] via-[#6d3a2b] to-[#26130d] border border-amber-400/30 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 group-hover:border-amber-400/50 transition-all duration-300">
                       <HighlightIcon size={15} className="text-[#ffaa5a]" />
                     </div>
-                    <div className="flex flex-col">
-                      <span className="font-toma text-xs font-bold uppercase tracking-wider text-white">
+                    <div className="relative z-10 flex flex-col">
+                      <span className="font-toma text-xs font-bold uppercase tracking-wider text-white group-hover:text-amber-100 transition-colors">
                         {item.text}
                       </span>
                       <span className="text-[10px] text-gray-400 font-modelica leading-tight">
                         {item.sub}
                       </span>
                     </div>
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
                   </div>
                 );
               })}
@@ -390,26 +392,29 @@ export default function CategoriesSection() {
             {standards.map((item) => (
               <div
                 key={item.number}
-                className="group p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-[#ff8914]/40 hover:bg-white/[0.05] transition-all duration-300"
+                className="group relative overflow-hidden p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/40 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5C3124]/30 transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-toma text-4xl sm:text-5xl font-black text-[#5C3124] group-hover:text-[#ffaa5a] transition-colors">
-                    {item.number}
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
-                    <ShieldCheck size={16} className="text-gray-400 group-hover:text-[#ff8914]" />
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-toma text-4xl sm:text-5xl font-black text-[#5C3124] group-hover:text-[#ffaa5a] transition-colors">
+                      {item.number}
+                    </span>
+                    <div className="w-8 h-8 rounded-full bg-white/[0.05] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:border group-hover:border-amber-400/30 flex items-center justify-center transition-all duration-300 shadow-xs">
+                      <ShieldCheck size={16} className="text-gray-400 group-hover:text-amber-200 transition-colors" />
+                    </div>
                   </div>
+
+                  <div className="h-[2px] w-12 bg-[#ff8914] mb-4 group-hover:w-full transition-all duration-500" />
+
+                  <h3 className="font-toma text-base sm:text-lg uppercase font-bold text-white group-hover:text-amber-100 transition-colors leading-snug">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-3 text-xs sm:text-sm text-gray-300 leading-relaxed font-light">
+                    {item.description}
+                  </p>
                 </div>
-
-                <div className="h-[2px] w-12 bg-[#ff8914] mb-4 group-hover:w-full transition-all duration-500" />
-
-                <h3 className="font-toma text-base sm:text-lg uppercase font-bold text-white leading-snug">
-                  {item.title}
-                </h3>
-
-                <p className="mt-3 text-xs sm:text-sm text-gray-300 leading-relaxed font-light">
-                  {item.description}
-                </p>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
             ))}
           </div>
@@ -447,13 +452,14 @@ export default function CategoriesSection() {
                       {faq.question}
                     </span>
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                      className={`relative overflow-hidden w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         open
-                          ? "bg-[#5C3124] text-white rotate-180"
-                          : "bg-gray-100 text-gray-500 group-hover:bg-[#ebdcd7]"
+                          ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white rotate-180 shadow-md shadow-[#5C3124]/25"
+                          : "bg-gray-100 text-gray-500 group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white"
                       }`}
                     >
-                      {open ? <X size={15} /> : <Plus size={15} />}
+                      <span className="relative z-10">{open ? <X size={15} className="text-amber-100" /> : <Plus size={15} />}</span>
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                     </div>
                   </button>
 
@@ -465,6 +471,38 @@ export default function CategoriesSection() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. BOTTOM CATALOG CTA ── */}
+      <section className="py-14 sm:py-20 bg-[#faf8f6]">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
+          <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-[#1c120e] via-[#261712] to-[#140c09] text-white shadow-2xl relative overflow-hidden border border-[#5C3124]/30 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-[#ff8914]/15 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 max-w-xl">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">
+                Direct From Laboratory To Athlete
+              </span>
+              <h2 className="font-toma text-2xl sm:text-4xl font-extrabold text-white mt-1 leading-snug">
+                Ready to Experience Verified Purity?
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-300 mt-2 font-light leading-relaxed">
+                Explore our complete range of certified sports nutrition products with free shipping across India.
+              </p>
+            </div>
+
+            <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+              <Link
+                to="/gomzi-supplement"
+                className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 cursor-pointer"
+              >
+                <span className="relative z-10 tracking-wider">Shop Full Catalog</span>
+                <ArrowRight size={16} className="relative z-10 text-amber-200 transition-transform duration-300 group-hover:translate-x-1" />
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

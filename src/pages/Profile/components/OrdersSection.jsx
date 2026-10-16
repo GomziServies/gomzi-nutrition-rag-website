@@ -116,10 +116,11 @@ function OrdersSection() {
 
             <Link
               to="/gomzi-supplement"
-              className="inline-flex items-center gap-2 bg-[#5C3124] hover:bg-[#48261c] text-white px-6 py-3.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all shadow-md shadow-[#5C3124]/20 cursor-pointer"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white px-6 py-3.5 rounded-xl text-xs font-extrabold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer relative overflow-hidden group"
             >
-              <span>Explore Products</span>
-              <ArrowRight size={15} />
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+              <span className="relative z-10">Explore Products</span>
+              <ArrowRight size={15} className="relative z-10 text-amber-200 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
         ) : (
@@ -192,7 +193,11 @@ function OrdersSection() {
 
                       <button
                         type="button"
-                        className="w-9 h-9 rounded-xl bg-[#faf8f6] border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-[#5C3124] transition-colors shrink-0"
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 relative overflow-hidden ${
+                          isOpen
+                            ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-xs"
+                            : "bg-[#faf8f6] border border-[#ebdcd7] text-gray-700 hover:text-[#5C3124] hover:border-[#5C3124]/40"
+                        }`}
                       >
                         {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                       </button>

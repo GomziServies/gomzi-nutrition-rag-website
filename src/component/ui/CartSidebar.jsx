@@ -105,9 +105,10 @@ export default function CartSidebar({ open, onClose }) {
 
           <button
             onClick={handleCheckout}
-            className="w-full bg-[#5C3124] hover:bg-[#48261c] text-white py-3.5 rounded-xl font-bold transition-colors cursor-pointer shadow-md"
+            className="group relative overflow-hidden w-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white py-3.5 rounded-xl font-bold transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
           >
-            Checkout
+            <span className="relative z-10">Checkout</span>
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </button>
 
           <button

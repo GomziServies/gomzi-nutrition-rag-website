@@ -105,10 +105,11 @@ function ProfileSection() {
         {!editing ? (
           <button
             onClick={() => setEditing(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm shadow-[#5C3124]/20 cursor-pointer self-start sm:self-auto shrink-0"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer self-start sm:self-auto shrink-0 relative overflow-hidden group"
           >
-            <Edit3 size={15} />
-            <span>Edit Profile</span>
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+            <Edit3 size={15} className="relative z-10 text-amber-200" />
+            <span className="relative z-10">Edit Profile</span>
           </button>
         ) : (
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
@@ -122,17 +123,18 @@ function ProfileSection() {
             <button
               onClick={handleUpdate}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm shadow-[#5C3124]/20 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
             >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               {loading ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Saving...</span>
+                  <span className="relative z-10 w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="relative z-10">Saving...</span>
                 </>
               ) : (
                 <>
-                  <Save size={15} />
-                  <span>Save Changes</span>
+                  <Save size={15} className="relative z-10 text-amber-200" />
+                  <span className="relative z-10">Save Changes</span>
                 </>
               )}
             </button>
@@ -298,10 +300,11 @@ function ProfileSection() {
                 </p>
                 <button
                   onClick={() => setEditing(true)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#5C3124] text-white text-xs font-bold cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer relative overflow-hidden group"
                 >
-                  <MapPin size={13} />
-                  <span>Add Delivery Address</span>
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <MapPin size={13} className="relative z-10 text-amber-200" />
+                  <span className="relative z-10">Add Delivery Address</span>
                 </button>
               </div>
             )}
@@ -454,17 +457,18 @@ function ProfileSection() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3.5 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#5C3124]/20 flex items-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 flex items-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
             >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               {loading ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>Updating Profile...</span>
+                  <span className="relative z-10 w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="relative z-10">Updating Profile...</span>
                 </>
               ) : (
                 <>
-                  <Save size={15} />
-                  <span>Save All Changes</span>
+                  <Save size={15} className="relative z-10 text-amber-200" />
+                  <span className="relative z-10">Save All Changes</span>
                 </>
               )}
             </button>

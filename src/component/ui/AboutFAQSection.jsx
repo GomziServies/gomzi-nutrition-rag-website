@@ -59,7 +59,15 @@ export default function AboutFAQSection() {
                     {item.question}
                   </h3>
 
-                  {open === index ? <Minus size={20} /> : <Plus size={20} />}
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 relative overflow-hidden ${
+                      open === index
+                        ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-xs rotate-180"
+                        : "bg-gray-100 text-gray-500 hover:bg-[#ebdcd7] hover:text-[#5C3124]"
+                    }`}
+                  >
+                    {open === index ? <Minus size={18} /> : <Plus size={18} />}
+                  </div>
                 </button>
 
                 <div

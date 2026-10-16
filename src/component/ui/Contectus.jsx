@@ -264,7 +264,7 @@ export default function ContactSection() {
           {/* 3 Metric Highlights */}
           <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3.5 sm:gap-6 text-[11px] sm:text-xs text-gray-300">
             <div className="inline-flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#ffaa5a] animate-pulse" />
               <span>WhatsApp Reply: Under 30 mins</span>
             </div>
             <div className="inline-flex items-center gap-2">
@@ -288,22 +288,22 @@ export default function ContactSection() {
               href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20have%20an%20inquiry%20regarding%20supplements"
               target="_blank"
               rel="noopener noreferrer"
-              className="group p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
-              <div>
+              <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-2xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
                     <FaWhatsapp />
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider border border-emerald-200">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fdf6f4] text-[#5C3124] text-[10px] font-bold uppercase tracking-wider border border-[#ebdcd7]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse" />
                     Live Support
                   </span>
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   Instant Messaging
                 </span>
-                <h3 className="font-toma text-lg font-bold text-gray-900 mt-0.5 group-hover:text-emerald-700 transition-colors">
+                <h3 className="font-toma text-lg font-bold text-gray-900 mt-0.5 group-hover:text-[#5C3124] transition-colors">
                   +91 98752 70200
                 </h3>
                 <p className="text-xs text-gray-500 leading-relaxed font-light mt-2">
@@ -311,20 +311,21 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-emerald-700">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
                 <span>Chat on WhatsApp</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
             </a>
 
             {/* Email Support */}
             <a
               href="mailto:info@ragnutrition.in"
-              className="group p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
-              <div>
+              <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] flex items-center justify-center text-xl group-hover:bg-[#5C3124] group-hover:text-white transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
                     <Mail size={22} />
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7]">
@@ -342,20 +343,21 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
                 <span>Send Email</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
             </a>
 
             {/* Phone Calling */}
             <a
               href="tel:+919875270200"
-              className="group p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
-              <div>
+              <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] flex items-center justify-center text-xl group-hover:bg-[#5C3124] group-hover:text-white transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
                     <Phone size={20} />
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
@@ -373,10 +375,11 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
                 <span>Call Directly</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
             </a>
 
             {/* Retail Store & Facility */}
@@ -384,11 +387,11 @@ export default function ContactSection() {
               href="https://maps.google.com/?q=G-23+TIME+SQUARE+Gaurav+Path+Road+Surat+Gujarat+394510"
               target="_blank"
               rel="noopener noreferrer"
-              className="group p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
-              <div>
+              <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] flex items-center justify-center text-xl group-hover:bg-[#5C3124] group-hover:text-white transition-colors">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
                     <MapPin size={22} />
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7]">
@@ -406,12 +409,13 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
                 <span className="inline-flex items-center gap-1">
                   Open in Maps <ExternalLink size={12} />
                 </span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
             </a>
           </div>
         </div>
@@ -435,9 +439,9 @@ export default function ContactSection() {
                 </p>
 
                 {submitted ? (
-                  <div className="p-8 rounded-2xl bg-white border border-emerald-500/40 text-center shadow-sm">
-                    <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle2 size={30} />
+                  <div className="p-8 rounded-2xl bg-white border border-[#ebdcd7] text-center shadow-sm">
+                    <div className="w-14 h-14 rounded-full bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle2 size={30} className="text-[#ff8914]" />
                     </div>
                     <h3 className="font-toma text-2xl font-bold text-gray-900 mb-2">
                       Inquiry Received!
@@ -447,9 +451,10 @@ export default function ContactSection() {
                     </p>
                     <button
                       onClick={() => setSubmitted(false)}
-                      className="px-6 py-2.5 rounded-xl bg-[#5C3124] text-white font-toma text-xs font-bold uppercase tracking-wider hover:bg-[#48261c] transition-all"
+                      className="group relative overflow-hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
                     >
-                      Send Another Message
+                      <span className="relative z-10">Send Another Message</span>
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                     </button>
                   </div>
                 ) : (
@@ -671,26 +676,28 @@ export default function ContactSection() {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-toma font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-[#5C3124]/20 active:scale-[0.98] disabled:opacity-50"
+                        className="group relative overflow-hidden flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 disabled:opacity-50 cursor-pointer"
                       >
                         {loading ? (
-                          <span>Sending Inquiry...</span>
+                          <span className="relative z-10">Sending Inquiry...</span>
                         ) : (
                           <>
-                            <span>Send Message</span>
-                            <Send size={14} />
+                            <span className="relative z-10">Send Message</span>
+                            <Send size={14} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                           </>
                         )}
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                       </button>
 
                       <a
                         href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20have%20an%20urgent%20inquiry"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98]"
+                        className="group relative overflow-hidden inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
                       >
-                        <FaWhatsapp size={15} />
-                        <span>Chat WhatsApp</span>
+                        <FaWhatsapp size={15} className="relative z-10 text-amber-200" />
+                        <span className="relative z-10">Chat WhatsApp</span>
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                       </a>
                     </div>
                   </form>
@@ -727,7 +734,7 @@ export default function ContactSection() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600 font-medium">Online Web Orders</span>
-                    <span className="font-bold text-emerald-600">Active 24 / 7 / 365</span>
+                    <span className="font-bold text-[#5C3124]">Active 24 / 7 / 365</span>
                   </div>
                 </div>
               </div>
@@ -798,7 +805,7 @@ export default function ContactSection() {
                     href="https://wa.me/919875270200"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-emerald-600 hover:border-transparent transition-all shadow-sm"
+                    className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-[#5C3124] hover:to-[#48261c] hover:border-amber-400/30 transition-all shadow-sm"
                     aria-label="WhatsApp Community"
                   >
                     <FaWhatsapp size={17} />
@@ -843,8 +850,10 @@ export default function ContactSection() {
                       {faq.question}
                     </span>
                     <span
-                      className={`w-8 h-8 rounded-full bg-[#fdf6f4] text-[#5C3124] flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                        isOpen ? "rotate-180 bg-[#5C3124] text-white" : ""
+                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                        isOpen
+                          ? "rotate-180 bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-xs"
+                          : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7]"
                       }`}
                     >
                       <ChevronDown size={16} />
@@ -894,10 +903,11 @@ export default function ContactSection() {
             <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
               <Link
                 to="/gomzi-supplement"
-                className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#5C3124] hover:bg-[#48261c] text-white font-toma font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#5C3124]/30 active:scale-[0.98]"
+                className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 cursor-pointer"
               >
-                <span>Shop Certified Catalog</span>
-                <ArrowRight size={15} />
+                <span className="relative z-10 tracking-wider">Shop Certified Catalog</span>
+                <ArrowRight size={16} className="relative z-10 text-amber-200 transition-transform duration-300 group-hover:translate-x-1" />
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
               </Link>
             </div>
           </div>

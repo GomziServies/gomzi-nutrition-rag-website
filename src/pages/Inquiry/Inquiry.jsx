@@ -2676,7 +2676,7 @@ export default function Inquiry() {
                         submitting ||
                         sendingOtp
                       }
-                      className="w-full sm:w-auto h-[48px] px-8 sm:px-10 bg-[#95442c] hover:bg-[#7d3824] text-white font-bold rounded-lg transition flex items-center justify-center gap-2.5 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#95442c] text-sm sm:text-base cursor-pointer"
+                      className="group relative overflow-hidden w-full sm:w-auto h-[48px] px-8 sm:px-10 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2.5 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base cursor-pointer"
                     >
                       {submitting ? (
                         <>
@@ -2694,10 +2694,11 @@ export default function Inquiry() {
                         </>
                       ) : (
                         <>
-                          <span>Submit Partner Application</span>
-                          <ArrowRight className="w-5 h-5 flex-shrink-0" />
+                          <span className="relative z-10">Submit Partner Application</span>
+                          <ArrowRight className="relative z-10 w-5 h-5 flex-shrink-0 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                         </>
                       )}
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                     </button>
                   </div>
                 </div>
@@ -2798,19 +2799,20 @@ export default function Inquiry() {
               <button
                 type="submit"
                 disabled={verifyingOtp || otpValue.length < 4}
-                className="w-full h-[44px] bg-[#95442c] hover:bg-[#7d3824] text-white font-bold rounded-lg transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 text-sm cursor-pointer"
+                className="group relative overflow-hidden w-full h-[46px] bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 disabled:opacity-50 text-sm cursor-pointer"
               >
                 {verifyingOtp ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Verifying OTP...
+                    <div className="relative z-10 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span className="relative z-10">Verifying OTP...</span>
                   </>
                 ) : (
                   <>
-                    Verify & Submit Application{" "}
-                    <ArrowRight className="w-4 h-4" />
+                    <span className="relative z-10">Verify & Submit Application</span>
+                    <ArrowRight className="relative z-10 w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                   </>
                 )}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
             </form>
 

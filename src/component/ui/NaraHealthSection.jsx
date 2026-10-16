@@ -87,7 +87,7 @@ const NaraHealthSection = () => {
                     key={idx}
                     className="group relative flex items-start gap-3 p-3.5 rounded-2xl bg-white border border-[#ebdcd7]/80 hover:border-[#5C3124]/40 hover:shadow-md hover:shadow-[#5C3124]/5 transition-all duration-300"
                   >
-                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] text-[#5C3124] group-hover:bg-[#5C3124] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-xs">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-xs">
                       <IconComponent className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <div className="min-w-0 flex-1">
