@@ -6,7 +6,6 @@ import TrendingDealsSection from "../component/ui/TrendingDealsSection";
 import BestSellingSection from "../component/ui/BestSellingSection";
 import PromoBannerSlider from "../component/ui/PromoBannerSlider";
 import BrandCompanyShowcaseSection from "../component/ui/BrandCompanyShowcaseSection";
-import TopBrandsSection from "../component/ui/TopBrandsSection";
 import NutritionPromoBannerSlider from "../component/ui/NutritionPromoBannerSlider";
 import BankOffersBannerSlider from "../component/ui/BankOffersBannerSlider";
 import TransparencySection from "../component/ui/transparency";
@@ -45,9 +44,6 @@ const Landing = () => {
 
         {/* 8. Official Brand Partner Showcase (Company Advertisement Banner + Top 5 Products) */}
         <BrandCompanyShowcaseSection />
-
-        {/* 8. Explore Full Catalog By Category Tabs (Whey, Mass Gainer, Pre Workout, BCAA, Creatine) */}
-        <TopBrandsSection />
 
 
         {/* 11. Bank & Payment Offers Carousel */}

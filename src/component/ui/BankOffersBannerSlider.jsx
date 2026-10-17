@@ -77,53 +77,10 @@ const resolveImageUrl = (img) => {
   return `https://files.fggroup.in/${img}`;
 };
 
-const DEFAULT_BANK_OFFERS = [
-  {
-    _id: "hsbc",
-    bankName: "HSBC",
-    bankPreset: "hsbc",
-    heading: "5% CASHBACK*",
-    subheading: "on Credit Card EMI",
-    terms: "*Min. transaction ₹5,000. T&C Apply.",
-    bgGradient: "linear-gradient(180deg, #5b1d7d 0%, #681f8f 65%, #c83d09 95%, #ea580c 100%)",
-    url: "/gomzi-supplement",
-  },
-  {
-    _id: "hdfc",
-    bankName: "HDFC Bank",
-    bankPreset: "hdfc",
-    heading: "10% INSTANT DISCOUNT*",
-    subheading: "on HDFC Bank Credit & Debit Cards",
-    terms: "*Max. discount ₹500 on orders above ₹2,499. T&C Apply.",
-    bgGradient: "linear-gradient(180deg, #5b1d7d 0%, #681f8f 65%, #c83d09 95%, #ea580c 100%)",
-    url: "/gomzi-supplement",
-  },
-  {
-    _id: "icici",
-    bankName: "ICICI Bank",
-    bankPreset: "icici",
-    heading: "FLAT ₹300 OFF*",
-    subheading: "on ICICI NetBanking & Cards",
-    terms: "*Applicable on Gomzi supplements above ₹1,999. T&C Apply.",
-    bgGradient: "linear-gradient(180deg, #5b1d7d 0%, #681f8f 65%, #c83d09 95%, #ea580c 100%)",
-    url: "/gomzi-supplement",
-  },
-  {
-    _id: "upi",
-    bankName: "UPI Pay",
-    bankPreset: "upi",
-    heading: "EXTRA 5% OFF*",
-    subheading: "Instant Discount on All UPI Payments",
-    terms: "*No coupon code required. Instant checkout discount. T&C Apply.",
-    bgGradient: "linear-gradient(180deg, #5b1d7d 0%, #681f8f 65%, #c83d09 95%, #ea580c 100%)",
-    url: "/gomzi-supplement",
-  },
-];
-
 export default function BankOffersBannerSlider() {
   const swiperRef = useRef(null);
   const navigate = useNavigate();
-  const [offers, setOffers] = useState(DEFAULT_BANK_OFFERS);
+  const [offers, setOffers] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -135,7 +92,7 @@ export default function BankOffersBannerSlider() {
           setOffers(res.data.data.offers);
         }
       } catch (err) {
-        console.warn("Could not fetch bank offers, displaying default offers:", err?.message);
+        console.warn("Could not fetch bank offers:", err?.message);
       }
     };
 
@@ -144,6 +101,10 @@ export default function BankOffersBannerSlider() {
       isMounted = false;
     };
   }, []);
+
+  if (!offers || offers.length === 0) {
+    return null;
+  }
 
   const renderBankLogo = (offer) => {
     if (offer.logo) {

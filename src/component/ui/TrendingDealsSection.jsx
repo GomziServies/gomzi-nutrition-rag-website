@@ -12,65 +12,9 @@ const resolveImageUrl = (img) => {
   return `https://files.fggroup.in/${img}`;
 };
 
-// Authentic Gomzi Nutrition default deals
-const DEFAULT_GOMZI_DEALS = [
-  {
-    _id: "deal-1",
-    title: "100% Whey Protein Isolate",
-    subtitle: "1kg • 27g Protein / Scoop",
-    tag: "PRICE DROPPED BY ₹450",
-    originalPrice: 3270,
-    dealPrice: 2820,
-    code: "WHEY450",
-    image: "/images/product-category/whey-protein.webp",
-    url: "/gomzi-supplement/whey-protein",
-    order: 1,
-    status: true,
-  },
-  {
-    _id: "deal-2",
-    title: "Pure Micronized Creatine",
-    subtitle: "250g • 100% Creapure Matrix",
-    tag: "EXTRA 15% OFF",
-    originalPrice: 1510,
-    dealPrice: 1280,
-    code: "CREA15",
-    image: "/images/product-category/creatine.webp",
-    url: "/gomzi-supplement/creatine",
-    order: 2,
-    status: true,
-  },
-  {
-    _id: "deal-3",
-    title: "Explosive Pre-Workout",
-    subtitle: "250g • Cola Blast Pump Matrix",
-    tag: "PRICE DROPPED BY ₹350",
-    originalPrice: 2550,
-    dealPrice: 2200,
-    code: "PUMP350",
-    image: "/images/product-category/pre-workout.webp",
-    url: "/gomzi-supplement/pre-workout",
-    order: 3,
-    status: true,
-  },
-  {
-    _id: "deal-4",
-    title: "BCAA 2:1:1 Rapid Recovery",
-    subtitle: "250g • Tangy Orange + Electrolytes",
-    tag: "EXCLUSIVE LAUNCH DEAL",
-    originalPrice: 2150,
-    dealPrice: 1799,
-    code: "BCAA20",
-    image: "/images/product-category/Bcaa-tangy-orange.webp",
-    url: "/gomzi-supplement/bcaa",
-    order: 4,
-    status: true,
-  },
-];
-
 export default function TrendingDealsSection() {
   const navigate = useNavigate();
-  const [deals, setDeals] = useState(DEFAULT_GOMZI_DEALS);
+  const [deals, setDeals] = useState([]);
   const [copiedCode, setCopiedCode] = useState(null);
 
   useEffect(() => {
@@ -82,7 +26,7 @@ export default function TrendingDealsSection() {
           setDeals(res.data.data.deals);
         }
       } catch (err) {
-        console.warn("Could not fetch promotional deals from API, displaying defaults:", err?.message);
+        console.warn("Could not fetch promotional deals from API:", err?.message);
       }
     };
 
@@ -91,6 +35,10 @@ export default function TrendingDealsSection() {
       isMounted = false;
     };
   }, []);
+
+  if (!deals || deals.length === 0) {
+    return null;
+  }
 
   const handleCopyCode = (code, e) => {
     e.stopPropagation();

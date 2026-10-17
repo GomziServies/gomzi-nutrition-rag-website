@@ -16,46 +16,10 @@ const resolveImageUrl = (img) => {
   return `https://files.fggroup.in/${img}`;
 };
 
-const DEFAULT_NUTRITION_SLIDES = [
-  {
-    _id: "workout-nutrition",
-    brand: "GOMZI NUTRITION",
-    title: "Your Workout Deserves Better Nutrition!",
-    badge: "UPTO",
-    discount: "50% OFF",
-    terms: "*On selected products",
-    image: "",
-    bgGradient: "linear-gradient(135deg, #10b981 0%, #34d399 45%, #6ee7b7 85%, #a7f3d0 100%)",
-    url: "/gomzi-supplement",
-  },
-  {
-    _id: "muscle-recovery",
-    brand: "ADVANCED FORMULAS",
-    title: "Fuel Muscle Recovery & Peak Strength!",
-    badge: "FLAT",
-    discount: "40% OFF",
-    terms: "*Includes Free Shaker Bottle",
-    image: "",
-    bgGradient: "linear-gradient(135deg, #059669 0%, #10b981 45%, #34d399 85%, #6ee7b7 100%)",
-    url: "/gomzi-supplement",
-  },
-  {
-    _id: "clean-gains",
-    brand: "CERTIFIED PURITY",
-    title: "Lab-Tested 100% Ultra-Filtered Protein",
-    badge: "SAVE",
-    discount: "₹1,200",
-    terms: "*Instant Checkout Discount",
-    image: "",
-    bgGradient: "linear-gradient(135deg, #047857 0%, #059669 45%, #10b981 85%, #34d399 100%)",
-    url: "/gomzi-supplement",
-  },
-];
-
 export default function NutritionPromoBannerSlider() {
   const swiperRef = useRef(null);
   const navigate = useNavigate();
-  const [banners, setBanners] = useState(DEFAULT_NUTRITION_SLIDES);
+  const [banners, setBanners] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -67,7 +31,7 @@ export default function NutritionPromoBannerSlider() {
           setBanners(res.data.data.banners);
         }
       } catch (err) {
-        console.warn("Could not fetch nutrition promo banners, displaying default slides:", err?.message);
+        console.warn("Could not fetch nutrition promo banners:", err?.message);
       }
     };
 
@@ -76,6 +40,10 @@ export default function NutritionPromoBannerSlider() {
       isMounted = false;
     };
   }, []);
+
+  if (!banners || banners.length === 0) {
+    return null;
+  }
   const handleBannerClick = (rawUrl) => {
     const url = (rawUrl || "/gomzi-supplement").trim();
     if (!url) return;

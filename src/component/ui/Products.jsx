@@ -109,45 +109,6 @@ const getPaginationItems = (currentPage, totalPages) => {
   return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
 };
 
-const DEFAULT_COMPANY_COUNTS = {
-  "All Companies": 419,
-  "MuscleBlaze": 61,
-  "Optimum Nutrition (ON)": 80,
-  "Optimum Nutrition": 80,
-  "Wellcore": 72,
-  "GNC": 78,
-  "Isopure": 26,
-  "Dynamite": 24,
-  "Fast&Up": 20,
-  "MyProtein": 18,
-  "Pure Go": 18,
-  "Refuel 2.0": 24,
-  "Dymatize": 11,
-  "Labrada": 11,
-  "Ultimate Nutrition": 9,
-  "MuscleTech": 7,
-  "Avvatar": 5,
-  "Gomzi Nutrition": 3,
-};
-
-const DEFAULT_COMPANIES_CATALOG = [
-  "MuscleBlaze",
-  "Optimum Nutrition (ON)",
-  "Wellcore",
-  "GNC",
-  "Isopure",
-  "Dynamite",
-  "Fast&Up",
-  "MyProtein",
-  "Dymatize",
-  "Labrada",
-  "Ultimate Nutrition",
-  "MuscleTech",
-  "Avvatar",
-  "Pure Go",
-  "Refuel 2.0",
-  "Gomzi Nutrition",
-];
 
 const ProductsGrid = ({ categorySlug, pageData }) => {
   const navigate = useNavigate();
@@ -234,25 +195,11 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     return map;
   }, [categoryData]);
 
-  const DEFAULT_COUNTS = {
-    "All Products": 419,
-    "Whey Protein": 86,
-    "Mass Gainer": 23,
-    "Plant Protein": 17,
-    "Pre Workout": 36,
-    "BCAA": 5,
-    "Creatine": 53,
-    "Wellness & Health": 0,
-  };
-
   const categories = useMemo(() => {
     return [
       {
         name: "All Products",
-        count:
-          Number(totalProducts) > 0
-            ? Number(totalProducts)
-            : DEFAULT_COUNTS["All Products"],
+        count: Number(totalProducts) > 0 ? Number(totalProducts) : null,
         backendCategories: [],
       },
       ...websiteCategories.map((websiteCategory) => {
@@ -265,31 +212,22 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
         return {
           ...websiteCategory,
-          count:
-            liveCount > 0
-              ? liveCount
-              : (DEFAULT_COUNTS[websiteCategory.name] ?? 0),
+          count: liveCount > 0 ? liveCount : null,
         };
       }),
     ];
   }, [backendCategoryCounts, totalProducts]);
 
   const allCompanies = useMemo(() => {
-    const baseList = companiesList.length > 0 ? companiesList : DEFAULT_COMPANIES_CATALOG;
     return [
       {
         name: "All Companies",
-        count: Number(totalProducts) > 0 ? Number(totalProducts) : 419,
+        count: Number(totalProducts) > 0 ? Number(totalProducts) : null,
       },
-      ...baseList.map((cName) => {
-        const clean = cName.replace(/\(.*?\)/g, "").trim();
-        const count =
-          DEFAULT_COMPANY_COUNTS[cName] ??
-          DEFAULT_COMPANY_COUNTS[clean] ??
-          10;
+      ...companiesList.map((cName) => {
         return {
           name: cName,
-          count,
+          count: null,
         };
       }),
     ];
@@ -635,10 +573,12 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               </div>
 
               <div
-                className="px-5 py-4 overflow-y-auto overscroll-contain"
+                className="px-5 py-4 overflow-y-auto overscroll-contain scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                 style={{
                   maxHeight: "calc(82vh - 120px)",
                   paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))",
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
                 }}
               >
                 <div className="space-y-2">
@@ -744,10 +684,12 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               </div>
 
               <div
-                className="px-5 py-4 overflow-y-auto overscroll-contain"
+                className="px-5 py-4 overflow-y-auto overscroll-contain scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                 style={{
                   maxHeight: "calc(82vh - 160px)",
                   paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))",
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
                 }}
               >
                 <div className="space-y-2">
@@ -782,15 +724,17 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                             {item.name}
                           </span>
                         </div>
-                        <span
-                          className={`min-w-[34px] px-2.5 py-1 rounded-full text-xs font-semibold text-center shrink-0 ml-2 ${
-                            isSelected
-                              ? "bg-white/15 text-white"
-                              : "bg-white text-gray-400 border border-gray-200"
-                          }`}
-                        >
-                          {item.count}
-                        </span>
+                        {item.count != null && (
+                          <span
+                            className={`min-w-[34px] px-2.5 py-1 rounded-full text-xs font-semibold text-center shrink-0 ml-2 ${
+                              isSelected
+                                ? "bg-white/15 text-white"
+                                : "bg-white text-gray-400 border border-gray-200"
+                            }`}
+                          >
+                            {item.count}
+                          </span>
+                        )}
                       </button>
                     );
                   })}
@@ -838,9 +782,11 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 flex items-center justify-between"
                     >
                       <span className="truncate">{item.name}</span>
-                      <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold ml-2">
-                        {item.count}
-                      </span>
+                      {item.count != null && (
+                        <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold ml-2">
+                          {item.count}
+                        </span>
+                      )}
                     </button>
                   ) : (
                     <button
@@ -849,7 +795,9 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       className="w-full text-left text-[#344054] hover:text-black hover:bg-gray-50/80 rounded-lg px-3.5 py-1.5 font-normal text-xs transition-colors cursor-pointer flex items-center justify-between group"
                     >
                       <span className="truncate group-hover:translate-x-0.5 transition-transform">{item.name}</span>
-                      <span className="text-[10px] text-gray-400 ml-2">({item.count})</span>
+                      {item.count != null && (
+                        <span className="text-[10px] text-gray-400 ml-2">({item.count})</span>
+                      )}
                     </button>
                   );
                 })}
@@ -891,7 +839,10 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               <div className="border-b border-gray-100 mb-3" />
 
               {/* Companies List */}
-              <div className="flex flex-col space-y-1">
+              <div
+                className="flex flex-col space-y-1 max-h-[340px] overflow-y-auto pr-1 scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
                 {filteredCompanies.map((item) => {
                   const isSelected = selectedCompany === item.name;
 
@@ -902,9 +853,11 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 flex items-center justify-between"
                     >
                       <span className="truncate">{item.name}</span>
-                      <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold ml-2">
-                        {item.count}
-                      </span>
+                      {item.count != null && (
+                        <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold ml-2">
+                          {item.count}
+                        </span>
+                      )}
                     </button>
                   ) : (
                     <button
@@ -913,7 +866,9 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       className="w-full text-left text-[#344054] hover:text-black hover:bg-gray-50/80 rounded-lg px-3.5 py-1.5 font-normal text-xs transition-colors cursor-pointer flex items-center justify-between group"
                     >
                       <span className="truncate group-hover:translate-x-0.5 transition-transform">{item.name}</span>
-                      <span className="text-[10px] text-gray-400 ml-2">({item.count})</span>
+                      {item.count != null && (
+                        <span className="text-[10px] text-gray-400 ml-2">({item.count})</span>
+                      )}
                     </button>
                   );
                 })}

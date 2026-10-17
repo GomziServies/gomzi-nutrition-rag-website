@@ -16,49 +16,10 @@ const resolveImageUrl = (img) => {
   return `https://files.fggroup.in/${img}`;
 };
 
-const DEFAULT_PROMO_SLIDES = [
-  {
-    _id: "slide-1",
-    brand: "GOMZI GEAR",
-    title: "Steel Shaker Range",
-    subtitle: "Anti-Leak • BPA Free • Pro Blender Ball",
-    priceText: "Starts @",
-    priceValue: "₹469",
-    image: "",
-    bgGradient: "linear-gradient(135deg, #e4e7ec 0%, #f4f5f8 50%, #e2e5ea 100%)",
-    url: "/gomzi-supplement",
-    order: 1,
-  },
-  {
-    _id: "slide-2",
-    brand: "WORKOUT PRO",
-    title: "Lifting Gear & Straps",
-    subtitle: "Heavy-Duty Power Support • Max Grip",
-    priceText: "Starts @",
-    priceValue: "₹299",
-    image: "",
-    bgGradient: "linear-gradient(135deg, #f5efe6 0%, #fbf8f3 50%, #eee5d8 100%)",
-    url: "/gomzi-supplement",
-    order: 2,
-  },
-  {
-    _id: "slide-3",
-    brand: "FIT FOODS",
-    title: "Natural Peanut Butter",
-    subtitle: "Zero Added Sugar • 30g Clean Protein",
-    priceText: "Starts @",
-    priceValue: "₹349",
-    image: "",
-    bgGradient: "linear-gradient(135deg, #fef5e7 0%, #fffbf2 50%, #faecd5 100%)",
-    url: "/gomzi-supplement",
-    order: 3,
-  },
-];
-
 export default function PromoBannerSlider() {
   const swiperRef = useRef(null);
   const navigate = useNavigate();
-  const [banners, setBanners] = useState(DEFAULT_PROMO_SLIDES);
+  const [banners, setBanners] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -70,7 +31,7 @@ export default function PromoBannerSlider() {
           setBanners(res.data.data.banners);
         }
       } catch (err) {
-        console.warn("Could not fetch promo banners, displaying defaults:", err?.message);
+        console.warn("Could not fetch promo banners:", err?.message);
       }
     };
 
@@ -79,6 +40,11 @@ export default function PromoBannerSlider() {
       isMounted = false;
     };
   }, []);
+
+  if (!banners || banners.length === 0) {
+    return null;
+  }
+
   const handleBannerClick = (rawUrl) => {
     const url = (rawUrl || "/gomzi-supplement").trim();
     if (!url) return;
