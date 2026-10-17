@@ -154,8 +154,14 @@ export const normalizeProduct = (p, defaultCategorySlug = "whey-protein") => {
     name,
     category: categoryName,
     image: getProductImageUrl(p),
-    rating: Number(p.rating?.average || p.rating || 4.8),
-    totalReviews: Number(p.rating?.totalReviews || p.totalReviews || 420),
+    rating: (() => {
+      const r = Number(p.rating?.average ?? p.rating?.rate ?? (typeof p.rating === "number" ? p.rating : null));
+      return !isNaN(r) && r > 0 ? r : 4.8;
+    })(),
+    totalReviews: (() => {
+      const rev = Number(p.rating?.totalReviews ?? p.rating?.count ?? p.totalReviews);
+      return !isNaN(rev) && rev > 0 ? rev : 420;
+    })(),
     price,
     originalPrice,
     memberPrice,

@@ -717,8 +717,8 @@ export default function BrandCompanyShowcaseSection() {
                   style={{ backgroundColor: brand.theme.accent }}
                 />
                 <h4 className="text-lg sm:text-xl font-extrabold text-gray-900 tracking-tight">
-                  <span className="sm:hidden">Top 4 Best-Selling Products from {brand.name}</span>
-                  <span className="hidden sm:inline">Top 5 Best-Selling Products from {brand.name}</span>
+                  <span className="sm:hidden">Top {Math.min(products.length, 4)} Best-Selling Products from {brand.name}</span>
+                  <span className="hidden sm:inline">Top {Math.min(products.length, 5)} Best-Selling Products from {brand.name}</span>
                 </h4>
               </div>
 
@@ -731,8 +731,8 @@ export default function BrandCompanyShowcaseSection() {
               </button>
             </div>
 
-            {/* Product Grid: 2x2 (4 items) on mobile, 5 items on desktop */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-5">
+            {/* Product Cards: Centered horizontally with responsive proportions */}
+            <div className="flex flex-wrap justify-center gap-3.5 sm:gap-5">
               {products.map((item, idx) => {
                 const discountPct = Math.round(
                   ((item.originalPrice - item.price) / item.originalPrice) * 100
@@ -741,7 +741,7 @@ export default function BrandCompanyShowcaseSection() {
                 return (
                   <div
                     key={item.id || idx}
-                    className={`bg-white rounded-3xl border border-gray-200/80 p-3.5 sm:p-4.5 flex-col justify-between hover:shadow-xl hover:border-[#5C3124]/30 hover:-translate-y-1 transition-all duration-300 relative group ${
+                    className={`bg-white rounded-3xl border border-gray-200/80 p-3.5 sm:p-4.5 flex-col justify-between hover:shadow-xl hover:border-[#5C3124]/30 hover:-translate-y-1 transition-all duration-300 relative group w-[calc(50%-7px)] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)] xl:w-[calc(20%-16px)] max-w-[270px] min-w-[150px] ${
                       idx >= 4 ? "hidden sm:flex" : "flex"
                     }`}
                   >
@@ -795,21 +795,21 @@ export default function BrandCompanyShowcaseSection() {
                     </div>
 
                     {/* Subtitle / Authenticity Line */}
-                    <p className="text-[10px] sm:text-[11px] font-extrabold tracking-wider uppercase text-[#733624] mb-1">
+                    <p className="text-[10px] sm:text-[11px] font-extrabold tracking-wider uppercase text-[#733624] mb-1 text-center">
                       100% AUTHENTIC • ZERO ADULTERATION
                     </p>
 
                     {/* Product Title */}
                     <h5
                       onClick={() => navigate(`/product/${item.slug || item.id || item._id}`)}
-                      className="text-xs sm:text-sm font-bold text-gray-900 line-clamp-2 leading-snug hover:text-[#5C3124] transition-colors cursor-pointer min-h-[36px] sm:min-h-[40px] mb-2.5"
+                      className="text-xs sm:text-sm font-bold text-gray-900 line-clamp-2 leading-snug hover:text-[#5C3124] transition-colors cursor-pointer min-h-[36px] sm:min-h-[40px] mb-2.5 text-center"
                       title={item.name}
                     >
                       {item.name}
                     </h5>
 
                     {/* Price Block */}
-                    <div className="flex items-baseline gap-2 mb-3.5 flex-wrap">
+                    <div className="flex items-baseline justify-center gap-2 mb-3.5 flex-wrap">
                       <span className="text-base sm:text-xl font-black text-gray-950">
                         ₹{item.price.toLocaleString("en-IN")}
                       </span>
