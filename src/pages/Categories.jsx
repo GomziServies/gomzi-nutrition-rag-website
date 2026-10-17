@@ -245,13 +245,13 @@ export default function CategoriesSection() {
           }}
         />
 
-        {/* Ambient Legacy Background Typographic Watermark */}
+        {/* Ambient RAG Background Typographic Watermark */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
           <span
             className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
-            style={{ fontSize: "clamp(80px, 16vw, 200px)" }}
+            style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
           >
-            LEGACY
+            RAG
           </span>
         </div>
 

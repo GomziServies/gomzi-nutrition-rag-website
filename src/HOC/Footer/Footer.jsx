@@ -91,12 +91,46 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative w-full overflow-hidden bg-[#0e0a09] text-gray-300 font-inter border-t border-white/5"
-      style={{ fontFamily: "'Inter', sans-serif" }}
+      className="relative w-full overflow-hidden border-t border-[#3a1d15] text-gray-300 font-inter"
+      style={{
+        background:
+          "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
+        fontFamily: "'Inter', sans-serif",
+      }}
     >
-      {/* Background ambient lighting */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#5C3124]/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#5C3124]/10 rounded-full blur-[140px] pointer-events-none" />
+      {/* Ambient Atmospheric Lighting */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[650px] h-[250px] rounded-full pointer-events-none blur-[120px]"
+        style={{ background: "rgba(92, 49, 36, 0.45)" }}
+      />
+      <div
+        className="absolute top-1/3 right-10 w-80 h-80 rounded-full pointer-events-none blur-[100px]"
+        style={{ background: "rgba(255, 137, 20, 0.1)" }}
+      />
+      <div
+        className="absolute bottom-10 left-10 w-80 h-80 rounded-full pointer-events-none blur-[100px]"
+        style={{ background: "rgba(92, 49, 36, 0.3)" }}
+      />
+
+      {/* Subtle Geometric Grid Texture */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
+      />
+
+      {/* Ambient RAG Background Typographic Watermark */}
+      <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
+        <span
+          className="font-toma font-black uppercase leading-none text-white/[0.02] tracking-widest"
+          style={{ fontSize: "clamp(120px, 22vw, 320px)" }}
+        >
+          RAG
+        </span>
+      </div>
 
       {/* ── 1. TOP VALUE / TRUST PILLARS BAR ── */}
       <div className="relative z-10 border-b border-white/[0.08] bg-[#140e0c]/80 backdrop-blur-md">

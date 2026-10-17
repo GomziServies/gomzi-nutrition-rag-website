@@ -188,8 +188,8 @@ export default function CustomerReviews() {
             const isExpanded = expandedReviews[review.name];
 
             return (
-              <SwiperSlide key={review.name} className="h-auto">
-                <div className="h-full min-h-[380px] rounded-3xl border border-[#ebdcd7]/90 bg-white p-6 sm:p-7 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+              <SwiperSlide key={review.name} className="!h-auto !flex flex-col">
+                <div className="w-full flex-1 min-h-[280px] sm:min-h-[290px] rounded-2xl sm:rounded-3xl border border-[#ebdcd7]/90 bg-white p-5 sm:p-6 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
                   {/* Subtle moving card sheen sweep on hover */}
                   <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.03] to-transparent pointer-events-none" />
                   {/* Decorative Quotation Mark Watermark */}
@@ -197,9 +197,9 @@ export default function CustomerReviews() {
                     “
                   </div>
 
-                  <div>
+                  <div className="flex-1 flex flex-col">
                     {/* Top Bar: Stars + Rating + Verified Badge */}
-                    <div className="flex items-center justify-between gap-2 mb-4 relative z-10">
+                    <div className="flex items-center justify-between gap-2 mb-3.5 relative z-10">
                       <div className="flex items-center gap-1.5">
                         <div className="flex gap-0.5 text-amber-400">
                           {[...Array(5)].map((_, i) => (
@@ -223,21 +223,21 @@ export default function CustomerReviews() {
                     </div>
 
                     {/* Review Body */}
-                    <div className="relative z-10">
+                    <div className="relative z-10 flex-1">
                       <p
                         className={`text-sm sm:text-[15px] leading-relaxed text-gray-700 transition-all duration-300 font-normal ${
-                          isExpanded ? "" : "line-clamp-4"
+                          isExpanded ? "" : "line-clamp-4 sm:line-clamp-5"
                         }`}
                       >
                         "{review.review}"
                       </p>
 
                       {/* Read More Toggle */}
-                      {review.review.length > 170 && (
+                      {review.review.length > 320 && (
                         <button
                           type="button"
                           onClick={() => toggleReadMore(review.name)}
-                          className="mt-2.5 text-[#5C3124] hover:text-[#3a1d15] font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 group/btn"
+                          className="mt-2 text-[#5C3124] hover:text-[#3a1d15] font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 group/btn"
                         >
                           <span>{isExpanded ? "Read Less" : "Read More"}</span>
                           <span className="text-[10px] group-hover/btn:translate-x-0.5 transition-transform">
@@ -249,7 +249,7 @@ export default function CustomerReviews() {
                   </div>
 
                   {/* Bottom Bar: Customer Avatar, Name, Location & Purchased Product Pill */}
-                  <div className="pt-5 mt-6 border-t border-gray-100 flex items-center justify-between gap-3 relative z-10">
+                  <div className="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between gap-3 relative z-10">
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Initials Avatar */}
                       <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white flex items-center justify-center font-black text-xs flex-shrink-0 shadow-md shadow-[#5C3124]/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">

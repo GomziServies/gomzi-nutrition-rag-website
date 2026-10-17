@@ -6,26 +6,46 @@ const PageHeading = ({ head, subtitle, breadcrumb = true }) => {
   const title = head || "Gomzi Supplement";
 
   return (
-    <div className="relative w-full overflow-hidden bg-gradient-to-r from-[#1f110b] via-[#3d1f16] to-[#5C3124] border-b border-[#8B5A2B]/25">
-      {/* Ambient background glows */}
+    <div
+      className="relative w-full overflow-hidden border-b border-[#3a1d15]"
+      style={{
+        background:
+          "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
+      }}
+    >
+      {/* Ambient Atmospheric Lighting */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(212,175,55,0.12),transparent_70%)]"
-        aria-hidden="true"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px]"
+        style={{ background: "rgba(92, 49, 36, 0.45)" }}
+      />
+      <div
+        className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px]"
+        style={{ background: "rgba(255, 137, 20, 0.12)" }}
+      />
+      <div
+        className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+        style={{ background: "rgba(92, 49, 36, 0.3)" }}
       />
 
-      {/* Left decorative asset */}
-      <img
-        src="/images/pageheadingleft.png"
-        alt=""
-        className="pointer-events-none opacity-20 absolute left-0 top-0 h-full w-auto object-contain z-0 hidden md:block select-none"
+      {/* Subtle Geometric Grid Texture */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+          backgroundSize: "32px 32px",
+        }}
       />
 
-      {/* Right decorative asset */}
-      <img
-        src="/images/pageheadingright.png"
-        alt=""
-        className="pointer-events-none opacity-20 absolute right-0 top-0 h-full w-auto object-contain z-0 select-none"
-      />
+      {/* Ambient RAG Background Typographic Watermark */}
+      <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
+        <span
+          className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+          style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
+        >
+          RAG
+        </span>
+      </div>
 
       {/* Content Container */}
       <div className="relative z-10 max-w-[var(--container-width)] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-10 sm:py-14 md:py-16 text-center">

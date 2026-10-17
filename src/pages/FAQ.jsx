@@ -215,6 +215,11 @@ export default function FAQPage() {
           style={{ background: "rgba(255, 137, 20, 0.12)" }}
         />
 
+        <div
+          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+          style={{ background: "rgba(92, 49, 36, 0.3)" }}
+        />
+
         {/* Subtle grid pattern overlay */}
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.03]"
@@ -224,6 +229,16 @@ export default function FAQPage() {
             backgroundSize: "32px 32px",
           }}
         />
+
+        {/* Ambient RAG Background Typographic Watermark */}
+        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
+          <span
+            className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+            style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
+          >
+            RAG
+          </span>
+        </div>
 
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Badge */}

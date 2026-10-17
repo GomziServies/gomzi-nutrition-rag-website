@@ -143,13 +143,13 @@ export default function AboutPage() {
           }}
         />
 
-        {/* Ambient Typographic Watermark */}
+        {/* Ambient RAG Background Typographic Watermark */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
           <span
             className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
-            style={{ fontSize: "clamp(80px, 16vw, 180px)" }}
+            style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
           >
-            SCIENCE
+            RAG
           </span>
         </div>
 
