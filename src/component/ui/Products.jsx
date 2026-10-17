@@ -891,7 +891,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               <div className="border-b border-gray-100 mb-3" />
 
               {/* Companies List */}
-              <div className="flex flex-col space-y-1 max-h-[340px] overflow-y-auto pr-1">
+              <div className="flex flex-col space-y-1">
                 {filteredCompanies.map((item) => {
                   const isSelected = selectedCompany === item.name;
 
