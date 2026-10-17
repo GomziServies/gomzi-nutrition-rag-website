@@ -10,6 +10,8 @@ import BlackFeatureBar from "../common/Black-Feature-Bar";
 import { Download, ShoppingCart, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { getHeroBannerApi } from "../../api/banner.api";
 
+// Dummy fallback banner data (commented out as requested - do not remove)
+/*
 const DEFAULT_BANNER = {
   desktop_image: "/images/banner-(gls)-web-view.webp",
   mobile_image: "/images/banner-(gls)-mobile-view.webp",
@@ -17,6 +19,7 @@ const DEFAULT_BANNER = {
   shop_link: "/gomzi-supplement",
   brochure_url: "/pdf/gomzi-brochure.pdf",
 };
+*/
 
 const resolveImageUrl = (img) => {
   if (!img) return "";
@@ -28,7 +31,9 @@ const resolveImageUrl = (img) => {
 
 export default function HeroSectionWithIcons() {
   const navigate = useNavigate();
-  const [banners, setBanners] = useState([DEFAULT_BANNER]);
+  // Dummy banner removed, initialized with empty array for 100% dynamic API banners
+  // const [banners, setBanners] = useState([DEFAULT_BANNER]);
+  const [banners, setBanners] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
 
@@ -46,7 +51,8 @@ export default function HeroSectionWithIcons() {
           }
         }
       } catch (err) {
-        console.warn("Using default hero banner fallback:", err.message);
+        // console.warn("Using default hero banner fallback:", err.message);
+        console.warn("Hero banner API failed to load:", err.message);
       }
     };
 
@@ -56,10 +62,11 @@ export default function HeroSectionWithIcons() {
     };
   }, []);
 
-  const currentBanner = banners[activeIndex] || banners[0] || DEFAULT_BANNER;
+  // const currentBanner = banners[activeIndex] || banners[0] || DEFAULT_BANNER;
+  const currentBanner = banners[activeIndex] || banners[0] || null;
 
   const handleShopNow = () => {
-    const link = (currentBanner.shop_link || "/gomzi-supplement").trim();
+    const link = (currentBanner?.shop_link || "/gomzi-supplement").trim();
     if (link.startsWith("http://") || link.startsWith("https://")) {
       window.open(link, "_blank", "noopener,noreferrer");
     } else if (link.startsWith("www.")) {
@@ -70,7 +77,7 @@ export default function HeroSectionWithIcons() {
   };
 
   const handleDownload = () => {
-    const brochure = resolveImageUrl(currentBanner.brochure_url || "/pdf/gomzi-brochure.pdf");
+    const brochure = resolveImageUrl(currentBanner?.brochure_url || "/pdf/gomzi-brochure.pdf");
     const link = document.createElement("a");
     link.href = brochure;
     link.download = "Gomzi-Brochure.pdf";
@@ -84,64 +91,68 @@ export default function HeroSectionWithIcons() {
     <section className="group relative w-full overflow-hidden select-none">
       <div className="relative w-full">
         {/* ================= Swiper Banner Slider ================= */}
-        <Swiper
-          key={`hero-swiper-${banners.length}`}
-          modules={[Autoplay, Pagination, Navigation]}
-          speed={800}
-          grabCursor={banners.length > 1}
-          loop={banners.length > 1}
-          autoplay={
-            banners.length > 1
-              ? {
-                  delay: 4500,
-                  disableOnInteraction: false,
-                  pauseOnMouseEnter: true,
-                }
-              : false
-          }
-          pagination={
-            banners.length > 1
-              ? {
-                  clickable: true,
-                }
-              : false
-          }
-          onSwiper={(swiper) => {
-            swiperRef.current = swiper;
-          }}
-          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-          className="hero-swiper w-full relative z-10"
-        >
-          {banners.map((slide, index) => (
-            <SwiperSlide key={slide._id || index} className="w-full">
-              <picture className="block w-full">
-                <source
-                  srcSet={resolveImageUrl(slide.mobile_image || slide.desktop_image)}
-                  media="(max-width: 1023px)"
-                />
+        {banners.length > 0 ? (
+          <Swiper
+            key={`hero-swiper-${banners.length}`}
+            modules={[Autoplay, Pagination, Navigation]}
+            speed={800}
+            grabCursor={banners.length > 1}
+            loop={banners.length > 1}
+            autoplay={
+              banners.length > 1
+                ? {
+                    delay: 4500,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                  }
+                : false
+            }
+            pagination={
+              banners.length > 1
+                ? {
+                    clickable: true,
+                  }
+                : false
+            }
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+            }}
+            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            className="hero-swiper w-full relative z-10"
+          >
+            {banners.map((slide, index) => (
+              <SwiperSlide key={slide._id || index} className="w-full">
+                <picture className="block w-full">
+                  <source
+                    srcSet={resolveImageUrl(slide.mobile_image || slide.desktop_image)}
+                    media="(max-width: 1023px)"
+                  />
 
-                <source
-                  srcSet={resolveImageUrl(slide.desktop_image)}
-                  media="(min-width: 1024px)"
-                />
+                  <source
+                    srcSet={resolveImageUrl(slide.desktop_image)}
+                    media="(min-width: 1024px)"
+                  />
 
-                <img
-                  src={resolveImageUrl(slide.desktop_image)}
-                  alt={slide.alt_text || "Science-backed sports nutrition products by Gomzi Supplement."}
-                  fetchPriority={index === 0 ? "high" : "low"}
-                  loading={index === 0 ? "eager" : "lazy"}
-                  className="
-                    block
-                    w-full
-                    h-auto
-                    object-cover
-                    select-none
-                  "
-                />
-              </picture>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+                  <img
+                    src={resolveImageUrl(slide.desktop_image)}
+                    alt={slide.alt_text || "Science-backed sports nutrition products by Gomzi Supplement."}
+                    fetchPriority={index === 0 ? "high" : "low"}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    className="
+                      block
+                      w-full
+                      h-auto
+                      object-cover
+                      select-none
+                    "
+                  />
+                </picture>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className="w-full aspect-[16/7] md:aspect-[21/9] lg:aspect-[2.6/1] bg-gradient-to-r from-[#24140e] via-[#331c14] to-[#1c100c]" />
+        )}
 
         {/* ================= Minimal Navigation Chevron Arrows ================= */}
         {banners.length > 1 && (
