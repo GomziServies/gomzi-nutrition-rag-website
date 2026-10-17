@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import SEO from "../component/SEO";
 import { getCategoriesApi } from "../api/category.api";
+import { CategoryGridSkeleton } from "../component/common/SkeletonLoaders";
 
 const resolveImageUrl = (img) => {
   if (!img) return "/images/product-placeholder.webp";
@@ -334,14 +335,7 @@ export default function CategoriesSection() {
 
           {/* Cards Grid or Skeletons */}
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={i}
-                  className="rounded-[22px] bg-gray-200 animate-pulse min-h-[360px] sm:min-h-[390px]"
-                />
-              ))}
-            </div>
+            <CategoryGridSkeleton count={6} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
               {categories.map((category) => (

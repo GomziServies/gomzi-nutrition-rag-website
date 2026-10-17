@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiTag, FiCopy, FiCheck, FiArrowRight, FiZap } from "react-icons/fi";
 import { getDealsApi } from "../../api/deal.api";
 import { successToast } from "../../utils/toast";
+import { TrendingDealsSectionSkeleton } from "../common/SkeletonLoaders";
 
 const resolveImageUrl = (img) => {
   if (!img) return "/images/product-category/whey-protein.webp";
@@ -15,6 +16,7 @@ const resolveImageUrl = (img) => {
 export default function TrendingDealsSection() {
   const navigate = useNavigate();
   const [deals, setDeals] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [copiedCode, setCopiedCode] = useState(null);
 
   useEffect(() => {
@@ -27,6 +29,8 @@ export default function TrendingDealsSection() {
         }
       } catch (err) {
         console.warn("Could not fetch promotional deals from API:", err?.message);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -35,6 +39,10 @@ export default function TrendingDealsSection() {
       isMounted = false;
     };
   }, []);
+
+  if (loading && deals.length === 0) {
+    return <TrendingDealsSectionSkeleton />;
+  }
 
   if (!deals || deals.length === 0) {
     return null;

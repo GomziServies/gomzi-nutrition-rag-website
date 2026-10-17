@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import BlackFeatureBar from "../common/Black-Feature-Bar";
 import { Download, ShoppingCart, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { getHeroBannerApi } from "../../api/banner.api";
+import { HeroSkeleton } from "../common/SkeletonLoaders";
 
 // Dummy fallback banner data (commented out as requested - do not remove)
 /*
@@ -34,6 +35,7 @@ export default function HeroSectionWithIcons() {
   // Dummy banner removed, initialized with empty array for 100% dynamic API banners
   // const [banners, setBanners] = useState([DEFAULT_BANNER]);
   const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
 
@@ -53,6 +55,8 @@ export default function HeroSectionWithIcons() {
       } catch (err) {
         // console.warn("Using default hero banner fallback:", err.message);
         console.warn("Hero banner API failed to load:", err.message);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -86,6 +90,15 @@ export default function HeroSectionWithIcons() {
     link.click();
     document.body.removeChild(link);
   };
+
+  if (loading && banners.length === 0) {
+    return (
+      <section className="relative w-full overflow-hidden select-none">
+        <HeroSkeleton />
+        <BlackFeatureBar />
+      </section>
+    );
+  }
 
   return (
     <section className="group relative w-full overflow-hidden select-none">

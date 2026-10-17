@@ -4,6 +4,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductCard from "../common/ProductCard";
+import { ProductCardSkeleton } from "../common/SkeletonLoaders";
 
 export default function ProductCarouselSection({
   title,
@@ -69,26 +70,6 @@ export default function ProductCarouselSection({
               </SwiperSlide>
             ))}
       </Swiper>
-    </div>
-  );
-}
-
-function ProductCardSkeleton() {
-  return (
-    <div className="animate-pulse rounded-2xl border border-gray-200 overflow-hidden bg-white">
-      <div className="aspect-square bg-gray-200" />
-
-      <div className="p-4">
-        <div className="h-4 w-3/4 bg-gray-200 rounded mb-3" />
-
-        <div className="h-3 w-full bg-gray-200 rounded mb-2" />
-        <div className="h-3 w-2/3 bg-gray-200 rounded mb-4" />
-
-        <div className="flex justify-between items-center">
-          <div className="h-5 w-20 bg-gray-200 rounded" />
-          <div className="h-9 w-9 rounded-full bg-gray-200" />
-        </div>
-      </div>
     </div>
   );
 }

@@ -18,6 +18,7 @@ import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { getCompaniesApi } from "../../api/company.api";
 import { getCompanyAdsApi } from "../../api/company-ad.api";
+import { BrandShowcaseSkeleton } from "../common/SkeletonLoaders";
 import { normalizeProduct, isRealProduct } from "../../utils/productAdapter";
 
 // Sleek Dynamic Theme Palettes for Database-Driven Brand Showcases
@@ -408,6 +409,7 @@ export default function BrandCompanyShowcaseSection() {
   const [addingId, setAddingId] = useState(null);
   const [brandProductsMap, setBrandProductsMap] = useState({});
   const [activeBrands, setActiveBrands] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Dynamically load:
   // 1. Active companies from Company API
@@ -659,6 +661,7 @@ export default function BrandCompanyShowcaseSection() {
       if (isMounted) {
         setBrandProductsMap(productsMap);
         setActiveBrands(activeList);
+        setLoading(false);
       }
     };
 
@@ -852,6 +855,10 @@ export default function BrandCompanyShowcaseSection() {
       </div>
     );
   };
+
+  if (loading && activeBrands.length === 0) {
+    return <BrandShowcaseSkeleton count={2} />;
+  }
 
   if (activeBrands.length === 0) {
     return null;

@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { getBankOffersApi } from "../../api/bank-offer.api";
+import { BannerSliderSkeleton } from "../common/SkeletonLoaders";
 
 // Clean Vector HSBC Bank Logo
 function HSBCLogo() {
@@ -81,6 +82,7 @@ export default function BankOffersBannerSlider() {
   const swiperRef = useRef(null);
   const navigate = useNavigate();
   const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -93,6 +95,8 @@ export default function BankOffersBannerSlider() {
         }
       } catch (err) {
         console.warn("Could not fetch bank offers:", err?.message);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -101,6 +105,10 @@ export default function BankOffersBannerSlider() {
       isMounted = false;
     };
   }, []);
+
+  if (loading && offers.length === 0) {
+    return <BannerSliderSkeleton aspect="aspect-[16/5] sm:aspect-[21/5]" />;
+  }
 
   if (!offers || offers.length === 0) {
     return null;

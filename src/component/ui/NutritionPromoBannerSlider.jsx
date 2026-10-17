@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { getNutritionPromoBannersApi } from "../../api/nutrition-promo-banner.api";
+import { BannerSliderSkeleton } from "../common/SkeletonLoaders";
 
 const resolveImageUrl = (img) => {
   if (!img) return "";
@@ -20,6 +21,7 @@ export default function NutritionPromoBannerSlider() {
   const swiperRef = useRef(null);
   const navigate = useNavigate();
   const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -32,6 +34,8 @@ export default function NutritionPromoBannerSlider() {
         }
       } catch (err) {
         console.warn("Could not fetch nutrition promo banners:", err?.message);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -40,6 +44,10 @@ export default function NutritionPromoBannerSlider() {
       isMounted = false;
     };
   }, []);
+
+  if (loading && banners.length === 0) {
+    return <BannerSliderSkeleton aspect="aspect-[16/6] sm:aspect-[21/6]" />;
+  }
 
   if (!banners || banners.length === 0) {
     return null;

@@ -10,6 +10,7 @@ import { successToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { normalizeProduct, filterProductsByCategory, isRealProduct } from "../../utils/productAdapter";
+import { ProductCardSkeleton } from "../common/SkeletonLoaders";
 
 // Authentic Gomzi Nutrition Products mapped by Category
 const CATEGORY_TABS = [
@@ -140,8 +141,10 @@ export default function TopBrandsSection() {
         {/* Carousel Container */}
         <div className="relative mt-4">
           {isLoadingApi ? (
-            <div className="py-16 text-center text-gray-400 font-modelica animate-pulse">
-              Loading authentic products...
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+              {[...Array(4)].map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
             </div>
           ) : currentProducts.length === 0 ? (
             <div className="py-14 text-center text-gray-500 font-modelica bg-white rounded-2xl border border-gray-100 p-8 shadow-xs">

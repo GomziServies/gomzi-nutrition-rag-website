@@ -331,19 +331,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     "Price, high to low",
   ];
 
-  if (loading) {
-    return (
-      <div className="w-full bg-bg py-12">
-        <div className="max-w-[1440px] mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-            {[...Array(12)].map((_, index) => (
-              <ProductCardSkeleton key={index} />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="w-full bg-bg py-6 sm:py-8 md:py-10 lg:py-12">
@@ -897,16 +885,24 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               </div>
             </div>
 
-            {/* Product Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6">
-              {products.map((product) => (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                  onAddToCart={handleAddToCart}
-                />
-              ))}
-            </div>
+            {/* Product Grid / Skeletons */}
+            {loading ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6">
+                {[...Array(9)].map((_, index) => (
+                  <ProductCardSkeleton key={index} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6">
+                {products.map((product) => (
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* No Products Found State */}
             {products.length === 0 && (

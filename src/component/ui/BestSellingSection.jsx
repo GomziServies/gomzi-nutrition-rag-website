@@ -12,6 +12,7 @@ import { successToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { normalizeProduct, isRealProduct } from "../../utils/productAdapter";
+import { BestSellingSectionSkeleton } from "../common/SkeletonLoaders";
 
 // Authentic Gomzi Nutrition Best Selling Products
 const BEST_SELLING_PRODUCTS = [];
@@ -19,6 +20,7 @@ const BEST_SELLING_PRODUCTS = [];
 export default function BestSellingSection() {
   const [wishlist, setWishlist] = useState({});
   const [apiProducts, setApiProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const swiperRef = useRef(null);
   const navigate = useNavigate();
 
@@ -37,6 +39,8 @@ export default function BestSellingSection() {
         }
       } catch (err) {
         console.error("Error fetching best sellers from RAG app:", err);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
     loadApiData();
@@ -46,6 +50,10 @@ export default function BestSellingSection() {
   }, []);
 
   const productsToRender = apiProducts;
+
+  if (loading && productsToRender.length === 0) {
+    return <BestSellingSectionSkeleton />;
+  }
 
   if (productsToRender.length === 0) return null;
 
