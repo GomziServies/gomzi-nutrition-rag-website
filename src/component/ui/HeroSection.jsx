@@ -7,7 +7,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import BlackFeatureBar from "../common/Black-Feature-Bar";
-import CertificationBadges from "../common/CertificationBadges";
 import { Download, ShoppingCart, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { getHeroBannerApi } from "../../api/banner.api";
 
@@ -291,14 +290,6 @@ export default function HeroSectionWithIcons() {
               <span className="tracking-tight">Download Brochure</span>
             </button>
           </div>
-
-          {/* Certification Badges */}
-          <div className="mt-4 xl:mt-6 pointer-events-auto">
-            <CertificationBadges
-              className="flex flex-row items-center gap-2 sm:gap-2.5 xl:gap-3.5"
-              badgeSize="h-7 lg:h-8 xl:h-9 2xl:h-10"
-            />
-          </div>
         </div>
 
         {/* ================= MOBILE & TABLET STATIC OVERLAY (< 1024px) ================= */}
@@ -330,13 +321,6 @@ export default function HeroSectionWithIcons() {
           <p className="font-bold text-[#5A2F20] text-[10.5px] sm:text-xs md:text-sm tracking-tight mt-1 sm:mt-1.5">
             Premium Protein | Wellness | No Amino Spiking 100%
           </p>
-
-          <div className="mt-2 sm:mt-2.5 pointer-events-auto">
-            <CertificationBadges
-              className="flex flex-row flex-wrap items-center justify-center gap-1.5 sm:gap-2"
-              badgeSize="h-5 sm:h-6 md:h-7"
-            />
-          </div>
         </div>
 
         {/* Bottom: Action Buttons */}
