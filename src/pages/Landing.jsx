@@ -5,11 +5,9 @@ import SeasonFavoritesSection from "../component/ui/SeasonFavoritesSection";
 import TrendingDealsSection from "../component/ui/TrendingDealsSection";
 import BestSellingSection from "../component/ui/BestSellingSection";
 import PromoBannerSlider from "../component/ui/PromoBannerSlider";
+import BrandCompanyShowcaseSection from "../component/ui/BrandCompanyShowcaseSection";
 import TopBrandsSection from "../component/ui/TopBrandsSection";
-import PlantProteinSection from "../component/ui/PlantProteinSection";
-import CreatineSection from "../component/ui/CreatineSection";
 import NutritionPromoBannerSlider from "../component/ui/NutritionPromoBannerSlider";
-import WellnessHealthSection from "../component/ui/WellnessHealthSection";
 import BankOffersBannerSlider from "../component/ui/BankOffersBannerSlider";
 import TransparencySection from "../component/ui/transparency";
 import TrustAndGoalSection from "../component/ui/TrustAndGoalSection";
@@ -32,27 +30,25 @@ const Landing = () => {
         {/* 3. Shop By Category (Visual category navigation cards) */}
         <SeasonFavoritesSection />
 
-        {/* 4. Flash Sale & Trending Deals (High-converting promotional deals) */}
-        <TrendingDealsSection />
-
-        {/* 5. Best Sellers (Flagship product rail with live ratings & Add to Cart) */}
-        <BestSellingSection />
-
-        {/* 6. Mid-Page High-Impact Promotional Banner */}
+        {/* 4. Promotional Banner Slider (Placed directly below Trending Deals of the Week) */}
         <PromoBannerSlider />
 
-        {/* 7. Explore Full Catalog By Category Tabs (Whey, Mass Gainer, Pre Workout, BCAA, Creatine) */}
-        <TopBrandsSection />
+        {/* 5. Flash Sale & Trending Deals (Trending Deals of the Week) */}
+        <TrendingDealsSection />
 
-        {/* 8. Specialized Performance Rails */}
-        <PlantProteinSection />
-        <CreatineSection />
-
-        {/* 9. Green Discount Strip Banner */}
+        {/* 6. Green Discount Strip Banner */}
         <NutritionPromoBannerSlider />
 
-        {/* 10. Daily Health & Wellness Essentials */}
-        <WellnessHealthSection />
+
+        {/* 7. Best Sellers (Flagship product rail with live ratings & Add to Cart) */}
+        <BestSellingSection />
+
+        {/* 8. Official Brand Partner Showcase (Company Advertisement Banner + Top 5 Products) */}
+        <BrandCompanyShowcaseSection />
+
+        {/* 8. Explore Full Catalog By Category Tabs (Whey, Mass Gainer, Pre Workout, BCAA, Creatine) */}
+        <TopBrandsSection />
+
 
         {/* 11. Bank & Payment Offers Carousel */}
         <BankOffersBannerSlider />

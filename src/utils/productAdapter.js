@@ -85,6 +85,8 @@ export const isRealProduct = (p) => {
     /brenden clarke/i,
     /phyllis crane/i,
     /kylan galloway/i,
+    /sample/i,
+    /^(whey protein|plant protein)(\s+[0-9]+kg)?$/i,
   ];
 
   for (const pattern of dummyPatterns) {

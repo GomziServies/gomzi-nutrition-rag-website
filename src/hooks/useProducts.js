@@ -5,6 +5,8 @@ const useProducts = ({
   page = 1,
   limit = 9,
   category = "",
+  brand = "",
+  company = "",
   search = "",
   sort = "",
   sortOrder = "",
@@ -24,6 +26,8 @@ const useProducts = ({
         page,
         limit,
         category,
+        brand,
+        company,
         search,
         sort,
         sortOrder,
@@ -44,7 +48,7 @@ const useProducts = ({
     };
 
     loadProducts();
-  }, [page, limit, category, sort, search, sortOrder, slug, id]);
+  }, [page, limit, category, brand, company, sort, search, sortOrder, slug, id]);
 
   return {
     products,

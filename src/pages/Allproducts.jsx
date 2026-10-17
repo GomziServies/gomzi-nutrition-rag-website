@@ -11,6 +11,7 @@ const Allproducts = () => {
   const [searchParams] = useSearchParams();
 
   const selectedCategory = searchParams.get("category") || "";
+  const selectedBrand = searchParams.get("brand") || searchParams.get("company") || "";
 
   const queryCategoryConfig = selectedCategory
     ? Object.values(categoryConfig).find(
@@ -31,18 +32,25 @@ const Allproducts = () => {
     (categorySlug ? categoryConfig[categorySlug] : null) ||
     categoryConfig.default;
 
-  const pageTitle = categorySlug
-    ? pageData.heading || "Gomzi Supplement"
-    : selectedCategory
-      ? selectedCategory
-      : "Gomzi Supplement";
+  const pageTitle = selectedBrand
+    ? `${selectedBrand} Collection`
+    : categorySlug
+      ? pageData.heading || "Gomzi Supplement"
+      : selectedCategory
+        ? selectedCategory
+        : "Gomzi Supplement";
+
+  const pageSubtitle = selectedBrand
+    ? `Explore 100% authentic, verified products from ${selectedBrand}`
+    : pageData.subHeading || "Science-Backed Nutrition For Everyday Performance";
 
   return (
     <>
-      <SEO title={pageData.seo.title} description={pageData.seo.description} />
+      <SEO title={pageTitle} description={pageSubtitle} />
       <PageHeading
         head={pageTitle}
-        subtitle={pageData.subHeading || "Science-Backed Nutrition For Everyday Performance"}
+        subtitle={pageSubtitle}
+        breadcrumb={false}
       />
       <BlackFeatureBar />
       <ProductsGrid categorySlug={categorySlug} pageData={pageData} />

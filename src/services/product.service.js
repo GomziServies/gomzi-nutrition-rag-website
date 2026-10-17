@@ -14,6 +14,8 @@ export const fetchProducts = async ({
   limit = 20,
   search = "",
   category = "",
+  brand = "",
+  company = "",
   tag = "",
   sort = "",
   sortOrder = "",
@@ -24,11 +26,15 @@ export const fetchProducts = async ({
     const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug || id || "");
     const singleProductLookup = Boolean(slug || id);
 
+    const activeCompany = (brand || company || "").trim();
+
     const params = {
       page,
       limit: singleProductLookup ? 1 : limit,
       search,
       category,
+      brand: activeCompany,
+      company: activeCompany,
       tag,
       sort,
       sortOrder,

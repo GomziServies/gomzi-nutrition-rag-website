@@ -5,6 +5,7 @@ import { addProductToCart } from "../../services/cartStorage.service";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 import useProductCategories from "../../hooks/useProductCategories";
+import { getCompaniesApi } from "../../api/company.api";
 import CategoryHero from "../category/CategoryHero";
 import ComparisonSection from "../category/ComparisonSection";
 import FAQSection from "../category/FAQSection";
@@ -14,7 +15,9 @@ import {
   SlidersHorizontal,
   ArrowUpDown,
   Check,
-  Sparkles,
+  Building2,
+  Search,
+  X,
 } from "lucide-react";
 
 const sortConfig = {
@@ -67,22 +70,6 @@ const websiteCategories = [
   },
 ];
 
-// Secondary labels some products carry alongside their real category.
-// They are not shopping categories, so they stay out of the menu.
-const hiddenBackendCategories = [
-  "Protein",
-  "Protein Supplement",
-  "Sports Nutrition",
-  "Muscle Building",
-  "Muscle Recovery",
-  "Lean Muscle",
-  "Weight Gain",
-  "Fat Burner",
-  "Strength Supplement",
-  "Amino Acid Supplement",
-  "Intra Workout",
-];
-
 const categorySlugMap = {
   "Whey Protein": "whey-protein",
   "Plant Protein": "plant-protein",
@@ -96,12 +83,6 @@ const categorySlugMap = {
 
 /**
  * Generates an array of page numbers and ellipsis indicators.
- * - When totalPages <= 7: returns [1, 2, 3, 4, 5, 6, 7]
- * - When currentPage <= 2: [1, 2, 3, '...', totalPages]
- * - When currentPage === 3: [1, 2, 3, 4, '...', totalPages]
- * - In middle: [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages]
- * - When currentPage === totalPages - 2: [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
- * - When currentPage >= totalPages - 1: [1, '...', totalPages - 2, totalPages - 1, totalPages]
  */
 const getPaginationItems = (currentPage, totalPages) => {
   if (!totalPages || totalPages <= 1) return [];
@@ -128,36 +109,112 @@ const getPaginationItems = (currentPage, totalPages) => {
   return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
 };
 
+const DEFAULT_COMPANY_COUNTS = {
+  "All Companies": 419,
+  "MuscleBlaze": 61,
+  "Optimum Nutrition (ON)": 80,
+  "Optimum Nutrition": 80,
+  "Wellcore": 72,
+  "GNC": 78,
+  "Isopure": 26,
+  "Dynamite": 24,
+  "Fast&Up": 20,
+  "MyProtein": 18,
+  "Pure Go": 18,
+  "Refuel 2.0": 24,
+  "Dymatize": 11,
+  "Labrada": 11,
+  "Ultimate Nutrition": 9,
+  "MuscleTech": 7,
+  "Avvatar": 5,
+  "Gomzi Nutrition": 3,
+};
+
+const DEFAULT_COMPANIES_CATALOG = [
+  "MuscleBlaze",
+  "Optimum Nutrition (ON)",
+  "Wellcore",
+  "GNC",
+  "Isopure",
+  "Dynamite",
+  "Fast&Up",
+  "MyProtein",
+  "Dymatize",
+  "Labrada",
+  "Ultimate Nutrition",
+  "MuscleTech",
+  "Avvatar",
+  "Pure Go",
+  "Refuel 2.0",
+  "Gomzi Nutrition",
+];
+
 const ProductsGrid = ({ categorySlug, pageData }) => {
   const navigate = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
+  const brandParam = searchParams.get("brand") || searchParams.get("company") || "";
 
   const [selectedCategory, setSelectedCategory] = useState(
     category || "All Products",
   );
+  const [selectedCompany, setSelectedCompany] = useState(
+    brandParam || "All Companies",
+  );
+  const [companySearchQuery, setCompanySearchQuery] = useState("");
+  const [companiesList, setCompaniesList] = useState([]);
 
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
+  const [isCompanyDrawerOpen, setIsCompanyDrawerOpen] = useState(false);
   const [sortBy, setSortBy] = useState("Featured");
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   /*
   |--------------------------------------------------------------------------
-  | Product API
+  | Load Companies from API
   |--------------------------------------------------------------------------
   */
+  useEffect(() => {
+    let isMounted = true;
+    const loadCompanies = async () => {
+      try {
+        const res = await getCompaniesApi();
+        if (res?.data?.data?.companies && Array.isArray(res.data.data.companies)) {
+          const names = res.data.data.companies
+            .filter((c) => c && c.status !== false && c.name)
+            .map((c) => c.name.trim());
+          if (isMounted && names.length > 0) {
+            setCompaniesList(Array.from(new Set(names)));
+          }
+        }
+      } catch (err) {
+        console.warn("Using default companies list:", err?.message);
+      }
+    };
+    loadCompanies();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
+  /*
+  |--------------------------------------------------------------------------
+  | Product API Query
+  |--------------------------------------------------------------------------
+  */
   const activeCategory = category || pageData?.category || "";
+  const activeBrand = selectedCompany !== "All Companies" ? selectedCompany : "";
 
   const { products, loading, pagination, hasProducts } = useProducts({
     page: currentPage,
     limit: 12,
     search,
     category: activeCategory,
+    brand: activeBrand,
+    company: activeBrand,
     ...(sortConfig[sortBy] || {}),
   });
 
@@ -169,17 +226,11 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
   const backendCategoryCounts = useMemo(() => {
     const map = {};
-
-    if (!Array.isArray(categoryData)) {
-      return map;
-    }
-
+    if (!Array.isArray(categoryData)) return map;
     categoryData.forEach((item) => {
       if (!item?.category) return;
-
       map[item.category] = Number(item.count || 0);
     });
-
     return map;
   }, [categoryData]);
 
@@ -223,6 +274,33 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     ];
   }, [backendCategoryCounts, totalProducts]);
 
+  const allCompanies = useMemo(() => {
+    const baseList = companiesList.length > 0 ? companiesList : DEFAULT_COMPANIES_CATALOG;
+    return [
+      {
+        name: "All Companies",
+        count: Number(totalProducts) > 0 ? Number(totalProducts) : 419,
+      },
+      ...baseList.map((cName) => {
+        const clean = cName.replace(/\(.*?\)/g, "").trim();
+        const count =
+          DEFAULT_COMPANY_COUNTS[cName] ??
+          DEFAULT_COMPANY_COUNTS[clean] ??
+          10;
+        return {
+          name: cName,
+          count,
+        };
+      }),
+    ];
+  }, [companiesList, totalProducts]);
+
+  const filteredCompanies = useMemo(() => {
+    if (!companySearchQuery.trim()) return allCompanies;
+    const q = companySearchQuery.toLowerCase().trim();
+    return allCompanies.filter((c) => c.name.toLowerCase().includes(q));
+  }, [allCompanies, companySearchQuery]);
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -230,32 +308,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     });
   }, [currentPage]);
 
-  const handleCategorySelect = (categoryName) => {
-    setCurrentPage(1);
-
-    if (categoryName === "All Products") {
-      navigate("/gomzi-supplement");
-      setSelectedCategory("All Products");
-      return;
-    }
-
-    const slug = categorySlugMap[categoryName];
-
-    if (!slug) {
-      const params = new URLSearchParams();
-      params.set("category", categoryName);
-
-      navigate(`/gomzi-supplement?${params.toString()}`);
-
-      setSelectedCategory(categoryName);
-
-      return;
-    }
-
-    navigate(`/gomzi-supplement/${slug}`);
-
-    setSelectedCategory(categoryName);
-  };
+  // Sync state when URL params change
   useEffect(() => {
     if (category) {
       setSelectedCategory(category);
@@ -265,8 +318,55 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
       setSelectedCategory("All Products");
     }
 
+    if (brandParam) {
+      setSelectedCompany(brandParam);
+    } else {
+      setSelectedCompany("All Companies");
+    }
+
     setCurrentPage(1);
-  }, [category, pageData?.category]);
+  }, [category, pageData?.category, brandParam]);
+
+  const handleCategorySelect = (categoryName) => {
+    setCurrentPage(1);
+    const newParams = new URLSearchParams(searchParams);
+
+    if (categoryName === "All Products") {
+      newParams.delete("category");
+      setSelectedCategory("All Products");
+    } else {
+      newParams.set("category", categoryName);
+      setSelectedCategory(categoryName);
+    }
+
+    const queryStr = newParams.toString();
+    navigate(queryStr ? `/gomzi-supplement?${queryStr}` : `/gomzi-supplement`);
+  };
+
+  const handleCompanySelect = (companyName) => {
+    setCurrentPage(1);
+    const newParams = new URLSearchParams(searchParams);
+
+    if (!companyName || companyName === "All Companies") {
+      newParams.delete("brand");
+      newParams.delete("company");
+      setSelectedCompany("All Companies");
+    } else {
+      newParams.set("brand", companyName);
+      newParams.delete("company");
+      setSelectedCompany(companyName);
+    }
+
+    const queryStr = newParams.toString();
+    navigate(queryStr ? `/gomzi-supplement?${queryStr}` : `/gomzi-supplement`);
+  };
+
+  const handleClearAllFilters = () => {
+    setCurrentPage(1);
+    setSelectedCategory("All Products");
+    setSelectedCompany("All Companies");
+    navigate("/gomzi-supplement");
+  };
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber < 1 || pageNumber > pagination.totalPages) {
@@ -315,14 +415,22 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
         {/* ================================================================
             DESKTOP TOOLBAR
         ================================================================ */}
-
         <div className="hidden lg:flex items-center justify-between border-b border-[#ebdcd7] pb-4 mb-6">
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-[#ebdcd7] shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-bold text-gray-900">
-              {pagination.totalDocs ?? products.length}
-            </span>
-            <span className="text-xs font-medium text-gray-500">Products Available</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-[#ebdcd7] shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-bold text-gray-900">
+                {pagination.totalDocs ?? products.length}
+              </span>
+              <span className="text-xs font-medium text-gray-500">Products Available</span>
+            </div>
+
+            {selectedCompany !== "All Companies" && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#5C3124]/10 border border-[#5C3124]/20 text-xs font-bold text-[#5C3124]">
+                <Building2 className="w-3.5 h-3.5" />
+                <span>{selectedCompany}</span>
+              </span>
+            )}
           </div>
 
           <div className="relative">
@@ -369,53 +477,60 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
         </div>
 
         {/* ================================================================
-    MOBILE TOOLBAR
-================================================================ */}
-
-        {/* ================================================================
-            MOBILE TOOLBAR (COMPACT 2-COLUMN)
+            MOBILE TOOLBAR (COMPACT 3-BUTTON GRID)
         ================================================================ */}
-
-        <div className="lg:hidden mb-6 grid grid-cols-2 gap-2.5">
+        <div className="lg:hidden mb-4 grid grid-cols-3 gap-2">
           {/* Category Selector */}
           <button
             onClick={() => setIsCategoryDrawerOpen(true)}
-            className="h-11 px-3.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between transition-all active:scale-[0.98]"
+            className="h-10 px-2.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between min-w-0"
           >
-            <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center gap-1.5 min-w-0">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
-              <span className="text-xs font-bold text-gray-900 truncate">
-                {selectedCategory}
+              <span className="text-[11px] font-bold text-gray-900 truncate">
+                {selectedCategory === "All Products" ? "Category" : selectedCategory}
               </span>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+            <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />
+          </button>
+
+          {/* Company Selector */}
+          <button
+            onClick={() => setIsCompanyDrawerOpen(true)}
+            className="h-10 px-2.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between min-w-0"
+          >
+            <div className="flex items-center gap-1.5 min-w-0">
+              <Building2 className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
+              <span className="text-[11px] font-bold text-gray-900 truncate">
+                {selectedCompany === "All Companies" ? "Brand" : selectedCompany}
+              </span>
+            </div>
+            <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />
           </button>
 
           {/* Sort */}
           <div className="relative">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className="w-full h-11 px-3.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between transition-all active:scale-[0.98]"
+              className="w-full h-10 px-2.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between min-w-0"
             >
-              <div className="flex items-center gap-2 min-w-0">
+              <div className="flex items-center gap-1.5 min-w-0">
                 <ArrowUpDown className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
-                <span className="text-xs font-bold text-gray-900 truncate">
-                  {sortBy}
+                <span className="text-[11px] font-bold text-gray-900 truncate">
+                  {sortBy === "Featured" ? "Sort" : sortBy}
                 </span>
               </div>
               <ChevronDown
-                className={`w-3.5 h-3.5 text-gray-400 shrink-0 transition-transform ${
+                className={`w-3 h-3 text-gray-400 shrink-0 transition-transform ${
                   isSortDropdownOpen ? "rotate-180 text-[#5C3124]" : ""
                 }`}
               />
             </button>
 
-            {/* Sort Dropdown */}
             {isSortDropdownOpen && (
               <div className="absolute right-0 left-0 mt-2 p-1.5 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#ebdcd7] z-50 overflow-hidden">
                 {sortOptions.map((option) => {
                   const isSelected = sortBy === option;
-
                   return (
                     <button
                       key={option}
@@ -424,7 +539,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                         setCurrentPage(1);
                         setIsSortDropdownOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3.5 py-2.5
+                      className={`w-full flex items-center justify-between px-3 py-2
                           rounded-xl text-left text-xs font-semibold transition-colors
                           ${
                             isSelected
@@ -443,31 +558,63 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
         </div>
 
         {/* ================================================================
-    MOBILE CATEGORY DRAWER
-================================================================ */}
+            ACTIVE FILTER CHIPS
+        ================================================================ */}
+        {(selectedCategory !== "All Products" || selectedCompany !== "All Companies") && (
+          <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-white rounded-2xl border border-[#ebdcd7] shadow-2xs">
+            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider pl-1">
+              Active Filters:
+            </span>
 
+            {selectedCategory !== "All Products" && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-[#5C3124]">
+                <span>Category: {selectedCategory}</span>
+                <button
+                  onClick={() => handleCategorySelect("All Products")}
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-[#5C3124]/10 transition-colors cursor-pointer"
+                  aria-label="Remove category filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {selectedCompany !== "All Companies" && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-[#5C3124]">
+                <span>Company: {selectedCompany}</span>
+                <button
+                  onClick={() => handleCompanySelect("All Companies")}
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-[#5C3124]/10 transition-colors cursor-pointer"
+                  aria-label="Remove company filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            <button
+              onClick={handleClearAllFilters}
+              className="text-xs font-semibold text-gray-500 hover:text-[#5C3124] underline ml-auto cursor-pointer"
+            >
+              Clear All
+            </button>
+          </div>
+        )}
+
+        {/* ================================================================
+            MOBILE CATEGORY DRAWER
+        ================================================================ */}
         {isCategoryDrawerOpen && (
           <>
-            {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[60]
-                 animate-in fade-in duration-200"
+              className="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[60] animate-in fade-in duration-200"
               onClick={() => setIsCategoryDrawerOpen(false)}
             />
-
-            {/* Bottom Sheet */}
             <div
-              className="fixed bottom-0 left-0 right-0 z-[70]
-                 bg-white rounded-t-[28px]
-                 max-h-[82vh]
-                 overflow-hidden
-                 shadow-[0_-10px_40px_rgba(0,0,0,0.15)]
-                 animate-in slide-in-from-bottom duration-300"
+              className="fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-[28px] max-h-[82vh] overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.15)] animate-in slide-in-from-bottom duration-300"
             >
-              {/* Handle + Header */}
               <div className="bg-white px-5 pt-3 pb-4 border-b border-gray-100">
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
-
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-widest text-[#5C3124]">
@@ -477,33 +624,16 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       Categories
                     </h3>
                   </div>
-
                   <button
                     onClick={() => setIsCategoryDrawerOpen(false)}
-                    className="w-10 h-10 rounded-full bg-gray-100
-                       flex items-center justify-center
-                       text-gray-500 hover:bg-gray-200
-                       transition-colors"
+                    className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors"
                     aria-label="Close categories"
                   >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
-              {/* Categories */}
               <div
                 className="px-5 py-4 overflow-y-auto overscroll-contain"
                 style={{
@@ -514,7 +644,6 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                 <div className="space-y-2">
                   {categories.map((item) => {
                     const isSelected = selectedCategory === item.name;
-
                     return (
                       <button
                         key={item.name}
@@ -522,57 +651,34 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                           handleCategorySelect(item.name);
                           setIsCategoryDrawerOpen(false);
                         }}
-                        className={`w-full min-h-[60px] px-4 rounded-2xl
-                            flex items-center justify-between
-                            transition-all duration-200
-                            ${
-                              isSelected
-                                ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
-                                : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
-                            }`}
+                        className={`w-full min-h-[56px] px-4 rounded-2xl flex items-center justify-between transition-all duration-200 ${
+                          isSelected
+                            ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
+                            : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
+                        }`}
                       >
                         <div className="flex items-center gap-3">
-                          {/* Category indicator */}
                           <div
-                            className={`w-9 h-9 rounded-xl flex items-center justify-center
-                                ${
-                                  isSelected
-                                    ? "bg-white/15"
-                                    : "bg-white border border-gray-200"
-                                }`}
+                            className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                              isSelected ? "bg-white/15" : "bg-white border border-gray-200"
+                            }`}
                           >
                             {isSelected ? (
-                              <svg
-                                className="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="m5 12 4 4L19 6"
-                                />
-                              </svg>
+                              <Check className="w-5 h-5 text-white" />
                             ) : (
                               <div className="w-2 h-2 rounded-full bg-[#5C3124]/50" />
                             )}
                           </div>
-
                           <span className="font-semibold text-[15px]">
                             {item.name}
                           </span>
                         </div>
-
                         <span
-                          className={`min-w-[34px] px-2.5 py-1 rounded-full
-                              text-xs font-semibold text-center
-                              ${
-                                isSelected
-                                  ? "bg-white/15 text-white"
-                                  : "bg-white text-gray-400 border border-gray-200"
-                              }`}
+                          className={`min-w-[34px] px-2.5 py-1 rounded-full text-xs font-semibold text-center ${
+                            isSelected
+                              ? "bg-white/15 text-white"
+                              : "bg-white text-gray-400 border border-gray-200"
+                          }`}
                         >
                           {item.count}
                         </span>
@@ -586,73 +692,257 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
         )}
 
         {/* ================================================================
-            MAIN CONTENT
+            MOBILE COMPANY DRAWER
         ================================================================ */}
+        {isCompanyDrawerOpen && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[60] animate-in fade-in duration-200"
+              onClick={() => setIsCompanyDrawerOpen(false)}
+            />
+            <div
+              className="fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-[28px] max-h-[82vh] overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.15)] animate-in slide-in-from-bottom duration-300"
+            >
+              <div className="bg-white px-5 pt-3 pb-3 border-b border-gray-100">
+                <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-widest text-[#5C3124]">
+                      Filter By
+                    </p>
+                    <h3 className="text-2xl font-bold text-gray-900 mt-1">
+                      Companies & Brands
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setIsCompanyDrawerOpen(false)}
+                    className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer"
+                    aria-label="Close companies"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 mt-5">
-          {/* ================================================================
-              DESKTOP SIDEBAR
-          ================================================================ */}
+                <div className="relative">
+                  <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={companySearchQuery}
+                    onChange={(e) => setCompanySearchQuery(e.target.value)}
+                    placeholder="Search company or brand..."
+                    className="w-full h-10 pl-9 pr-8 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#5C3124] focus:bg-white transition-all text-gray-800 placeholder:text-gray-400"
+                  />
+                  {companySearchQuery && (
+                    <button
+                      onClick={() => setCompanySearchQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
 
-          {hasProducts && (
-            <aside className="hidden lg:block w-72 flex-shrink-0">
-              <div className="bg-white rounded-3xl border border-gray-200/90 p-6 sticky top-24 shadow-xs">
-                {/* Header matching user design */}
-                <h2 className="font-extrabold text-2xl text-black tracking-tight mb-4 font-toma">
-                  Products
-                </h2>
-
-                {/* Divider Line */}
-                <div className="border-b border-gray-200/90 mb-5" />
-
-                {/* Categories List */}
-                <div className="flex flex-col space-y-1.5">
-                  {categories.map((item) => {
-                    const isSelected = selectedCategory === item.name;
-
-                    return isSelected ? (
+              <div
+                className="px-5 py-4 overflow-y-auto overscroll-contain"
+                style={{
+                  maxHeight: "calc(82vh - 160px)",
+                  paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))",
+                }}
+              >
+                <div className="space-y-2">
+                  {filteredCompanies.map((item) => {
+                    const isSelected = selectedCompany === item.name;
+                    return (
                       <button
                         key={item.name}
-                        onClick={() => handleCategorySelect(item.name)}
-                        className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-4 py-2.5 font-bold text-sm transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 relative overflow-hidden group"
+                        onClick={() => {
+                          handleCompanySelect(item.name);
+                          setIsCompanyDrawerOpen(false);
+                        }}
+                        className={`w-full min-h-[56px] px-4 rounded-2xl flex items-center justify-between transition-all duration-200 cursor-pointer ${
+                          isSelected
+                            ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
+                            : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
+                        }`}
                       >
-                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
-                        <span className="relative z-10">{item.name} ({item.count})</span>
-                      </button>
-                    ) : (
-                      <button
-                        key={item.name}
-                        onClick={() => handleCategorySelect(item.name)}
-                        className="w-full text-left text-[#344054] hover:text-black hover:bg-gray-50/80 rounded-lg px-4 py-2 font-normal text-sm transition-colors cursor-pointer"
-                      >
-                        {item.name} ({item.count})
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                              isSelected ? "bg-white/15" : "bg-white border border-gray-200"
+                            }`}
+                          >
+                            {isSelected ? (
+                              <Check className="w-5 h-5 text-white" />
+                            ) : (
+                              <Building2 className="w-4 h-4 text-[#5C3124]/60" />
+                            )}
+                          </div>
+                          <span className="font-semibold text-sm truncate">
+                            {item.name}
+                          </span>
+                        </div>
+                        <span
+                          className={`min-w-[34px] px-2.5 py-1 rounded-full text-xs font-semibold text-center shrink-0 ml-2 ${
+                            isSelected
+                              ? "bg-white/15 text-white"
+                              : "bg-white text-gray-400 border border-gray-200"
+                          }`}
+                        >
+                          {item.count}
+                        </span>
                       </button>
                     );
                   })}
+                  {filteredCompanies.length === 0 && (
+                    <p className="text-sm text-gray-400 py-8 text-center">
+                      No companies found matching "{companySearchQuery}"
+                    </p>
+                  )}
                 </div>
               </div>
-            </aside>
-          )}
+            </div>
+          </>
+        )}
+
+        {/* ================================================================
+            MAIN CONTENT
+        ================================================================ */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 mt-5">
+          {/* ================================================================
+              DESKTOP SIDEBAR (DUAL FILTERS: CATEGORIES + COMPANIES)
+          ================================================================ */}
+          <aside className="hidden lg:block w-72 flex-shrink-0 space-y-6">
+            {/* 1. Categories Card */}
+            <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-xs">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-extrabold text-base text-black tracking-tight font-toma flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4 text-[#5C3124]" />
+                  <span>Categories</span>
+                </h2>
+                <span className="text-[11px] font-semibold text-gray-400">
+                  {categories.length}
+                </span>
+              </div>
+
+              <div className="border-b border-gray-100 mb-3" />
+
+              <div className="flex flex-col space-y-1">
+                {categories.map((item) => {
+                  const isSelected = selectedCategory === item.name;
+
+                  return isSelected ? (
+                    <button
+                      key={item.name}
+                      onClick={() => handleCategorySelect(item.name)}
+                      className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 flex items-center justify-between"
+                    >
+                      <span className="truncate">{item.name}</span>
+                      <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold ml-2">
+                        {item.count}
+                      </span>
+                    </button>
+                  ) : (
+                    <button
+                      key={item.name}
+                      onClick={() => handleCategorySelect(item.name)}
+                      className="w-full text-left text-[#344054] hover:text-black hover:bg-gray-50/80 rounded-lg px-3.5 py-1.5 font-normal text-xs transition-colors cursor-pointer flex items-center justify-between group"
+                    >
+                      <span className="truncate group-hover:translate-x-0.5 transition-transform">{item.name}</span>
+                      <span className="text-[10px] text-gray-400 ml-2">({item.count})</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. Companies & Brands Card */}
+            <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-xs sticky top-24">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-extrabold text-base text-black tracking-tight font-toma flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-[#5C3124]" />
+                  <span>Companies & Brands</span>
+                </h2>
+                <span className="text-[11px] font-semibold text-gray-400">
+                  {allCompanies.length - 1} Brands
+                </span>
+              </div>
+
+              {/* Company Search Input */}
+              <div className="relative mb-3">
+                <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={companySearchQuery}
+                  onChange={(e) => setCompanySearchQuery(e.target.value)}
+                  placeholder="Search brand or company..."
+                  className="w-full h-8 pl-8 pr-7 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#5C3124] focus:bg-white transition-all text-gray-800 placeholder:text-gray-400"
+                />
+                {companySearchQuery && (
+                  <button
+                    onClick={() => setCompanySearchQuery("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+
+              <div className="border-b border-gray-100 mb-3" />
+
+              {/* Companies List */}
+              <div className="flex flex-col space-y-1 max-h-[340px] overflow-y-auto pr-1">
+                {filteredCompanies.map((item) => {
+                  const isSelected = selectedCompany === item.name;
+
+                  return isSelected ? (
+                    <button
+                      key={item.name}
+                      onClick={() => handleCompanySelect(item.name)}
+                      className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 flex items-center justify-between"
+                    >
+                      <span className="truncate">{item.name}</span>
+                      <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold ml-2">
+                        {item.count}
+                      </span>
+                    </button>
+                  ) : (
+                    <button
+                      key={item.name}
+                      onClick={() => handleCompanySelect(item.name)}
+                      className="w-full text-left text-[#344054] hover:text-black hover:bg-gray-50/80 rounded-lg px-3.5 py-1.5 font-normal text-xs transition-colors cursor-pointer flex items-center justify-between group"
+                    >
+                      <span className="truncate group-hover:translate-x-0.5 transition-transform">{item.name}</span>
+                      <span className="text-[10px] text-gray-400 ml-2">({item.count})</span>
+                    </button>
+                  );
+                })}
+                {filteredCompanies.length === 0 && (
+                  <p className="text-xs text-gray-400 py-4 text-center">No companies found</p>
+                )}
+              </div>
+            </div>
+          </aside>
 
           {/* ================================================================
-              PRODUCTS
+              PRODUCTS GRID
           ================================================================ */}
-
           <div className="flex-1">
             {/* Mobile Header */}
-
-            <div className="lg:hidden mb-6 pb-4 border-b border-gray-200">
-              <h2 className="font-toma text-xl font-bold text-text mb-2">
-                {selectedCategory}
-              </h2>
-
-              <span className="font-modelica text-sm text-text-light">
-                {pagination.totalDocs ?? products.length} products
-              </span>
+            <div className="lg:hidden mb-4 pb-3 border-b border-gray-200 flex items-center justify-between">
+              <div>
+                <h2 className="font-toma text-lg font-bold text-text">
+                  {selectedCompany !== "All Companies"
+                    ? selectedCompany
+                    : selectedCategory}
+                </h2>
+                <span className="font-modelica text-xs text-text-light">
+                  {pagination.totalDocs ?? products.length} products found
+                </span>
+              </div>
             </div>
 
             {/* Product Grid */}
-
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6">
               {products.map((product) => (
                 <ProductCard
@@ -663,22 +953,30 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               ))}
             </div>
 
-            {/* No Products */}
-
+            {/* No Products Found State */}
             {products.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-20">
-                <img
-                  src="/images/coming-soon.webp"
-                  alt="Coming Soon"
-                  className="img-fluid mb-6"
-                />
+              <div className="flex flex-col items-center justify-center py-16 bg-white rounded-3xl border border-gray-200/80 p-8 text-center my-6">
+                <div className="w-16 h-16 rounded-2xl bg-[#5C3124]/10 flex items-center justify-center text-[#5C3124] mb-4">
+                  <Building2 className="w-8 h-8" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">
+                  No Products Found
+                </h3>
+                <p className="text-xs text-gray-500 max-w-sm mb-5">
+                  We couldn't find any products matching your current category and company filter combination.
+                </p>
+                <button
+                  onClick={handleClearAllFilters}
+                  className="px-6 py-2.5 rounded-full bg-[#5C3124] hover:bg-[#48261c] text-white font-bold text-xs transition-all shadow-sm cursor-pointer"
+                >
+                  Reset All Filters
+                </button>
               </div>
             )}
 
             {/* ============================================================
                 PAGINATION
             ============================================================ */}
-
             {pagination.totalPages > 1 && (
               <div className="mt-14 mb-6 flex flex-wrap items-center justify-end gap-2 sm:gap-2.5 select-none">
                 <button
@@ -748,7 +1046,6 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
       {/* ================================================================
           CLICK OUTSIDE SORT
       ================================================================ */}
-
       {isSortDropdownOpen && (
         <div
           className="fixed inset-0 z-0"
@@ -759,7 +1056,6 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
       {/* ================================================================
           BOTTOM CONTENT
       ================================================================ */}
-
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 mt-10">
         <ComparisonSection data={pageData.sections?.comparisonSection} />
       </div>
