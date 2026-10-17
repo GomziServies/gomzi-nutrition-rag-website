@@ -885,8 +885,13 @@ export default function ContactSection() {
       {/* ── 5. BOTTOM CATALOG CTA ── */}
       <section className="py-14 sm:py-16 bg-[#faf8f6]">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-[#1c120e] via-[#261712] to-[#140c09] text-white shadow-2xl relative overflow-hidden border border-[#5C3124]/30 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#ff8914]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="group/cta relative rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] text-white shadow-2xl overflow-hidden border border-[#5C3124]/40 hover:border-amber-400/40 transition-all duration-500 flex flex-col md:flex-row items-center justify-between gap-8">
+            {/* Decorative Corner Glow */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+
+            {/* Subtle sheen highlight across banner on hover */}
+            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.05] to-transparent pointer-events-none" />
 
             <div className="relative z-10 max-w-xl text-center md:text-left">
               <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">
