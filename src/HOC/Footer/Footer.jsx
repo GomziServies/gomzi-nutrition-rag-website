@@ -133,7 +133,7 @@ export default function Footer() {
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10 pt-10 sm:pt-14">
         <div className="group/newsletter relative rounded-3xl overflow-hidden p-6 sm:p-10 lg:p-12 border border-[#5C3124]/40 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 shadow-2xl transition-all duration-500">
           {/* Decorative Corner Glow */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#5C3124]/30 to-transparent rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/newsletter:scale-110" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#5C3124]/30 to-transparent rounded-full blur-2xl pointer-events-none" />
           {/* Subtle sheen highlight across banner on hover */}
           <div className="absolute inset-0 -translate-x-full group-hover/newsletter:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
 
