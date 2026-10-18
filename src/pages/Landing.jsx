@@ -1,6 +1,7 @@
 import React from "react";
 import SEO from "../component/SEO";
 import HeroSectionWithIcons from "../component/ui/HeroSection";
+import PartnerMarqueeStrip from "../component/ui/PartnerMarqueeStrip";
 import SeasonFavoritesSection from "../component/ui/SeasonFavoritesSection";
 import TrendingDealsSection from "../component/ui/TrendingDealsSection";
 import BestSellingSection from "../component/ui/BestSellingSection";
@@ -22,6 +23,9 @@ const Landing = () => {
       <main className="w-full bg-[#faf8f6]">
         {/* 1. Hero Carousel + Feature Bar (Free Shipping, Lab Tested, FSSAI, Pan-India) */}
         <HeroSectionWithIcons />
+
+        {/* 1.1 Official Brand Partners Infinite Running Marquee Strip */}
+        <PartnerMarqueeStrip />
 
         {/* 2. Welcome First Order Voucher (Unlock 10% Off) */}
         <AthleteCircleSection />
