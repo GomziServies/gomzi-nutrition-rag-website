@@ -53,7 +53,9 @@ export default function TransparencySection() {
     <section className="bg-[#faf8f6] py-12 sm:py-16 md:py-20 w-full overflow-hidden border-t border-[#ebdcd7]/60">
       <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-16">
         {/* Main Card */}
-        <div className="w-full rounded-3xl overflow-hidden bg-white p-6 sm:p-10 lg:p-12 border border-[#ebdcd7] shadow-sm">
+        <div className="group/transparency relative w-full rounded-3xl overflow-hidden bg-white p-6 sm:p-10 lg:p-12 border border-[#ebdcd7]/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(92,49,36,0.08)] hover:border-amber-400/40 transition-all duration-500">
+          {/* Subtle moving card sheen sweep on hover across whole transparency section */}
+          <div className="absolute inset-0 -translate-x-full group-hover/transparency:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.025] to-transparent pointer-events-none" />
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
             {/* ── LEFT: Story & Streamlined Accordion ── */}
             <div className="w-full lg:w-[50%] flex flex-col">

@@ -288,7 +288,7 @@ export default function ContactSection() {
               href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20have%20an%20inquiry%20regarding%20supplements"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
@@ -321,7 +321,7 @@ export default function ContactSection() {
             {/* Email Support */}
             <a
               href="mailto:info@ragnutrition.in"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
@@ -353,7 +353,7 @@ export default function ContactSection() {
             {/* Phone Calling */}
             <a
               href="tel:+919875270200"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
@@ -387,7 +387,7 @@ export default function ContactSection() {
               href="https://maps.google.com/?q=G-23+TIME+SQUARE+Gaurav+Path+Road+Surat+Gujarat+394510"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
@@ -885,8 +885,13 @@ export default function ContactSection() {
       {/* ── 5. BOTTOM CATALOG CTA ── */}
       <section className="py-14 sm:py-16 bg-[#faf8f6]">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-[#1c120e] via-[#261712] to-[#140c09] text-white shadow-2xl relative overflow-hidden border border-[#5C3124]/30 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#ff8914]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="group/cta relative rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 border border-[#5C3124]/40 text-white shadow-2xl overflow-hidden transition-all duration-500 flex flex-col md:flex-row items-center justify-between gap-8">
+            {/* Decorative Corner Glow */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+
+            {/* Subtle sheen highlight across banner on hover */}
+            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
 
             <div className="relative z-10 max-w-xl text-center md:text-left">
               <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">

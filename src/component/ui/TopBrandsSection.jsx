@@ -178,9 +178,12 @@ export default function TopBrandsSection() {
 
               return (
                 <SwiperSlide key={item.id} className="h-auto">
-                  <div className="bg-white rounded-2xl border border-gray-200/80 p-4 h-full flex flex-col justify-between hover:shadow-xl hover:border-[#5C3124]/30 hover:-translate-y-1 transition-all duration-300 relative group">
+                  <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200/80 hover:border-amber-400/40 p-4 h-full flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 relative group overflow-hidden">
+                    {/* Subtle moving card sheen sweep on hover */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+
                     {/* Top Row: TrusLified badge & Wishlist Heart */}
-                    <div className="flex items-center justify-between w-full mb-2">
+                    <div className="relative z-10 flex items-center justify-between w-full mb-2">
                       <div>
                         {item.trusLified ? (
                           <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider text-[#5C3124] bg-[#fdf6f4] border border-[#ebdcd7] px-2 py-0.5 rounded-full uppercase">

@@ -41,9 +41,13 @@ export default function TrustExpertsSection() {
     >
       <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
         {/* Main Enterprise Showcase Card */}
-        <div className="relative rounded-3xl bg-[#fdfbf9] border border-[#ebdcd7] p-6 sm:p-10 lg:p-14 shadow-sm overflow-hidden">
-          {/* Subtle Accent Glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#5C3124]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="group/section relative rounded-3xl bg-[#fdfbf9] border border-[#ebdcd7]/90 p-6 sm:p-10 lg:p-14 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(92,49,36,0.09)] hover:border-amber-400/40 transition-all duration-500 overflow-hidden">
+          {/* Subtle moving card sheen sweep on hover across main section background */}
+          <div className="absolute inset-0 -translate-x-full group-hover/section:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.025] to-transparent pointer-events-none" />
+
+          {/* Subtle Accent Glows */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#5C3124]/5 group-hover/section:bg-[#5C3124]/10 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover/section:scale-110" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-amber-500/5 group-hover/section:bg-amber-500/10 rounded-full blur-3xl pointer-events-none transition-all duration-700" />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* ── LEFT: Content & Advantage Grid (7 cols) ── */}
@@ -72,17 +76,27 @@ export default function TrustExpertsSection() {
                 {B2B_BENEFITS.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl bg-white border border-[#ebdcd7]/80 shadow-2xs hover:border-[#5C3124]/40 transition-colors"
+                    className="group relative p-4 sm:p-5 rounded-2xl bg-white border border-[#ebdcd7]/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden cursor-pointer"
                   >
-                    <div className="w-9 h-9 rounded-lg bg-[#fdf6f4] flex items-center justify-center mb-2.5">
-                      {item.icon}
+                    {/* Subtle moving card sheen sweep on hover */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.03] to-transparent pointer-events-none" />
+
+                    {/* Decorative Background Watermark Icon */}
+                    <div className="absolute top-2.5 right-3 text-[#5C3124]/5 group-hover:text-[#5C3124]/12 transition-colors select-none pointer-events-none">
+                      {React.cloneElement(item.icon, { className: "w-8 h-8" })}
                     </div>
-                    <h3 className="text-sm font-bold text-gray-900 leading-snug">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                      {item.desc}
-                    </p>
+
+                    <div className="relative z-10">
+                      <div className="w-9 h-9 rounded-lg bg-[#fdf6f4] border border-[#ebdcd7]/60 group-hover:border-amber-400/40 flex items-center justify-center mb-2.5 group-hover:scale-105 transition-all duration-300 shadow-2xs">
+                        {item.icon}
+                      </div>
+                      <h3 className="text-sm font-bold text-gray-900 leading-snug group-hover:text-[#5C3124] transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1 leading-relaxed font-normal">
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -116,7 +130,7 @@ export default function TrustExpertsSection() {
 
             {/* ── RIGHT: Professional Warehouse & Partner Graphic (5 cols) ── */}
             <div className="lg:col-span-5 flex items-center justify-center">
-              <div className="relative w-full max-w-md rounded-2xl overflow-hidden border border-[#ebdcd7] shadow-lg group bg-white">
+              <div className="relative w-full max-w-md rounded-2xl overflow-hidden border border-[#ebdcd7]/90 shadow-lg hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300 group bg-white">
                 <img
                   src="/images/product-export.webp"
                   alt="Gomzi Nutrition Wholesale Logistics & Pallet Orders"
@@ -126,6 +140,9 @@ export default function TrustExpertsSection() {
                     e.currentTarget.src = "/images/product-category/whey-protein.webp";
                   }}
                 />
+
+                {/* Subtle moving sheen sweep on hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.05] to-transparent pointer-events-none z-10" />
 
                 {/* Ambient Image Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />

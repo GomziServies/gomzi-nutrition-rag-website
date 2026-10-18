@@ -113,12 +113,19 @@ export default function TrendingDealsSection() {
               <div
                 key={dealId}
                 onClick={() => handleCardClick(deal.url)}
-                className="group relative bg-white rounded-2xl overflow-hidden border border-[#ebdcd7]/80 hover:border-[#5C3124]/40 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                className="group relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-[#ebdcd7]/90 hover:border-amber-400/40 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer"
               >
+                {/* Subtle moving card sheen sweep on hover across whole deal card */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+
                 {/* Top Promo Tag Banner */}
                 {deal.tag && (
-                  <div className="bg-[#5C3124] text-white text-[10px] font-black uppercase tracking-wider text-center py-1.5 px-3">
-                    {deal.tag}
+                  <div className="group/tag relative overflow-hidden bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] group-hover:from-[#48261c] group-hover:to-[#381c14] hover:from-[#48261c] hover:to-[#381c14] border-b border-amber-400/30 group-hover:border-amber-400/50 text-white text-[10.5px] font-black uppercase tracking-wider text-center py-2 px-3 transition-all duration-300 shadow-xs flex items-center justify-center">
+                    <span className="relative z-10 transition-colors duration-300 group-hover:text-amber-200">
+                      {deal.tag}
+                    </span>
+                    {/* Dynamic sheen sweep highlight across top tag on card hover */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                   </div>
                 )}
 
@@ -217,7 +224,7 @@ export default function TrendingDealsSection() {
                       e.stopPropagation();
                       handleCardClick(deal.url);
                     }}
-                    className="group/btn relative overflow-hidden mt-3 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="group/btn relative overflow-hidden mt-3 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <span>Claim Deal</span>
                     <FiArrowRight className="w-3.5 h-3.5 text-amber-300 transition-transform duration-300 group-hover/btn:translate-x-1" />

@@ -397,7 +397,7 @@ export default function AboutPage() {
                   >
                     {/* Content Card */}
                     <div className="w-full md:w-1/2">
-                      <div className="group relative overflow-hidden p-6 sm:p-8 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300">
+                      <div className="group relative overflow-hidden p-6 sm:p-8 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300">
                         <div className="relative z-10">
                           <div className="flex items-center justify-between mb-2">
                             <span className="font-toma text-lg font-black text-[#5C3124]">
@@ -451,7 +451,7 @@ export default function AboutPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                  className="group relative overflow-hidden p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
                 >
                   <div className="relative z-10">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-105 group-hover:border-amber-400/50 group-hover:shadow-lg group-hover:shadow-[#5C3124]/30 transition-all duration-300">
@@ -508,8 +508,13 @@ export default function AboutPage() {
       {/* ── 7. EXPERIENCE THE DIFFERENCE CTA BANNER ── */}
       <section className="py-16 sm:py-20 bg-[#faf8f6]">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="rounded-3xl p-8 sm:p-14 bg-gradient-to-br from-[#1c120e] via-[#261712] to-[#140c09] text-white shadow-2xl relative overflow-hidden border border-[#5C3124]/30 text-center sm:text-left flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#ff8914]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="group/cta relative rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 border border-[#5C3124]/40 text-white shadow-2xl overflow-hidden transition-all duration-500 text-center sm:text-left flex flex-col md:flex-row items-center justify-between gap-8">
+            {/* Decorative Corner Glow */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+
+            {/* Subtle sheen highlight across banner on hover */}
+            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
 
             <div className="relative z-10 max-w-xl">
               <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">

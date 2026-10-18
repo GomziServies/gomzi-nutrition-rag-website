@@ -152,10 +152,13 @@ export default function BestSellingSection() {
 
               return (
                 <SwiperSlide key={item.id} className="h-auto">
-                  <div className="bg-white rounded-2xl border border-gray-200/90 p-2.5 sm:p-4 h-full flex flex-col justify-between hover:shadow-xl hover:border-[#5C3124]/30 hover:-translate-y-1 transition-all duration-300 relative group">
+                  <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200/90 hover:border-amber-400/40 p-2.5 sm:p-4 h-full flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 relative group overflow-hidden">
+                    {/* Subtle moving card sheen sweep on hover */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+
                     {/* Top Tag & Wishlist */}
-                    <div className="flex items-center justify-between w-full mb-1.5 sm:mb-2">
-                      <span className="text-[9px] sm:text-[10px] font-bold tracking-wider text-[#5C3124] bg-[#fdf6f4] border border-[#ebdcd7] px-2 sm:px-2.5 py-0.5 rounded-full uppercase truncate max-w-[70%]">
+                    <div className="relative z-10 flex items-center justify-between w-full mb-1.5 sm:mb-2">
+                      <span className="text-[9px] sm:text-[10px] font-bold tracking-wider text-[#5C3124] bg-[#fdf6f4] border border-[#ebdcd7] group-hover:border-amber-400/40 px-2 sm:px-2.5 py-0.5 rounded-full uppercase truncate max-w-[70%] transition-colors">
                         {item.tag}
                       </span>
                       <button

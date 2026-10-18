@@ -277,10 +277,11 @@ function BrandBannerSlider({ brand, slides, totalCount, onNavigate }) {
         </div>
         <button
           onClick={() => onNavigate(targetUrl)}
-          className="self-start sm:self-auto px-4 py-2 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
+          className="group relative overflow-hidden self-start sm:self-auto px-5 py-2 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-[#5C3124]/20 hover:shadow-lg hover:shadow-[#5C3124]/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
         >
-          <span>Explore {brand.name}</span>
-          <FiArrowRight className="w-3.5 h-3.5" />
+          <span className="relative z-10">Explore {brand.name}</span>
+          <FiArrowRight className="relative z-10 w-3.5 h-3.5 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
         </button>
       </div>
     );
@@ -744,13 +745,16 @@ export default function BrandCompanyShowcaseSection() {
                 return (
                   <div
                     key={item.id || idx}
-                    className={`bg-white rounded-3xl border border-gray-200/80 p-3.5 sm:p-4.5 flex-col justify-between hover:shadow-xl hover:border-[#5C3124]/30 hover:-translate-y-1 transition-all duration-300 relative group w-[calc(50%-7px)] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)] xl:w-[calc(20%-16px)] max-w-[270px] min-w-[150px] ${
+                    className={`bg-white rounded-3xl border border-gray-200/80 hover:border-amber-400/40 p-3.5 sm:p-4.5 flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 relative group overflow-hidden w-[calc(50%-7px)] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)] xl:w-[calc(20%-16px)] max-w-[270px] min-w-[150px] ${
                       idx >= 4 ? "hidden sm:flex" : "flex"
                     }`}
                   >
+                    {/* Subtle moving card sheen sweep on hover */}
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+
                     {/* Top Tag & Wishlist */}
-                    <div className="flex items-center justify-between w-full mb-1">
-                      <span className="px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#733624] bg-[#fbf5f2] border border-[#f0ded8]">
+                    <div className="relative z-10 flex items-center justify-between w-full mb-1">
+                      <span className="px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#733624] bg-[#fbf5f2] border border-[#f0ded8] group-hover:border-amber-400/40 transition-colors">
                         {idx === 0 ? "TOP VALUE" : "BEST SELLER"}
                       </span>
                       <button
@@ -830,10 +834,12 @@ export default function BrandCompanyShowcaseSection() {
                     <button
                       onClick={() => handleAddToCart(item)}
                       disabled={addingId === item.id}
-                      className="w-full py-2.5 sm:py-3 rounded-xl bg-[#4a281e] hover:bg-[#381c14] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                      className="group/btn relative overflow-hidden w-full py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-[#5C3124]/20 hover:shadow-lg hover:shadow-[#5C3124]/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer disabled:opacity-50"
                     >
-                      <FiShoppingCart className="w-4 h-4" />
-                      <span>{addingId === item.id ? "Adding..." : "Add to Cart"}</span>
+                      <FiShoppingCart className="w-4 h-4 text-amber-200 transition-transform duration-300 group-hover/btn:scale-110" />
+                      <span className="relative z-10">{addingId === item.id ? "Adding..." : "Add to Cart"}</span>
+                      {/* Subtle ambient sheen */}
+                      <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                     </button>
                   </div>
                 );
@@ -844,10 +850,12 @@ export default function BrandCompanyShowcaseSection() {
             <div className="flex justify-center mt-7 sm:mt-9">
               <button
                 onClick={() => navigate(`/gomzi-supplement?brand=${encodeURIComponent(brand.name)}`)}
-                className="px-8 py-3 rounded-full bg-[#4a281e] hover:bg-[#381c14] text-white font-bold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all duration-200 hover:scale-102 cursor-pointer active:scale-95"
+                className="group relative overflow-hidden px-8 py-3 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs sm:text-sm shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
               >
-                <span>View All {brand.name}</span>
-                <FiChevronRight className="w-4 h-4" />
+                <span className="relative z-10">View All {brand.name}</span>
+                <FiChevronRight className="relative z-10 w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                {/* Subtle ambient sheen */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
             </div>
           </div>

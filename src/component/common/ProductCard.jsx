@@ -49,7 +49,10 @@ export default function ProductCard({ product, onAddToCart }) {
   const imageUrl = getProductImageUrl(product);
 
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden border border-[#ebdcd7] shadow-xs hover:shadow-xl hover:shadow-[#5C3124]/10 hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300 flex flex-col font-modelica">
+    <div className="group relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-[#ebdcd7]/90 hover:border-amber-400/40 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col font-modelica">
+      {/* Subtle moving card sheen sweep on hover */}
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+
       {/* ── Image Container ── */}
       <div
         className="relative bg-gradient-to-b from-[#faf8f6] to-white overflow-hidden cursor-pointer"

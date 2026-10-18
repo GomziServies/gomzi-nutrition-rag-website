@@ -110,7 +110,7 @@ function CategoryCard({ category }) {
   return (
     <Link
       to={targetUrl}
-      className="group relative overflow-hidden rounded-[22px] cursor-pointer bg-[#140e0c] border border-[#ebdcd7]/60 hover:border-[#5C3124]/60 hover:-translate-y-1 shadow-md hover:shadow-2xl transition-all duration-500 flex flex-col justify-between min-h-[360px] sm:min-h-[390px]"
+      className="group relative overflow-hidden rounded-[22px] cursor-pointer bg-[#140e0c] border border-[#ebdcd7]/60 hover:border-amber-400/50 hover:-translate-y-1.5 shadow-md hover:shadow-[0_20px_45px_rgba(92,49,36,0.30)] transition-all duration-500 flex flex-col justify-between min-h-[360px] sm:min-h-[390px]"
     >
       {/* Background Image with Zoom Effect */}
       <img
@@ -472,8 +472,13 @@ export default function CategoriesSection() {
       {/* ── 6. BOTTOM CATALOG CTA ── */}
       <section className="py-14 sm:py-20 bg-[#faf8f6]">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-[#1c120e] via-[#261712] to-[#140c09] text-white shadow-2xl relative overflow-hidden border border-[#5C3124]/30 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#ff8914]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="group/cta relative rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 border border-[#5C3124]/40 text-white shadow-2xl overflow-hidden transition-all duration-500 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+            {/* Decorative Corner Glow */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+
+            {/* Subtle sheen highlight across banner on hover */}
+            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
 
             <div className="relative z-10 max-w-xl">
               <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">

@@ -163,8 +163,11 @@ export default function SeasonFavoritesSection() {
               <SwiperSlide key={cat.id} className="h-auto">
                 <Link
                   to={cat.url}
-                  className="group flex flex-col h-full bg-[#fcfbf9] hover:bg-white rounded-2xl overflow-hidden border border-[#ebdcd7]/80 hover:border-[#5C3124]/50 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  className="group relative flex flex-col h-full bg-[#fcfbf9] hover:bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-[#ebdcd7]/90 hover:border-amber-400/40 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
                 >
+                  {/* Subtle moving card sheen sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.04] to-transparent pointer-events-none z-20" />
+
                   {/* Category Image Area */}
                   <div className="relative w-full aspect-[4/3.2] overflow-hidden bg-gradient-to-b from-[#f5f1ed] to-[#ede6df]">
                     <img
@@ -175,7 +178,7 @@ export default function SeasonFavoritesSection() {
                     />
 
                     {/* Badge Pill */}
-                    <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs text-[#5C3124] text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs border border-[#5C3124]/10">
+                    <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs text-[#5C3124] text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs border border-[#ebdcd7] group-hover:border-amber-400/40 group-hover:scale-105 transition-all duration-300">
                       {cat.badge}
                     </div>
 
@@ -184,7 +187,7 @@ export default function SeasonFavoritesSection() {
                   </div>
 
                   {/* Category Content Area */}
-                  <div className="flex flex-col flex-1 p-5">
+                  <div className="flex flex-col flex-1 p-5 relative z-10">
                     <div className="flex items-center justify-between gap-2">
                       <h3 className="text-base font-extrabold text-[#1c1c28] group-hover:text-[#5C3124] transition-colors leading-snug">
                         {cat.title}
@@ -194,7 +197,7 @@ export default function SeasonFavoritesSection() {
                       </span>
                     </div>
 
-                    <p className="text-xs text-gray-500 leading-relaxed mt-1.5 line-clamp-2">
+                    <p className="text-xs text-gray-500 leading-relaxed mt-1.5 line-clamp-2 font-normal">
                       {cat.subtitle}
                     </p>
 
@@ -203,7 +206,7 @@ export default function SeasonFavoritesSection() {
                     {/* Interactive Action Bar */}
                     <div className="mt-3.5 pt-3 border-t border-[#ebdcd7]/60 flex items-center justify-between text-xs font-bold text-[#5C3124] group-hover:text-[#3d1e15]">
                       <span>Explore Range</span>
-                      <div className="w-7 h-7 rounded-full bg-[#fdf6f4] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border group-hover:border-amber-400/30 flex items-center justify-center transition-all duration-300">
+                      <div className="w-7 h-7 rounded-full bg-[#fdf6f4] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border group-hover:border-amber-400/40 group-hover:shadow-md group-hover:scale-110 flex items-center justify-center transition-all duration-300">
                         <FiArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                       </div>
                     </div>

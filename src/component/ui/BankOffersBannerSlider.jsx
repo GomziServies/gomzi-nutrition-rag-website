@@ -187,9 +187,12 @@ export default function BankOffersBannerSlider() {
                 <SwiperSlide key={offerId}>
                   <div
                     onClick={() => handleBannerClick(offer.url)}
-                    className="relative w-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] cursor-pointer flex flex-col justify-between overflow-hidden select-none"
+                    className="group/slide relative w-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] cursor-pointer flex flex-col justify-between overflow-hidden select-none"
                     style={{ background: gradient }}
                   >
+                    {/* Subtle moving card sheen sweep on hover */}
+                    <div className="absolute inset-0 -translate-x-full group-hover/slide:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none z-20" />
+
                     {/* Decorative Festive Streamers & Background Texture */}
                     <div className="absolute inset-0 pointer-events-none opacity-30">
                       {/* Concentric rings pattern */}
