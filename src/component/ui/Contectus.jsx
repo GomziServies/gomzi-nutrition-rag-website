@@ -180,29 +180,29 @@ export default function ContactSection() {
     <div className="bg-[#faf8f6] font-modelica text-[#1c1c28]">
       {/* ── 1. LUXURY HERO BANNER (COMPACT & MODERN) ── */}
       <section
-        className="relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none"
+        className="group/contacthero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none transition-all duration-500"
         style={{
           background:
             "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
         }}
       >
-        {/* Ambient atmospheric glows */}
+        {/* Ambient atmospheric glows with interactive breathing */}
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px]"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/contacthero:scale-110 group-hover/contacthero:opacity-60"
           style={{ background: "rgba(92, 49, 36, 0.45)" }}
         />
         <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px]"
+          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/contacthero:scale-125 group-hover/contacthero:opacity-25"
           style={{ background: "rgba(255, 137, 20, 0.12)" }}
         />
         <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/contacthero:scale-120 group-hover/contacthero:opacity-50"
           style={{ background: "rgba(92, 49, 36, 0.3)" }}
         />
 
         {/* Subtle grid pattern overlay */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/contacthero:opacity-[0.06] transition-opacity duration-500"
           style={{
             backgroundImage:
               "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -213,18 +213,21 @@ export default function ContactSection() {
         {/* Ambient RAG Background Typographic Watermark */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
           <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/contacthero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/contacthero:scale-105"
             style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
           >
             RAG
           </span>
         </div>
 
+        {/* Subtle Sheen Highlight Sweep across banner on hover */}
+        <div className="absolute inset-0 -translate-x-full group-hover/contacthero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Breadcrumb Navigation */}
           <nav
             aria-label="Breadcrumb"
-            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/10 text-[11px] text-white/80 mb-3 sm:mb-4"
+            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] backdrop-blur-md border border-white/10 text-[11px] text-white/80 mb-3 sm:mb-4 transition-all duration-300"
           >
             <Link to="/" className="hover:text-[#ffaa5a] transition-colors">
               Home
@@ -235,15 +238,15 @@ export default function ContactSection() {
 
           {/* Badge */}
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ff8914]/10 border border-[#ff8914]/25 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a]">
-              <Sparkles size={12} className="text-[#ff8914]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ff8914]/10 hover:bg-[#ff8914]/20 border border-[#ff8914]/25 hover:border-amber-400/50 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:scale-105 cursor-default group/pill mb-1">
+              <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
               <span>Surat Manufacturing Hub • Direct Customer Support</span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
             </div>
           </div>
 
           {/* Heading */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/contacthero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
             <span>WE ARE HERE TO HELP. </span>
             <span
               style={{
@@ -257,21 +260,21 @@ export default function ContactSection() {
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light">
+          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/contacthero:text-white/95">
             Questions on whey bio-availability, batch CoA lab verification, order delivery, or wholesale partnerships? We respond with direct technical answers, not generic bot scripts.
           </p>
 
           {/* 3 Metric Highlights */}
           <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3.5 sm:gap-6 text-[11px] sm:text-xs text-gray-300">
-            <div className="inline-flex items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
               <span className="w-2 h-2 rounded-full bg-[#ffaa5a] animate-pulse" />
               <span>WhatsApp Reply: Under 30 mins</span>
             </div>
-            <div className="inline-flex items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
               <Building size={13} className="text-[#ffaa5a]" />
               <span>Surat, Gujarat Direct Facility</span>
             </div>
-            <div className="inline-flex items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
               <ShieldCheck size={13} className="text-[#ffaa5a]" />
               <span>100% In-House Nutrition Support</span>
             </div>
@@ -288,14 +291,14 @@ export default function ContactSection() {
               href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20have%20an%20inquiry%20regarding%20supplements"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-2xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-2xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
                     <FaWhatsapp />
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fdf6f4] text-[#5C3124] text-[10px] font-bold uppercase tracking-wider border border-[#ebdcd7]">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fdf6f4] text-[#5C3124] text-[10px] font-bold uppercase tracking-wider border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse" />
                     Live Support
                   </span>
@@ -315,20 +318,21 @@ export default function ContactSection() {
                 <span>Chat on WhatsApp</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+              {/* High-contrast luxury travelling sheen sweep */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
 
             {/* Email Support */}
             <a
               href="mailto:info@ragnutrition.in"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
                     <Mail size={22} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                     Official Desk
                   </span>
                 </div>
@@ -347,20 +351,21 @@ export default function ContactSection() {
                 <span>Send Email</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+              {/* High-contrast luxury travelling sheen sweep */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
 
             {/* Phone Calling */}
             <a
               href="tel:+919875270200"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
                     <Phone size={20} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full group-hover:bg-[#faeee9] group-hover:text-[#5C3124] transition-all duration-300">
                     10 AM – 6 PM
                   </span>
                 </div>
@@ -379,7 +384,8 @@ export default function ContactSection() {
                 <span>Call Directly</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+              {/* High-contrast luxury travelling sheen sweep */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
 
             {/* Retail Store & Facility */}
@@ -387,21 +393,21 @@ export default function ContactSection() {
               href="https://maps.google.com/?q=G-23+TIME+SQUARE+Gaurav+Path+Road+Surat+Gujarat+394510"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
                     <MapPin size={22} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                     Surat Store
                   </span>
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   Store & Facility
                 </span>
-                <h3 className="font-toma text-base font-bold text-gray-900 mt-0.5 line-clamp-2">
+                <h3 className="font-toma text-base font-bold text-gray-900 mt-0.5 line-clamp-2 group-hover:text-[#5C3124] transition-colors">
                   G-23 Time Square, Surat
                 </h3>
                 <p className="text-xs text-gray-500 leading-relaxed font-light mt-2 line-clamp-2">
@@ -415,7 +421,8 @@ export default function ContactSection() {
                 </span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+              {/* High-contrast luxury travelling sheen sweep */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
           </div>
         </div>
@@ -427,7 +434,7 @@ export default function ContactSection() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
             {/* Left: Inquiry Form */}
             <div className="lg:col-span-7">
-              <div className="p-7 sm:p-10 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-lg">
+              <div className="group/form relative overflow-hidden p-7 sm:p-10 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(92,49,36,0.08)] hover:border-amber-400/40 transition-all duration-300">
                 <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
                   Send a Direct Message
                 </span>
@@ -702,115 +709,129 @@ export default function ContactSection() {
                     </div>
                   </form>
                 )}
+                {/* High-contrast luxury travelling sheen sweep */}
+                <div className="absolute inset-0 -translate-x-full group-hover/form:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.025] to-transparent pointer-events-none z-20" />
               </div>
             </div>
 
             {/* Right: Operational Schedule & Surat Hub Info */}
             <div className="lg:col-span-5 flex flex-col gap-6">
               {/* Working Hours Card */}
-              <div className="p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center">
-                    <Clock size={18} />
+              <div className="group/hours relative overflow-hidden p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center group-hover/hours:bg-gradient-to-r group-hover/hours:from-[#5C3124] group-hover/hours:to-[#48261c] group-hover/hours:text-[#ffaa5a] group-hover/hours:border-amber-400/30 group-hover/hours:scale-105 transition-all duration-300">
+                      <Clock size={18} />
+                    </div>
+                    <div>
+                      <h3 className="font-toma text-lg font-bold text-gray-900 group-hover/hours:text-[#5C3124] transition-colors">
+                        Operational Timings
+                      </h3>
+                      <span className="text-[11px] text-gray-500">
+                        Indian Standard Time (IST)
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-toma text-lg font-bold text-gray-900">
-                      Operational Timings
-                    </h3>
-                    <span className="text-[11px] text-gray-500">
-                      Indian Standard Time (IST)
-                    </span>
-                  </div>
-                </div>
 
-                <div className="space-y-3 pt-2 text-xs">
-                  <div className="flex items-center justify-between pb-2.5 border-b border-gray-200">
-                    <span className="text-gray-600 font-medium">Monday – Saturday</span>
-                    <span className="font-bold text-gray-900">10:00 AM – 6:00 PM</span>
-                  </div>
-                  <div className="flex items-center justify-between pb-2.5 border-b border-gray-200">
-                    <span className="text-gray-600 font-medium">Sunday</span>
-                    <span className="font-bold text-[#ff8914]">Plant Sanitization & Dispatches</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 font-medium">Online Web Orders</span>
-                    <span className="font-bold text-[#5C3124]">Active 24 / 7 / 365</span>
+                  <div className="space-y-3 pt-2 text-xs">
+                    <div className="flex items-center justify-between pb-2.5 border-b border-gray-200">
+                      <span className="text-gray-600 font-medium">Monday – Saturday</span>
+                      <span className="font-bold text-gray-900">10:00 AM – 6:00 PM</span>
+                    </div>
+                    <div className="flex items-center justify-between pb-2.5 border-b border-gray-200">
+                      <span className="text-gray-600 font-medium">Sunday</span>
+                      <span className="font-bold text-[#ff8914]">Plant Sanitization & Dispatches</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 font-medium">Online Web Orders</span>
+                      <span className="font-bold text-[#5C3124]">Active 24 / 7 / 365</span>
+                    </div>
                   </div>
                 </div>
+                {/* High-contrast luxury travelling sheen sweep */}
+                <div className="absolute inset-0 -translate-x-full group-hover/hours:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
               </div>
 
               {/* Retail Location & Directions */}
-              <div className="p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center">
-                    <Building size={18} />
+              <div className="group/store relative overflow-hidden p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center group-hover/store:bg-gradient-to-r group-hover/store:from-[#5C3124] group-hover/store:to-[#48261c] group-hover/store:text-[#ffaa5a] group-hover/store:border-amber-400/30 group-hover/store:scale-105 transition-all duration-300">
+                      <Building size={18} />
+                    </div>
+                    <div>
+                      <h3 className="font-toma text-lg font-bold text-gray-900 group-hover/store:text-[#5C3124] transition-colors">
+                        Surat Experience Store
+                      </h3>
+                      <span className="text-[11px] text-gray-500">
+                        Direct Manufacturing Outlet
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-toma text-lg font-bold text-gray-900">
-                      Surat Experience Store
-                    </h3>
-                    <span className="text-[11px] text-gray-500">
-                      Direct Manufacturing Outlet
-                    </span>
-                  </div>
+
+                  <p className="text-xs text-gray-600 leading-relaxed font-light mb-4">
+                    G-23 Time Square, Gaurav Path Road, TP 10 Main Rd, opp. Shree Bharti Residency, Surat, Gujarat 394510.
+                  </p>
+
+                  <a
+                    href="https://maps.google.com/?q=G-23+TIME+SQUARE+Gaurav+Path+Road+Surat+Gujarat+394510"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#ebdcd7] hover:border-amber-400/40 hover:bg-[#5C3124] text-[#5C3124] hover:text-white text-xs font-bold transition-all shadow-sm"
+                  >
+                    <MapPin size={13} />
+                    <span>Get Driving Directions</span>
+                    <ExternalLink size={12} className="ml-auto" />
+                  </a>
                 </div>
-
-                <p className="text-xs text-gray-600 leading-relaxed font-light mb-4">
-                  G-23 Time Square, Gaurav Path Road, TP 10 Main Rd, opp. Shree Bharti Residency, Surat, Gujarat 394510.
-                </p>
-
-                <a
-                  href="https://maps.google.com/?q=G-23+TIME+SQUARE+Gaurav+Path+Road+Surat+Gujarat+394510"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#ebdcd7] hover:border-[#5C3124] text-[#5C3124] text-xs font-bold transition-all shadow-sm"
-                >
-                  <MapPin size={13} />
-                  <span>Get Driving Directions</span>
-                  <ExternalLink size={12} className="ml-auto" />
-                </a>
+                {/* High-contrast luxury travelling sheen sweep */}
+                <div className="absolute inset-0 -translate-x-full group-hover/store:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
               </div>
 
               {/* Verified Social Media Channels */}
-              <div className="p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm">
-                <h3 className="font-toma text-base font-bold text-gray-900 mb-1">
-                  Connect on Social Media
-                </h3>
-                <p className="text-xs text-gray-500 font-light mb-4">
-                  Daily formulation insights, clinical dietetics advice, and behind-the-scenes facility footage.
-                </p>
+              <div className="group/social relative overflow-hidden p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
+                <div className="relative z-10">
+                  <h3 className="font-toma text-base font-bold text-gray-900 group-hover/social:text-[#5C3124] transition-colors mb-1">
+                    Connect on Social Media
+                  </h3>
+                  <p className="text-xs text-gray-500 font-light mb-4">
+                    Daily formulation insights, clinical dietetics advice, and behind-the-scenes facility footage.
+                  </p>
 
-                <div className="flex items-center gap-3">
-                  <a
-                    href="https://www.instagram.com/gomzi.supplement__rag"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-500 hover:border-transparent transition-all shadow-sm"
-                    aria-label="Instagram"
-                  >
-                    <FaInstagram size={17} />
-                  </a>
+                  <div className="flex items-center gap-3">
+                    <a
+                      href="https://www.instagram.com/gomzi.supplement__rag"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-500 hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
+                      aria-label="Instagram"
+                    >
+                      <FaInstagram size={17} />
+                    </a>
 
-                  <a
-                    href="https://www.facebook.com/people/Gomzi-Supplement/61590460356446/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-blue-600 hover:border-transparent transition-all shadow-sm"
-                    aria-label="Facebook"
-                  >
-                    <FaFacebookF size={15} />
-                  </a>
+                    <a
+                      href="https://www.facebook.com/people/Gomzi-Supplement/61590460356446/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-blue-600 hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
+                      aria-label="Facebook"
+                    >
+                      <FaFacebookF size={15} />
+                    </a>
 
-                  <a
-                    href="https://wa.me/919875270200"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-[#5C3124] hover:to-[#48261c] hover:border-amber-400/30 transition-all shadow-sm"
-                    aria-label="WhatsApp Community"
-                  >
-                    <FaWhatsapp size={17} />
-                  </a>
+                    <a
+                      href="https://wa.me/919875270200"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-[#5C3124] hover:to-[#48261c] hover:border-amber-400/30 hover:scale-110 active:scale-95 transition-all shadow-sm"
+                      aria-label="WhatsApp Community"
+                    >
+                      <FaWhatsapp size={17} />
+                    </a>
+                  </div>
                 </div>
+                {/* High-contrast luxury travelling sheen sweep */}
+                <div className="absolute inset-0 -translate-x-full group-hover/social:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
               </div>
             </div>
           </div>
@@ -839,21 +860,25 @@ export default function ContactSection() {
               return (
                 <div
                   key={faq.id}
-                  className="rounded-2xl border border-[#ebdcd7] bg-white overflow-hidden shadow-sm transition-all"
+                  className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 ${
+                    isOpen
+                      ? "border-amber-400/50 bg-[#fffdfa] shadow-md shadow-[#5C3124]/5"
+                      : "border-[#ebdcd7] bg-white hover:border-amber-400/40 hover:shadow-md hover:-translate-y-0.5"
+                  }`}
                 >
                   <button
                     type="button"
                     onClick={() => toggleFaq(faq.id)}
-                    className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 hover:bg-[#fdfbf9] transition-colors"
+                    className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 transition-colors"
                   >
-                    <span className="font-toma text-sm sm:text-base font-bold text-gray-900 tracking-tight">
+                    <span className="font-toma text-sm sm:text-base font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight">
                       {faq.question}
                     </span>
                     <span
                       className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         isOpen
                           ? "rotate-180 bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-xs"
-                          : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7]"
+                          : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-[#5C3124] group-hover:text-white"
                       }`}
                     >
                       <ChevronDown size={16} />
@@ -865,6 +890,8 @@ export default function ContactSection() {
                       {faq.answer}
                     </div>
                   )}
+                  {/* High-contrast luxury travelling sheen sweep */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}

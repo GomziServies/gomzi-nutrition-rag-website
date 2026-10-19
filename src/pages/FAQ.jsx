@@ -199,7 +199,7 @@ export default function FAQPage() {
 
       {/* ── 1. LUXURY HERO BANNER & SEARCH (COMPACT & MODERN) ── */}
       <section
-        className="relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none"
+        className="group/faqhero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 border-b border-[#3a1d15] hover:border-amber-400/35 transition-colors duration-500 text-white select-none"
         style={{
           background:
             "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
@@ -207,22 +207,22 @@ export default function FAQPage() {
       >
         {/* Ambient atmospheric glows */}
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px]"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/faqhero:scale-110 group-hover/faqhero:opacity-60"
           style={{ background: "rgba(92, 49, 36, 0.45)" }}
         />
         <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px]"
+          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/faqhero:scale-125 group-hover/faqhero:opacity-25"
           style={{ background: "rgba(255, 137, 20, 0.12)" }}
         />
 
         <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/faqhero:scale-120 group-hover/faqhero:opacity-50"
           style={{ background: "rgba(92, 49, 36, 0.3)" }}
         />
 
         {/* Subtle grid pattern overlay */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/faqhero:opacity-[0.06] transition-opacity duration-500"
           style={{
             backgroundImage:
               "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -233,23 +233,26 @@ export default function FAQPage() {
         {/* Ambient RAG Background Typographic Watermark */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
           <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/faqhero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/faqhero:scale-105"
             style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
           >
             RAG
           </span>
         </div>
 
+        {/* Subtle Sheen Highlight Sweep across banner on hover */}
+        <div className="absolute inset-0 -translate-x-full group-hover/faqhero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a]">
-            <Sparkles size={12} className="text-[#ff8914]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-amber-400/40 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 cursor-default group/pill mb-3">
+            <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
             <span>Help Center & Knowledge Base</span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
           </div>
 
           {/* Heading */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+          <h1 className="mt-2 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/faqhero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
             ANSWERS TO YOUR{" "}
             <span
               style={{
@@ -263,13 +266,13 @@ export default function FAQPage() {
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-lg mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light">
+          <p className="max-w-lg mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/faqhero:text-white/95">
             Everything you need to know about our formulations, lab certifications, batch testing, and shipping.
           </p>
 
           {/* Live Reactive Search Bar */}
           <div className="mt-5 max-w-xl mx-auto relative">
-            <div className="relative flex items-center bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg p-1 transition-all focus-within:border-[#ff8914] focus-within:bg-white/15">
+            <div className="relative flex items-center bg-white/10 hover:bg-white/[0.14] backdrop-blur-xl border border-white/20 hover:border-amber-400/40 rounded-xl shadow-lg p-1 transition-all focus-within:border-[#ff8914] focus-within:bg-white/15">
               <div className="pl-3 text-gray-400">
                 <Search size={16} className="text-[#ffaa5a]" />
               </div>
@@ -332,38 +335,46 @@ export default function FAQPage() {
               return (
                 <div
                   key={item.id}
-                  className={`rounded-2xl bg-white border transition-all duration-300 overflow-hidden ${
+                  className={`group relative overflow-hidden rounded-2xl transition-all duration-300 cursor-pointer border ${
                     isOpen
-                      ? "border-[#5C3124]/50 shadow-md ring-1 ring-[#5C3124]/10"
-                      : "border-[#eee4e0] hover:border-[#5C3124]/30 hover:shadow-sm"
+                      ? "border-amber-400/50 bg-gradient-to-br from-[#fdfbf9] to-white shadow-[0_8px_24px_rgba(92,49,36,0.08)] ring-1 ring-amber-400/20"
+                      : "border-[#ebdcd7] bg-white hover:border-amber-400/40 hover:bg-[#fdfbf9]/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_28px_rgba(92,49,36,0.08)] hover:-translate-y-0.5"
                   }`}
                 >
+                  {/* Subtle moving card sheen sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+
                   <button
                     onClick={() => toggleItem(item.id)}
-                    className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer group gap-4"
+                    className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer gap-4 relative z-10"
                   >
                     <div className="flex flex-col gap-1 flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#5C3124]">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#5C3124] group-hover:text-amber-600 transition-colors">
                         {item.categoryLabel}
                       </span>
-                      <h3 className="font-modelica font-semibold text-base sm:text-lg text-gray-900 group-hover:text-[#5C3124] transition-colors leading-snug">
+                      <h3
+                        className={`font-modelica font-semibold text-base sm:text-lg transition-colors leading-snug ${
+                          isOpen ? "text-[#5C3124]" : "text-gray-900 group-hover:text-[#5C3124]"
+                        }`}
+                      >
                         {item.question}
                       </h3>
                     </div>
 
                     <div
-                      className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 relative overflow-hidden ${
+                      className={`relative overflow-hidden w-8.5 h-8.5 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         isOpen
-                          ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-sm rotate-180"
-                          : "bg-gray-100 text-gray-500 group-hover:bg-[#ebdcd7] group-hover:text-[#5C3124]"
+                          ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white rotate-180 shadow-md shadow-[#5C3124]/25"
+                          : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white group-hover:shadow-md group-hover:scale-105"
                       }`}
                     >
-                      {isOpen ? <Minus size={16} /> : <Plus size={16} />}
+                      <span className="relative z-10">{isOpen ? <Minus size={15} className="text-amber-100" /> : <Plus size={15} />}</span>
+                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                     </div>
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base text-gray-600 leading-relaxed font-light border-t border-gray-100 animate-fadeIn">
+                    <div className="px-5 sm:px-6 pb-6 pt-1 text-sm sm:text-base text-gray-600 leading-relaxed font-light border-t border-gray-100 animate-fadeIn relative z-10">
                       <p>{item.answer}</p>
                     </div>
                   )}
@@ -424,20 +435,21 @@ export default function FAQPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden flex items-start gap-3.5 p-5 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-lg hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300"
+                  className="group relative overflow-hidden flex items-start gap-4 p-5 sm:p-5.5 rounded-2xl sm:rounded-3xl bg-[#faf8f6] border border-[#ebdcd7]/90 hover:border-amber-400/40 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-[#ffaa5a] group-hover:border-amber-400/30 transition-all duration-300 shadow-xs relative z-10">
-                    <Icon size={18} />
+                  <div className="w-11 h-11 rounded-2xl bg-white border border-[#ebdcd7]/80 flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:text-amber-200 group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs relative z-10">
+                    <Icon size={19} className="transition-transform duration-300 group-hover:scale-110" />
                   </div>
                   <div className="relative z-10">
                     <h4 className="font-toma text-sm font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed font-light">
+                    <p className="text-xs text-gray-500 mt-1 leading-relaxed font-light">
                       {item.sub}
                     </p>
                   </div>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                  {/* Subtle moving card sheen sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}

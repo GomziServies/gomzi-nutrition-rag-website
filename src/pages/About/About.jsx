@@ -113,7 +113,7 @@ export default function AboutPage() {
 
       {/* ── 1. LUXURY HERO BANNER (COMPACT & MODERN) ── */}
       <section
-        className="relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none"
+        className="group/abouthero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 border-b border-[#3a1d15] hover:border-amber-400/35 transition-colors duration-500 text-white select-none"
         style={{
           background:
             "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
@@ -121,21 +121,21 @@ export default function AboutPage() {
       >
         {/* Ambient atmospheric glows */}
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px]"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/abouthero:scale-110 group-hover/abouthero:opacity-60"
           style={{ background: "rgba(92, 49, 36, 0.45)" }}
         />
         <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px]"
+          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/abouthero:scale-125 group-hover/abouthero:opacity-25"
           style={{ background: "rgba(255, 137, 20, 0.12)" }}
         />
         <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/abouthero:scale-120 group-hover/abouthero:opacity-50"
           style={{ background: "rgba(92, 49, 36, 0.3)" }}
         />
 
         {/* Subtle grid pattern overlay */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/abouthero:opacity-[0.06] transition-opacity duration-500"
           style={{
             backgroundImage:
               "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -146,23 +146,26 @@ export default function AboutPage() {
         {/* Ambient RAG Background Typographic Watermark */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
           <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/abouthero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/abouthero:scale-105"
             style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
           >
             RAG
           </span>
         </div>
 
+        {/* Subtle Sheen Highlight Sweep across banner on hover */}
+        <div className="absolute inset-0 -translate-x-full group-hover/abouthero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a]">
-            <Sparkles size={12} className="text-[#ff8914]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-amber-400/40 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 cursor-default group/pill mb-3">
+            <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
             <span>Purity • Science • Athletic Legacy</span>
             <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
           </div>
 
           {/* Heading */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/abouthero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
             <span>BORN FROM SCIENCE. </span>
             <span
               style={{
@@ -176,7 +179,7 @@ export default function AboutPage() {
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light">
+          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/abouthero:text-white/95">
             We didn't begin as marketers outsourcing formulas to anonymous factories. We started as the cGMP laboratory holding the highest standard. Here is why we put our name on the label.
           </p>
 
@@ -397,7 +400,7 @@ export default function AboutPage() {
                   >
                     {/* Content Card */}
                     <div className="w-full md:w-1/2">
-                      <div className="group relative overflow-hidden p-6 sm:p-8 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300">
+                      <div className="group relative overflow-hidden p-6 sm:p-8 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-[#5C3124]/30 hover:-translate-y-1.5 transition-all duration-300">
                         <div className="relative z-10">
                           <div className="flex items-center justify-between mb-2">
                             <span className="font-toma text-lg font-black text-[#5C3124]">
@@ -414,7 +417,8 @@ export default function AboutPage() {
                             {item.description}
                           </p>
                         </div>
-                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                        {/* High-contrast luxury travelling sheen sweep */}
+                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                       </div>
                     </div>
 
@@ -457,7 +461,7 @@ export default function AboutPage() {
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-105 group-hover:border-amber-400/50 group-hover:shadow-lg group-hover:shadow-[#5C3124]/30 transition-all duration-300">
                       <Icon size={22} />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-white px-2.5 py-1 rounded-md border border-[#ebdcd7] group-hover:border-[#5C3124]/30 transition-colors">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-white px-2.5 py-1 rounded-md border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                       {p.tag}
                     </span>
                     <h3 className="font-toma text-xl font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors mt-3 mb-2 tracking-tight">
@@ -467,7 +471,8 @@ export default function AboutPage() {
                       {p.description}
                     </p>
                   </div>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                  {/* High-contrast luxury travelling sheen sweep */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}
@@ -484,9 +489,9 @@ export default function AboutPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden flex items-start gap-3.5 p-5 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-lg hover:border-[#5C3124]/40 hover:-translate-y-1 transition-all duration-300"
+                  className="group relative overflow-hidden flex items-start gap-3.5 p-5 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_28px_rgba(92,49,36,0.1)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-[#ffaa5a] group-hover:border-amber-400/30 transition-all duration-300 shadow-xs relative z-10">
+                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-[#ffaa5a] group-hover:border-amber-400/30 group-hover:scale-105 transition-all duration-300 shadow-xs relative z-10">
                     <Icon size={18} />
                   </div>
                   <div className="relative z-10">
@@ -497,7 +502,8 @@ export default function AboutPage() {
                       {c.sub}
                     </p>
                   </div>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                  {/* High-contrast luxury travelling sheen sweep */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}

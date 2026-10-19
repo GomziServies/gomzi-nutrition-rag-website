@@ -184,29 +184,29 @@ export default function BlogPage() {
 
       {/* ── 1. LUXURY EDITORIAL HERO BANNER (COMPACT & MODERN) ── */}
       <section
-        className="relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none"
+        className="group/bloghero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none transition-all duration-500"
         style={{
           background:
             "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
         }}
       >
-        {/* Ambient atmospheric glows */}
+        {/* Ambient atmospheric glows with interactive breathing */}
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px]"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/bloghero:scale-110 group-hover/bloghero:opacity-60"
           style={{ background: "rgba(92, 49, 36, 0.45)" }}
         />
         <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px]"
+          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/bloghero:scale-125 group-hover/bloghero:opacity-25"
           style={{ background: "rgba(255, 137, 20, 0.12)" }}
         />
         <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/bloghero:scale-120 group-hover/bloghero:opacity-50"
           style={{ background: "rgba(92, 49, 36, 0.3)" }}
         />
 
         {/* Subtle grid pattern overlay */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/bloghero:opacity-[0.06] transition-opacity duration-500"
           style={{
             backgroundImage:
               "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -217,18 +217,21 @@ export default function BlogPage() {
         {/* Ambient RAG Background Typographic Watermark */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
           <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/bloghero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/bloghero:scale-105"
             style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
           >
             RAG
           </span>
         </div>
 
+        {/* Subtle Sheen Highlight Sweep across banner on hover */}
+        <div className="absolute inset-0 -translate-x-full group-hover/bloghero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Breadcrumb Navigation */}
           <nav
             aria-label="Breadcrumb"
-            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/10 text-[11px] text-white/80 mb-3 sm:mb-4"
+            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] backdrop-blur-md border border-white/10 text-[11px] text-white/80 mb-3 sm:mb-4 transition-all duration-300"
           >
             <Link to="/" className="hover:text-[#ffaa5a] transition-colors">
               Home
@@ -239,15 +242,15 @@ export default function BlogPage() {
 
           {/* Badge */}
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ff8914]/10 border border-[#ff8914]/25 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a]">
-              <Sparkles size={12} className="text-[#ff8914]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ff8914]/10 hover:bg-[#ff8914]/20 border border-[#ff8914]/25 hover:border-amber-400/50 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:scale-105 cursor-default group/pill mb-1">
+              <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
               <span>Evidence-Based Nutrition & Science</span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
             </div>
           </div>
 
           {/* Heading */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/bloghero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
             <span>THE GOMZI SCIENCE JOURNAL. </span>
             <span
               style={{
@@ -261,21 +264,21 @@ export default function BlogPage() {
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light">
+          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/bloghero:text-white/95">
             Clear, peer-reviewed sports nutrition science, official ICMR-NIN dietary guidelines, and formulation breakdowns written by practicing dietitians.
           </p>
 
           {/* Metric Highlights */}
           <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3.5 sm:gap-6 text-[11px] sm:text-xs text-gray-300">
-            <div className="inline-flex items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
               <FlaskConical size={13} className="text-[#ffaa5a]" />
               <span>Peer-Reviewed Formulations</span>
             </div>
-            <div className="inline-flex items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
               <ShieldCheck size={13} className="text-[#ffaa5a]" />
               <span>ICMR-NIN RDA Citing</span>
             </div>
-            <div className="inline-flex items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
               <Award size={13} className="text-[#ffaa5a]" />
               <span>Reviewed by Registered Dietitians</span>
             </div>
@@ -438,7 +441,7 @@ export default function BlogPage() {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </Link>
           </div>
         </section>
@@ -542,7 +545,7 @@ export default function BlogPage() {
                       </span>
                     </div>
                   </div>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </Link>
               ))}
             </div>
@@ -610,10 +613,10 @@ export default function BlogPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden p-6 sm:p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+                  className="group relative overflow-hidden p-6 sm:p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
                 >
                   <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-105 group-hover:border-amber-400/50 group-hover:shadow-lg group-hover:shadow-[#5C3124]/30 transition-all duration-300">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-110 group-hover:border-amber-400/60 group-hover:shadow-lg group-hover:shadow-[#5C3124]/35 transition-all duration-300">
                       <Icon size={22} />
                     </div>
                     <h3 className="font-toma text-lg font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors mb-2">
@@ -623,7 +626,8 @@ export default function BlogPage() {
                       {rule.desc}
                     </p>
                   </div>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                  {/* High-contrast luxury travelling sheen sweep */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}

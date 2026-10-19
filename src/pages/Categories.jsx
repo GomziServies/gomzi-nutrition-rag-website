@@ -215,7 +215,7 @@ export default function CategoriesSection() {
 
       {/* ── 1. LUXURY HERO SECTION (COMPACT & MODERN) ── */}
       <section
-        className="relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none"
+        className="group relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 border-b border-[#3a1d15] hover:border-amber-400/35 transition-colors duration-500 text-white select-none"
         style={{
           background:
             "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
@@ -223,21 +223,21 @@ export default function CategoriesSection() {
       >
         {/* Ambient Atmospheric Lighting */}
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px]"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover:scale-110 group-hover:opacity-60"
           style={{ background: "rgba(92, 49, 36, 0.45)" }}
         />
         <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px]"
+          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover:scale-125 group-hover:opacity-25"
           style={{ background: "rgba(255, 137, 20, 0.12)" }}
         />
         <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px]"
+          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover:scale-120 group-hover:opacity-50"
           style={{ background: "rgba(92, 49, 36, 0.3)" }}
         />
 
         {/* Subtle Geometric Grid Texture */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover:opacity-[0.06] transition-opacity duration-500"
           style={{
             backgroundImage:
               "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -248,17 +248,20 @@ export default function CategoriesSection() {
         {/* Ambient RAG Background Typographic Watermark */}
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
           <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] tracking-widest"
+            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover:scale-105"
             style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
           >
             RAG
           </span>
         </div>
 
+        {/* Subtle Sheen Highlight Sweep across banner on hover */}
+        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           {/* Top Live Status Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a]">
-            <Sparkles size={12} className="text-[#ff8914]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-amber-400/40 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 cursor-default group/pill">
+            <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
             <span>
               {loading
                 ? "Connecting to Live Catalog..."
@@ -268,7 +271,7 @@ export default function CategoriesSection() {
           </div>
 
           {/* Headline */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
+          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
             FIND YOUR{" "}
             <span
               style={{
@@ -283,7 +286,7 @@ export default function CategoriesSection() {
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light">
+          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover:text-white/95">
             Engineered for peak performance, muscle synthesis, and daily vitality. Explore clinical-grade sports supplements tailored to your athletic ambitions.
           </p>
 
@@ -361,19 +364,59 @@ export default function CategoriesSection() {
 
       {/* ── 4. THE GOMZI STANDARD SECTION ── */}
       <section
-        className="py-16 sm:py-24 text-white relative overflow-hidden"
+        className="group/standard py-16 sm:py-24 text-white relative overflow-hidden border-t border-b border-[#3a1d15] hover:border-amber-400/35 transition-colors duration-500 select-none"
         style={{
           background:
             "linear-gradient(180deg, #120b08 0%, #1a0f0a 50%, #0d0705 100%)",
         }}
       >
+        {/* Ambient Atmospheric Lighting */}
+        <div
+          className="absolute top-0 right-1/4 w-[550px] h-[260px] rounded-full pointer-events-none blur-[110px] transition-all duration-700 ease-out group-hover/standard:scale-115 group-hover/standard:opacity-60"
+          style={{ background: "rgba(92, 49, 36, 0.45)" }}
+        />
+        <div
+          className="absolute top-1/3 left-10 w-72 h-72 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/standard:scale-125 group-hover/standard:opacity-25"
+          style={{ background: "rgba(255, 137, 20, 0.12)" }}
+        />
+        <div
+          className="absolute bottom-10 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/standard:scale-120 group-hover/standard:opacity-40"
+          style={{ background: "rgba(92, 49, 36, 0.3)" }}
+        />
+
+        {/* Subtle Geometric Grid Texture */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/standard:opacity-[0.06] transition-opacity duration-500"
+          style={{
+            backgroundImage:
+              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+
+        {/* Ambient Background Typographic Watermark */}
+        <div className="absolute inset-0 flex justify-end items-center pr-4 sm:pr-12 pointer-events-none select-none overflow-hidden">
+          <span
+            className="font-toma font-black uppercase leading-none text-white/[0.02] group-hover/standard:text-white/[0.04] tracking-widest transition-all duration-700 ease-out group-hover/standard:scale-105"
+            style={{ fontSize: "clamp(80px, 16vw, 200px)" }}
+          >
+            STANDARD
+          </span>
+        </div>
+
+        {/* Subtle Sheen Highlight Sweep across section on hover */}
+        <div className="absolute inset-0 -translate-x-full group-hover/standard:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+
         <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#ffaa5a] mb-2">
-              <Zap size={13} className="text-[#ff8914]" />
+            {/* Standard Badge Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-amber-400/40 backdrop-blur-md text-xs font-semibold uppercase tracking-widest text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 cursor-default group/pill mb-3">
+              <Zap size={13} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
               <span>The Gomzi Quality Standard</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
             </div>
-            <h2 className="font-toma text-3xl sm:text-5xl lg:text-6xl uppercase leading-tight font-black tracking-tight text-white">
+
+            <h2 className="font-toma text-3xl sm:text-5xl lg:text-6xl uppercase leading-tight font-black tracking-tight text-white transition-all duration-300 group-hover/standard:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
               Why Serious Athletes
               <br />
               <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
@@ -386,7 +429,7 @@ export default function CategoriesSection() {
             {standards.map((item) => (
               <div
                 key={item.number}
-                className="group relative overflow-hidden p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/40 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5C3124]/30 transition-all duration-300 flex flex-col justify-between"
+                className="group relative overflow-hidden p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/40 hover:bg-white/[0.06] hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#5C3124]/30 transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="relative z-10">
                   <div className="flex items-center justify-between mb-4">
@@ -419,7 +462,7 @@ export default function CategoriesSection() {
       <section className="py-16 sm:py-24 bg-[#faf8f6]">
         <div className="max-w-[1000px] mx-auto px-5 sm:px-6">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#fdf6f4] border border-[#ebdcd7] text-xs font-bold uppercase tracking-wider text-[#5C3124] mb-3">
               Got Questions?
             </span>
             <h2 className="font-toma text-3xl sm:text-5xl uppercase font-black tracking-tight text-[#1c1c28] mt-1">
@@ -430,26 +473,33 @@ export default function CategoriesSection() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3.5">
             {faqs.map((faq, index) => {
               const open = activeFaq === index;
               return (
                 <div
                   key={index}
-                  className="rounded-2xl bg-white border border-[#ebdcd7] overflow-hidden shadow-sm transition-all duration-200"
+                  className={`group relative overflow-hidden rounded-2xl transition-all duration-300 cursor-pointer border ${
+                    open
+                      ? "border-amber-400/50 bg-gradient-to-br from-[#fdfbf9] to-white shadow-[0_8px_24px_rgba(92,49,36,0.08)] ring-1 ring-amber-400/20"
+                      : "border-[#ebdcd7] bg-white hover:border-amber-400/40 hover:bg-[#fdfbf9]/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_28px_rgba(92,49,36,0.08)] hover:-translate-y-0.5"
+                  }`}
                 >
+                  {/* Subtle moving card sheen sweep on hover */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+
                   <button
                     onClick={() => setActiveFaq(open ? null : index)}
-                    className="w-full flex justify-between items-center px-6 py-4 text-left cursor-pointer group"
+                    className="w-full flex justify-between items-center px-6 py-4.5 text-left cursor-pointer relative z-10"
                   >
                     <span className="font-modelica font-semibold text-sm sm:text-base text-gray-900 group-hover:text-[#5C3124] transition-colors pr-4">
                       {faq.question}
                     </span>
                     <div
-                      className={`relative overflow-hidden w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                      className={`relative overflow-hidden w-8.5 h-8.5 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         open
                           ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white rotate-180 shadow-md shadow-[#5C3124]/25"
-                          : "bg-gray-100 text-gray-500 group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white"
+                          : "bg-gray-100 text-gray-500 group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white group-hover:shadow-md group-hover:scale-105"
                       }`}
                     >
                       <span className="relative z-10">{open ? <X size={15} className="text-amber-100" /> : <Plus size={15} />}</span>
@@ -458,7 +508,7 @@ export default function CategoriesSection() {
                   </button>
 
                   {open && (
-                    <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed font-light border-t border-gray-100 animate-fadeIn">
+                    <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed font-light border-t border-gray-100 animate-fadeIn relative z-10">
                       {faq.answer}
                     </div>
                   )}
