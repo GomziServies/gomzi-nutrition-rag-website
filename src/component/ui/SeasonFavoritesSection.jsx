@@ -7,6 +7,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { getCategoriesApi } from "../../api/category.api";
+import { getLocalCache, setLocalCache } from "../../utils/storage";
+
+const CATEGORIES_CACHE_KEY = "gomzi_categories_cache";
+// 15-minute background freshness window (revalidates in background)
+const CACHE_FRESHNESS_MS = 15 * 60 * 1000;
 
 // Resolves category image URLs from backend (relative paths, CDN, or absolute URLs)
 const resolveCategoryImageUrl = (img) => {
@@ -26,15 +31,29 @@ const resolveCategoryImageUrl = (img) => {
 
 export default function SeasonFavoritesSection() {
   const swiperRef = useRef(null);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  // Instant hydration from localStorage: 0ms initial render, zero layout shift
+  const [categories, setCategories] = useState(() => {
+    const cached = getLocalCache(CATEGORIES_CACHE_KEY);
+    return Array.isArray(cached) && cached.length > 0 ? cached : [];
+  });
+
+  const [loading, setLoading] = useState(() => {
+    const cached = getLocalCache(CATEGORIES_CACHE_KEY);
+    return Array.isArray(cached) && cached.length > 0 ? false : true;
+  });
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchCategories = async () => {
       try {
-        setLoading(true);
+        // If no cached categories exist, indicate loading state
+        const hasExistingData = categories.length > 0;
+        if (!hasExistingData) {
+          setLoading(true);
+        }
+
         const res = await getCategoriesApi();
         if (isMounted && res?.data?.data) {
           const rawCategories = res.data.data.categories || [];
@@ -77,7 +96,11 @@ export default function SeasonFavoritesSection() {
             }
           }
 
-          setCategories(uniqueCategories);
+          if (uniqueCategories.length > 0) {
+            setCategories(uniqueCategories);
+            // Save clean deduplicated categories into localStorage
+            setLocalCache(CATEGORIES_CACHE_KEY, uniqueCategories);
+          }
         }
       } catch (err) {
         console.warn(

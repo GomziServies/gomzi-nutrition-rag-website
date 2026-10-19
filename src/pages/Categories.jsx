@@ -16,6 +16,9 @@ import {
 import SEO from "../component/SEO";
 import { getCategoriesApi } from "../api/category.api";
 import { CategoryGridSkeleton } from "../component/common/SkeletonLoaders";
+import { getLocalCache, setLocalCache } from "../utils/storage";
+
+const CATEGORIES_PAGE_CACHE_KEY = "gomzi_categories_page_cache";
 
 const resolveImageUrl = (img) => {
   if (!img) return "/images/product-placeholder.webp";
@@ -174,23 +177,42 @@ function CategoryCard({ category }) {
 }
 
 export default function CategoriesSection() {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [totalProducts, setTotalProducts] = useState(153);
+  const [categories, setCategories] = useState(() => {
+    const cached = getLocalCache(CATEGORIES_PAGE_CACHE_KEY);
+    return Array.isArray(cached?.categories) && cached.categories.length > 0
+      ? cached.categories
+      : [];
+  });
+  const [loading, setLoading] = useState(() => {
+    const cached = getLocalCache(CATEGORIES_PAGE_CACHE_KEY);
+    return Array.isArray(cached?.categories) && cached.categories.length > 0
+      ? false
+      : true;
+  });
+  const [totalProducts, setTotalProducts] = useState(() => {
+    const cached = getLocalCache(CATEGORIES_PAGE_CACHE_KEY);
+    return cached?.totalProducts || 153;
+  });
   const [activeFaq, setActiveFaq] = useState(0);
 
-  // Fetch dynamic categories from the API on mount
+  // Fetch dynamic categories from the API on mount (SWR revalidation)
   useEffect(() => {
     let isMounted = true;
     const fetchCategories = async () => {
       try {
-        setLoading(true);
+        if (categories.length === 0) {
+          setLoading(true);
+        }
         const res = await getCategoriesApi();
         if (isMounted && res.data?.data) {
           const data = res.data.data;
           if (Array.isArray(data.categories) && data.categories.length > 0) {
             setCategories(data.categories);
             if (data.totalProducts) setTotalProducts(data.totalProducts);
+            setLocalCache(CATEGORIES_PAGE_CACHE_KEY, {
+              categories: data.categories,
+              totalProducts: data.totalProducts || 153,
+            });
           }
         }
       } catch (err) {
