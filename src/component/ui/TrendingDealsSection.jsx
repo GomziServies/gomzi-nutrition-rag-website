@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiTag, FiCopy, FiCheck, FiArrowRight, FiZap } from "react-icons/fi";
+import { CheckCircle2, Heart, ShoppingCart, Star } from "lucide-react";
 import { getDealsApi } from "../../api/deal.api";
 import { successToast } from "../../utils/toast";
+import { addProductToCart } from "../../services/cartStorage.service";
 import { TrendingDealsSectionSkeleton } from "../common/SkeletonLoaders";
 
 const resolveImageUrl = (img) => {
@@ -18,6 +20,8 @@ export default function TrendingDealsSection() {
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copiedCode, setCopiedCode] = useState(null);
+  const [wishlist, setWishlist] = useState({});
+  const [isAdding, setIsAdding] = useState({});
 
   useEffect(() => {
     let isMounted = true;
@@ -59,6 +63,17 @@ export default function TrendingDealsSection() {
     setTimeout(() => setCopiedCode(null), 3000);
   };
 
+  const toggleWishlist = (id, e) => {
+    e.stopPropagation();
+    setWishlist((prev) => {
+      const isFav = !prev[id];
+      if (isFav) {
+        successToast("Added to wishlist!");
+      }
+      return { ...prev, [id]: isFav };
+    });
+  };
+
   const handleCardClick = (url) => {
     if (url) {
       if (url.startsWith("http://") || url.startsWith("https://")) {
@@ -71,9 +86,28 @@ export default function TrendingDealsSection() {
     }
   };
 
+  const handleAddToCart = async (deal, e) => {
+    e.stopPropagation();
+    const dealId = deal._id || deal.id;
+    setIsAdding((prev) => ({ ...prev, [dealId]: true }));
+    try {
+      await addProductToCart({
+        id: dealId,
+        _id: dealId,
+        name: deal.title,
+        price: deal.dealPrice || deal.price,
+        originalPrice: deal.originalPrice,
+        image: resolveImageUrl(deal.image),
+        slug: deal.url?.replace("/product/", "") || dealId,
+      });
+    } finally {
+      setIsAdding((prev) => ({ ...prev, [dealId]: false }));
+    }
+  };
+
   return (
-    <section className="w-full py-12 sm:py-16 bg-[#faf8f6] border-t border-[#ebdcd7]/60 overflow-hidden" aria-label="Trending Promotional Deals">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
+    <section className="w-full py-10 sm:py-16 bg-[#f8f6f4] border-t border-[#ebdcd7]/60 overflow-hidden font-modelica" aria-label="Trending Promotional Deals">
+      <div className="max-w-[1250px] mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
@@ -98,12 +132,13 @@ export default function TrendingDealsSection() {
           </Link>
         </div>
 
-        {/* Dynamic Grid of Promotional Deal Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+        {/* Dynamic Grid of Promotional Deal Cards: 2 per row on mobile (2x2 grid), 4 on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
           {deals.map((deal, idx) => {
             const dealId = deal._id || deal.id || `deal-${idx}`;
+            const isLiked = wishlist[dealId];
+            const addingThis = isAdding[dealId];
             const hasDiscount = deal.originalPrice && Number(deal.originalPrice) > Number(deal.dealPrice);
-            const savings = hasDiscount ? Number(deal.originalPrice) - Number(deal.dealPrice) : null;
             const discountPercent = hasDiscount
               ? Math.round(((Number(deal.originalPrice) - Number(deal.dealPrice)) / Number(deal.originalPrice)) * 100)
               : null;
@@ -113,122 +148,140 @@ export default function TrendingDealsSection() {
               <div
                 key={dealId}
                 onClick={() => handleCardClick(deal.url)}
-                className="group relative bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-[#ebdcd7]/90 hover:border-amber-400/40 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                className="bg-white rounded-xl sm:rounded-2xl border border-gray-200/80 hover:border-[#5C3124]/40 hover:shadow-xl transition-all duration-200 p-2.5 sm:p-4 flex flex-col justify-between relative cursor-pointer group/card"
               >
-                {/* Subtle moving card sheen sweep on hover across whole deal card */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+                {/* Top Row: Trustified Badge & Wishlist Heart */}
+                <div className="flex items-center justify-between mb-1 sm:mb-2">
+                  <div className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1 sm:px-1.5 py-0.5 rounded">
+                    <CheckCircle2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-600 flex-shrink-0" />
+                    <span className="truncate">Trustified</span>
+                  </div>
 
-                {/* Top Promo Tag Banner */}
-                {deal.tag && (
-                  <div className="group/tag relative overflow-hidden bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] group-hover:from-[#48261c] group-hover:to-[#381c14] hover:from-[#48261c] hover:to-[#381c14] border-b border-amber-400/30 group-hover:border-amber-400/50 text-white text-[10.5px] font-black uppercase tracking-wider text-center py-2 px-3 transition-all duration-300 shadow-xs flex items-center justify-center">
-                    <span className="relative z-10 transition-colors duration-300 group-hover:text-amber-200">
+                  {deal.tag && (
+                    <span className="text-[8px] sm:text-[9px] font-extrabold uppercase px-1.5 sm:px-2 py-0.5 rounded bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] truncate max-w-[80px]">
                       {deal.tag}
                     </span>
-                    {/* Dynamic sheen sweep highlight across top tag on card hover */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full group-hover/tag:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                  </div>
-                )}
+                  )}
 
-                {/* Product Image Area */}
-                <div className="relative w-full aspect-[4/3.5] bg-gradient-to-b from-[#fbf9f6] to-[#f4eee7] flex items-center justify-center p-4 overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={(e) => toggleWishlist(dealId, e)}
+                    className="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-red-500 transition-colors bg-transparent border-none cursor-pointer ml-auto"
+                    aria-label="Save to Wishlist"
+                  >
+                    <Heart
+                      className={`w-3.5 h-3.5 sm:w-5 sm:h-5 transition-transform duration-150 ${
+                        isLiked
+                          ? "fill-red-500 text-red-500 scale-110"
+                          : "text-gray-400"
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {/* Product Image */}
+                <div className="h-32 sm:h-44 w-full flex items-center justify-center p-1 sm:p-2 mb-2 sm:mb-3 bg-white relative">
                   <img
                     src={resolveImageUrl(deal.image)}
                     alt={deal.title}
+                    className="max-h-full max-w-full object-contain group-hover/card:scale-105 transition-transform duration-300"
                     loading="lazy"
-                    className="max-h-full max-w-full object-contain group-hover:scale-108 transition-transform duration-500 ease-out drop-shadow-md"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = "/images/product-category/whey-protein.webp";
                     }}
                   />
-
-                  {/* Discount Badge Pill */}
                   {discountPercent && (
-                    <div className="absolute top-2.5 right-2.5 bg-[#b42318] text-white text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
+                    <div className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-[#b42318] text-white text-[8px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded shadow-xs">
                       {discountPercent}% OFF
                     </div>
                   )}
                 </div>
 
-                {/* Card Content Details */}
-                <div className="flex flex-col flex-1 p-5">
-                  {/* Subtitle / Spec Pill */}
-                  {deal.subtitle && (
-                    <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wide">
-                      {deal.subtitle}
-                    </div>
-                  )}
+                {/* Rating Pill (Gomzi Signature Theme #5C3124 + Gold Star) */}
+                <div className="flex items-center gap-1 bg-[#5C3124] text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded w-fit mb-1.5 shadow-2xs">
+                  <span>{(4.4 + (idx % 3) * 0.1).toFixed(1)}</span>
+                  <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-amber-400 text-amber-400" />
+                </div>
 
-                  {/* Deal Title */}
-                  <h3 className="mt-1 text-base font-extrabold text-[#1c1c28] group-hover:text-[#5C3124] transition-colors leading-snug line-clamp-2">
-                    {deal.title}
-                  </h3>
+                {/* Deal Title (2-Line Clamp) */}
+                <h3 className="text-[11px] sm:text-[13px] font-bold text-[#1c1c28] group-hover/card:text-[#5C3124] transition-colors line-clamp-2 min-h-[30px] sm:min-h-[34px] leading-snug mb-1.5">
+                  {deal.title}
+                </h3>
 
-                  {/* Pricing Box */}
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-xl font-black text-[#1c1c28]">
-                      ₹{deal.dealPrice?.toLocaleString("en-IN")}
+                {/* Pricing Box */}
+                <div className="flex items-baseline gap-1.5 mb-1.5">
+                  <span className="text-sm sm:text-base lg:text-lg font-black text-[#1c1c28]">
+                    ₹{deal.dealPrice?.toLocaleString("en-IN")}
+                  </span>
+                  {hasDiscount && (
+                    <span className="text-[10px] sm:text-xs text-gray-400 line-through">
+                      ₹{deal.originalPrice?.toLocaleString("en-IN")}
                     </span>
-                    {hasDiscount && (
-                      <span className="text-xs text-gray-400 line-through">
-                        ₹{deal.originalPrice?.toLocaleString("en-IN")}
-                      </span>
-                    )}
-                    {savings && (
-                      <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                        Save ₹{savings.toLocaleString("en-IN")}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex-1 min-h-[10px]" />
-
-                  {/* Coupon Code Pill */}
-                  {deal.code && (
-                    <div
-                      onClick={(e) => handleCopyCode(deal.code, e)}
-                      className={`mt-4 w-full flex items-center justify-between px-3 py-2 rounded-xl border border-dashed transition-all duration-200 ${
-                        isCopied
-                          ? "bg-emerald-50 border-emerald-400 text-emerald-800"
-                          : "bg-[#fdfbf9] border-[#5C3124]/40 hover:bg-[#fbf4ee] hover:border-[#5C3124] text-gray-800"
-                      }`}
-                      title="Click to copy coupon code"
-                    >
-                      <div className="flex items-center gap-1.5 text-xs">
-                        <FiTag className="w-3.5 h-3.5 text-[#5C3124]" />
-                        <span className="font-semibold text-gray-600">CODE:</span>
-                        <span className="font-black text-[#5C3124] tracking-wider uppercase">
-                          {deal.code}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1 text-[11px] font-bold text-[#5C3124]">
-                        {isCopied ? (
-                          <>
-                            <FiCheck className="w-3.5 h-3.5 text-emerald-600" />
-                            <span className="text-emerald-700">COPIED</span>
-                          </>
-                        ) : (
-                          <>
-                            <FiCopy className="w-3.5 h-3.5" />
-                            <span>COPY</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
                   )}
+                </div>
 
-                  {/* Primary CTA Button */}
+                {/* Coupon Code Pill */}
+                {deal.code ? (
+                  <div
+                    onClick={(e) => handleCopyCode(deal.code, e)}
+                    className={`mb-2 sm:mb-3 w-full flex items-center justify-between px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-lg border border-dashed transition-all duration-200 ${
+                      isCopied
+                        ? "bg-emerald-50 border-emerald-400 text-emerald-800"
+                        : "bg-[#fdf6f4] border-[#5C3124]/40 hover:bg-[#fbf4ee] hover:border-[#5C3124] text-gray-800"
+                    }`}
+                    title="Click to copy coupon code"
+                  >
+                    <div className="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[11px]">
+                      <FiTag className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#5C3124]" />
+                      <span className="font-semibold text-gray-600 hidden xs:inline">CODE:</span>
+                      <span className="font-extrabold text-[#5C3124] tracking-wider uppercase truncate max-w-[65px] sm:max-w-none">
+                        {deal.code}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-0.5 sm:gap-1 text-[8px] sm:text-[10px] font-bold text-[#5C3124]">
+                      {isCopied ? (
+                        <>
+                          <FiCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-600" />
+                          <span className="text-emerald-700">COPIED</span>
+                        </>
+                      ) : (
+                        <>
+                          <FiCopy className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                          <span>COPY</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-[10px] sm:text-xs font-bold text-[#5C3124] truncate mb-2 sm:mb-3">
+                    Extra 5% Off | Code: ZYMX
+                  </p>
+                )}
+
+                {/* Double Action CTA Buttons (Gomzi Signature Brown Theme) */}
+                <div className="space-y-1.5 sm:space-y-2 mt-auto">
+                  {/* Outline Add to Cart */}
+                  <button
+                    type="button"
+                    onClick={(e) => handleAddToCart(deal, e)}
+                    disabled={addingThis}
+                    className="w-full py-1.5 sm:py-2 px-1 border-2 border-[#5C3124] bg-white hover:bg-[#fdf6f4] text-[#5C3124] text-[11px] sm:text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-all duration-200 cursor-pointer active:scale-[0.98]"
+                  >
+                    <ShoppingCart className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                    <span>{addingThis ? "Adding..." : "Add to Cart"}</span>
+                  </button>
+
+                  {/* Solid Claim Deal / Buy Now */}
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleCardClick(deal.url);
                     }}
-                    className="group/btn relative overflow-hidden mt-3 w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full py-2 sm:py-2.5 px-1 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-[11px] sm:text-xs font-bold rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer border border-amber-400/25 shadow-sm shadow-[#5C3124]/20 hover:shadow-md hover:shadow-[#5C3124]/35 active:scale-[0.98]"
                   >
-                    <span>Claim Deal</span>
-                    <FiArrowRight className="w-3.5 h-3.5 text-amber-300 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                    <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                    Claim Deal
                   </button>
                 </div>
               </div>

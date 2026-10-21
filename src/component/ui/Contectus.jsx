@@ -740,7 +740,7 @@ export default function ContactSection() {
                     </div>
                     <div className="flex items-center justify-between pb-2.5 border-b border-gray-200">
                       <span className="text-gray-600 font-medium">Sunday</span>
-                      <span className="font-bold text-[#ff8914]">Plant Sanitization & Dispatches</span>
+                      <span className="font-bold text-[#5C3124]">Plant Sanitization & Dispatches</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600 font-medium">Online Web Orders</span>
@@ -823,7 +823,7 @@ export default function ContactSection() {
                       href="https://wa.me/919875270200"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-[#5C3124] hover:to-[#48261c] hover:border-amber-400/30 hover:scale-110 active:scale-95 transition-all shadow-sm"
+                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-[#25D366] hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
                       aria-label="WhatsApp Community"
                     >
                       <FaWhatsapp size={17} />

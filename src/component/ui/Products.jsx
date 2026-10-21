@@ -18,6 +18,8 @@ import {
   Building2,
   Search,
   X,
+  Tag,
+  Percent,
 } from "lucide-react";
 
 const sortConfig = {
@@ -169,14 +171,46 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   const activeCategory = category || pageData?.category || "";
   const activeBrand = selectedCompany !== "All Companies" ? selectedCompany : "";
 
+  // Special nav modes (Best Sellers & Offer Zone) should not be sent as literal text searches to MongoDB
+  const rawSearch = (searchParams.get("search") || "").trim();
+  const filterParam = (searchParams.get("filter") || "").trim();
+  const tabParam = (searchParams.get("tab") || "").trim();
+
+  const isBestSeller =
+    rawSearch === "best-seller" ||
+    rawSearch === "bestseller" ||
+    rawSearch === "best_seller" ||
+    filterParam === "best-seller" ||
+    tabParam === "best-seller";
+
+  const isDeal =
+    rawSearch === "deal" ||
+    rawSearch === "deals" ||
+    rawSearch === "offer" ||
+    rawSearch === "offer-zone" ||
+    filterParam === "deal" ||
+    tabParam === "deal";
+
+  const apiSearch = isBestSeller || isDeal ? "" : rawSearch;
+
+  // For Best Sellers / Offer Zone, if user hasn't explicitly chosen a sort, pick optimal default
+  let effectiveSortConfig = sortConfig[sortBy] || {};
+  if (sortBy === "Featured") {
+    if (isBestSeller) {
+      effectiveSortConfig = { sort: "createdAt", sortOrder: "desc" };
+    } else if (isDeal) {
+      effectiveSortConfig = { sort: "price", sortOrder: "asc" };
+    }
+  }
+
   const { products, loading, pagination, hasProducts } = useProducts({
     page: currentPage,
     limit: 12,
-    search,
+    search: apiSearch,
     category: activeCategory,
     brand: activeBrand,
     company: activeBrand,
-    ...(sortConfig[sortBy] || {}),
+    ...effectiveSortConfig,
   });
 
   const {
@@ -357,6 +391,20 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                 <span>{selectedCompany}</span>
               </span>
             )}
+
+            {isBestSeller && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-800">
+                <Tag className="w-3.5 h-3.5 text-amber-600" />
+                <span>Best Sellers</span>
+              </span>
+            )}
+
+            {isDeal && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs font-bold text-rose-700">
+                <Percent className="w-3.5 h-3.5 text-rose-600" />
+                <span>Offer Zone</span>
+              </span>
+            )}
           </div>
 
           <div className="relative">
@@ -486,11 +534,73 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
         {/* ================================================================
             ACTIVE FILTER CHIPS
         ================================================================ */}
-        {(selectedCategory !== "All Products" || selectedCompany !== "All Companies") && (
+        {(selectedCategory !== "All Products" ||
+          selectedCompany !== "All Companies" ||
+          isBestSeller ||
+          isDeal ||
+          Boolean(apiSearch)) && (
           <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-white rounded-2xl border border-[#ebdcd7] shadow-2xs">
             <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider pl-1">
               Active Filters:
             </span>
+
+            {isBestSeller && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 border border-amber-200 text-amber-800">
+                <span>Best Sellers</span>
+                <button
+                  onClick={() => {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete("search");
+                    newParams.delete("filter");
+                    newParams.delete("tab");
+                    const q = newParams.toString();
+                    navigate(q ? `/gomzi-supplement?${q}` : `/gomzi-supplement`);
+                  }}
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-amber-200/60 transition-colors cursor-pointer"
+                  aria-label="Remove best sellers filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {isDeal && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 border border-rose-200 text-rose-700">
+                <span>Offer Zone</span>
+                <button
+                  onClick={() => {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete("search");
+                    newParams.delete("filter");
+                    newParams.delete("tab");
+                    const q = newParams.toString();
+                    navigate(q ? `/gomzi-supplement?${q}` : `/gomzi-supplement`);
+                  }}
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-rose-200/60 transition-colors cursor-pointer"
+                  aria-label="Remove offer zone filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+
+            {Boolean(apiSearch) && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-[#5C3124]">
+                <span>Search: "{apiSearch}"</span>
+                <button
+                  onClick={() => {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete("search");
+                    const q = newParams.toString();
+                    navigate(q ? `/gomzi-supplement?${q}` : `/gomzi-supplement`);
+                  }}
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-[#5C3124]/10 transition-colors cursor-pointer"
+                  aria-label="Remove search filter"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
 
             {selectedCategory !== "All Products" && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-[#5C3124]">

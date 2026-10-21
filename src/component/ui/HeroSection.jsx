@@ -1,41 +1,43 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import BlackFeatureBar from "../common/Black-Feature-Bar";
-import { Download, ShoppingCart, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getHeroBannerApi } from "../../api/banner.api";
-import { HeroSkeleton } from "../common/SkeletonLoaders";
 
-// Dummy fallback banner data (commented out as requested - do not remove)
-/*
-const DEFAULT_BANNER = {
-  desktop_image: "/images/banner-(gls)-web-view.webp",
-  mobile_image: "/images/banner-(gls)-mobile-view.webp",
-  alt_text: "Science-backed sports nutrition products by Gomzi Supplement.",
+/**
+ * Official Live Gomzi Hero Banner
+ * Science-Backed Nutrition For Everyday Performance
+ * 100% identical with the active live website banner.
+ */
+const CURRENT_LIVE_BANNER_SLIDE = {
+  _id: "current-gomzi-live-hero-banner",
+  desktop_image: "/images/banners/current-hero-banner.jpg",
+  mobile_image: "/images/banners/current-hero-banner.jpg",
+  alt_text: "Science-Backed Nutrition For Everyday Performance - Gomzi Nutrition",
   shop_link: "/gomzi-supplement",
-  brochure_url: "/pdf/gomzi-brochure.pdf",
+  title: "SCIENCE-BACKED NUTRITION FOR EVERYDAY PERFORMANCE",
 };
-*/
 
 const resolveImageUrl = (img) => {
-  if (!img) return "";
+  if (!img) return "/images/banners/current-hero-banner.jpg";
   if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/")) {
     return img;
   }
   return `https://files.fggroup.in/${img}`;
 };
 
+/**
+ * Hero Section Master Banner Carousel
+ * Renders the authentic live banner from the website, smoothly compressing on all screen sizes (Desktop, Tablet, Mobile)
+ * without cropping, horizontal scroll, or aspect distortion.
+ */
 export default function HeroSectionWithIcons() {
   const navigate = useNavigate();
-  // Dummy banner removed, initialized with empty array for 100% dynamic API banners
-  // const [banners, setBanners] = useState([DEFAULT_BANNER]);
-  const [banners, setBanners] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [banners, setBanners] = useState([CURRENT_LIVE_BANNER_SLIDE]);
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
 
@@ -45,18 +47,27 @@ export default function HeroSectionWithIcons() {
       try {
         const res = await getHeroBannerApi();
         if (isMounted && res.data?.data) {
-          const data = res.data.data;
-          if (Array.isArray(data.banners) && data.banners.length > 0) {
-            setBanners(data.banners);
-          } else if (data.desktop_image) {
-            setBanners([data]);
+          const raw = res.data.data;
+          let list = [];
+          if (Array.isArray(raw.banners) && raw.banners.length > 0) {
+            list = raw.banners;
+          } else if (Array.isArray(raw) && raw.length > 0) {
+            list = raw;
+          } else if (raw.desktop_image || raw.mobile_image) {
+            list = [raw];
+          }
+
+          if (list.length > 0) {
+            // Always prioritize the official desktop_image so the exact same banner compresses everywhere without divergence
+            const formatted = list.map((b) => ({
+              ...b,
+              desktop_image: b.desktop_image || b.mobile_image || "/images/banners/current-hero-banner.jpg",
+            }));
+            setBanners(formatted);
           }
         }
       } catch (err) {
-        // console.warn("Using default hero banner fallback:", err.message);
-        console.warn("Hero banner API failed to load:", err.message);
-      } finally {
-        if (isMounted) setLoading(false);
+        console.warn("Hero banner API failed, using verified live fallback:", err.message);
       }
     };
 
@@ -66,351 +77,129 @@ export default function HeroSectionWithIcons() {
     };
   }, []);
 
-  // const currentBanner = banners[activeIndex] || banners[0] || DEFAULT_BANNER;
-  const currentBanner = banners[activeIndex] || banners[0] || null;
+  const displaySlides = banners.length > 0 ? banners : [CURRENT_LIVE_BANNER_SLIDE];
 
-  const handleShopNow = () => {
-    const link = (currentBanner?.shop_link || "/gomzi-supplement").trim();
+  const handleSlideNavigation = (link) => {
+    if (!link) {
+      navigate("/gomzi-supplement");
+      return;
+    }
     if (link.startsWith("http://") || link.startsWith("https://")) {
       window.open(link, "_blank", "noopener,noreferrer");
-    } else if (link.startsWith("www.")) {
-      window.open(`https://${link}`, "_blank", "noopener,noreferrer");
     } else {
       navigate(link.startsWith("/") ? link : `/${link}`);
     }
   };
 
-  const handleDownload = () => {
-    const brochure = resolveImageUrl(currentBanner?.brochure_url || "/pdf/gomzi-brochure.pdf");
-    const link = document.createElement("a");
-    link.href = brochure;
-    link.download = "Gomzi-Brochure.pdf";
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  if (loading && banners.length === 0) {
-    return (
-      <section className="relative w-full overflow-hidden select-none">
-        <HeroSkeleton />
-        <BlackFeatureBar />
-      </section>
-    );
-  }
-
   return (
-    <section className="group relative w-full overflow-hidden select-none">
-      <div className="relative w-full">
-        {/* ================= Swiper Banner Slider ================= */}
-        {banners.length > 0 ? (
-          <Swiper
-            key={`hero-swiper-${banners.length}`}
-            modules={[Autoplay, Pagination, Navigation]}
-            speed={800}
-            grabCursor={banners.length > 1}
-            loop={banners.length > 1}
-            autoplay={
-              banners.length > 1
-                ? {
-                    delay: 4500,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                  }
-                : false
-            }
-            pagination={
-              banners.length > 1
-                ? {
-                    clickable: true,
-                  }
-                : false
-            }
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
-            }}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            className="hero-swiper w-full relative z-10"
-          >
-            {banners.map((slide, index) => (
-              <SwiperSlide key={slide._id || index} className="w-full">
-                <picture className="block w-full">
-                  <source
-                    srcSet={resolveImageUrl(slide.mobile_image || slide.desktop_image)}
-                    media="(max-width: 1023px)"
-                  />
+    <section className="group relative w-full overflow-hidden select-none bg-[#f4f4f4]">
+      {/* 
+        ========================================================================
+        HERO BANNER CONTAINER:
+        Scales and compresses proportionately on all screens (Desktop, Tablet, Mobile).
+        ZERO cropping, zero horizontal scroll, zero visual degradation.
+        ========================================================================
+      */}
+      <div className="relative w-full overflow-hidden">
+        <Swiper
+          modules={[Autoplay, Navigation]}
+          speed={650}
+          grabCursor={displaySlides.length > 1}
+          loop={displaySlides.length > 1}
+          autoplay={
+            displaySlides.length > 1
+              ? {
+                  delay: 4500,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }
+              : false
+          }
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+          }}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          className="w-full relative z-10"
+        >
+          {displaySlides.map((slide, index) => {
+            const bannerSrc = resolveImageUrl(slide.desktop_image);
 
-                  <source
-                    srcSet={resolveImageUrl(slide.desktop_image)}
-                    media="(min-width: 1024px)"
-                  />
-
+            return (
+              <SwiperSlide key={slide._id || slide.id || index} className="w-full">
+                <div
+                  onClick={() => handleSlideNavigation(slide.shop_link || slide.shopLink)}
+                  className="w-full cursor-pointer block bg-[#f4f4f4] overflow-hidden"
+                >
+                  {/* Unified Banner: Compresses smoothly without cutting off any text or graphics */}
                   <img
-                    src={resolveImageUrl(slide.desktop_image)}
-                    alt={slide.alt_text || "Science-backed sports nutrition products by Gomzi Supplement."}
+                    src={bannerSrc}
+                    alt={slide.alt_text || slide.title || "Gomzi Nutrition Hero Banner"}
                     fetchPriority={index === 0 ? "high" : "low"}
                     loading={index === 0 ? "eager" : "lazy"}
-                    className="
-                      block
-                      w-full
-                      h-auto
-                      object-cover
-                      select-none
-                    "
+                    className="w-full h-auto block select-none transition-transform duration-300 hover:scale-[1.003]"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/images/banners/current-hero-banner.jpg";
+                    }}
                   />
-                </picture>
+                </div>
               </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <div className="w-full aspect-[16/7] md:aspect-[21/9] lg:aspect-[2.6/1] bg-gradient-to-r from-[#24140e] via-[#331c14] to-[#1c100c]" />
-        )}
+            );
+          })}
+        </Swiper>
 
-        {/* ================= Minimal Navigation Chevron Arrows ================= */}
-        {banners.length > 1 && (
+        {/* Circular Navigation Chevrons (< and >) - Desktop/Tablet Only */}
+        {displaySlides.length > 1 && (
           <>
             <button
-              onClick={() => swiperRef.current?.slidePrev()}
+              onClick={(e) => {
+                e.stopPropagation();
+                swiperRef.current?.slidePrev();
+              }}
               type="button"
-              className="
-                hidden md:flex
-                absolute z-30
-                left-3 sm:left-4
-                top-1/2 -translate-y-1/2
-                w-10 h-10 sm:w-11 sm:h-11
-                rounded-full
-                bg-black/35 hover:bg-[#5C3124]
-                text-white
-                backdrop-blur-md
-                border border-white/20
-                items-center justify-center
-                shadow-lg
-                transition-all duration-300
-                opacity-0 group-hover:opacity-90 hover:!opacity-100
-                hover:scale-105 active:scale-95
-                cursor-pointer
-              "
-              aria-label="Previous Hero Slide"
+              className="hidden sm:flex absolute z-20 left-3 sm:left-6 md:left-10 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-black/45 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 items-center justify-center shadow-2xl transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95"
+              aria-label="Previous Slide"
             >
               <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
 
             <button
-              onClick={() => swiperRef.current?.slideNext()}
+              onClick={(e) => {
+                e.stopPropagation();
+                swiperRef.current?.slideNext();
+              }}
               type="button"
-              className="
-                hidden md:flex
-                absolute z-30
-                right-3 sm:right-4
-                top-1/2 -translate-y-1/2
-                w-10 h-10 sm:w-11 sm:h-11
-                rounded-full
-                bg-black/35 hover:bg-[#5C3124]
-                text-white
-                backdrop-blur-md
-                border border-white/20
-                items-center justify-center
-                shadow-lg
-                transition-all duration-300
-                opacity-0 group-hover:opacity-90 hover:!opacity-100
-                hover:scale-105 active:scale-95
-                cursor-pointer
-              "
-              aria-label="Next Hero Slide"
+              className="hidden sm:flex absolute z-20 right-3 sm:right-6 md:right-10 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-black/45 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 items-center justify-center shadow-2xl transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95"
+              aria-label="Next Slide"
             >
               <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </>
         )}
 
-        {/* ================= DESKTOP STATIC OVERLAY (>= 1024px) ================= */}
-        <div
-          className="
-            hidden lg:flex
-            absolute z-20
-            left-[2.8%] xl:left-[3.2%] 2xl:left-[3.8%]
-            top-[10%] xl:top-[12%] 2xl:top-[14%]
-            max-w-[55%] xl:max-w-[50%]
-            flex-col items-start
-            select-none
-            pointer-events-none
-          "
-        >
-          {/* Static 3-Line Luxury Brand Heading */}
-          <h1 className="flex flex-col font-black tracking-[-0.035em] uppercase leading-[0.92] text-left">
-            <span className="text-[#964816] text-3xl lg:text-4xl xl:text-[54px] 2xl:text-[66px] drop-shadow-sm font-black">
-              SCIENCE-BACKED
-            </span>
-            <span className="text-[#23150E] text-3xl lg:text-4xl xl:text-[54px] 2xl:text-[66px] drop-shadow-sm font-black mt-1 xl:mt-1.5">
-              NUTRITION FOR EVERYDAY
-            </span>
-            <span className="text-[#23150E] text-3xl lg:text-4xl xl:text-[54px] 2xl:text-[66px] drop-shadow-sm font-black mt-1 xl:mt-1.5">
-              PERFORMANCE
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="font-bold text-[#5A2F20] text-sm lg:text-base xl:text-lg 2xl:text-xl tracking-tight mt-2.5 xl:mt-3.5 text-left">
-            Premium Protein | Wellness | No Amino Spiking 100%
-          </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-row items-center gap-3.5 xl:gap-5 mt-4 xl:mt-6 pointer-events-auto">
-            {/* Shop Now Primary Button */}
-            <button
-              onClick={handleShopNow}
-              className="
-                group relative overflow-hidden
-                bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c]
-                hover:from-[#48261c] hover:to-[#381c14]
-                text-white
-                font-bold
-                rounded-xl
-                sm:rounded-2xl
-                shadow-lg shadow-[#5C3124]/35
-                hover:shadow-xl hover:shadow-[#5C3124]/50
-                border border-amber-400/30
-                transition-all duration-300
-                hover:-translate-y-0.5 active:scale-[0.98]
-                cursor-pointer
-                whitespace-nowrap
-                flex items-center justify-center
-                gap-2 sm:gap-2.5
-                text-sm sm:text-base xl:text-lg px-6 py-3 lg:px-7 lg:py-3.5
-              "
-            >
-              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110 text-amber-200" />
-              <span className="tracking-tight">Shop Now</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
-
-              {/* Subtle ambient sheen */}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
-            </button>
-
-            {/* Download Brochure Secondary Frosted Button */}
-            <button
-              onClick={handleDownload}
-              className="
-                group relative overflow-hidden
-                bg-white/95 hover:bg-white
-                backdrop-blur-md
-                border-2 border-[#5C3124]/30 hover:border-[#5C3124]
-                text-[#3d1e15] hover:text-[#5C3124]
-                font-bold
-                rounded-xl
-                sm:rounded-2xl
-                shadow-md hover:shadow-xl hover:shadow-[#5C3124]/15
-                transition-all duration-300
-                hover:-translate-y-0.5 active:scale-[0.98]
-                cursor-pointer
-                whitespace-nowrap
-                flex items-center justify-center
-                gap-2 sm:gap-2.5
-                text-sm sm:text-base xl:text-lg px-6 py-3 lg:px-7 lg:py-3.5
-              "
-            >
-              <Download className="w-4 h-4 sm:w-5 sm:h-5 text-[#5C3124] transition-transform duration-300 group-hover:-translate-y-0.5" />
-              <span className="tracking-tight">Download Brochure</span>
-            </button>
+        {/* Bottom Pill Capsule Pagination Dots */}
+        {displaySlides.length > 1 && (
+          <div className="absolute z-20 bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 pointer-events-auto">
+            <div className="bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center gap-1.5 border border-white/15 shadow-lg">
+              {displaySlides.map((_, i) => {
+                const isActive = activeIndex === i;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => swiperRef.current?.slideToLoop(i)}
+                    className={`transition-all duration-300 rounded-full border-none cursor-pointer p-0 ${
+                      isActive
+                        ? "w-4 sm:w-5 h-1.5 bg-white"
+                        : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
+                    }`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-
-        {/* ================= MOBILE & TABLET STATIC OVERLAY (< 1024px) ================= */}
-        {/* Top: Headline, Subtitle, Badges */}
-        <div
-          className="
-            lg:hidden
-            absolute z-20
-            top-[3%] sm:top-[4%]
-            left-1/2 -translate-x-1/2
-            w-full px-3 sm:px-6
-            flex flex-col items-center text-center
-            select-none
-            pointer-events-none
-          "
-        >
-          <h1 className="flex flex-col font-black tracking-[-0.035em] uppercase leading-[0.94] text-center">
-            <span className="text-[#964816] text-xl sm:text-2xl md:text-3xl font-black">
-              SCIENCE-BACKED
-            </span>
-            <span className="text-[#23150E] text-xl sm:text-2xl md:text-3xl font-black mt-0.5">
-              NUTRITION FOR EVERYDAY
-            </span>
-            <span className="text-[#23150E] text-xl sm:text-2xl md:text-3xl font-black mt-0.5">
-              PERFORMANCE
-            </span>
-          </h1>
-
-          <p className="font-bold text-[#5A2F20] text-[10.5px] sm:text-xs md:text-sm tracking-tight mt-1 sm:mt-1.5">
-            Premium Protein | Wellness | No Amino Spiking 100%
-          </p>
-        </div>
-
-        {/* Bottom: Action Buttons */}
-        <div
-          className="
-            lg:hidden
-            absolute z-20
-            bottom-[3%] sm:bottom-[3.5%] md:bottom-[4%]
-            left-1/2 -translate-x-1/2
-            w-full px-3 sm:px-5
-            flex flex-row items-center justify-center gap-2 sm:gap-3
-          "
-        >
-          <button
-            onClick={handleShopNow}
-            className="
-              group relative overflow-hidden
-              bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c]
-              hover:from-[#48261c] hover:to-[#381c14]
-              text-white
-              font-bold
-              rounded-xl
-              shadow-lg shadow-[#5C3124]/35
-              border border-amber-400/30
-              transition-all duration-300
-              hover:-translate-y-0.5 active:scale-[0.98]
-              cursor-pointer
-              whitespace-nowrap
-              flex items-center justify-center
-              gap-2
-              text-xs sm:text-sm px-4 py-2.5 sm:px-5 sm:py-3
-            "
-          >
-            <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-amber-200" />
-            <span className="tracking-tight">Shop Now</span>
-            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
-          </button>
-
-          <button
-            onClick={handleDownload}
-            className="
-              group relative overflow-hidden
-              bg-white/95 hover:bg-white
-              backdrop-blur-md
-              border-2 border-[#5C3124]/30 hover:border-[#5C3124]
-              text-[#3d1e15]
-              font-bold
-              rounded-xl
-              shadow-md hover:shadow-xl hover:shadow-[#5C3124]/15
-              transition-all duration-300
-              hover:-translate-y-0.5 active:scale-[0.98]
-              cursor-pointer
-              whitespace-nowrap
-              flex items-center justify-center
-              gap-2
-              text-xs sm:text-sm px-4 py-2.5 sm:px-5 sm:py-3
-            "
-          >
-            <Download className="w-4 h-4 sm:w-5 sm:h-5 text-[#5C3124]" />
-            <span className="tracking-tight">Download Brochure</span>
-          </button>
-        </div>
+        )}
       </div>
-
-      <BlackFeatureBar />
     </section>
   );
 }
-

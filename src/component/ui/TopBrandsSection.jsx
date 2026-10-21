@@ -50,7 +50,7 @@ export default function TopBrandsSection() {
         setIsLoadingApi(true);
         const res = await getProductsApi({
           category: activeCategory,
-          limit: 50,
+          limit: 200,
           page: 1,
         });
         if (isMounted && res.data?.data && Array.isArray(res.data.data)) {

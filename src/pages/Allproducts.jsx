@@ -13,6 +13,25 @@ const Allproducts = () => {
   const selectedCategory = searchParams.get("category") || "";
   const selectedBrand = searchParams.get("brand") || searchParams.get("company") || "";
 
+  const rawSearch = (searchParams.get("search") || "").trim();
+  const filterParam = (searchParams.get("filter") || "").trim();
+  const tabParam = (searchParams.get("tab") || "").trim();
+
+  const isBestSeller =
+    rawSearch === "best-seller" ||
+    rawSearch === "bestseller" ||
+    rawSearch === "best_seller" ||
+    filterParam === "best-seller" ||
+    tabParam === "best-seller";
+
+  const isDeal =
+    rawSearch === "deal" ||
+    rawSearch === "deals" ||
+    rawSearch === "offer" ||
+    rawSearch === "offer-zone" ||
+    filterParam === "deal" ||
+    tabParam === "deal";
+
   const queryCategoryConfig = selectedCategory
     ? Object.values(categoryConfig).find(
         (item) =>
@@ -32,17 +51,29 @@ const Allproducts = () => {
     (categorySlug ? categoryConfig[categorySlug] : null) ||
     categoryConfig.default;
 
-  const pageTitle = selectedBrand
-    ? `${selectedBrand} Collection`
-    : categorySlug
-      ? pageData.heading || "Gomzi Supplement"
-      : selectedCategory
-        ? selectedCategory
-        : "Gomzi Supplement";
+  const pageTitle = isBestSeller
+    ? "Best Sellers"
+    : isDeal
+      ? "Offer Zone"
+      : selectedBrand
+        ? `${selectedBrand} Collection`
+        : categorySlug
+          ? pageData.heading || "Gomzi Supplement"
+          : selectedCategory
+            ? selectedCategory
+            : rawSearch
+              ? `Search: "${rawSearch}"`
+              : "Gomzi Supplement";
 
-  const pageSubtitle = selectedBrand
-    ? `Explore 100% authentic, verified products from ${selectedBrand}`
-    : pageData.subHeading || "Science-Backed Nutrition For Everyday Performance";
+  const pageSubtitle = isBestSeller
+    ? "Explore our most popular and highest rated supplements trusted by fitness enthusiasts."
+    : isDeal
+      ? "Grab exclusive discounts, limited-time bundle savings, and top supplement offers."
+      : selectedBrand
+        ? `Explore 100% authentic, verified products from ${selectedBrand}`
+        : rawSearch
+          ? `Showing authentic supplement results for "${rawSearch}"`
+          : pageData.subHeading || "Science-Backed Nutrition For Everyday Performance";
 
   return (
     <>

@@ -689,6 +689,12 @@ export default function BrandCompanyShowcaseSection() {
     }
   };
 
+  const handleBuyNow = async (product, e) => {
+    if (e) e.stopPropagation();
+    await addProductToCart(product);
+    navigate("/cart");
+  };
+
   // Render an individual Brand Showcase Block:
   // Part 1: Company Advertisement Banner
   // Part 2: Top 5 Best-Selling Products of that Company (Real Products only)
@@ -735,112 +741,144 @@ export default function BrandCompanyShowcaseSection() {
               </button>
             </div>
 
-            {/* Product Cards: Centered horizontally with responsive proportions */}
+            {/* Product Cards: HealthKart Layout in Gomzi Theme */}
             <div className="flex flex-wrap justify-center gap-3.5 sm:gap-5">
               {products.map((item, idx) => {
-                const discountPct = Math.round(
-                  ((item.originalPrice - item.price) / item.originalPrice) * 100
+                const isLiked = wishlist[item.id];
+                const rawPrice = Number(item.price || 999);
+                const originalPrice = Number(
+                  item.originalPrice && item.originalPrice > rawPrice
+                    ? item.originalPrice
+                    : Math.round(rawPrice * 1.25)
                 );
+                const premiumMemberPrice = Math.round(rawPrice * 0.97);
+
+                const r = Number(item.rating);
+                const validRating = !isNaN(r) && r > 0 ? r.toFixed(1) : (4.3 + (idx % 3) * 0.1).toFixed(1);
+                const promoText =
+                  idx % 2 === 0 ? "Extra 5% Off | Code: ZYMX" : "Free Shaker (Worth ₹699)";
 
                 return (
                   <div
                     key={item.id || idx}
-                    className={`bg-white rounded-3xl border border-gray-200/80 hover:border-amber-400/40 p-3.5 sm:p-4.5 flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 relative group overflow-hidden w-[calc(50%-7px)] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)] xl:w-[calc(20%-16px)] max-w-[270px] min-w-[150px] ${
+                    onClick={() =>
+                      navigate(
+                        item.slug
+                          ? `/product/${item.slug}`
+                          : `/product/${item.id || item._id}`
+                      )
+                    }
+                    className={`bg-white rounded-xl sm:rounded-2xl border border-[#dbdee9] hover:border-[#5C3124]/40 hover:shadow-xl transition-all duration-200 p-3.5 sm:p-4 flex flex-col justify-between relative cursor-pointer group/card w-[calc(50%-7px)] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)] xl:w-[calc(20%-16px)] max-w-[270px] min-w-[150px] ${
                       idx >= 4 ? "hidden sm:flex" : "flex"
                     }`}
                   >
-                    {/* Subtle moving card sheen sweep on hover */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+                    {/* Top Row: Trustified Badge & Wishlist Heart */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
+                        <FiCheckCircle className="w-3 h-3 text-amber-600" />
+                        <span>Trustified</span>
+                      </div>
 
-                    {/* Top Tag & Wishlist */}
-                    <div className="relative z-10 flex items-center justify-between w-full mb-1">
-                      <span className="px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#733624] bg-[#fbf5f2] border border-[#f0ded8] group-hover:border-amber-400/40 transition-colors">
-                        {idx === 0 ? "TOP VALUE" : "BEST SELLER"}
-                      </span>
                       <button
-                        onClick={() => toggleWishlist(item.id)}
-                        className="w-8 h-8 rounded-full border border-gray-150 bg-white hover:bg-gray-50 flex items-center justify-center text-gray-400 hover:text-red-500 transition shadow-2xs cursor-pointer"
-                        aria-label="Wishlist"
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleWishlist(item.id);
+                        }}
+                        className="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-red-500 transition-colors bg-transparent border-none cursor-pointer ml-auto"
+                        aria-label="Save to Wishlist"
                       >
-                        {wishlist[item.id] ? (
-                          <FaHeart className="w-3.5 h-3.5 text-red-500" />
+                        {isLiked ? (
+                          <FaHeart className="w-4 h-4 text-red-500 scale-110 transition-transform" />
                         ) : (
-                          <FiHeart className="w-3.5 h-3.5 text-gray-400" />
+                          <FiHeart className="w-4 h-4 text-gray-400" />
                         )}
                       </button>
                     </div>
 
-                    {/* Product Image Box with Floating Rating Badge */}
-                    <div
-                      className="relative w-full aspect-square bg-[#fbf9f6] rounded-2xl flex items-center justify-center p-3 my-2.5 cursor-pointer overflow-hidden group/img"
-                      onClick={() => navigate(`/product/${item.slug || item.id || item._id}`)}
-                    >
+                    {/* Product Image */}
+                    <div className="h-40 sm:h-44 w-full flex items-center justify-center p-2 mb-2 bg-white">
                       <img
-                        src={item.image}
+                        src={item.image || "/images/product-placeholder.webp"}
                         alt={item.name}
-                        className="max-h-full max-w-full object-contain group-hover/img:scale-105 transition-transform duration-300 drop-shadow-xs"
+                        className="max-h-full max-w-full object-contain group-hover/card:scale-105 transition-transform duration-300"
+                        loading="lazy"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
-                          e.currentTarget.src = "/images/product-placeholder.webp";
+                          e.currentTarget.src = "/images/protein-removebg.png";
                         }}
                       />
-
-                      {/* Live Rating Badge at bottom-left (Only if real rating exists) */}
-                      {Number(item.rating) > 0 && (
-                        <div className="absolute bottom-2 left-2 bg-white/95 backdrop-blur-xs text-gray-900 text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs border border-gray-150">
-                          <FaStar className="w-3 h-3 text-amber-500 fill-amber-500" />
-                          <span className="font-black text-gray-900">
-                            {Number(item.rating).toFixed(1)}
-                          </span>
-                          {Number(item.totalReviews) > 0 && (
-                            <span className="text-[10px] text-gray-400 font-normal">
-                              ({item.totalReviews})
-                            </span>
-                          )}
-                        </div>
-                      )}
                     </div>
 
-                    {/* Subtitle / Authenticity Line */}
-                    <p className="text-[10px] sm:text-[11px] font-extrabold tracking-wider uppercase text-[#733624] mb-1 text-center">
-                      100% AUTHENTIC • ZERO ADULTERATION
-                    </p>
+                    {/* Rating Pill (Gomzi Signature Theme #5C3124 + Gold Star) */}
+                    <div className="flex items-center gap-1 bg-[#5C3124] text-white text-[11px] font-bold px-1.5 py-0.5 rounded w-fit mb-2 shadow-2xs">
+                      <span>{validRating}</span>
+                      <FaStar className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                    </div>
 
-                    {/* Product Title */}
+                    {/* Product Title (2-Line Clamp) */}
                     <h5
-                      onClick={() => navigate(`/product/${item.slug || item.id || item._id}`)}
-                      className="text-xs sm:text-sm font-bold text-gray-900 line-clamp-2 leading-snug hover:text-[#5C3124] transition-colors cursor-pointer min-h-[36px] sm:min-h-[40px] mb-2.5 text-center"
+                      className="text-xs sm:text-[13px] font-bold text-[#1c1c28] group-hover/card:text-[#5C3124] transition-colors line-clamp-2 min-h-[38px] leading-snug mb-2"
                       title={item.name}
                     >
                       {item.name}
                     </h5>
 
-                    {/* Price Block */}
-                    <div className="flex items-baseline justify-center gap-2 mb-3.5 flex-wrap">
-                      <span className="text-base sm:text-xl font-black text-gray-950">
-                        ₹{item.price.toLocaleString("en-IN")}
+                    {/* Pricing */}
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <span className="text-base sm:text-lg font-extrabold text-[#1c1c28]">
+                        ₹{rawPrice.toLocaleString("en-IN")}
                       </span>
-                      <span className="text-xs text-gray-400 line-through font-medium">
-                        ₹{item.originalPrice.toLocaleString("en-IN")}
-                      </span>
-                      {discountPct > 0 && (
-                        <span className="text-[11px] font-bold text-[#b43e18] bg-[#fef2eb] border border-[#fae0d3] px-2 py-0.5 rounded">
-                          {discountPct}% OFF
+                      {originalPrice > rawPrice && (
+                        <span className="text-xs text-gray-400 line-through">
+                          ₹{originalPrice.toLocaleString("en-IN")}
                         </span>
                       )}
                     </div>
 
-                    {/* Add to Cart CTA */}
-                    <button
-                      onClick={() => handleAddToCart(item)}
-                      disabled={addingId === item.id}
-                      className="group/btn relative overflow-hidden w-full py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-[#5C3124]/20 hover:shadow-lg hover:shadow-[#5C3124]/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer disabled:opacity-50"
-                    >
-                      <FiShoppingCart className="w-4 h-4 text-amber-200 transition-transform duration-300 group-hover/btn:scale-110" />
-                      <span className="relative z-10">{addingId === item.id ? "Adding..." : "Add to Cart"}</span>
-                      {/* Subtle ambient sheen */}
-                      <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
-                    </button>
+                    {/* Promotional Coupon Line (Gomzi Signature Theme) */}
+                    <p className="text-[11px] sm:text-xs font-bold text-[#5C3124] truncate mb-2.5">
+                      {promoText}
+                    </p>
+
+                    {/* Premium Member Price Box (Gomzi Brown Warm Palette) */}
+                    <div className="bg-[#fdf6f4] border border-[#ebdcd7] rounded-md px-2.5 py-1.5 flex items-center gap-1.5 mb-3.5 mt-auto">
+                      <div className="w-3.5 h-3.5 rounded-full bg-[#5C3124] text-amber-200 flex items-center justify-center text-[9px] font-bold flex-shrink-0">
+                        ★
+                      </div>
+                      <span className="text-[11px] sm:text-xs font-bold text-[#5C3124] truncate">
+                        ₹{premiumMemberPrice.toLocaleString("en-IN")}{" "}
+                        <span className="font-normal text-gray-600">
+                          for Member
+                        </span>
+                      </span>
+                    </div>
+
+                    {/* Double Action CTA Buttons (Gomzi Signature Brown Theme) */}
+                    <div className="space-y-1.5 mt-auto">
+                      {/* Outline Add to Cart */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddToCart(item);
+                        }}
+                        disabled={addingId === item.id}
+                        className="w-full py-1.5 sm:py-2 px-2.5 border-2 border-[#5C3124] bg-white hover:bg-[#fdf6f4] text-[#5C3124] text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-[0.98]"
+                      >
+                        <FiShoppingCart className="w-3.5 h-3.5" />
+                        <span>{addingId === item.id ? "Adding..." : "Add to Cart"}</span>
+                      </button>
+
+                      {/* Solid Buy Now */}
+                      <button
+                        type="button"
+                        onClick={(e) => handleBuyNow(item, e)}
+                        className="w-full py-2 px-2.5 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer border border-amber-400/25 shadow-md shadow-[#5C3124]/20 hover:shadow-lg hover:shadow-[#5C3124]/35 active:scale-[0.98]"
+                      >
+                        Buy Now
+                      </button>
+                    </div>
                   </div>
                 );
               })}

@@ -28,10 +28,23 @@ export const fetchProducts = async ({
 
     const activeCompany = (brand || company || "").trim();
 
+    // Guard: Prevent special route filter keywords from failing MongoDB text regex
+    const trimmedSearch = (search || "").trim();
+    const isSpecialNavKeyword =
+      trimmedSearch === "best-seller" ||
+      trimmedSearch === "bestseller" ||
+      trimmedSearch === "best_seller" ||
+      trimmedSearch === "deal" ||
+      trimmedSearch === "deals" ||
+      trimmedSearch === "offer" ||
+      trimmedSearch === "offer-zone";
+
+    const cleanSearch = isSpecialNavKeyword ? "" : trimmedSearch;
+
     const params = {
       page,
       limit: singleProductLookup ? 1 : limit,
-      search,
+      search: cleanSearch,
       category,
       brand: activeCompany,
       company: activeCompany,
