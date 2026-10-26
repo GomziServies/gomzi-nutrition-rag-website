@@ -177,105 +177,34 @@ export default function ContactSection() {
   };
 
   return (
-    <div className="bg-[#faf8f6] font-modelica text-[#1c1c28]">
-      {/* ── 1. LUXURY HERO BANNER (COMPACT & MODERN) ── */}
-      <section
-        className="group/contacthero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none transition-all duration-500"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
-        }}
-      >
-        {/* Ambient atmospheric glows with interactive breathing */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/contacthero:scale-110 group-hover/contacthero:opacity-60"
-          style={{ background: "rgba(92, 49, 36, 0.45)" }}
-        />
-        <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/contacthero:scale-125 group-hover/contacthero:opacity-25"
-          style={{ background: "rgba(255, 137, 20, 0.12)" }}
-        />
-        <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/contacthero:scale-120 group-hover/contacthero:opacity-50"
-          style={{ background: "rgba(92, 49, 36, 0.3)" }}
-        />
+    <div className="bg-bg-cream text-text">
+      {/* ── 1. HERO BANNER ── */}
+      <section className="w-full border-b border-border bg-white">
+        <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-8 text-center">
 
-        {/* Subtle grid pattern overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/contacthero:opacity-[0.06] transition-opacity duration-500"
-          style={{
-            backgroundImage:
-              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-
-        {/* Ambient RAG Background Typographic Watermark */}
-        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
-          <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/contacthero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/contacthero:scale-105"
-            style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
-          >
-            RAG
-          </span>
-        </div>
-
-        {/* Subtle Sheen Highlight Sweep across banner on hover */}
-        <div className="absolute inset-0 -translate-x-full group-hover/contacthero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          {/* Breadcrumb Navigation */}
-          <nav
-            aria-label="Breadcrumb"
-            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] backdrop-blur-md border border-white/10 text-[11px] text-white/80 mb-3 sm:mb-4 transition-all duration-300"
-          >
-            <Link to="/" className="hover:text-[#ffaa5a] transition-colors">
-              Home
-            </Link>
-            <ChevronRight size={12} className="text-white/40" />
-            <span className="font-semibold text-white">Contact & Support</span>
-          </nav>
-
-          {/* Badge */}
-          <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ff8914]/10 hover:bg-[#ff8914]/20 border border-[#ff8914]/25 hover:border-amber-400/50 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:scale-105 cursor-default group/pill mb-1">
-              <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
-              <span>Surat Manufacturing Hub • Direct Customer Support</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
-            </div>
-          </div>
 
           {/* Heading */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/contacthero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
-            <span>WE ARE HERE TO HELP. </span>
-            <span
-              style={{
-                background: "linear-gradient(90deg, #ffaa5a 0%, #ff8914 50%, #f3a055 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              SPEAK DIRECT WITH OUR TEAM.
-            </span>
+          <h1 className="text-3xl font-semibold tracking-tight text-text sm:text-4xl md:text-[40px] leading-tight">
+            We Are Here To Help. Speak Direct With Our Team.
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/contacthero:text-white/95">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-text-light">
             Questions on whey bio-availability, batch CoA lab verification, order delivery, or wholesale partnerships? We respond with direct technical answers, not generic bot scripts.
           </p>
 
           {/* 3 Metric Highlights */}
-          <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3.5 sm:gap-6 text-[11px] sm:text-xs text-gray-300">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
-              <span className="w-2 h-2 rounded-full bg-[#ffaa5a] animate-pulse" />
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-5 text-xs text-text-light">
+            <div className="inline-flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-primary" />
               <span>WhatsApp Reply: Under 30 mins</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
-              <Building size={13} className="text-[#ffaa5a]" />
+            <div className="inline-flex items-center gap-2">
+              <Building size={13} className="text-primary" />
               <span>Surat, Gujarat Direct Facility</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
-              <ShieldCheck size={13} className="text-[#ffaa5a]" />
+            <div className="inline-flex items-center gap-2">
+              <ShieldCheck size={13} className="text-primary" />
               <span>100% In-House Nutrition Support</span>
             </div>
           </div>
@@ -283,7 +212,7 @@ export default function ContactSection() {
       </section>
 
       {/* ── 2. FOUR DIRECT ACCESS CARDS ── */}
-      <section className="py-12 sm:py-16 bg-[#faf8f6]">
+      <section className="py-12 sm:py-16 bg-bg-cream">
         <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {/* WhatsApp Priority */}
@@ -291,14 +220,14 @@ export default function ContactSection() {
               href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20have%20an%20inquiry%20regarding%20supplements"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-primary-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-2xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-primary-light text-primary border border-primary-border flex items-center justify-center text-2xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-primary/20 transition-all duration-300 shadow-xs">
                     <FaWhatsapp />
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#fdf6f4] text-[#5C3124] text-[10px] font-bold uppercase tracking-wider border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-light text-primary text-[10px] font-bold uppercase tracking-wider border border-primary-border group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse" />
                     Live Support
                   </span>
@@ -306,7 +235,7 @@ export default function ContactSection() {
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   Instant Messaging
                 </span>
-                <h3 className="font-toma text-lg font-bold text-gray-900 mt-0.5 group-hover:text-[#5C3124] transition-colors">
+                <h3 className="text-lg font-bold text-gray-900 mt-0.5 group-hover:text-primary transition-colors">
                   +91 98752 70200
                 </h3>
                 <p className="text-xs text-gray-500 leading-relaxed font-light mt-2">
@@ -314,32 +243,31 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-primary">
                 <span>Chat on WhatsApp</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
               {/* High-contrast luxury travelling sheen sweep */}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
 
             {/* Email Support */}
             <a
               href="mailto:info@ragnutrition.in"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-primary-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-primary-light text-primary border border-primary-border flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-primary/20 transition-all duration-300 shadow-xs">
                     <Mail size={22} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary-light px-2.5 py-1 rounded-full border border-primary-border group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                     Official Desk
                   </span>
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   Written Queries
                 </span>
-                <h3 className="font-toma text-lg font-bold text-gray-900 mt-0.5 group-hover:text-[#5C3124] transition-colors break-all">
+                <h3 className="text-lg font-bold text-gray-900 mt-0.5 group-hover:text-primary transition-colors break-all">
                   info@ragnutrition.in
                 </h3>
                 <p className="text-xs text-gray-500 leading-relaxed font-light mt-2">
@@ -347,32 +275,31 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-primary">
                 <span>Send Email</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
               {/* High-contrast luxury travelling sheen sweep */}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
 
             {/* Phone Calling */}
             <a
               href="tel:+919875270200"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-primary-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-primary-light text-primary border border-primary-border flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-primary/20 transition-all duration-300 shadow-xs">
                     <Phone size={20} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full group-hover:bg-[#faeee9] group-hover:text-[#5C3124] transition-all duration-300">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full group-hover:bg-[#faeee9] group-hover:text-primary transition-all duration-300">
                     10 AM – 6 PM
                   </span>
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   Voice Calling
                 </span>
-                <h3 className="font-toma text-lg font-bold text-gray-900 mt-0.5 group-hover:text-[#5C3124] transition-colors">
+                <h3 className="text-lg font-bold text-gray-900 mt-0.5 group-hover:text-primary transition-colors">
                   +91 98752 70200
                 </h3>
                 <p className="text-xs text-gray-500 leading-relaxed font-light mt-2">
@@ -380,12 +307,11 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-primary">
                 <span>Call Directly</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
               {/* High-contrast luxury travelling sheen sweep */}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
 
             {/* Retail Store & Facility */}
@@ -393,21 +319,21 @@ export default function ContactSection() {
               href="https://maps.google.com/?q=G-23+TIME+SQUARE+Gaurav+Path+Road+Surat+Gujarat+394510"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              className="group relative overflow-hidden p-6 rounded-2xl bg-white border border-primary-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-primary-light text-primary border border-primary-border flex items-center justify-center text-xl group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover group-hover:text-white group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-primary/20 transition-all duration-300 shadow-xs">
                     <MapPin size={22} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-[#fdf6f4] px-2.5 py-1 rounded-full border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-primary-light px-2.5 py-1 rounded-full border border-primary-border group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                     Surat Store
                   </span>
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
                   Store & Facility
                 </span>
-                <h3 className="font-toma text-base font-bold text-gray-900 mt-0.5 line-clamp-2 group-hover:text-[#5C3124] transition-colors">
+                <h3 className="text-base font-bold text-gray-900 mt-0.5 line-clamp-2 group-hover:text-primary transition-colors">
                   G-23 Time Square, Surat
                 </h3>
                 <p className="text-xs text-gray-500 leading-relaxed font-light mt-2 line-clamp-2">
@@ -415,30 +341,29 @@ export default function ContactSection() {
                 </p>
               </div>
 
-              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+              <div className="relative z-10 mt-5 pt-3 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-primary">
                 <span className="inline-flex items-center gap-1">
                   Open in Maps <ExternalLink size={12} />
                 </span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
               {/* High-contrast luxury travelling sheen sweep */}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </a>
           </div>
         </div>
       </section>
 
       {/* ── 3. INTERACTIVE INQUIRY FORM & FACILITY SCHEDULE ── */}
-      <section className="py-12 sm:py-16 bg-white border-y border-[#ebdcd7]">
+      <section className="py-12 sm:py-16 bg-white border-y border-primary-border">
         <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
             {/* Left: Inquiry Form */}
             <div className="lg:col-span-7">
-              <div className="group/form relative overflow-hidden p-7 sm:p-10 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(92,49,36,0.08)] hover:border-amber-400/40 transition-all duration-300">
-                <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
+              <div className="group/form relative p-7 sm:p-10 rounded-3xl bg-bg-cream border border-primary-border shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(92,49,36,0.08)] hover:border-amber-400/40 transition-all duration-300">
+                <span className="text-xs font-bold uppercase tracking-widest text-primary">
                   Send a Direct Message
                 </span>
-                <h2 className="font-toma text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1c1c28] mt-1 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-text mt-1 tracking-tight">
                   How Can We Assist You?
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 mt-2 mb-6 font-light leading-relaxed">
@@ -446,11 +371,11 @@ export default function ContactSection() {
                 </p>
 
                 {submitted ? (
-                  <div className="p-8 rounded-2xl bg-white border border-[#ebdcd7] text-center shadow-sm">
-                    <div className="w-14 h-14 rounded-full bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center mx-auto mb-4">
+                  <div className="p-8 rounded-2xl bg-white border border-primary-border text-center shadow-sm">
+                    <div className="w-14 h-14 rounded-full bg-primary-light text-primary border border-primary-border flex items-center justify-center mx-auto mb-4">
                       <CheckCircle2 size={30} className="text-[#ff8914]" />
                     </div>
-                    <h3 className="font-toma text-2xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       Inquiry Received!
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto leading-relaxed font-light mb-6">
@@ -458,10 +383,9 @@ export default function ContactSection() {
                     </p>
                     <button
                       onClick={() => setSubmitted(false)}
-                      className="group relative overflow-hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
+                      className="group relative overflow-hidden px-6 py-2.5 rounded-xl btn-gradient border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer"
                     >
                       <span className="relative z-10">Send Another Message</span>
-                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                     </button>
                   </div>
                 ) : (
@@ -479,7 +403,7 @@ export default function ContactSection() {
                           value={formData.name}
                           onChange={handleChange}
                           placeholder="e.g. Rahul Sharma"
-                          className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebdcd7] text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/10 transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-white border border-primary-border text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
                         />
                       </div>
 
@@ -494,7 +418,7 @@ export default function ContactSection() {
                           value={formData.email}
                           onChange={handleChange}
                           placeholder="rahul@example.com"
-                          className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebdcd7] text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/10 transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-white border border-primary-border text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
                         />
                       </div>
                     </div>
@@ -516,7 +440,7 @@ export default function ContactSection() {
                           value={formData.mobile}
                           onChange={handleChange}
                           placeholder="98765 43210"
-                          className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-[#ebdcd7] text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/10 transition-all"
+                          className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-primary-border text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
                         />
                       </div>
                       <span className="text-[11px] text-gray-400 font-light mt-1 block">
@@ -532,12 +456,15 @@ export default function ContactSection() {
                       const ActiveIcon = currentCategory.icon;
 
                       return (
-                        <div className="relative" ref={dropdownRef}>
+                        <div
+                          className={`relative ${isDropdownOpen ? "z-30" : "z-10"}`}
+                          ref={dropdownRef}
+                        >
                           <div className="flex items-center justify-between mb-1.5">
                             <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">
                               Select Inquiry Category <span className="text-red-500">*</span>
                             </label>
-                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#5C3124] bg-[#5C3124]/8 px-2 py-0.5 rounded-full border border-[#5C3124]/10">
+                            <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914]" />
                               {currentCategory.tag}
                             </span>
@@ -552,30 +479,30 @@ export default function ContactSection() {
                             }}
                             aria-haspopup="listbox"
                             aria-expanded={isDropdownOpen}
-                            className={`w-full px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl bg-white border text-left transition-all duration-200 flex items-center justify-between shadow-2xs cursor-pointer ${
+                            className={`w-full px-4 py-3 rounded-xl bg-white border text-left transition-all duration-200 flex items-center justify-between shadow-2xs cursor-pointer ${
                               isDropdownOpen
-                                ? "border-[#5C3124] ring-2 ring-[#5C3124]/10 bg-[#fffcf9]"
-                                : "border-[#ebdcd7] hover:border-[#5C3124]/40 hover:bg-[#fffcf9]"
+                                ? "border-primary ring-2 ring-primary/15 bg-white"
+                                : "border-primary-border hover:border-primary/50 hover:bg-[#fffcf9]"
                             }`}
                           >
                             <div className="flex items-center gap-3 min-w-0">
-                              <div className="w-8 h-8 rounded-lg bg-[#5C3124]/8 text-[#5C3124] flex items-center justify-center shrink-0 border border-[#5C3124]/10">
-                                <ActiveIcon size={16} />
+                              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/15">
+                                <ActiveIcon size={17} />
                               </div>
                               <div className="flex flex-col min-w-0">
                                 <span className="text-xs font-bold text-gray-900 truncate">
                                   {currentCategory.label}
                                 </span>
-                                <span className="text-[10px] text-gray-400 font-light truncate hidden sm:block">
+                                <span className="text-[11px] text-gray-500 font-light truncate hidden sm:block">
                                   {currentCategory.desc}
                                 </span>
                               </div>
                             </div>
 
                             <ChevronDown
-                              size={16}
+                              size={17}
                               className={`text-gray-400 shrink-0 ml-2 transition-transform duration-200 ${
-                                isDropdownOpen ? "rotate-180 text-[#5C3124]" : ""
+                                isDropdownOpen ? "rotate-180 text-primary" : ""
                               }`}
                             />
                           </button>
@@ -584,13 +511,14 @@ export default function ContactSection() {
                           {isDropdownOpen && (
                             <div
                               role="listbox"
-                              className="absolute left-0 right-0 top-full mt-2 z-50 bg-white/98 backdrop-blur-md border border-[#ebdcd7] rounded-2xl shadow-[0_20px_40px_-10px_rgba(92,49,36,0.18),0_4px_12px_rgba(0,0,0,0.04)] p-1.5 overflow-hidden animate-in fade-in duration-150"
+                              className="absolute left-0 right-0 top-full mt-2 z-50 bg-white border border-[#e8ded7] rounded-2xl shadow-[0_20px_48px_-10px_rgba(92,49,36,0.18),0_4px_16px_rgba(0,0,0,0.06)] p-2 animate-in fade-in zoom-in-95 duration-150"
                             >
-                              <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-gray-400 uppercase border-b border-[#ebdcd7]/50 mb-1">
-                                Inquiry Topic • Select Category
+                              <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-gray-400 uppercase border-b border-gray-100 mb-1.5 flex items-center justify-between">
+                                <span>Inquiry Topic • Select Category</span>
+                                <span className="text-[9px] font-normal lowercase tracking-normal text-gray-400">5 departments</span>
                               </div>
 
-                              <div className="space-y-1 max-h-72 overflow-y-auto pr-0.5">
+                              <div className="space-y-1.5 max-h-[380px] overflow-y-auto pr-0.5">
                                 {inquiryCategories.map((item) => {
                                   const isSelected = selectedTopic === item.label;
                                   const IconComponent = item.icon;
@@ -604,9 +532,9 @@ export default function ContactSection() {
                                         setSelectedTopic(item.label);
                                         setIsDropdownOpen(false);
                                       }}
-                                      className={`group flex items-center justify-between p-2.5 sm:p-3 rounded-xl cursor-pointer transition-all duration-150 ${
+                                      className={`group flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all duration-150 ${
                                         isSelected
-                                          ? "bg-[#5C3124]/8 border border-[#5C3124]/20 shadow-2xs"
+                                          ? "bg-primary/8 border border-primary/25 shadow-xs"
                                           : "hover:bg-[#faf6f3] border border-transparent"
                                       }`}
                                     >
@@ -615,7 +543,7 @@ export default function ContactSection() {
                                           className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                                             isSelected
                                               ? "bg-[#ff8914]/20 text-[#ff8914] border border-[#ff8914]/40"
-                                              : "bg-[#faf8f6] text-[#5C3124] group-hover:bg-white group-hover:text-[#ff8914] border border-[#ebdcd7]/60"
+                                              : "bg-bg-cream text-primary group-hover:bg-white group-hover:text-[#ff8914] border border-primary-border/60"
                                           }`}
                                         >
                                           <IconComponent size={16} />
@@ -624,30 +552,30 @@ export default function ContactSection() {
                                         <div className="flex flex-col min-w-0">
                                           <span
                                             className={`text-xs font-bold leading-tight ${
-                                              isSelected ? "text-[#5C3124]" : "text-gray-900 group-hover:text-[#5C3124]"
+                                              isSelected ? "text-primary" : "text-gray-900 group-hover:text-primary"
                                             }`}
                                           >
                                             {item.label}
                                           </span>
-                                          <span className="text-[10px] text-gray-500 font-light leading-tight mt-0.5">
+                                          <span className="text-[11px] text-gray-500 font-light leading-tight mt-0.5">
                                             {item.desc}
                                           </span>
                                         </div>
                                       </div>
 
-                                      <div className="flex items-center gap-2 shrink-0 ml-2">
+                                      <div className="flex items-center gap-2 shrink-0 ml-3">
                                         <span
                                           className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider hidden sm:inline-block ${
                                             isSelected
-                                              ? "bg-[#5C3124] text-white"
-                                              : "bg-gray-100 text-gray-500 group-hover:bg-[#5C3124]/10 group-hover:text-[#5C3124]"
+                                              ? "bg-primary text-white"
+                                              : "bg-gray-100 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary"
                                           }`}
                                         >
                                           {item.tag}
                                         </span>
 
                                         {isSelected && (
-                                          <div className="w-5 h-5 rounded-full bg-[#5C3124] text-white flex items-center justify-center shadow-2xs">
+                                          <div className="w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center shadow-xs">
                                             <Check size={12} strokeWidth={3} />
                                           </div>
                                         )}
@@ -674,7 +602,7 @@ export default function ContactSection() {
                         value={formData.message}
                         onChange={handleChange}
                         placeholder="Please describe your question, specific batch number, or wholesale quantity..."
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-[#ebdcd7] text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/10 transition-all resize-none"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-primary-border text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all resize-none"
                       />
                     </div>
 
@@ -683,7 +611,7 @@ export default function ContactSection() {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="group relative overflow-hidden flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 disabled:opacity-50 cursor-pointer"
+                        className="group relative overflow-hidden flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl btn-gradient border border-amber-400/30 text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 disabled:opacity-50 cursor-pointer"
                       >
                         {loading ? (
                           <span className="relative z-10">Sending Inquiry...</span>
@@ -693,38 +621,35 @@ export default function ContactSection() {
                             <Send size={14} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                           </>
                         )}
-                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                       </button>
 
                       <a
                         href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20have%20an%20urgent%20inquiry"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group relative overflow-hidden inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
+                        className="group relative overflow-hidden inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl btn-gradient border border-amber-400/30 text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer"
                       >
                         <FaWhatsapp size={15} className="relative z-10 text-amber-200" />
                         <span className="relative z-10">Chat WhatsApp</span>
-                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                       </a>
                     </div>
                   </form>
                 )}
                 {/* High-contrast luxury travelling sheen sweep */}
-                <div className="absolute inset-0 -translate-x-full group-hover/form:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.025] to-transparent pointer-events-none z-20" />
               </div>
             </div>
 
             {/* Right: Operational Schedule & Surat Hub Info */}
             <div className="lg:col-span-5 flex flex-col gap-6">
               {/* Working Hours Card */}
-              <div className="group/hours relative overflow-hidden p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
+              <div className="group/hours relative overflow-hidden p-7 rounded-3xl bg-bg-cream border border-primary-border shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="relative z-10">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center group-hover/hours:bg-gradient-to-r group-hover/hours:from-[#5C3124] group-hover/hours:to-[#48261c] group-hover/hours:text-[#ffaa5a] group-hover/hours:border-amber-400/30 group-hover/hours:scale-105 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-primary-light text-primary border border-primary-border flex items-center justify-center group-hover/hours:bg-gradient-to-r group-hover/hours:from-primary group-hover/hours:to-primary-hover group-hover/hours:text-[#ff8914] group-hover/hours:border-amber-400/30 group-hover/hours:scale-105 transition-all duration-300">
                       <Clock size={18} />
                     </div>
                     <div>
-                      <h3 className="font-toma text-lg font-bold text-gray-900 group-hover/hours:text-[#5C3124] transition-colors">
+                      <h3 className="text-lg font-bold text-gray-900 group-hover/hours:text-primary transition-colors">
                         Operational Timings
                       </h3>
                       <span className="text-[11px] text-gray-500">
@@ -740,27 +665,26 @@ export default function ContactSection() {
                     </div>
                     <div className="flex items-center justify-between pb-2.5 border-b border-gray-200">
                       <span className="text-gray-600 font-medium">Sunday</span>
-                      <span className="font-bold text-[#5C3124]">Plant Sanitization & Dispatches</span>
+                      <span className="font-bold text-primary">Plant Sanitization & Dispatches</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600 font-medium">Online Web Orders</span>
-                      <span className="font-bold text-[#5C3124]">Active 24 / 7 / 365</span>
+                      <span className="font-bold text-primary">Active 24 / 7 / 365</span>
                     </div>
                   </div>
                 </div>
                 {/* High-contrast luxury travelling sheen sweep */}
-                <div className="absolute inset-0 -translate-x-full group-hover/hours:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
               </div>
 
               {/* Retail Location & Directions */}
-              <div className="group/store relative overflow-hidden p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
+              <div className="group/store relative overflow-hidden p-7 rounded-3xl bg-bg-cream border border-primary-border shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="relative z-10">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] flex items-center justify-center group-hover/store:bg-gradient-to-r group-hover/store:from-[#5C3124] group-hover/store:to-[#48261c] group-hover/store:text-[#ffaa5a] group-hover/store:border-amber-400/30 group-hover/store:scale-105 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-primary-light text-primary border border-primary-border flex items-center justify-center group-hover/store:bg-gradient-to-r group-hover/store:from-primary group-hover/store:to-primary-hover group-hover/store:text-[#ff8914] group-hover/store:border-amber-400/30 group-hover/store:scale-105 transition-all duration-300">
                       <Building size={18} />
                     </div>
                     <div>
-                      <h3 className="font-toma text-lg font-bold text-gray-900 group-hover/store:text-[#5C3124] transition-colors">
+                      <h3 className="text-lg font-bold text-gray-900 group-hover/store:text-primary transition-colors">
                         Surat Experience Store
                       </h3>
                       <span className="text-[11px] text-gray-500">
@@ -777,7 +701,7 @@ export default function ContactSection() {
                     href="https://maps.google.com/?q=G-23+TIME+SQUARE+Gaurav+Path+Road+Surat+Gujarat+394510"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#ebdcd7] hover:border-amber-400/40 hover:bg-[#5C3124] text-[#5C3124] hover:text-white text-xs font-bold transition-all shadow-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-primary-border hover:border-amber-400/40 hover:bg-primary text-primary hover:text-white text-xs font-bold transition-all shadow-sm"
                   >
                     <MapPin size={13} />
                     <span>Get Driving Directions</span>
@@ -785,13 +709,12 @@ export default function ContactSection() {
                   </a>
                 </div>
                 {/* High-contrast luxury travelling sheen sweep */}
-                <div className="absolute inset-0 -translate-x-full group-hover/store:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
               </div>
 
               {/* Verified Social Media Channels */}
-              <div className="group/social relative overflow-hidden p-7 rounded-3xl bg-[#faf8f6] border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
+              <div className="group/social relative overflow-hidden p-7 rounded-3xl bg-bg-cream border border-primary-border shadow-sm hover:shadow-[0_12px_32px_rgba(92,49,36,0.08)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="relative z-10">
-                  <h3 className="font-toma text-base font-bold text-gray-900 group-hover/social:text-[#5C3124] transition-colors mb-1">
+                  <h3 className="text-base font-bold text-gray-900 group-hover/social:text-primary transition-colors mb-1">
                     Connect on Social Media
                   </h3>
                   <p className="text-xs text-gray-500 font-light mb-4">
@@ -803,7 +726,7 @@ export default function ContactSection() {
                       href="https://www.instagram.com/gomzi.supplement__rag"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-500 hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
+                      className="w-10 h-10 rounded-xl bg-white border border-primary-border flex items-center justify-center text-gray-700 hover:text-white hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-500 hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
                       aria-label="Instagram"
                     >
                       <FaInstagram size={17} />
@@ -813,7 +736,7 @@ export default function ContactSection() {
                       href="https://www.facebook.com/people/Gomzi-Supplement/61590460356446/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-blue-600 hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
+                      className="w-10 h-10 rounded-xl bg-white border border-primary-border flex items-center justify-center text-gray-700 hover:text-white hover:bg-blue-600 hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
                       aria-label="Facebook"
                     >
                       <FaFacebookF size={15} />
@@ -823,7 +746,7 @@ export default function ContactSection() {
                       href="https://wa.me/919875270200"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-xl bg-white border border-[#ebdcd7] flex items-center justify-center text-gray-700 hover:text-white hover:bg-[#25D366] hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
+                      className="w-10 h-10 rounded-xl bg-white border border-primary-border flex items-center justify-center text-gray-700 hover:text-white hover:bg-[#25D366] hover:border-transparent hover:scale-110 active:scale-95 transition-all shadow-sm"
                       aria-label="WhatsApp Community"
                     >
                       <FaWhatsapp size={17} />
@@ -831,7 +754,6 @@ export default function ContactSection() {
                   </div>
                 </div>
                 {/* High-contrast luxury travelling sheen sweep */}
-                <div className="absolute inset-0 -translate-x-full group-hover/social:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
               </div>
             </div>
           </div>
@@ -839,14 +761,14 @@ export default function ContactSection() {
       </section>
 
       {/* ── 4. FREQUENTLY ASKED QUESTIONS ACCORDION ── */}
-      <section className="py-14 sm:py-20 bg-[#faf8f6]">
+      <section className="py-14 sm:py-20 bg-bg-cream">
         <div className="max-w-[1000px] mx-auto px-5 sm:px-6">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124] inline-flex items-center gap-1.5">
-              <HelpCircle size={14} className="text-[#5C3124]" />
+            <span className="text-xs font-bold uppercase tracking-widest text-primary inline-flex items-center gap-1.5">
+              <HelpCircle size={14} className="text-primary" />
               Quick Resolution
             </span>
-            <h2 className="font-toma text-2xl sm:text-4xl font-extrabold text-[#1c1c28] mt-1 tracking-tight uppercase">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-text mt-1 tracking-tight uppercase">
               Common Support Inquiries
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 mt-2 font-light">
@@ -862,8 +784,8 @@ export default function ContactSection() {
                   key={faq.id}
                   className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 ${
                     isOpen
-                      ? "border-amber-400/50 bg-[#fffdfa] shadow-md shadow-[#5C3124]/5"
-                      : "border-[#ebdcd7] bg-white hover:border-amber-400/40 hover:shadow-md hover:-translate-y-0.5"
+                      ? "border-amber-400/50 bg-[#fffdfa] shadow-md shadow-primary/5"
+                      : "border-primary-border bg-white hover:border-amber-400/40 hover:shadow-md hover:-translate-y-0.5"
                   }`}
                 >
                   <button
@@ -871,14 +793,14 @@ export default function ContactSection() {
                     onClick={() => toggleFaq(faq.id)}
                     className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 transition-colors"
                   >
-                    <span className="font-toma text-sm sm:text-base font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight">
+                    <span className="text-sm sm:text-base font-bold text-gray-900 group-hover:text-primary transition-colors tracking-tight">
                       {faq.question}
                     </span>
                     <span
                       className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         isOpen
-                          ? "rotate-180 bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-xs"
-                          : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-[#5C3124] group-hover:text-white"
+                          ? "rotate-180 bg-gradient-to-r from-primary to-primary-hover text-white border border-amber-400/30 shadow-xs"
+                          : "bg-primary-light text-primary border border-primary-border group-hover:bg-primary group-hover:text-white"
                       }`}
                     >
                       <ChevronDown size={16} />
@@ -891,7 +813,6 @@ export default function ContactSection() {
                     </div>
                   )}
                   {/* High-contrast luxury travelling sheen sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}
@@ -901,7 +822,7 @@ export default function ContactSection() {
           <div className="mt-10 text-center">
             <p className="text-xs text-gray-500">
               Have a clinical dietetics question?{" "}
-              <Link to="/faq" className="font-bold text-[#5C3124] hover:underline">
+              <Link to="/faq" className="font-bold text-primary hover:underline">
                 Explore our full 25+ FAQ Knowledge Base →
               </Link>
             </p>
@@ -910,36 +831,28 @@ export default function ContactSection() {
       </section>
 
       {/* ── 5. BOTTOM CATALOG CTA ── */}
-      <section className="py-14 sm:py-16 bg-[#faf8f6]">
-        <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="group/cta relative rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 border border-[#5C3124]/40 text-white shadow-2xl overflow-hidden transition-all duration-500 flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Decorative Corner Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
-            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
-
-            {/* Subtle sheen highlight across banner on hover */}
-            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
-            <div className="relative z-10 max-w-xl text-center md:text-left">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">
+      <section className="py-12 sm:py-16 bg-white border-t border-border">
+        <div className="max-w-[1170px] mx-auto px-4 sm:px-6">
+          <div className="relative rounded-2xl border border-border bg-gradient-to-r from-primary-light/60 via-white to-primary-light/40 p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
+            <div className="max-w-xl text-center md:text-left">
+              <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-primary bg-white px-3 py-1 rounded-full border border-primary-border shadow-xs mb-3">
                 Direct From Laboratory To Athlete
               </span>
-              <h2 className="font-toma text-2xl sm:text-3xl font-extrabold text-white mt-1 leading-snug">
+              <h2 className="text-2xl sm:text-3xl font-bold text-text tracking-tight leading-tight">
                 Ready to Experience Verified Purity?
               </h2>
-              <p className="text-xs sm:text-sm text-gray-300 mt-2 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-text-light mt-2 leading-relaxed font-normal">
                 Explore our 100% Whey Isolate, Creatine Monohydrate, and plant protein formulas with free delivery across India.
               </p>
             </div>
 
-            <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <Link
                 to="/gomzi-supplement"
-                className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary hover:bg-primary-hover active:scale-[0.98] text-white font-semibold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer"
               >
-                <span className="relative z-10 tracking-wider">Shop Certified Catalog</span>
-                <ArrowRight size={16} className="relative z-10 text-amber-200 transition-transform duration-300 group-hover:translate-x-1" />
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+                <span>Shop Certified Catalog</span>
+                <ArrowRight size={15} />
               </Link>
             </div>
           </div>

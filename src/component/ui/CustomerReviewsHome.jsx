@@ -83,21 +83,21 @@ export default function CustomerReviews() {
   };
 
   return (
-    <section className="bg-[#faf8f6] py-12 sm:py-16 md:py-20 w-full overflow-hidden border-t border-[#ebdcd7]/60">
+    <section className="bg-bg-cream py-12 sm:py-16 md:py-20 w-full overflow-hidden border-t border-primary-border/60">
       <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-18">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#5C3124]/10 border border-[#5C3124]/20 mb-3.5 w-fit">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3.5 w-fit">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-black uppercase tracking-widest text-[#5C3124]">
+              <span className="text-xs font-black uppercase tracking-widest text-primary">
                 Customer Stories
               </span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-950 tracking-tight leading-tight">
               What People Are Saying{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5C3124] to-amber-700">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700">
                 About Gomzi
               </span>
             </h2>
@@ -123,7 +123,7 @@ export default function CustomerReviews() {
 
               <div className="w-24 sm:w-28 h-1.5 rounded-full bg-gray-200 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#5C3124] to-amber-600 rounded-full transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-primary to-amber-600 rounded-full transition-all duration-300"
                   style={{
                     width: `${(activeIndex / reviews.length) * 100}%`,
                   }}
@@ -138,14 +138,14 @@ export default function CustomerReviews() {
             <div className="flex gap-2">
               <button
                 aria-label="Previous review"
-                className="review-prev h-11 w-11 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:border-[#5C3124] hover:text-white flex items-center justify-center text-gray-700 shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
+                className="review-prev h-11 w-11 rounded-full border border-gray-200 bg-white hover:bg-primary hover:border-primary hover:text-white flex items-center justify-center text-gray-700 shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
               >
                 <ChevronLeft size={18} />
               </button>
 
               <button
                 aria-label="Next review"
-                className="review-next h-11 w-11 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:border-[#5C3124] hover:text-white flex items-center justify-center text-gray-700 shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
+                className="review-next h-11 w-11 rounded-full border border-gray-200 bg-white hover:bg-primary hover:border-primary hover:text-white flex items-center justify-center text-gray-700 shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
               >
                 <ChevronRight size={18} />
               </button>
@@ -189,11 +189,10 @@ export default function CustomerReviews() {
 
             return (
               <SwiperSlide key={review.name} className="!h-auto !flex flex-col">
-                <div className="w-full flex-1 min-h-[280px] sm:min-h-[290px] rounded-2xl sm:rounded-3xl border border-[#ebdcd7]/90 bg-white p-5 sm:p-6 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+                <div className="w-full flex-1 min-h-[280px] sm:min-h-[290px] rounded-2xl sm:rounded-3xl border border-primary-border/90 bg-white p-5 sm:p-6 flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
                   {/* Subtle moving card sheen sweep on hover */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.03] to-transparent pointer-events-none" />
                   {/* Decorative Quotation Mark Watermark */}
-                  <div className="absolute top-3 right-5 text-6xl font-serif font-black text-[#5C3124]/5 group-hover:text-[#5C3124]/12 transition-colors select-none pointer-events-none leading-none">
+                  <div className="absolute top-3 right-5 text-6xl font-serif font-black text-primary/5 group-hover:text-primary/12 transition-colors select-none pointer-events-none leading-none">
                     “
                   </div>
 
@@ -237,7 +236,7 @@ export default function CustomerReviews() {
                         <button
                           type="button"
                           onClick={() => toggleReadMore(review.name)}
-                          className="mt-2 text-[#5C3124] hover:text-[#3a1d15] font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 group/btn"
+                          className="mt-2 text-primary hover:text-[#3a1d15] font-bold text-xs inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 group/btn"
                         >
                           <span>{isExpanded ? "Read Less" : "Read More"}</span>
                           <span className="text-[10px] group-hover/btn:translate-x-0.5 transition-transform">
@@ -252,9 +251,8 @@ export default function CustomerReviews() {
                   <div className="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between gap-3 relative z-10">
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Initials Avatar */}
-                      <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white flex items-center justify-center font-black text-xs flex-shrink-0 shadow-md shadow-[#5C3124]/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
+                      <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full btn-gradient border border-amber-400/30 text-white flex items-center justify-center font-black text-xs flex-shrink-0 shadow-md shadow-primary/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
                         <span className="relative z-10 text-amber-100">{getInitials(review.name)}</span>
-                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                       </div>
 
                       <div className="flex flex-col min-w-0">
@@ -268,7 +266,7 @@ export default function CustomerReviews() {
                     </div>
 
                     {/* Product Tag */}
-                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#fdf6f4] border border-[#ebdcd7] text-[#5C3124] text-[11px] font-bold flex-shrink-0 max-w-[120px] shadow-2xs">
+                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary-light border border-primary-border text-primary text-[11px] font-bold flex-shrink-0 max-w-[120px] shadow-2xs">
                       <span className="truncate">{review.product}</span>
                     </div>
                   </div>

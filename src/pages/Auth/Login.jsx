@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { loginUser, sendOTP, verifyOTP } from "../../services/auth.service";
 import { setToken } from "../../utils/storage";
 import { successToast, errorToast } from "../../utils/toast";
@@ -17,10 +17,15 @@ import {
   Star,
   CheckCircle2,
   Sparkles,
+  Tag,
+  Truck,
 } from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Where to land after a successful login (e.g. /checkouts for Buy Now).
+  const redirectTo = searchParams.get("redirect") || "/";
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginType, setLoginType] = useState("otp"); // "otp" | "password" - default to OTP for fast mobile e-com
@@ -85,7 +90,7 @@ export default function LoginPage() {
       if (token) {
         setToken(token);
         successToast("Welcome back! Login successful");
-        window.location.replace("/");
+        window.location.replace(redirectTo);
       } else {
         errorToast("Authorization token not received");
       }
@@ -181,7 +186,7 @@ export default function LoginPage() {
       if (token) {
         setToken(token);
         successToast("Verification successful! Welcome back");
-        window.location.replace("/");
+        window.location.replace(redirectTo);
       } else {
         errorToast("Unable to authenticate session");
       }
@@ -208,7 +213,7 @@ export default function LoginPage() {
       if (token) {
         setToken(token);
         successToast("Google login successful!");
-        window.location.replace("/");
+        window.location.replace(redirectTo);
       } else {
         errorToast("Google authorization failed");
       }
@@ -223,126 +228,176 @@ export default function LoginPage() {
   const isIdentifierEmail = identifier.includes("@");
 
   return (
-    <div className="min-h-screen w-full flex bg-[#faf9f8] font-modelica text-[#1c1c28]">
+    <div className="min-h-screen w-full flex bg-[#f6f7fa] text-text">
       {/* ── LEFT PANEL: Authentic Athletic Brand Showcase (Desktop lg+) ── */}
-      <div
-        className="hidden lg:flex flex-col justify-between w-[48%] xl:w-[46%] relative overflow-hidden p-10 xl:p-14 text-white select-none shrink-0"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(16, 10, 8, 0.55) 0%, rgba(16, 10, 8, 0.82) 55%, rgba(10, 6, 5, 0.96) 100%), url('/images/gym-owner.webp') center/cover no-repeat",
-        }}
-      >
-        {/* Subtle Ambient Vignette & Warmth */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 pointer-events-none" />
+      <div className="hidden lg:flex flex-col justify-between w-[48%] xl:w-[46%] relative overflow-hidden p-8 xl:p-12 bg-gradient-to-br from-[#f1f4f9] via-[#f8fafc] to-[#e8edf6] border-r border-border text-text select-none shrink-0">
+        {/* Subtle Ambient Radial Lighting */}
+        <div
+          className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/5 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+          aria-hidden="true"
+        />
 
-        {/* Top Header: Brand Logo & Official Badge */}
+        {/* Top Header: Official Store Badge */}
         <div className="relative z-10 flex items-center justify-between">
-          <Link to="/" className="inline-block transition-transform hover:scale-[1.02]">
-            <img
-              src="/images/whitelogo.webp"
-              alt="Gomzi Nutrition"
-              className="h-10 xl:h-11 object-contain object-left"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/images/rag-icon-logo.png";
-                e.currentTarget.className = "h-10 xl:h-11 object-contain filter brightness-0 invert";
-              }}
-            />
-          </Link>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-white/10 text-amber-300 border border-white/20 backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             Official Brand Store
           </span>
         </div>
 
-        {/* Center: Powerful Athletic Editorial Statement */}
-        <div className="relative z-10 my-auto py-8 flex flex-col gap-6 max-w-xl">
-          <div className="flex flex-col gap-3">
-            <div className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-extrabold text-amber-400">
-              <Sparkles size={14} className="text-amber-400" />
+        {/* Center: Hero Product & Value Proposition */}
+        <div className="relative z-10 my-auto py-6 flex flex-col gap-5 max-w-xl">
+          <div className="flex flex-col gap-2.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-light border border-primary-border text-primary text-xs font-bold tracking-wide uppercase w-fit shadow-xs">
+              <Sparkles size={13} className="text-primary" />
               <span>Certified Sports Nutrition</span>
             </div>
 
-            <h1 className="font-toma text-4xl xl:text-5xl font-black text-white tracking-tight leading-[1.08]">
-              FUEL YOUR BEST. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-orange-400">
-                ZERO SHORTCUTS.
-              </span>
+            <h1 className="text-3xl xl:text-4xl font-extrabold text-primary tracking-tight leading-tight">
+              Fuel Your Peak Performance. <br />
+              <span className="text-text">100% Authentic.</span>
             </h1>
 
-            <p className="text-sm xl:text-base text-gray-300 leading-relaxed max-w-md font-normal mt-1">
-              Join 50,000+ elite athletes & fitness enthusiasts. Direct factory-fresh supplements, 100% label accuracy, and exclusive member benefits.
+            <p className="text-xs xl:text-sm text-text-light leading-relaxed max-w-md">
+              Join 50,000+ elite athletes & fitness enthusiasts. Direct factory-fresh supplements, 100% label accuracy, and exclusive VIP member benefits.
             </p>
           </div>
 
-          {/* Genuine Verified Customer Proof Card */}
-          <div className="relative bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-5 shadow-2xl">
-            <div className="flex items-center gap-1 text-amber-400 mb-2">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={14} fill="#fbbf24" strokeWidth={0} />
-              ))}
-              <span className="ml-2 text-xs font-bold text-white">4.9 / 5 Rating</span>
+          {/* Featured Product Hero Card */}
+          <div className="relative bg-white rounded-2xl border border-border p-4 xl:p-5 shadow-sm shadow-primary/5 flex items-center gap-4 xl:gap-6 hover:shadow-md transition-shadow">
+            <div className="relative w-24 h-28 xl:w-28 xl:h-32 shrink-0 flex items-center justify-center bg-[#f8fafc] rounded-xl border border-border/60 p-2">
+              <img
+                src="/images/protein-removebg.png"
+                alt="Gomzi 100% Whey Protein Blend"
+                className="w-full h-full object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-300"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/images/Gomzi_Protein_Product_HD.webp";
+                }}
+              />
             </div>
-            <p className="text-xs xl:text-sm text-gray-200 italic leading-relaxed">
-              "Gomzi 100% Whey Isolate has the best mixability and digestion I have experienced. Zero bloating, great post-workout recovery."
-            </p>
-            <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10 text-[11px]">
-              <span className="font-bold text-white">Aman Verma</span>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                <CheckCircle2 size={12} /> Verified Athlete
-              </span>
+
+            <div className="flex-1 flex flex-col gap-1.5">
+              <div className="flex items-center gap-1 text-amber-500">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={13} fill="#f59e0b" strokeWidth={0} />
+                ))}
+                <span className="ml-1 text-xs font-bold text-text">4.9 / 5</span>
+                <span className="text-[11px] text-text-light">• 50k+ Athletes</span>
+              </div>
+
+              <h2 className="text-sm xl:text-base font-bold text-text leading-snug">
+                Gomzi 100% Whey Protein Blend
+              </h2>
+
+              <p className="text-[11px] text-text-light leading-relaxed line-clamp-2">
+                Ultra-filtered whey isolate with 24g protein, zero added sugar, and instant solubility for rapid muscle recovery.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                <span className="px-2 py-0.5 rounded-md bg-primary-light text-primary text-[10px] font-bold border border-primary-border">
+                  24g Protein
+                </span>
+                <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                  Zero Spiking
+                </span>
+                <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[10px] font-bold border border-amber-200">
+                  Lab Tested
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Member Benefits List */}
+          <div className="grid grid-cols-1 gap-2.5">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-white/80 border border-border text-xs text-text shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-primary-light flex items-center justify-center text-primary shrink-0">
+                <Tag size={16} />
+              </div>
+              <div>
+                <p className="font-bold text-text">Exclusive VIP Member Pricing</p>
+                <p className="text-[11px] text-text-light">
+                  Save extra on every direct order with automatic member-only checkout discounts.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-white/80 border border-border text-xs text-text shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+                <ShieldCheck size={16} />
+              </div>
+              <div>
+                <p className="font-bold text-text">100% Factory Authenticity</p>
+                <p className="text-[11px] text-text-light">
+                  Direct factory dispatch with QR-verifiable third-party lab test certificates.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-white/80 border border-border text-xs text-text shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                <Truck size={16} />
+              </div>
+              <div>
+                <p className="font-bold text-text">Pan-India Priority Express</p>
+                <p className="text-[11px] text-text-light">
+                  Free express shipping on eligible orders with real-time dispatch tracking.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Trust Indicators Strip */}
-        <div className="relative z-10 pt-4 border-t border-white/15 flex items-center justify-between text-xs text-gray-300">
-          <span className="flex items-center gap-1.5 font-semibold">
-            <ShieldCheck size={16} className="text-emerald-400" /> 100% Lab Tested
+        <div className="relative z-10 pt-4 border-t border-border flex items-center justify-between text-xs text-text-light">
+          <span className="flex items-center gap-1.5 font-semibold text-text">
+            <ShieldCheck size={16} className="text-emerald-600" /> 100% Lab Tested
           </span>
-          <span className="flex items-center gap-1.5 font-semibold">
-            <CheckCircle2 size={16} className="text-amber-400" /> FSSAI Certified
+          <span className="flex items-center gap-1.5 font-semibold text-text">
+            <CheckCircle2 size={16} className="text-primary" /> FSSAI Certified
           </span>
-          <span className="flex items-center gap-1.5 font-semibold">
-            <Sparkles size={16} className="text-cyan-400" /> Pan-India Express
+          <span className="flex items-center gap-1.5 font-semibold text-text">
+            <Sparkles size={16} className="text-primary" /> Pan-India Express
           </span>
         </div>
       </div>
 
       {/* ── RIGHT PANEL: Clean, High-Conversion E-Commerce Auth Portal ── */}
-      <div className="flex-1 flex flex-col justify-between items-center px-4 sm:px-8 py-6 sm:py-10 overflow-y-auto">
+      <div className="flex-1 w-full min-h-screen flex flex-col justify-between items-center px-3 sm:px-6 md:px-8 py-4 sm:py-8 overflow-y-auto">
         {/* Top Navigation Bar */}
-        <div className="w-full max-w-[440px] flex items-center justify-between shrink-0 mb-4 sm:mb-6">
+        <div className="w-full max-w-[440px] flex items-center justify-between shrink-0 mb-3 sm:mb-5">
           <button
             onClick={() => navigate("/")}
-            className="inline-flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-[#5C3124] transition-colors py-2 px-3 rounded-lg hover:bg-black/5 cursor-pointer"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-text-light hover:text-primary transition-colors py-2 px-3 rounded-lg hover:bg-black/5 cursor-pointer active:scale-95"
           >
             <ArrowLeft size={15} />
             <span>Back to Store</span>
           </button>
-
-          {/* Mobile Logo on small screens */}
-          <Link to="/" className="lg:hidden">
-            <img
-              src="/images/rag-icon-logo.png"
-              alt="Gomzi Supplement"
-              className="h-8 object-contain"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/images/gomzi-supplements-dark.webp";
-              }}
-            />
-          </Link>
         </div>
 
         {/* Auth Main Card */}
-        <div className="w-full max-w-[440px] bg-white rounded-3xl border border-[#ebdcd7] p-7 sm:p-9 shadow-xl shadow-[#5C3124]/5 my-auto flex flex-col gap-5">
+        <div className="w-full max-w-[440px] bg-white rounded-2xl border border-border p-5 sm:p-8 shadow-sm sm:shadow-lg shadow-black/[0.03] my-auto flex flex-col gap-4 sm:gap-5">
           {/* Header */}
-          <div className="flex flex-col gap-1 text-left">
-            <h2 className="font-toma text-2xl sm:text-3xl font-black text-[#1c1c28] tracking-tight">
+          <div className="flex flex-col items-center text-center gap-2">
+            <Link to="/" className="inline-block mb-1" aria-label="Gomzi Nutrition Home">
+              <img
+                src="/images/gomzi-supplements-dark.webp"
+                alt="Gomzi Supplements"
+                className="h-9 sm:h-10 w-auto max-w-[190px] object-contain transition-transform duration-200 hover:scale-[1.02]"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/images/rag-icon-logo.png";
+                }}
+              />
+            </Link>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text tracking-tight">
               Sign In to Gomzi
             </h2>
-            <p className="text-xs sm:text-sm text-gray-500">
+            <p className="text-xs sm:text-sm text-text-light max-w-sm">
               Access your orders, saved addresses & VIP athlete pricing.
             </p>
           </div>
@@ -364,16 +419,16 @@ export default function LoginPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-gray-200" />
-              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-[10px] uppercase tracking-wider text-text-muted font-bold">
                 or sign in with
               </span>
-              <div className="flex-1 h-px bg-gray-200" />
+              <div className="flex-1 h-px bg-border" />
             </div>
           </div>
 
           {/* Clean Segmented Tab Switcher */}
-          <div className="grid grid-cols-2 p-1 rounded-xl bg-[#f5f1ee] border border-[#ebdcd7] text-xs font-bold">
+          <div className="grid grid-cols-2 p-1 rounded-xl bg-primary-light/80 border border-primary-border text-xs font-bold">
             <button
               type="button"
               onClick={() => {
@@ -381,8 +436,8 @@ export default function LoginPage() {
               }}
               className={`py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
                 loginType === "otp"
-                  ? "bg-[#5C3124] text-white shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-text-secondary hover:text-text"
               }`}
             >
               <Smartphone size={14} />
@@ -397,8 +452,8 @@ export default function LoginPage() {
               }}
               className={`py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
                 loginType === "password"
-                  ? "bg-[#5C3124] text-white shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-text-secondary hover:text-text"
               }`}
             >
               <Lock size={14} />
@@ -412,7 +467,7 @@ export default function LoginPage() {
               {/* Identifier Input */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-gray-700">
+                  <label className="text-xs font-semibold text-text">
                     Mobile Number or Email
                   </label>
                   {otpSent && (
@@ -422,7 +477,7 @@ export default function LoginPage() {
                         setOtpSent(false);
                         setOtp("");
                       }}
-                      className="text-[11px] text-[#5C3124] font-bold hover:underline cursor-pointer"
+                      className="text-[11px] text-primary font-bold hover:underline cursor-pointer"
                     >
                       Change
                     </button>
@@ -432,17 +487,17 @@ export default function LoginPage() {
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     identifierFocused
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
+                      : "border-border hover:border-gray-300"
                   }`}
                 >
-                  <div className="pl-3.5 pr-1 text-gray-500 font-bold text-xs flex items-center gap-1.5 select-none">
+                  <div className="pl-3.5 pr-1 text-text-light font-bold text-xs flex items-center gap-1.5 select-none">
                     {isIdentifierEmail ? (
-                      <Mail size={16} className={identifierFocused ? "text-[#5C3124]" : ""} />
+                      <Mail size={16} className={identifierFocused ? "text-primary" : ""} />
                     ) : (
                       <>
                         <span className="text-sm">🇮🇳</span>
-                        <span className="text-gray-700 font-semibold">+91</span>
+                        <span className="text-text font-semibold">+91</span>
                       </>
                     )}
                   </div>
@@ -454,7 +509,7 @@ export default function LoginPage() {
                     onChange={(e) => setIdentifier(e.target.value)}
                     onFocus={() => setIdentifierFocused(true)}
                     onBlur={() => setIdentifierFocused(false)}
-                    className="w-full bg-transparent outline-none text-xs sm:text-sm px-2 py-3.5 text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50 disabled:text-gray-500 rounded-xl"
+                    className="w-full bg-transparent outline-none text-base sm:text-sm px-2.5 py-2.5 sm:py-3 text-text placeholder:text-text-muted disabled:bg-gray-50 disabled:text-text-muted rounded-xl"
                   />
                 </div>
               </div>
@@ -463,11 +518,11 @@ export default function LoginPage() {
               {otpSent && (
                 <div className="flex flex-col gap-1.5 animate-fadeIn">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-gray-700">
+                    <label className="text-xs font-semibold text-text">
                       6-Digit Verification Code
                     </label>
                     {resendCountdown > 0 ? (
-                      <span className="text-[11px] text-gray-400 font-semibold">
+                      <span className="text-[11px] text-text-muted font-semibold">
                         Resend in {resendCountdown}s
                       </span>
                     ) : (
@@ -475,7 +530,7 @@ export default function LoginPage() {
                         type="button"
                         onClick={handleSendOTP}
                         disabled={loading}
-                        className="text-[11px] text-[#5C3124] font-bold hover:underline cursor-pointer"
+                        className="text-[11px] text-primary font-bold hover:underline cursor-pointer"
                       >
                         Resend Code
                       </button>
@@ -485,8 +540,8 @@ export default function LoginPage() {
                   <div
                     className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                       otpFocused
-                        ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "border-primary ring-2 ring-primary/15 shadow-sm"
+                        : "border-border hover:border-gray-300"
                     }`}
                   >
                     <input
@@ -498,7 +553,7 @@ export default function LoginPage() {
                       onChange={(e) => setOtp(e.target.value)}
                       onFocus={() => setOtpFocused(true)}
                       onBlur={() => setOtpFocused(false)}
-                      className="w-full bg-transparent outline-none font-mono text-center text-xl tracking-[0.4em] font-bold py-3.5 text-gray-900 placeholder:text-gray-300"
+                      className="w-full bg-transparent outline-none font-mono text-center text-xl tracking-[0.4em] font-bold py-3 text-text placeholder:text-text-muted"
                     />
                   </div>
                 </div>
@@ -510,40 +565,38 @@ export default function LoginPage() {
                   type="button"
                   onClick={handleSendOTP}
                   disabled={loading}
-                  className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl font-toma text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.99] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 bg-primary hover:bg-primary-hover active:scale-[0.99] shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span className="relative z-10">Sending Code...</span>
+                      <span>Sending Code...</span>
                     </>
                   ) : (
                     <>
-                      <span className="relative z-10">Get Verification Code</span>
-                      <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                      <span>Get Verification Code</span>
+                      <ArrowRight size={16} className="text-white transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                   )}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={handleVerifyOTP}
                   disabled={loading}
-                  className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl font-toma text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.99] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 bg-primary hover:bg-primary-hover active:scale-[0.99] shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span className="relative z-10">Verifying...</span>
+                      <span>Verifying...</span>
                     </>
                   ) : (
                     <>
-                      <span className="relative z-10">Verify & Sign In</span>
-                      <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                      <span>Verify & Sign In</span>
+                      <ArrowRight size={16} className="text-white transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                   )}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </button>
               )}
             </div>
@@ -552,18 +605,18 @@ export default function LoginPage() {
             <form onSubmit={handleLogin} className="flex flex-col gap-4">
               {/* Email Input */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-gray-700">
+                <label className="text-xs font-semibold text-text">
                   Email Address
                 </label>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     emailFocused
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
+                      : "border-border hover:border-gray-300"
                   }`}
                 >
-                  <div className="pl-3.5 text-gray-400">
-                    <Mail size={16} className={emailFocused ? "text-[#5C3124]" : ""} />
+                  <div className="pl-3.5 text-text-muted">
+                    <Mail size={16} className={emailFocused ? "text-primary" : ""} />
                   </div>
                   <input
                     type="email"
@@ -573,7 +626,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     onFocus={() => setEmailFocused(true)}
                     onBlur={() => setEmailFocused(false)}
-                    className="w-full bg-transparent outline-none text-xs sm:text-sm px-3 py-3.5 text-gray-900 placeholder:text-gray-400"
+                    className="w-full bg-transparent outline-none text-base sm:text-sm px-3 py-2.5 sm:py-3 text-text placeholder:text-text-muted"
                   />
                 </div>
               </div>
@@ -581,22 +634,22 @@ export default function LoginPage() {
               {/* Password Input */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-gray-700">
+                  <label className="text-xs font-semibold text-text">
                     Password
                   </label>
-                  <span className="text-[11px] text-[#5C3124] font-semibold hover:underline cursor-pointer select-none">
+                  <span className="text-[11px] text-primary font-semibold hover:underline cursor-pointer select-none">
                     Forgot password?
                   </span>
                 </div>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     passwordFocused
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
+                      : "border-border hover:border-gray-300"
                   }`}
                 >
-                  <div className="pl-3.5 text-gray-400">
-                    <Lock size={16} className={passwordFocused ? "text-[#5C3124]" : ""} />
+                  <div className="pl-3.5 text-text-muted">
+                    <Lock size={16} className={passwordFocused ? "text-primary" : ""} />
                   </div>
                   <input
                     type={showPassword ? "text" : "password"}
@@ -606,12 +659,12 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     onFocus={() => setPasswordFocused(true)}
                     onBlur={() => setPasswordFocused(false)}
-                    className="w-full bg-transparent outline-none text-xs sm:text-sm px-3 py-3.5 pr-10 text-gray-900 placeholder:text-gray-400"
+                    className="w-full bg-transparent outline-none text-base sm:text-sm px-3 py-2.5 sm:py-3 pr-10 text-text placeholder:text-text-muted"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 text-gray-400 hover:text-gray-600 transition-colors p-1 cursor-pointer"
+                    className="absolute right-1 text-text-muted hover:text-text transition-colors p-2 min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer active:scale-90"
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -622,30 +675,29 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl font-toma text-white text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.99] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group relative overflow-hidden w-full mt-1 py-3.5 rounded-xl text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200 bg-primary hover:bg-primary-hover active:scale-[0.99] shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span className="relative z-10">Signing In...</span>
+                    <span>Signing In...</span>
                   </>
                 ) : (
                   <>
-                    <span className="relative z-10">Sign In to Account</span>
-                    <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                    <span>Sign In to Account</span>
+                    <ArrowRight size={16} className="text-white transition-transform duration-300 group-hover:translate-x-1" />
                   </>
                 )}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
             </form>
           )}
 
           {/* New to Store Registration Link */}
-          <div className="pt-2 border-t border-gray-100 flex items-center justify-center text-xs text-gray-600">
+          <div className="pt-2 border-t border-border flex items-center justify-center text-xs text-text-light">
             <span>New to Gomzi Nutrition?</span>
             <Link
-              to="/register"
-              className="ml-1.5 font-bold text-[#5C3124] hover:text-[#45241a] hover:underline"
+              to={`/register${searchParams.toString() ? `?${searchParams.toString()}` : ""}`}
+              className="ml-1.5 font-bold text-primary hover:underline"
             >
               Create an account →
             </Link>
@@ -661,11 +713,11 @@ export default function LoginPage() {
         {/* Bottom Terms & Privacy Legal Notice */}
         <p className="text-[11px] text-center text-gray-400 mt-4 shrink-0">
           By continuing, you agree to Gomzi Nutrition's{" "}
-          <Link to="/terms-and-conditions" className="text-gray-600 underline hover:text-[#5C3124]">
+          <Link to="/terms-and-conditions" className="text-gray-600 underline hover:text-primary">
             Terms
           </Link>{" "}
           and{" "}
-          <Link to="/privacy-policy" className="text-gray-600 underline hover:text-[#5C3124]">
+          <Link to="/privacy-policy" className="text-gray-600 underline hover:text-primary">
             Privacy Policy
           </Link>
           .

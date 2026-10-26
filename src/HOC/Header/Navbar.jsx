@@ -8,12 +8,6 @@ import {
   ChevronDown,
   ChevronRight,
   LogOut,
-  Tag,
-  Award,
-  Percent,
-  Gift,
-  MessageSquare,
-  MapPin,
 } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
@@ -21,49 +15,12 @@ import { fetchProducts } from "../../services/product.service";
 import CartPopover from "./CartPopover";
 import MegaMenu from "./MegaMenu";
 import {
-  NAVIGATION_DEPARTMENTS,
   HEADER_NAV_LINKS,
   QUICK_NAV_LINKS,
 } from "../../data/navigationCategories";
 
-const getNavLinkIcon = (icon, active = false) => {
-  const iconClass = `w-3.5 h-3.5 transition-colors duration-150 ${
-    active ? "text-white" : "text-[#5C3124] group-hover:text-[#5C3124]"
-  }`;
-  switch (icon) {
-    case "tag":
-    case "badgeCheck":
-      return <Tag className={iconClass} />;
-    case "award":
-    case "shield":
-      return <Award className={iconClass} />;
-    case "percent":
-      return <Percent className={iconClass} />;
-    case "fileText":
-      return (
-        <span
-          className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black leading-none flex-shrink-0 transition-colors duration-150 ${
-            active
-              ? "bg-white text-[#5C3124]"
-              : "bg-[#5C3124] text-white group-hover:bg-[#48261c]"
-          }`}
-        >
-          B
-        </span>
-      );
-    case "gift":
-      return <Gift className={iconClass} />;
-    case "messageSquare":
-    case "headphones":
-      return <MessageSquare className={iconClass} />;
-    case "mapPin":
-      return <MapPin className={iconClass} />;
-    default:
-      return null;
-  }
-};
+  /**
 
-/**
  * HealthKart 2-Tier Master Navbar Component
  *
  * Tier 1: Brand logo, prominent center search bar with live auto-suggest,
@@ -91,11 +48,9 @@ export default function Navbar() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-  const [mobileExpandedDept, setMobileExpandedDept] = useState(null);
 
   // Popover Timer ref for smooth hover transitions without flickering
   const cartTimerRef = useRef(null);
-  const megaMenuTimerRef = useRef(null);
   const searchContainerRef = useRef(null);
   const megaMenuContainerRef = useRef(null);
 
@@ -206,18 +161,6 @@ export default function Navbar() {
     }, 250);
   };
 
-  // Hover handlers for Mega Menu
-  const handleMegaMenuMouseEnter = () => {
-    if (megaMenuTimerRef.current) clearTimeout(megaMenuTimerRef.current);
-    setMegaMenuOpen(true);
-  };
-
-  const handleMegaMenuMouseLeave = () => {
-    megaMenuTimerRef.current = setTimeout(() => {
-      setMegaMenuOpen(false);
-    }, 250);
-  };
-
   const isLinkActive = (href) => {
     const currentPath = location.pathname;
 
@@ -269,18 +212,18 @@ export default function Navbar() {
   };
 
   return (
-    <header className="w-full bg-white relative z-50 font-modelica shadow-[0_2px_8px_rgba(0,0,0,0.06)] border-t-2 border-[#1c1c28]">
+    <header className="w-full bg-white relative z-50 shadow-header">
       {/* =========================================================================
-          TIER 1: MAIN MIDDLE HEADER (Logo, Primary Search Bar, Account & Cart)
+          TIER 1: MIDDLE HEADER (Logo | Search | Login | Cart)
           ========================================================================= */}
-      <div className="w-full border-b border-[#e5e7eb] bg-white">
-        <div className="max-w-[1250px] mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-4 lg:gap-8">
+      <div className="w-full bg-white">
+        <div className="max-w-[1170px] mx-auto px-4 md:px-0 h-[64px] md:h-[87px] flex items-center justify-between gap-4 lg:gap-8">
           {/* LEFT: Mobile Hamburger & Brand Logo */}
-          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0 md:w-1/4">
             {/* Hamburger Button (Mobile Only) */}
             <button
               onClick={() => setDrawerOpen(true)}
-              className="lg:hidden p-2 text-[#1c1c28] hover:text-[#5C3124] bg-transparent border-none cursor-pointer rounded-lg hover:bg-gray-100 transition-colors"
+              className="lg:hidden p-2 text-text bg-transparent border-none cursor-pointer rounded-md hover:bg-bg-light transition-colors"
               aria-label="Open mobile navigation"
             >
               <Menu className="w-6 h-6" />
@@ -295,7 +238,7 @@ export default function Navbar() {
               <img
                 src="/images/gomzi-supplements-dark.webp"
                 alt="Gomzi Supplements"
-                className="h-8 sm:h-10 w-auto max-w-[170px] sm:max-w-[210px] object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+                className="h-8 sm:h-10 md:h-11 w-auto max-w-[150px] md:max-w-[210px] object-contain transition-transform duration-200 group-hover:scale-[1.02]"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = "/images/rag-icon-logo.png";
@@ -307,21 +250,19 @@ export default function Navbar() {
           {/* CENTER: Prominent HealthKart-Style Search Bar (Desktop) */}
           <div
             ref={searchContainerRef}
-            className="hidden md:flex flex-1 max-w-2xl relative"
+            className="hidden md:flex flex-1 max-w-[654px] relative"
           >
             <form
               onSubmit={handleSearchSubmit}
               className="w-full relative flex items-center"
             >
               <div
-                className={`w-full h-10 lg:h-10.5 flex items-center rounded-md bg-[#f4f4f7] border transition-all duration-200 px-3.5 gap-2.5 ${
-                  searchFocused
-                    ? "bg-white border-[#5C3124] shadow-[0_0_0_2px_rgba(92,49,36,0.12)]"
-                    : "border-transparent hover:border-[#dbdee9]"
+                className={`w-full h-11 md:h-12 flex items-center rounded-sm bg-white border transition-colors duration-150 px-3 gap-2 ${
+                  searchFocused ? "border-primary" : "border-border-2"
                 }`}
               >
                 {/* Search Magnifier Icon */}
-                <span className="text-gray-400 flex-shrink-0">
+                <span className="text-text-muted flex-shrink-0">
                   <Search className="w-4 h-4" />
                 </span>
 
@@ -332,7 +273,7 @@ export default function Navbar() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setSearchFocused(true)}
                   placeholder="Search for products & brands..."
-                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm text-[#1c1c28] placeholder:text-gray-500 h-full"
+                  className="w-full bg-transparent border-none outline-none text-sm text-text placeholder:text-text-muted h-full appearance-none"
                   autoComplete="off"
                 />
 
@@ -344,7 +285,7 @@ export default function Navbar() {
                       setSearchQuery("");
                       setProductSuggestions([]);
                     }}
-                    className="p-1 text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer rounded-full"
+                    className="p-1 text-text-muted hover:text-text bg-transparent border-none cursor-pointer"
                     aria-label="Clear search query"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -358,7 +299,7 @@ export default function Navbar() {
               <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-[#dbdee9] overflow-hidden z-[999999] animate-in fade-in duration-150">
                 {isSearching && productSuggestions.length === 0 ? (
                   <div className="px-4 py-3 text-xs text-gray-500 flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 border-2 border-[#5C3124] border-t-transparent rounded-full animate-spin" />
+                    <span className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                     Searching supplements...
                   </div>
                 ) : (
@@ -400,7 +341,7 @@ export default function Navbar() {
                                 }}
                               />
                               <div className="min-w-0">
-                                <p className="text-xs font-semibold text-[#1c1c28] truncate group-hover:text-[#5C3124] transition-colors">
+                                <p className="text-xs font-semibold text-text truncate group-hover:text-primary transition-colors">
                                   {product.name}
                                 </p>
                                 <span className="text-[10px] text-gray-400">
@@ -409,7 +350,7 @@ export default function Navbar() {
                               </div>
                             </div>
                             {price && (
-                              <span className="text-xs font-bold text-[#5C3124] flex-shrink-0">
+                              <span className="text-xs font-bold text-primary flex-shrink-0">
                                 ₹{Number(price).toLocaleString("en-IN")}
                               </span>
                             )}
@@ -422,7 +363,7 @@ export default function Navbar() {
                       <button
                         type="button"
                         onClick={handleSearchSubmit}
-                        className="text-xs font-bold text-[#5C3124] hover:underline bg-transparent border-none cursor-pointer"
+                        className="text-xs font-bold text-primary hover:underline bg-transparent border-none cursor-pointer"
                       >
                         View all results for "{searchQuery}" →
                       </button>
@@ -434,11 +375,11 @@ export default function Navbar() {
           </div>
 
           {/* RIGHT: User Account & Cart Section (HealthKart .hk-header-cart) */}
-          <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0">
+          <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0 md:w-1/4 md:justify-end">
             {/* Mobile Search Icon Trigger */}
             <button
               onClick={() => setMobileSearchOpen((prev) => !prev)}
-              className="md:hidden p-2 text-[#1c1c28] hover:text-[#5C3124] bg-transparent border-none cursor-pointer rounded-lg hover:bg-gray-100 transition-colors"
+              className="md:hidden p-2 text-text bg-transparent border-none cursor-pointer"
               aria-label="Toggle search input"
             >
               <Search className="w-5 h-5" />
@@ -449,23 +390,23 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setProfileDropdownOpen((prev) => !prev)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#dbdee9] hover:border-[#5C3124] text-xs font-bold text-[#1c1c28] bg-transparent cursor-pointer transition-colors"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-sm border border-border-2 hover:border-primary text-xs font-medium text-text bg-transparent cursor-pointer transition-colors"
                   aria-expanded={profileDropdownOpen}
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#f4f7f8] flex items-center justify-center text-[#5C3124]">
+                  <div className="w-6 h-6 rounded-full bg-primary-light flex items-center justify-center text-primary">
                     <User className="w-3.5 h-3.5" />
                   </div>
                   <span className="hidden sm:inline max-w-[100px] truncate">
                     {user?.name || "Account"}
                   </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+                  <ChevronDown className="w-3.5 h-3.5 text-text-muted" />
                 </button>
 
                 {/* Profile Flyout Dropdown */}
                 {profileDropdownOpen && (
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#dbdee9] py-1.5 z-[999999] animate-in fade-in duration-150">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-xs font-bold text-[#1c1c28] truncate">
+                      <p className="text-xs font-bold text-text truncate">
                         {user?.name || "Athlete"}
                       </p>
                       <p className="text-[11px] text-gray-500 truncate">
@@ -476,7 +417,7 @@ export default function Navbar() {
                     <Link
                       to="/profile"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 hover:text-[#5C3124] transition-colors"
+                      className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
                     >
                       My Profile & Orders
                     </Link>
@@ -497,7 +438,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="px-5 sm:px-6 py-2 bg-[#5C3124] hover:bg-[#48261c] text-white text-xs sm:text-sm font-bold rounded-md transition-colors duration-150 shadow-xs text-decoration-none"
+                className="btn btn-primary text-decoration-none"
               >
                 Login
               </Link>
@@ -512,7 +453,7 @@ export default function Navbar() {
               <Link
                 to="/cart"
                 onClick={() => setCartPopoverOpen(false)}
-                className="relative p-1.5 flex items-center justify-center text-[#1c1c28] hover:text-[#5C3124] transition-colors text-decoration-none"
+                className="relative p-1.5 flex items-center justify-center text-text hover:text-primary transition-colors text-decoration-none"
                 aria-label={`Cart with ${cartCount} items`}
               >
                 {/* HealthKart Authentic Cart SVG */}
@@ -547,8 +488,8 @@ export default function Navbar() {
                   />
                 </svg>
 
-                {/* Orange Circular Count Badge (Matching HealthKart Image 2) */}
-                <span className="absolute -top-1 -right-1 bg-[#ff7a00] text-white text-[10px] font-extrabold h-4.5 w-4.5 rounded-full flex items-center justify-center shadow-xs border-2 border-white animate-in zoom-in duration-150">
+                {/* Orange Circular Count Badge (HealthKart .total-count) */}
+                <span className="absolute -top-1 -right-1 bg-sale text-white text-[12px] font-medium h-5 w-5 rounded-full flex items-center justify-center">
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
               </Link>
@@ -579,7 +520,7 @@ export default function Navbar() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search products & categories..."
-                className="w-full h-10 px-4 pl-9 text-xs bg-white border border-[#dbdee9] rounded-lg outline-none focus:border-[#5C3124]"
+                className="w-full h-10 px-4 pl-9 text-xs bg-white border border-[#dbdee9] rounded-lg outline-none focus:border-primary"
                 autoFocus
               />
               <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
@@ -598,14 +539,14 @@ export default function Navbar() {
       </div>
 
       {/* =========================================================================
-          TIER 2: LOWER HEADER (Clean Horizontal Navigation Bar: Home, Shop, Categories, Faqs, About Us, Blogs, Contact Us)
+          TIER 2: LOWER NAV BAR (Shop By Category | Home | Shop | Categories | ...)
           ========================================================================= */}
-      <nav className="hidden lg:block w-full bg-white border-b border-[#e5e7eb] relative">
+      <nav className="hidden lg:block w-full bg-white border-t-2 border-border relative">
         <div
           ref={megaMenuContainerRef}
-          className="max-w-[1250px] mx-auto px-4 sm:px-6 h-12 flex items-center justify-center relative"
+          className="max-w-[1170px] mx-auto px-4 md:px-0 h-[70px] flex items-center justify-center relative"
         >
-          <ul className="flex items-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5 list-none p-0 m-0 h-full">
+          <ul className="flex w-full items-center justify-center gap-6 lg:gap-8 list-none p-0 m-0 h-full">
             {HEADER_NAV_LINKS.map((link) => {
               const active = isLinkActive(link.href);
 
@@ -619,19 +560,17 @@ export default function Navbar() {
                         e.stopPropagation();
                         setMegaMenuOpen((prev) => !prev);
                       }}
-                      className={`group flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-[13px] transition-all duration-150 text-decoration-none select-none cursor-pointer border ${
+                      className={`flex items-center gap-1.5 px-0 py-5 text-sm font-medium transition-colors duration-150 text-decoration-none select-none cursor-pointer border-b-2 -mb-px ${
                         isDropdownActive
-                          ? "bg-[#5C3124] text-white border-[#5C3124] font-bold shadow-xs"
-                          : "text-[#2b2b36] hover:text-[#5C3124] hover:bg-[#fdf6f4] hover:border-[#ebdcd7] border-transparent font-semibold"
+                          ? "border-primary text-primary"
+                          : "border-transparent text-text hover:text-primary"
                       }`}
                       aria-expanded={megaMenuOpen}
                     >
                       <span>{link.label}</span>
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          isDropdownActive
-                            ? "rotate-180 text-white"
-                            : "text-gray-400 group-hover:text-[#5C3124]"
+                          isDropdownActive ? "rotate-180" : "text-text-muted"
                         }`}
                       />
                     </button>
@@ -643,10 +582,10 @@ export default function Navbar() {
                 <li key={link.label} className="h-full flex items-center">
                   <Link
                     to={link.href}
-                    className={`flex items-center px-3.5 sm:px-4 py-1.5 rounded-full text-xs sm:text-[13px] transition-all duration-150 text-decoration-none select-none cursor-pointer border ${
+                    className={`flex items-center px-0 py-5 text-sm font-medium transition-colors duration-150 text-decoration-none select-none cursor-pointer border-b-2 -mb-px ${
                       active
-                        ? "bg-[#5C3124] text-white border-[#5C3124] font-bold shadow-xs"
-                        : "text-[#2b2b36] hover:text-[#5C3124] hover:bg-[#fdf6f4] hover:border-[#ebdcd7] border-transparent font-semibold"
+                        ? "border-primary text-primary"
+                        : "border-transparent text-text hover:text-primary"
                     }`}
                   >
                     <span>{link.label}</span>
@@ -695,65 +634,6 @@ export default function Navbar() {
 
             {/* Drawer Scrollable Content */}
             <div className="flex-1 overflow-y-auto divide-y divide-gray-100 scrollbar-thin">
-              {/* Category Hierarchy Accordion */}
-              <div className="py-2">
-                <div className="px-4 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                  Shop By Category
-                </div>
-
-                {NAVIGATION_DEPARTMENTS.map((dept) => {
-                  const isExpanded = mobileExpandedDept === dept.id;
-
-                  return (
-                    <div key={dept.id} className="border-b border-gray-50 last:border-none">
-                      <button
-                        onClick={() =>
-                          setMobileExpandedDept(isExpanded ? null : dept.id)
-                        }
-                        className="w-full px-4 py-3 text-xs font-bold text-[#1c1c28] flex items-center justify-between hover:bg-gray-50 transition-colors bg-transparent border-none cursor-pointer"
-                      >
-                        <span className="truncate">{dept.name}</span>
-                        <ChevronDown
-                          className={`w-4 h-4 text-gray-400 transition-transform ${
-                            isExpanded ? "rotate-180 text-[#5C3124]" : ""
-                          }`}
-                        />
-                      </button>
-
-                      {isExpanded && (
-                        <div className="bg-[#f8fafb] px-4 py-2 space-y-3">
-                          {dept.groups.map((group) => (
-                            <div key={group.slug} className="space-y-1.5">
-                              <p className="text-[11px] font-bold text-[#5C3124] uppercase tracking-wide">
-                                {group.title}
-                              </p>
-                              <div className="space-y-1 pl-2">
-                                {group.items.map((item) => (
-                                  <button
-                                    key={item.name}
-                                    onClick={() => {
-                                      setDrawerOpen(false);
-                                      navigate(
-                                        `/gomzi-supplement?search=${encodeURIComponent(
-                                          item.query,
-                                        )}`,
-                                      );
-                                    }}
-                                    className="w-full text-left py-1 text-xs text-[#515151] hover:text-[#5C3124] bg-transparent border-none cursor-pointer block"
-                                  >
-                                    {item.name}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
               {/* Standard Page Links */}
               <div className="py-2">
                 <div className="px-4 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
@@ -769,8 +649,8 @@ export default function Navbar() {
                       onClick={() => setDrawerOpen(false)}
                       className={`flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-decoration-none transition-colors rounded-lg mx-2 my-0.5 ${
                         active
-                          ? "text-white bg-[#5C3124] font-bold shadow-xs"
-                          : "text-[#2b2b36] hover:text-[#5C3124] hover:bg-[#fdf6f4]"
+                          ? "text-white bg-primary font-bold shadow-xs"
+                          : "text-[#2b2b36] hover:text-primary hover:bg-primary-light"
                       }`}
                     >
                       <span>{link.label}</span>
@@ -787,7 +667,7 @@ export default function Navbar() {
                     <Link
                       to="/profile"
                       onClick={() => setDrawerOpen(false)}
-                      className="block w-full py-2.5 text-center text-xs font-bold text-[#1c1c28] bg-white border border-[#dbdee9] rounded-lg text-decoration-none"
+                      className="block w-full py-2.5 text-center text-xs font-bold text-text bg-white border border-[#dbdee9] rounded-lg text-decoration-none"
                     >
                       My Profile & Orders
                     </Link>
@@ -805,7 +685,7 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setDrawerOpen(false)}
-                    className="block w-full py-2.5 text-center text-xs font-bold text-white bg-[#5C3124] hover:bg-[#48261c] rounded-lg text-decoration-none"
+                    className="block w-full py-2.5 text-center text-xs font-bold text-white bg-primary hover:bg-primary-hover rounded-lg text-decoration-none"
                   >
                     Login / Sign Up
                   </Link>

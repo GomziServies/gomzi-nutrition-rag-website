@@ -47,16 +47,15 @@ function FAQItemCard({ faq, isOpen, onToggle }) {
       className={`group relative overflow-hidden rounded-2xl transition-all duration-300 cursor-pointer border ${
         isOpen
           ? "border-amber-400/40 bg-gradient-to-br from-[#fdfbf9] to-white shadow-md p-4 sm:p-5"
-          : "border-[#ebdcd7]/80 bg-white hover:border-amber-400/40 hover:bg-[#fdf6f4]/40 p-4 sm:p-4.5 shadow-2xs"
+          : "border-primary-border/80 bg-white hover:border-amber-400/40 hover:bg-primary-light/40 p-4 sm:p-4.5 shadow-2xs"
       }`}
     >
       {/* Subtle moving sheen highlight across FAQ card on hover */}
-      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.03] to-transparent pointer-events-none" />
 
       <div className="relative z-10 w-full flex items-center justify-between gap-4 text-left">
         <h3
           className={`text-base sm:text-lg font-bold leading-snug transition-colors pr-2 ${
-            isOpen ? "text-[#5C3124]" : "text-gray-900 group-hover:text-[#5C3124]"
+            isOpen ? "text-primary" : "text-gray-900 group-hover:text-primary"
           }`}
         >
           {faq.question}
@@ -65,19 +64,18 @@ function FAQItemCard({ faq, isOpen, onToggle }) {
         <span
           className={`group/btn relative overflow-hidden flex-shrink-0 w-8.5 h-8.5 rounded-full flex items-center justify-center transition-all duration-300 ${
             isOpen
-              ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white rotate-180 shadow-md shadow-[#5C3124]/25"
-              : "bg-[#fdf6f4] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white text-[#5C3124] border border-[#ebdcd7]"
+              ? "btn-gradient border border-amber-400/30 text-white rotate-180 shadow-md shadow-primary/25"
+              : "bg-primary-light group-hover:bg-gradient-to-r group-hover:from-primary group-hover:via-primary group-hover:to-primary-hover group-hover:border-amber-400/30 group-hover:text-white text-primary border border-primary-border"
           }`}
         >
           <span className="relative z-10">
             {isOpen ? <Minus size={15} className="text-amber-100" /> : <Plus size={15} />}
           </span>
-          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
         </span>
       </div>
 
       {isOpen && (
-        <div className="pt-3.5 mt-3.5 border-t border-[#ebdcd7]/60">
+        <div className="pt-3.5 mt-3.5 border-t border-primary-border/60">
           <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
             {faq.answer}
           </p>
@@ -99,15 +97,15 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="w-full bg-[#faf8f6] py-14 sm:py-20 lg:py-24 border-t border-[#ebdcd7]/60 overflow-hidden">
+    <section className="w-full bg-bg-cream py-14 sm:py-20 lg:py-24 border-t border-primary-border/60 overflow-hidden">
       <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-start">
           {/* ── LEFT: FAQ Accordion ── */}
           <div className="w-full lg:col-span-7 flex flex-col">
             {/* Top Eyebrow */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#5C3124]/10 border border-[#5C3124]/20 mb-3.5 w-fit">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3.5 w-fit">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-black uppercase tracking-widest text-[#5C3124]">
+              <span className="text-xs font-black uppercase tracking-widest text-primary">
                 Frequently Asked Questions
               </span>
             </div>
@@ -115,7 +113,7 @@ export default function FAQSection() {
             {/* Heading */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-950 tracking-tight leading-tight">
               Don't think twice, your{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5C3124] to-amber-700">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700">
                 body will thank you!
               </span>
             </h2>
@@ -140,11 +138,11 @@ export default function FAQSection() {
             </div>
 
             {/* Micro Support CTA */}
-            <div className="mt-6 pt-5 border-t border-[#ebdcd7]/60 flex items-center justify-between text-xs sm:text-sm text-gray-500 font-medium">
+            <div className="mt-6 pt-5 border-t border-primary-border/60 flex items-center justify-between text-xs sm:text-sm text-gray-500 font-medium">
               <span>Still have doubts or need formula advice?</span>
               <Link
                 to="/contact-us"
-                className="text-[#5C3124] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                className="text-primary font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
               >
                 <span>Ask Our Experts</span>
                 <ArrowRight size={14} />
@@ -154,7 +152,7 @@ export default function FAQSection() {
 
           {/* ── RIGHT: Athlete Showcase Frame ── */}
           <div className="w-full lg:col-span-5 lg:sticky lg:top-24 flex items-center justify-center">
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#ebdcd7] group bg-gradient-to-b from-[#1c120c] to-[#120a06]">
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-primary-border group bg-gradient-to-b from-[#1c120c] to-[#120a06]">
               {/* Main Photo */}
               <img
                 src="/images/about-us-photo.webp"
@@ -178,9 +176,8 @@ export default function FAQSection() {
               {/* Bottom Social Proof Pill */}
               <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-white/80 shadow-2xl flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-amber-200 flex items-center justify-center font-black text-sm flex-shrink-0 shadow-md shadow-[#5C3124]/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
+                  <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full btn-gradient border border-amber-400/30 text-amber-200 flex items-center justify-center font-black text-sm flex-shrink-0 shadow-md shadow-primary/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
                     <span className="relative z-10">★</span>
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs sm:text-sm font-black text-gray-950 leading-tight truncate">

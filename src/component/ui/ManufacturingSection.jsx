@@ -42,7 +42,7 @@ export default function ManufacturingSection() {
               font-black
               leading-[1.1]
               tracking-tight
-              text-text-black
+              text-text
             "
           >
             Leadership
@@ -102,7 +102,7 @@ export default function ManufacturingSection() {
                     md:text-[26px]
                     font-bold
                     leading-tight
-                    text-text-black
+                    text-text
                   "
                 >
                   {founder.name}
@@ -117,7 +117,7 @@ export default function ManufacturingSection() {
                     sm:tracking-[3px]
                     text-[10px]
                     sm:text-xs
-                    text-[#5C3124]
+                    text-primary
                     font-semibold
                   "
                 >
@@ -143,7 +143,7 @@ export default function ManufacturingSection() {
                     leading-[1.7]
                     sm:leading-[1.75]
                     text-gray-600
-                    font-modelica
+                   
                     text-left
                   "
                 >

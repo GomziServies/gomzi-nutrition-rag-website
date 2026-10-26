@@ -141,87 +141,87 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
       {/* ── 1. CONTACT INFORMATION ── */}
       <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h2 className="font-toma text-lg sm:text-xl font-black text-[#1c1c28] tracking-tight flex items-center gap-2">
-            <Mail size={18} className="text-[#5C3124]" />
+          <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
+            <Mail size={18} className="text-primary" />
             <span>Contact Information</span>
           </h2>
           <Link
             to="/login"
-            className="text-xs font-bold text-[#5C3124] hover:underline"
+            className="text-xs font-bold text-primary hover:underline"
           >
             Already have an account? Log in
           </Link>
         </div>
 
-        <div className="relative flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
           <input
             type="email"
             required
             value={formData.email}
             onChange={(e) => updateField("email", e.target.value)}
             placeholder="Email address (for order confirmation & tracking)"
-            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-[#1c1c28] placeholder:text-gray-400"
+            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
           />
         </div>
       </section>
 
       {/* ── 2. DELIVERY DESTINATION ── */}
       <section className="flex flex-col gap-3.5">
-        <h2 className="font-toma text-lg sm:text-xl font-black text-[#1c1c28] tracking-tight flex items-center gap-2">
-          <MapPin size={18} className="text-[#5C3124]" />
+        <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
+          <MapPin size={18} className="text-primary" />
           <span>Shipping Address</span>
         </h2>
 
         {/* Name Fields */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="relative flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+          <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
             <input
               type="text"
               required
               value={formData.first_name}
               onChange={(e) => updateField("first_name", e.target.value)}
               placeholder="First name *"
-              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-[#1c1c28] placeholder:text-gray-400"
+              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
             />
           </div>
 
-          <div className="relative flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+          <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
             <input
               type="text"
               value={formData.last_name}
               onChange={(e) => updateField("last_name", e.target.value)}
               placeholder="Last name"
-              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-[#1c1c28] placeholder:text-gray-400"
+              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
             />
           </div>
         </div>
 
         {/* Street Address Line 1 */}
-        <div className="relative flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
           <input
             type="text"
             required
             value={formData.address_line_1}
             onChange={(e) => updateField("address_line_1", e.target.value)}
             placeholder="Address (House/Flat No., Building, Street) *"
-            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-[#1c1c28] placeholder:text-gray-400"
+            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
           />
         </div>
 
         {/* Address Line 2 */}
-        <div className="relative flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
           <input
             type="text"
             value={formData.address_line_2}
             onChange={(e) => updateField("address_line_2", e.target.value)}
             placeholder="Apartment, suite, landmark (optional)"
-            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-[#1c1c28] placeholder:text-gray-400"
+            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
           />
         </div>
 
         {/* State & City Dropdowns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="[&>div>div]:!rounded-xl [&>div>div]:!border-[#ebdcd7] [&>div>div]:focus-within:!border-[#5C3124]">
+          <div className="[&>div>div]:!rounded-xl [&>div>div]:!border-primary-border [&>div>div]:focus-within:!border-primary">
             <SearchableSelect
               label="State *"
               value={selectedState}
@@ -236,7 +236,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             />
           </div>
 
-          <div className="[&>div>div]:!rounded-xl [&>div>div]:!border-[#ebdcd7] [&>div>div]:focus-within:!border-[#5C3124]">
+          <div className="[&>div>div]:!rounded-xl [&>div>div]:!border-primary-border [&>div>div]:focus-within:!border-primary">
             <SearchableSelect
               label="City *"
               value={selectedCity}
@@ -252,7 +252,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
 
         {/* PIN Code & Country */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="relative flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+          <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
             <input
               type="text"
               required
@@ -260,11 +260,11 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
               value={formData.pin_code}
               onChange={(e) => updateField("pin_code", e.target.value)}
               placeholder="6-Digit Postal PIN Code *"
-              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-[#1c1c28] placeholder:text-gray-400"
+              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
             />
           </div>
 
-          <div className="relative flex items-center bg-gray-50 border border-[#ebdcd7] rounded-xl px-4 py-3.5 select-none">
+          <div className="relative flex items-center bg-gray-50 border border-primary-border rounded-xl px-4 py-3.5 select-none">
             <span className="text-xs sm:text-sm text-gray-700 font-bold flex items-center gap-2">
               <span>🇮🇳</span>
               <span>India (Domestic Express)</span>
@@ -273,7 +273,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
         </div>
 
         {/* Mobile Phone */}
-        <div className="relative flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
           <div className="pl-4 pr-1 text-xs font-bold text-gray-500 flex items-center gap-1 select-none">
             <span>🇮🇳</span>
             <span className="text-gray-700">+91</span>
@@ -285,7 +285,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             value={formData.mobile}
             onChange={(e) => updateField("mobile", e.target.value)}
             placeholder="10-digit mobile number for delivery updates *"
-            className="w-full bg-transparent text-xs sm:text-sm px-2 py-3.5 outline-none text-[#1c1c28] placeholder:text-gray-400"
+            className="w-full bg-transparent text-xs sm:text-sm px-2 py-3.5 outline-none text-text placeholder:text-gray-400"
           />
         </div>
 
@@ -296,7 +296,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
         >
           <div
             className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
-              saveInfo ? "bg-[#5C3124] border-[#5C3124]" : "bg-white border-gray-300"
+              saveInfo ? "bg-primary border-primary" : "bg-white border-gray-300"
             }`}
           >
             {saveInfo && <CheckCircle2 size={12} className="text-white" />}
@@ -309,18 +309,18 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
 
       {/* ── 3. SHIPPING METHOD ── */}
       <section className="flex flex-col gap-3">
-        <h2 className="font-toma text-lg sm:text-xl font-black text-[#1c1c28] tracking-tight flex items-center gap-2">
-          <Truck size={18} className="text-[#5C3124]" />
+        <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
+          <Truck size={18} className="text-primary" />
           <span>Shipping Method</span>
         </h2>
 
-        <div className="p-4 rounded-xl border border-[#ebdcd7] bg-[#faf8f6] flex items-center justify-between">
+        <div className="p-4 rounded-xl border border-primary-border bg-bg-cream flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
               <Truck size={18} />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-bold text-[#1c1c28]">
+              <p className="text-xs sm:text-sm font-bold text-text">
                 Priority Pan-India Express (Bluedart / Delhivery)
               </p>
               <p className="text-[11px] text-gray-500">
@@ -338,8 +338,8 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
       {/* ── 4. PAYMENT METHOD ── */}
       <section className="flex flex-col gap-3.5">
         <div className="flex flex-col gap-0.5">
-          <h2 className="font-toma text-lg sm:text-xl font-black text-[#1c1c28] tracking-tight flex items-center gap-2">
-            <CreditCard size={18} className="text-[#5C3124]" />
+          <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
+            <CreditCard size={18} className="text-primary" />
             <span>Payment Method</span>
           </h2>
           <p className="text-xs text-gray-500">
@@ -356,23 +356,23 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             }}
             className={`p-4 rounded-xl border transition-all cursor-pointer ${
               payMethod === "ONLINE"
-                ? "border-[#5C3124] bg-[#fdfaf9] ring-2 ring-[#5C3124]/15 shadow-sm"
-                : "border-[#ebdcd7] bg-white hover:border-gray-300"
+                ? "border-primary bg-[#fdfaf9] ring-2 ring-primary/15 shadow-sm"
+                : "border-primary-border bg-white hover:border-gray-300"
             }`}
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div
                   className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                    payMethod === "ONLINE" ? "border-[#5C3124]" : "border-gray-300"
+                    payMethod === "ONLINE" ? "border-primary" : "border-gray-300"
                   }`}
                 >
                   {payMethod === "ONLINE" && (
-                    <div className="w-2 h-2 rounded-full bg-[#5C3124]" />
+                    <div className="w-2 h-2 rounded-full bg-primary" />
                   )}
                 </div>
                 <div>
-                  <span className="text-xs sm:text-sm font-bold text-[#1c1c28] block">
+                  <span className="text-xs sm:text-sm font-bold text-text block">
                     Online Payment (Instant & Recommended)
                   </span>
                   <span className="text-[11px] text-gray-500">
@@ -387,7 +387,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             </div>
 
             {payMethod === "ONLINE" && (
-              <div className="mt-3 pt-3 border-t border-[#ebdcd7]/80 flex items-center gap-2 text-[11px] text-gray-600">
+              <div className="mt-3 pt-3 border-t border-primary-border/80 flex items-center gap-2 text-[11px] text-gray-600">
                 <ShieldCheck size={14} className="text-emerald-600 shrink-0" />
                 <span>
                   After clicking "Pay Securely", you will complete payment via 256-bit encrypted Razorpay modal.
@@ -404,23 +404,23 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             }}
             className={`p-4 rounded-xl border transition-all cursor-pointer ${
               payMethod === "Cash On Delivery"
-                ? "border-[#5C3124] bg-[#fdfaf9] ring-2 ring-[#5C3124]/15 shadow-sm"
-                : "border-[#ebdcd7] bg-white hover:border-gray-300"
+                ? "border-primary bg-[#fdfaf9] ring-2 ring-primary/15 shadow-sm"
+                : "border-primary-border bg-white hover:border-gray-300"
             }`}
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div
                   className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                    payMethod === "Cash On Delivery" ? "border-[#5C3124]" : "border-gray-300"
+                    payMethod === "Cash On Delivery" ? "border-primary" : "border-gray-300"
                   }`}
                 >
                   {payMethod === "Cash On Delivery" && (
-                    <div className="w-2 h-2 rounded-full bg-[#5C3124]" />
+                    <div className="w-2 h-2 rounded-full bg-primary" />
                   )}
                 </div>
                 <div>
-                  <span className="text-xs sm:text-sm font-bold text-[#1c1c28] block">
+                  <span className="text-xs sm:text-sm font-bold text-text block">
                     Cash on Delivery (COD)
                   </span>
                   <span className="text-[11px] text-gray-500">
@@ -435,7 +435,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             </div>
 
             {payMethod === "Cash On Delivery" && (
-              <div className="mt-3 pt-3 border-t border-[#ebdcd7]/80 flex items-center gap-2 text-[11px] text-emerald-700 bg-emerald-50/50 p-2.5 rounded-lg">
+              <div className="mt-3 pt-3 border-t border-primary-border/80 flex items-center gap-2 text-[11px] text-emerald-700 bg-emerald-50/50 p-2.5 rounded-lg">
                 <CheckCircle2 size={14} className="shrink-0" />
                 <span>Zero advance deposit required. Please keep exact cash ready upon delivery.</span>
               </div>
@@ -451,7 +451,7 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
             type="button"
             disabled={loading}
             onClick={handleOnlinePayment}
-            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 btn-gradient border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -465,14 +465,13 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
                 <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
               </>
             )}
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </button>
         ) : (
           <button
             type="button"
             disabled={loading}
             onClick={handleCodPayment}
-            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 btn-gradient border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? (
               <>
@@ -486,7 +485,6 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
                 <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
               </>
             )}
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </button>
         )}
 
@@ -508,16 +506,16 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
 
       {/* ── 6. POLICY LINKS FOOTER ── */}
       <div className="pt-4 border-t border-gray-100 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">
-        <Link to="/refund-policy" className="hover:text-[#5C3124] underline transition-colors">
+        <Link to="/refund-policy" className="hover:text-primary underline transition-colors">
           Refund Policy
         </Link>
-        <Link to="/shipping-policy" className="hover:text-[#5C3124] underline transition-colors">
+        <Link to="/shipping-policy" className="hover:text-primary underline transition-colors">
           Shipping Policy
         </Link>
-        <Link to="/privacy-policy" className="hover:text-[#5C3124] underline transition-colors">
+        <Link to="/privacy-policy" className="hover:text-primary underline transition-colors">
           Privacy Policy
         </Link>
-        <Link to="/terms-and-conditions" className="hover:text-[#5C3124] underline transition-colors">
+        <Link to="/terms-and-conditions" className="hover:text-primary underline transition-colors">
           Terms of Service
         </Link>
       </div>

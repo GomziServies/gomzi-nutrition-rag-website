@@ -1,30 +1,26 @@
-import React, { useEffect } from 'react'
-import AnnouncementBar from './Header/AnnouncementBanner';
-import Navbar from './Header/Navbar';
-import Footer from './Footer/Footer';
-import { Outlet, useLocation } from 'react-router-dom';
+import React from "react";
+import AnnouncementBar from "./Header/AnnouncementBanner";
+import Navbar from "./Header/Navbar";
+import Footer from "./Footer/Footer";
+import { Outlet } from "react-router-dom";
+import ScrollToTop from "../component/common/ScrollToTop";
 
+/**
+ * Page shell: header -> sale strip -> content -> footer
+ * (HealthKart places the offer strip directly below the header.)
+ */
 const Wrapper = () => {
-//     const { pathname } = useLocation();
-
-//   useEffect(() => {
-//     window.scrollTo({
-//       top: 0,
-//       left: 0,
-//       // behavior: "smooth", // agar instant chahiye to hata do
-//     });
-//   }, [pathname]);
   return (
-   <>
-    <AnnouncementBar/>
-    <Navbar/>
-      <div>
-        <Outlet/>
-      </div>
-      <Footer/>
-   </>
-   
-  )
-}
+    <>
+      <ScrollToTop />
+      <Navbar />
+      <AnnouncementBar />
+      <main className="min-h-[60vh]">
+        <Outlet />
+      </main>
+      <Footer />
+    </>
+  );
+};
 
-export default Wrapper
+export default Wrapper;

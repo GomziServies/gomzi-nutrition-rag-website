@@ -235,6 +235,7 @@ export const HEADER_NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/gomzi-supplement" },
   { label: "Categories", href: "/category", hasDropdown: true },
+  { label: "Wholesale & Gyms", href: "/wholesale" },
   { label: "Faqs", href: "/faq" },
   { label: "About Us", href: "/about" },
   { label: "Blogs", href: "/blog" },

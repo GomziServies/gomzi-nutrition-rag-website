@@ -4,7 +4,7 @@ const Hookheading = ({ text1,text2,text3 }) => {
   return (
     <div>
       <h2
-        className="font-toma text-center text-3xl sm:text-4xl lg:text-5xl font-black text-text mb-10 md:mb-14"
+        className="text-center text-3xl sm:text-4xl lg:text-5xl font-black text-text mb-10 md:mb-14"
         style={{ lineHeight: "1.15", letterSpacing: "-0.3px" }}
       >
        {text1}{" "}

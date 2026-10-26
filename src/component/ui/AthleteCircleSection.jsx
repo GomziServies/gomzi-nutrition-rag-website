@@ -18,7 +18,7 @@ export default function AthleteCircleSection() {
 
   return (
     <section
-      className="w-full bg-gradient-to-r from-[#1c100a] via-[#2c1810] to-[#1c100a] border-b border-[#5C3124]/40 select-none py-2.5 sm:py-3 relative z-10 shadow-xs"
+      className="w-full bg-gradient-to-r from-[#1c100a] via-[#2c1810] to-[#1c100a] border-b border-primary/40 select-none py-2.5 sm:py-3 relative z-10 shadow-xs"
       aria-label="First Order Promo Ticker"
     >
       <div className="max-w-[var(--container-width)] mx-auto px-3 sm:px-6 md:px-8 lg:px-12">
@@ -82,11 +82,10 @@ export default function AthleteCircleSection() {
           {/* Direct Shop Action */}
           <Link
             to="/gomzi-supplement"
-            className="group relative overflow-hidden inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/35 text-white text-xs font-bold shadow-md shadow-[#5C3124]/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] ml-1"
+            className="group relative overflow-hidden inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full btn-gradient border border-amber-400/35 text-white text-xs font-bold shadow-md shadow-primary/30 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] ml-1"
           >
             <span className="tracking-tight">Shop Now</span>
             <FiArrowRight className="w-3.5 h-3.5 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </Link>
         </div>
       </div>

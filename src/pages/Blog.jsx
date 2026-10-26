@@ -176,110 +176,37 @@ export default function BlogPage() {
   };
 
   return (
-    <div className="bg-[#faf8f6] font-modelica text-[#1c1c28] min-h-screen">
+    <div className="bg-bg-cream text-text min-h-screen">
       <SEO
         title="Fitness & Nutrition Science Journal | Gomzi Supplement by RAG"
         description="Evidence-based sports nutrition articles, ICMR protein RDA guidelines, whey isolate vs concentrate comparisons, and formulation insights by registered dietitians."
       />
 
-      {/* ── 1. LUXURY EDITORIAL HERO BANNER (COMPACT & MODERN) ── */}
-      <section
-        className="group/bloghero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 text-white select-none transition-all duration-500"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
-        }}
-      >
-        {/* Ambient atmospheric glows with interactive breathing */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/bloghero:scale-110 group-hover/bloghero:opacity-60"
-          style={{ background: "rgba(92, 49, 36, 0.45)" }}
-        />
-        <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/bloghero:scale-125 group-hover/bloghero:opacity-25"
-          style={{ background: "rgba(255, 137, 20, 0.12)" }}
-        />
-        <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/bloghero:scale-120 group-hover/bloghero:opacity-50"
-          style={{ background: "rgba(92, 49, 36, 0.3)" }}
-        />
-
-        {/* Subtle grid pattern overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/bloghero:opacity-[0.06] transition-opacity duration-500"
-          style={{
-            backgroundImage:
-              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-
-        {/* Ambient RAG Background Typographic Watermark */}
-        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
-          <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/bloghero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/bloghero:scale-105"
-            style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
-          >
-            RAG
-          </span>
-        </div>
-
-        {/* Subtle Sheen Highlight Sweep across banner on hover */}
-        <div className="absolute inset-0 -translate-x-full group-hover/bloghero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          {/* Breadcrumb Navigation */}
-          <nav
-            aria-label="Breadcrumb"
-            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] backdrop-blur-md border border-white/10 text-[11px] text-white/80 mb-3 sm:mb-4 transition-all duration-300"
-          >
-            <Link to="/" className="hover:text-[#ffaa5a] transition-colors">
-              Home
-            </Link>
-            <ChevronRight size={12} className="text-white/40" />
-            <span className="font-semibold text-white">The Gomzi Journal</span>
-          </nav>
-
-          {/* Badge */}
-          <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ff8914]/10 hover:bg-[#ff8914]/20 border border-[#ff8914]/25 hover:border-amber-400/50 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:scale-105 cursor-default group/pill mb-1">
-              <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
-              <span>Evidence-Based Nutrition & Science</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
-            </div>
-          </div>
-
+      {/* ── 1. HERO BANNER ── */}
+      <section className="w-full border-b border-border bg-white">
+        <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-8 text-center">
           {/* Heading */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/bloghero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
-            <span>THE GOMZI SCIENCE JOURNAL. </span>
-            <span
-              style={{
-                background: "linear-gradient(90deg, #ffaa5a 0%, #ff8914 50%, #f3a055 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              ZERO FLUFF. PURE PROTOCOLS.
-            </span>
+          <h1 className="text-3xl font-semibold tracking-tight text-text sm:text-4xl md:text-[40px] leading-tight">
+            The Gomzi Science Journal. Zero Fluff. Pure Protocols.
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/bloghero:text-white/95">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-text-light">
             Clear, peer-reviewed sports nutrition science, official ICMR-NIN dietary guidelines, and formulation breakdowns written by practicing dietitians.
           </p>
 
           {/* Metric Highlights */}
-          <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-3.5 sm:gap-6 text-[11px] sm:text-xs text-gray-300">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
-              <FlaskConical size={13} className="text-[#ffaa5a]" />
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-4 text-xs text-text-light">
+            <div className="inline-flex items-center gap-2">
+              <FlaskConical size={13} className="text-primary" />
               <span>Peer-Reviewed Formulations</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
-              <ShieldCheck size={13} className="text-[#ffaa5a]" />
+            <div className="inline-flex items-center gap-2">
+              <ShieldCheck size={13} className="text-primary" />
               <span>ICMR-NIN RDA Citing</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-white/[0.05] transition-colors duration-200">
-              <Award size={13} className="text-[#ffaa5a]" />
+            <div className="inline-flex items-center gap-2">
+              <Award size={13} className="text-primary" />
               <span>Reviewed by Registered Dietitians</span>
             </div>
           </div>
@@ -287,11 +214,11 @@ export default function BlogPage() {
       </section>
 
       {/* ── 2. SEARCH & FILTER COMMAND BAR ── */}
-      <section className="sticky top-0 z-30 bg-[#faf8f6]/95 backdrop-blur-md border-b border-[#ebdcd7] py-4 transition-all shadow-sm">
+      <section className="sticky top-0 z-30 bg-bg-cream/95 backdrop-blur-md border-b border-primary-border py-4 transition-all shadow-sm">
         <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            {/* Category Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+            {/* Category Pills (centered horizontally, wraps into 2 lines on smaller screens) */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 w-full">
               {filterCategories.map((cat) => {
                 const isActive = selectedCategory === cat.id;
                 const count = getCategoryCount(cat.id);
@@ -300,10 +227,10 @@ export default function BlogPage() {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`group relative overflow-hidden inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap active:scale-[0.98] cursor-pointer ${
+                    className={`group relative overflow-hidden inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-300 active:scale-[0.98] cursor-pointer ${
                       isActive
-                        ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
-                        : "bg-white text-gray-700 border border-[#ebdcd7] hover:border-[#5C3124]/40 hover:bg-[#fdfbf9]"
+                        ? "btn-gradient text-white shadow-md shadow-primary/25 border border-amber-400/30"
+                        : "bg-white text-gray-700 border border-primary-border hover:border-primary/40 hover:bg-[#fdfbf9]"
                     }`}
                   >
                     <span className="relative z-10">{cat.label}</span>
@@ -316,16 +243,13 @@ export default function BlogPage() {
                     >
                       {count}
                     </span>
-                    {isActive && (
-                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                    )}
                   </button>
                 );
               })}
             </div>
 
             {/* Live Search Input */}
-            <div className="relative w-full md:w-80">
+            <div className="relative w-full md:w-80 shrink-0">
               <Search
                 size={16}
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
@@ -335,7 +259,7 @@ export default function BlogPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles, whey, ICMR..."
-                className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-white border border-[#ebdcd7] text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/10 transition-all"
+                className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-white border border-primary-border text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
               />
               {searchQuery && (
                 <button
@@ -353,11 +277,11 @@ export default function BlogPage() {
 
       {/* ── 3. FEATURED EDITORIAL SPOTLIGHT ── */}
       {selectedCategory === "all" && !searchQuery && isFeaturedInFiltered && (
-        <section className="py-10 sm:py-14 bg-[#faf8f6]">
+        <section className="py-10 sm:py-14 bg-bg-cream">
           <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124] flex items-center gap-1.5">
-                <BookOpen size={14} className="text-[#5C3124]" />
+              <span className="text-xs font-bold uppercase tracking-widest text-primary flex items-center gap-1.5">
+                <BookOpen size={14} className="text-primary" />
                 Featured Editorial Publication
               </span>
               <span className="text-xs text-gray-500 font-medium hidden sm:inline-block">
@@ -367,7 +291,7 @@ export default function BlogPage() {
 
             <Link
               to={`/blog/${featuredBlog.slug}`}
-              className="group relative overflow-hidden block rounded-3xl border border-[#ebdcd7] bg-white shadow-xl hover:shadow-2xl hover:border-[#5C3124]/50 hover:-translate-y-1 transition-all duration-500"
+              className="group relative overflow-hidden block rounded-3xl border border-primary-border bg-white shadow-xl hover:shadow-2xl hover:border-primary/50 hover:-translate-y-1 transition-all duration-500"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 items-center">
                 {/* Image Half */}
@@ -394,18 +318,18 @@ export default function BlogPage() {
                     {/* Meta details */}
                     <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
                       <span className="inline-flex items-center gap-1">
-                        <Calendar size={13} className="text-[#5C3124]" />
+                        <Calendar size={13} className="text-primary" />
                         {featuredBlog.date}
                       </span>
                       <span>•</span>
-                      <span className="inline-flex items-center gap-1 font-semibold text-[#5C3124]">
+                      <span className="inline-flex items-center gap-1 font-semibold text-primary">
                         <Clock size={13} />
                         {featuredBlog.readTime}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h2 className="font-toma text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1c1c28] leading-[1.12] tracking-tight group-hover:text-[#5C3124] transition-colors">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-text leading-[1.12] tracking-tight group-hover:text-primary transition-colors">
                       {featuredBlog.title}
                     </h2>
 
@@ -415,8 +339,8 @@ export default function BlogPage() {
                     </p>
 
                     {/* Reviewer Capsule */}
-                    <div className="mt-6 flex items-center gap-2.5 p-3 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7]">
-                      <div className="w-7 h-7 rounded-full bg-[#5C3124] text-white flex items-center justify-center shrink-0">
+                    <div className="mt-6 flex items-center gap-2.5 p-3 rounded-xl bg-primary-light border border-primary-border">
+                      <div className="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center shrink-0">
                         <UserCheck size={14} />
                       </div>
                       <div className="text-[11px] leading-tight">
@@ -431,32 +355,31 @@ export default function BlogPage() {
                   </div>
 
                   {/* Read Article CTA */}
-                  <div className="mt-8 pt-6 border-t border-[#ebdcd7] flex items-center justify-between">
-                    <span className="font-toma text-xs font-bold uppercase tracking-wider text-[#5C3124]">
+                  <div className="mt-8 pt-6 border-t border-primary-border flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-primary">
                       Read Landmark Analysis
                     </span>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white flex items-center justify-center group-hover:translate-x-1.5 transition-all shadow-md shadow-[#5C3124]/30 border border-amber-400/30">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-primary-hover text-white flex items-center justify-center group-hover:translate-x-1.5 transition-all shadow-md shadow-primary/30 border border-amber-400/30">
                       <ArrowRight size={16} />
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
             </Link>
           </div>
         </section>
       )}
 
       {/* ── 4. PUBLICATION ARTICLE GRID ── */}
-      <section className="py-12 sm:py-16 bg-[#faf8f6]">
+      <section className="py-12 sm:py-16 bg-bg-cream">
         <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#ebdcd7]">
+          <div className="flex items-center justify-between mb-8 pb-4 border-b border-primary-border">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">
                 Research Library
               </span>
-              <h2 className="font-toma text-2xl sm:text-3xl font-black text-[#1c1c28] tracking-tight mt-0.5">
+              <h2 className="text-2xl sm:text-3xl font-black text-text tracking-tight mt-0.5">
                 All Publications ({filteredBlogs.length})
               </h2>
             </div>
@@ -464,7 +387,7 @@ export default function BlogPage() {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="text-xs font-bold text-[#5C3124] hover:underline"
+                className="text-xs font-bold text-primary hover:underline"
               >
                 Reset Search
               </button>
@@ -478,7 +401,7 @@ export default function BlogPage() {
                 <Link
                   key={blog._id || blog.id || blog.slug}
                   to={`/blog/${blog.slug}`}
-                  className="group relative overflow-hidden flex flex-col h-full rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300"
+                  className="group relative overflow-hidden flex flex-col h-full rounded-2xl bg-white border border-primary-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300"
                 >
                   {/* Article Thumbnail */}
                   <div className="relative h-56 sm:h-64 overflow-hidden bg-[#1c120e]">
@@ -491,8 +414,8 @@ export default function BlogPage() {
 
                     {/* Category Tag */}
                     <div className="absolute top-4 left-4">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-[#5C3124] text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#5C3124]" />
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-primary text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                         {blog.category}
                       </span>
                     </div>
@@ -500,7 +423,7 @@ export default function BlogPage() {
                     {/* Read Time Tag */}
                     <div className="absolute bottom-3 right-3">
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md text-white text-[10px] font-medium">
-                        <Clock size={11} className="text-[#ffaa5a]" />
+                        <Clock size={11} className="text-[#ff8914]" />
                         {blog.readTime}
                       </span>
                     </div>
@@ -512,16 +435,16 @@ export default function BlogPage() {
                       {/* Date & Reviewer */}
                       <div className="flex items-center justify-between text-[11px] text-gray-500 mb-3">
                         <span className="inline-flex items-center gap-1">
-                          <Calendar size={12} className="text-[#5C3124]" />
+                          <Calendar size={12} className="text-primary" />
                           {blog.date}
                         </span>
-                        <span className="text-[10px] font-semibold text-[#ff8914] bg-[#fdf6f4] px-2 py-0.5 rounded-md border border-[#ebdcd7]">
+                        <span className="text-[10px] font-semibold text-[#ff8914] bg-primary-light px-2 py-0.5 rounded-md border border-primary-border">
                           Evidence-Based
                         </span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-toma text-lg sm:text-xl font-bold text-[#1c1c28] leading-[1.25] tracking-tight group-hover:text-[#5C3124] transition-colors line-clamp-2 mb-2.5">
+                      <h3 className="text-lg sm:text-xl font-bold text-text leading-[1.25] tracking-tight group-hover:text-primary transition-colors line-clamp-2 mb-2.5">
                         {blog.title}
                       </h3>
 
@@ -534,28 +457,27 @@ export default function BlogPage() {
                     {/* Footer */}
                     <div className="pt-4 border-t border-gray-100 flex items-center justify-between mt-auto">
                       <div className="flex items-center gap-2 text-[11px] text-gray-500">
-                        <FileText size={13} className="text-[#5C3124]" />
+                        <FileText size={13} className="text-primary" />
                         <span className="font-medium truncate max-w-[160px]">
                           {blog.reviewer}
                         </span>
                       </div>
 
-                      <span className="w-8 h-8 rounded-full bg-[#fdf6f4] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] text-[#5C3124] group-hover:text-white flex items-center justify-center transition-all shrink-0 border border-[#ebdcd7] group-hover:border-amber-400/30 shadow-xs">
+                      <span className="w-8 h-8 rounded-full bg-primary-light group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover text-primary group-hover:text-white flex items-center justify-center transition-all shrink-0 border border-primary-border group-hover:border-amber-400/30 shadow-xs">
                         <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                       </span>
                     </div>
                   </div>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </Link>
               ))}
             </div>
           ) : (
             /* Empty State */
-            <div className="text-center py-16 px-4 bg-white rounded-2xl border border-[#ebdcd7] max-w-lg mx-auto">
-              <div className="w-14 h-14 rounded-full bg-[#fdf6f4] text-[#5C3124] mx-auto flex items-center justify-center mb-4">
+            <div className="text-center py-16 px-4 bg-white rounded-2xl border border-primary-border max-w-lg mx-auto">
+              <div className="w-14 h-14 rounded-full bg-primary-light text-primary mx-auto flex items-center justify-center mb-4">
                 <Search size={24} />
               </div>
-              <h3 className="font-toma text-xl font-bold text-gray-900 mb-1">
+              <h3 className="text-xl font-bold text-gray-900 mb-1">
                 No Publications Found
               </h3>
               <p className="text-xs text-gray-500 leading-relaxed max-w-sm mx-auto mb-6">
@@ -566,9 +488,8 @@ export default function BlogPage() {
                   setSearchQuery("");
                   setSelectedCategory("all");
                 }}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white font-toma text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 relative overflow-hidden group inline-flex items-center justify-center cursor-pointer"
+                className="px-5 py-2.5 rounded-xl btn-gradient text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 border border-amber-400/30 relative overflow-hidden group inline-flex items-center justify-center cursor-pointer"
               >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 <span className="relative z-10">Reset All Filters</span>
               </button>
             </div>
@@ -577,16 +498,16 @@ export default function BlogPage() {
       </section>
 
       {/* ── 5. SCIENCE ADVISORY INTEGRITY GUARANTEE ── */}
-      <section className="py-14 sm:py-20 bg-white border-y border-[#ebdcd7]">
-        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
+      <section className="py-14 sm:py-20 bg-white border-y border-border">
+        <div className="max-w-[1170px] mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-14">
+            <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-primary bg-primary-light px-3 py-1 rounded-full border border-primary-border mb-3">
               Editorial Standards
             </span>
-            <h2 className="font-toma text-2xl sm:text-4xl text-[#1c1c28] mt-1 font-extrabold tracking-tight uppercase">
+            <h2 className="text-2xl sm:text-3xl font-bold text-text tracking-tight">
               Our Publication Integrity Rules
             </h2>
-            <p className="text-xs sm:text-sm text-gray-500 max-w-lg mx-auto mt-2">
+            <p className="text-xs sm:text-sm text-text-light max-w-lg mx-auto mt-2 leading-relaxed font-normal">
               Sports nutrition content is flooded with sponsored misinformation. Here is how we protect editorial truth.
             </p>
           </div>
@@ -613,21 +534,19 @@ export default function BlogPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden p-6 sm:p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/50 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+                  className="group relative p-6 sm:p-7 rounded-2xl bg-bg-light/60 border border-border hover:bg-white hover:border-primary/40 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                 >
-                  <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-110 group-hover:border-amber-400/60 group-hover:shadow-lg group-hover:shadow-[#5C3124]/35 transition-all duration-300">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-primary-light border border-primary-border text-primary flex items-center justify-center mb-5 shadow-2xs group-hover:bg-primary group-hover:text-white group-hover:border-primary group-hover:scale-105 transition-all duration-300">
                       <Icon size={22} />
                     </div>
-                    <h3 className="font-toma text-lg font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors mb-2">
+                    <h3 className="text-base sm:text-lg font-bold text-text group-hover:text-primary transition-colors mb-2 tracking-tight">
                       {rule.title}
                     </h3>
-                    <p className="text-xs text-gray-600 leading-relaxed font-light">
+                    <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-normal">
                       {rule.desc}
                     </p>
                   </div>
-                  {/* High-contrast luxury travelling sheen sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}
@@ -636,34 +555,27 @@ export default function BlogPage() {
       </section>
 
       {/* ── 6. WEEKLY RESEARCH DIGEST NEWSLETTER ── */}
-      <section className="py-16 sm:py-20 bg-[#faf8f6]">
-        <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="group/cta relative rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 border border-[#5C3124]/40 text-white shadow-2xl overflow-hidden transition-all duration-500 flex flex-col lg:flex-row items-center justify-between gap-8">
-            {/* Decorative Corner Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
-            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
-
-            {/* Subtle sheen highlight across banner on hover */}
-            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
-            <div className="relative z-10 max-w-xl text-center lg:text-left">
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#ffaa5a] mb-2">
-                <Mail size={14} className="text-[#ff8914]" />
-                Weekly Science Briefing
+      <section className="py-12 sm:py-16 bg-white border-t border-border">
+        <div className="max-w-[1170px] mx-auto px-4 sm:px-6">
+          <div className="relative rounded-2xl border border-border bg-gradient-to-r from-primary-light/60 via-white to-primary-light/40 p-8 sm:p-12 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8">
+            <div className="max-w-xl text-center lg:text-left">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary bg-white px-3 py-1 rounded-full border border-primary-border shadow-xs mb-3">
+                <Mail size={13} className="text-primary" />
+                <span>Weekly Science Briefing</span>
               </span>
-              <h2 className="font-toma text-2xl sm:text-4xl font-extrabold text-white mt-1 leading-snug">
-                Evidence-Based Nutrition In Your Inbox.
+              <h2 className="text-2xl sm:text-3xl font-bold text-text tracking-tight leading-tight">
+                Evidence-Based Nutrition In Your Inbox
               </h2>
-              <p className="text-xs sm:text-sm text-gray-300 mt-2 font-light leading-relaxed">
+              <p className="text-xs sm:text-sm text-text-light mt-2 leading-relaxed font-normal">
                 Join 25,000+ athletes receiving weekly clinical breakdowns, macro timing guides, and supplement formulation analyses. Zero spam.
               </p>
             </div>
 
-            <div className="relative z-10 w-full lg:w-auto shrink-0">
+            <div className="w-full lg:w-auto shrink-0">
               {newsletterSubscribed ? (
-                <div className="p-4 rounded-xl bg-white/10 border border-amber-400/40 text-amber-200 text-xs font-semibold flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#ffaa5a]" />
-                  <span>You're subscribed! Check your inbox for the welcome guide.</span>
+                <div className="p-3.5 sm:p-4 rounded-xl bg-success-light border border-success/30 text-success text-xs font-semibold flex items-center gap-2">
+                  <CheckCircle2 size={16} className="text-success" />
+                  <span>You&apos;re subscribed! Check your inbox for the welcome guide.</span>
                 </div>
               ) : (
                 <form
@@ -676,15 +588,14 @@ export default function BlogPage() {
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
                     placeholder="Enter your email address..."
-                    className="px-4 py-3.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder:text-gray-400 focus:outline-none focus:border-[#ff8914] focus:ring-2 focus:ring-[#ff8914]/20 transition-all sm:w-72"
+                    className="px-4 py-3 rounded-lg bg-white border border-border text-xs sm:text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all sm:w-72 shadow-2xs"
                   />
                   <button
                     type="submit"
-                    className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 shrink-0 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary hover:bg-primary-hover active:scale-[0.98] text-white font-semibold text-xs uppercase tracking-wider transition-all shadow-sm shrink-0 cursor-pointer"
                   >
-                    <span className="relative z-10 tracking-wider">Subscribe</span>
-                    <Send size={14} className="relative z-10 text-amber-200 transition-transform duration-300 group-hover:translate-x-1" />
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+                    <span>Subscribe</span>
+                    <Send size={14} className="text-white" />
                   </button>
                 </form>
               )}

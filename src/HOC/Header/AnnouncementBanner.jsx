@@ -1,75 +1,80 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-// import { Autoplay, Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Autoplay, Navigation, EffectFade } from "swiper/modules";
-import "swiper/css/effect-fade"; // 👈 aa pan import kar
+import { Link } from "react-router-dom";
+import { Truck, ShieldCheck, RotateCcw, Zap } from "lucide-react";
 
-const announcements = [
-  { id: 1, icon: "🔥", text: "FREE Shipping" },
-  // { id: 2, icon: "🎁", text: "Buy 2 Get 1 FREE - Limited Time Offer!" },
-  // { id: 3, icon: "⚡", text: "Flash Sale: Up to 50% OFF Today Only!" },
-  // { id: 4, icon: "🚚", text: "Express Delivery Available - Order by 3PM" },
+/**
+ * HealthKart sale strip.
+ * Sits directly below the header, dark grey bar with rotating offers.
+ */
+const OFFERS = [
+  { icon: Zap, text: "Upto 60% Off on top brands", href: "/gomzi-supplement?search=deal" },
+  { icon: Truck, text: "Free shipping on orders above ₹999", href: "/gomzi-supplement" },
+  { icon: ShieldCheck, text: "100% genuine products, direct from brands", href: "/about" },
+  { icon: RotateCcw, text: "Easy 14-day returns", href: "/refund-policy" },
 ];
 
 export default function AnnouncementBar() {
   return (
-    <div className="w-full py-2 px-4 select-none bg-primary">
-      <div className="max-w-[var(--container-width)] mx-auto relative flex items-center px-10">
-        {/* Custom Prev Button */}
-        <button
-          className="swiper-announcement-prev flex-shrink-0 transition-colors duration-200 px-2 text-lg z-10 text-text-light hover:text-btn-light"
-          aria-label="Previous"
+    <div className="w-full bg-[#45484e] overflow-hidden select-none">
+      {/* ── MOBILE: Smooth Infinite Running Ticker (< md) ── */}
+      <div className="md:hidden flex overflow-hidden py-1.5 relative">
+        <div
+          className="marquee-track flex items-center gap-6 active:[animation-play-state:paused]"
+          style={{ animationDuration: "20s" }}
         >
-          ‹
-        </button>
+          {/* First track */}
+          <div className="flex shrink-0 items-center gap-6">
+            {OFFERS.map((offer, i) => {
+              const Icon = offer.icon;
+              return (
+                <Link
+                  key={`m1-${i}`}
+                  to={offer.href}
+                  className="flex shrink-0 items-center gap-1.5 text-[11px] font-medium text-white/95 hover:text-white transition-colors whitespace-nowrap"
+                >
+                  <Icon className="h-3.5 w-3.5 shrink-0" />
+                  <span>{offer.text}</span>
+                  <span className="text-white/30 ml-2 select-none">•</span>
+                </Link>
+              );
+            })}
+          </div>
 
-        {/* Swiper */}
-        <div className="flex-1 overflow-hidden">
-          <Swiper
-            modules={[Autoplay, Navigation, EffectFade]} // EffectFade add kar
-            spaceBetween={0}
-            slidesPerView={1}
-            loop={true}
-            effect="fade" // 👈 fade effect
-            fadeEffect={{ crossFade: true }} // 👈 smooth fade
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            navigation={{
-              prevEl: ".swiper-announcement-prev",
-              nextEl: ".swiper-announcement-next",
-            }}
-            speed={500}
-            className="announcement-swiper"
-          >
-            {announcements.map((item) => (
-              <SwiperSlide key={item.id}>
-                <div className="flex items-center justify-center gap-2 text-center w-full ">
-                  {/* Icon */}
-                  <span className="text-base sm:text-sm text-secondary">
-                    {item.icon}
-                  </span>
-
-                  {/* Text */}
-                  <p className="text-xs sm:text-sm font-medium tracking-wide whitespace-nowrap truncate max-w-xs sm:max-w-none font-modelica uppercase text-btn-light">
-                    {item.text}
-                  </p>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          {/* Duplicated track for seamless infinite marquee loop */}
+          <div className="flex shrink-0 items-center gap-6" aria-hidden="true">
+            {OFFERS.map((offer, i) => {
+              const Icon = offer.icon;
+              return (
+                <Link
+                  key={`m2-${i}`}
+                  to={offer.href}
+                  tabIndex={-1}
+                  className="flex shrink-0 items-center gap-1.5 text-[11px] font-medium text-white/95 hover:text-white transition-colors whitespace-nowrap"
+                >
+                  <Icon className="h-3.5 w-3.5 shrink-0" />
+                  <span>{offer.text}</span>
+                  <span className="text-white/30 ml-2 select-none">•</span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
+      </div>
 
-        {/* Custom Next Button */}
-        <button
-          className="swiper-announcement-next flex-shrink-0 transition-colors duration-200 px-2 text-lg z-10 text-text-light hover:text-btn-light"
-          aria-label="Next"
-        >
-          ›
-        </button>
+      {/* ── DESKTOP: Centered Static Bar (>= md) ── */}
+      <div className="hidden md:flex max-w-[1170px] mx-auto px-4 py-2 items-center justify-center gap-8">
+        {OFFERS.map((offer) => {
+          const Icon = offer.icon;
+          return (
+            <Link
+              key={offer.text}
+              to={offer.href}
+              className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-white/90 hover:text-white transition-colors whitespace-nowrap"
+            >
+              <Icon className="h-3.5 w-3.5 shrink-0" />
+              <span>{offer.text}</span>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

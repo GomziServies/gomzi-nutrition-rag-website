@@ -71,7 +71,7 @@ function OrdersSection() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <div className="w-8 h-8 border-3 border-[#5C3124]/20 border-t-[#5C3124] rounded-full animate-spin mb-3" />
+        <div className="w-8 h-8 border-3 border-primary/20 border-t-primary rounded-full animate-spin mb-3" />
         <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">
           Fetching Order History...
         </p>
@@ -82,9 +82,9 @@ function OrdersSection() {
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-[#ebdcd7]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-5 border-b border-primary-border">
         <div>
-          <h2 className="font-toma text-2xl sm:text-3xl font-black text-[#1c1c28] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-text tracking-tight">
             Order History & Tracking
           </h2>
           <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
@@ -92,7 +92,7 @@ function OrdersSection() {
           </p>
         </div>
 
-        <span className="text-xs font-bold text-[#5C3124] bg-[#f5eeeb] px-3.5 py-1.5 rounded-xl border border-[#ebdcd7] self-start sm:self-auto">
+        <span className="text-xs font-bold text-primary bg-[#f5eeeb] px-3.5 py-1.5 rounded-xl border border-primary-border self-start sm:self-auto">
           {orders.length} {orders.length === 1 ? "Order" : "Orders"} Placed
         </span>
       </div>
@@ -101,12 +101,12 @@ function OrdersSection() {
       <div className="space-y-5">
         {orders.length === 0 ? (
           /* Empty State */
-          <div className="bg-[#faf8f6] rounded-2xl md:rounded-3xl border border-dashed border-[#ebdcd7] p-8 sm:p-12 text-center flex flex-col items-center">
-            <div className="w-16 h-16 rounded-2xl bg-white border border-[#ebdcd7] flex items-center justify-center text-[#5C3124] mb-4 shadow-sm">
+          <div className="bg-bg-cream rounded-2xl md:rounded-3xl border border-dashed border-primary-border p-8 sm:p-12 text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-2xl bg-white border border-primary-border flex items-center justify-center text-primary mb-4 shadow-sm">
               <ShoppingBag size={28} />
             </div>
 
-            <h3 className="font-toma text-xl sm:text-2xl font-black text-[#1c1c28] mb-2">
+            <h3 className="text-xl sm:text-2xl font-black text-text mb-2">
               No Orders Found
             </h3>
 
@@ -116,9 +116,8 @@ function OrdersSection() {
 
             <Link
               to="/gomzi-supplement"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white px-6 py-3.5 rounded-xl text-xs font-extrabold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer relative overflow-hidden group"
+              className="inline-flex items-center gap-2 btn-gradient text-white px-6 py-3.5 rounded-xl text-xs font-extrabold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 border border-amber-400/30 cursor-pointer relative overflow-hidden group"
             >
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               <span className="relative z-10">Explore Products</span>
               <ArrowRight size={15} className="relative z-10 text-amber-200 group-hover:translate-x-0.5 transition-transform" />
             </Link>
@@ -140,18 +139,18 @@ function OrdersSection() {
             return (
               <div
                 key={order._id || index}
-                className="bg-white rounded-2xl border border-[#ebdcd7] overflow-hidden transition-all duration-200 shadow-sm hover:border-[#5C3124]/40"
+                className="bg-white rounded-2xl border border-primary-border overflow-hidden transition-all duration-200 shadow-sm hover:border-primary/40"
               >
                 {/* Clickable Order Header */}
                 <div
                   onClick={() => toggleOrder(order._id)}
-                  className="cursor-pointer p-5 sm:p-6 bg-white hover:bg-[#faf8f6] transition-colors"
+                  className="cursor-pointer p-5 sm:p-6 bg-white hover:bg-bg-cream transition-colors"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     {/* Left: Order Info & Product Preview */}
                     <div className="flex flex-col gap-2 min-w-0">
                       <div className="flex items-center gap-3 flex-wrap">
-                        <span className="font-mono text-sm sm:text-base font-black text-[#1c1c28] tracking-tight">
+                        <span className="font-mono text-sm sm:text-base font-black text-text tracking-tight">
                           #{order.receipt_id || String(order._id).slice(-8).toUpperCase()}
                         </span>
                         {getStatusBadge(order.status)}
@@ -167,7 +166,7 @@ function OrdersSection() {
                         {order.CART?.slice(0, 3).map((item, itemIdx) => (
                           <span
                             key={itemIdx}
-                            className="bg-[#f5eeeb] text-[#5C3124] border border-[#ebdcd7] px-2.5 py-1 rounded-lg text-xs font-bold truncate max-w-[220px]"
+                            className="bg-[#f5eeeb] text-primary border border-primary-border px-2.5 py-1 rounded-lg text-xs font-bold truncate max-w-[220px]"
                           >
                             {item.name}
                           </span>
@@ -186,7 +185,7 @@ function OrdersSection() {
                         <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">
                           Total Amount
                         </span>
-                        <span className="font-toma text-xl sm:text-2xl font-black text-[#1c1c28]">
+                        <span className="text-xl sm:text-2xl font-black text-text">
                           ₹{Number(order.amount || 0).toLocaleString()}
                         </span>
                       </div>
@@ -195,8 +194,8 @@ function OrdersSection() {
                         type="button"
                         className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 relative overflow-hidden ${
                           isOpen
-                            ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border border-amber-400/30 shadow-xs"
-                            : "bg-[#faf8f6] border border-[#ebdcd7] text-gray-700 hover:text-[#5C3124] hover:border-[#5C3124]/40"
+                            ? "bg-gradient-to-r from-primary to-primary-hover text-white border border-amber-400/30 shadow-xs"
+                            : "bg-bg-cream border border-primary-border text-gray-700 hover:text-primary hover:border-primary/40"
                         }`}
                       >
                         {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -207,7 +206,7 @@ function OrdersSection() {
 
                 {/* Expanded Details Section */}
                 {isOpen && (
-                  <div className="border-t border-[#ebdcd7] p-5 sm:p-6 bg-[#fcfbfa] flex flex-col gap-6 animate-fadeIn">
+                  <div className="border-t border-primary-border p-5 sm:p-6 bg-[#fcfbfa] flex flex-col gap-6 animate-fadeIn">
                     {/* Itemized Products */}
                     <div className="flex flex-col gap-3">
                       <h4 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-gray-500">
@@ -225,20 +224,20 @@ function OrdersSection() {
                           return (
                             <div
                               key={itemIdx}
-                              className="flex items-center justify-between gap-4 p-3.5 rounded-xl bg-white border border-[#ebdcd7]"
+                              className="flex items-center justify-between gap-4 p-3.5 rounded-xl bg-white border border-primary-border"
                             >
                               <div className="flex items-center gap-3.5 min-w-0">
                                 <img
                                   src={imgSrc}
                                   alt={item.name}
-                                  className="w-12 h-12 object-contain rounded-lg bg-[#faf8f6] p-1 border border-gray-200 shrink-0"
+                                  className="w-12 h-12 object-contain rounded-lg bg-bg-cream p-1 border border-gray-200 shrink-0"
                                   onError={(e) => {
                                     e.currentTarget.onerror = null;
                                     e.currentTarget.src = "/images/product-placeholder.webp";
                                   }}
                                 />
                                 <div className="min-w-0">
-                                  <h5 className="font-bold text-xs sm:text-sm text-[#1c1c28] truncate">
+                                  <h5 className="font-bold text-xs sm:text-sm text-text truncate">
                                     {item.name}
                                   </h5>
                                   <span className="text-[11px] text-gray-500 font-medium">
@@ -247,7 +246,7 @@ function OrdersSection() {
                                 </div>
                               </div>
 
-                              <span className="font-bold text-sm sm:text-base text-[#1c1c28] shrink-0">
+                              <span className="font-bold text-sm sm:text-base text-text shrink-0">
                                 ₹{(Number(item.price || 0) * qty).toLocaleString()}
                               </span>
                             </div>
@@ -259,20 +258,20 @@ function OrdersSection() {
                     {/* Order Metadata Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {/* Payment Card */}
-                      <div className="bg-white rounded-xl p-4 border border-[#ebdcd7] flex flex-col justify-between">
+                      <div className="bg-white rounded-xl p-4 border border-primary-border flex flex-col justify-between">
                         <div className="flex items-center gap-2 text-gray-500 text-xs font-bold mb-2">
-                          <CreditCard size={15} className="text-[#5C3124]" />
+                          <CreditCard size={15} className="text-primary" />
                           <span>Payment Method</span>
                         </div>
-                        <span className="font-bold text-sm text-[#1c1c28] uppercase">
+                        <span className="font-bold text-sm text-text uppercase">
                           {order.purchase_mode || "Online Gateway"}
                         </span>
                       </div>
 
                       {/* Shipment Status Card */}
-                      <div className="bg-white rounded-xl p-4 border border-[#ebdcd7] flex flex-col justify-between">
+                      <div className="bg-white rounded-xl p-4 border border-primary-border flex flex-col justify-between">
                         <div className="flex items-center gap-2 text-gray-500 text-xs font-bold mb-2">
-                          <Package size={15} className="text-[#5C3124]" />
+                          <Package size={15} className="text-primary" />
                           <span>Fulfillment Status</span>
                         </div>
                         <span className="font-bold text-sm text-emerald-600">
@@ -283,11 +282,11 @@ function OrdersSection() {
                       </div>
 
                       {/* Total Paid Card */}
-                      <div className="bg-[#5C3124] text-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
+                      <div className="bg-primary text-white rounded-xl p-4 shadow-sm flex flex-col justify-between">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200">
                           Total Invoice
                         </span>
-                        <span className="font-toma text-2xl font-black mt-1">
+                        <span className="text-2xl font-black mt-1">
                           ₹{Number(order.amount || 0).toLocaleString()}
                         </span>
                       </div>
@@ -295,9 +294,9 @@ function OrdersSection() {
 
                     {/* Shipping Address */}
                     {order.notes?.address_line_1 && (
-                      <div className="bg-white rounded-xl p-4 border border-[#ebdcd7]">
+                      <div className="bg-white rounded-xl p-4 border border-primary-border">
                         <div className="flex items-center gap-2 text-gray-500 text-xs font-bold mb-1.5">
-                          <MapPin size={15} className="text-[#5C3124]" />
+                          <MapPin size={15} className="text-primary" />
                           <span>Delivery Destination</span>
                         </div>
                         <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
@@ -312,8 +311,8 @@ function OrdersSection() {
                     )}
 
                     {/* Visual 5-Stage Tracking Timeline */}
-                    <div className="bg-white rounded-xl p-5 border border-[#ebdcd7] flex flex-col gap-4">
-                      <h4 className="font-bold text-xs sm:text-sm text-[#1c1c28] flex items-center gap-2">
+                    <div className="bg-white rounded-xl p-5 border border-primary-border flex flex-col gap-4">
+                      <h4 className="font-bold text-xs sm:text-sm text-text flex items-center gap-2">
                         <CheckCircle2 size={16} className="text-emerald-600" />
                         <span>Live Shipment Timeline</span>
                       </h4>
@@ -348,7 +347,7 @@ function OrdersSection() {
                               </div>
                               <span
                                 className={`text-[10px] sm:text-xs font-bold leading-tight ${
-                                  isDone ? "text-[#1c1c28]" : "text-gray-400"
+                                  isDone ? "text-text" : "text-gray-400"
                                 }`}
                               >
                                 {step.label}

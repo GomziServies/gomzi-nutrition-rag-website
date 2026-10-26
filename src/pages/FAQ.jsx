@@ -191,102 +191,48 @@ export default function FAQPage() {
   }, [activeTab, searchQuery]);
 
   return (
-    <div className="bg-[#faf8f6] font-modelica text-[#1c1c28]">
+    <div className="bg-bg-cream text-text">
       <SEO
         title="Frequently Asked Questions (FAQ) | Gomzi Nutrition"
         description="Find verified answers regarding Gomzi Whey Protein, Creatine, Mass Gainer, dosages, 3rd-party lab certifications, and shipping."
       />
 
-      {/* ── 1. LUXURY HERO BANNER & SEARCH (COMPACT & MODERN) ── */}
-      <section
-        className="group/faqhero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 border-b border-[#3a1d15] hover:border-amber-400/35 transition-colors duration-500 text-white select-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
-        }}
-      >
-        {/* Ambient atmospheric glows */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/faqhero:scale-110 group-hover/faqhero:opacity-60"
-          style={{ background: "rgba(92, 49, 36, 0.45)" }}
-        />
-        <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/faqhero:scale-125 group-hover/faqhero:opacity-25"
-          style={{ background: "rgba(255, 137, 20, 0.12)" }}
-        />
-
-        <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/faqhero:scale-120 group-hover/faqhero:opacity-50"
-          style={{ background: "rgba(92, 49, 36, 0.3)" }}
-        />
-
-        {/* Subtle grid pattern overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/faqhero:opacity-[0.06] transition-opacity duration-500"
-          style={{
-            backgroundImage:
-              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-
-        {/* Ambient RAG Background Typographic Watermark */}
-        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
-          <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/faqhero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/faqhero:scale-105"
-            style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
-          >
-            RAG
-          </span>
-        </div>
-
-        {/* Subtle Sheen Highlight Sweep across banner on hover */}
-        <div className="absolute inset-0 -translate-x-full group-hover/faqhero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      {/* ── 1. HERO BANNER & SEARCH ── */}
+      <section className="w-full border-b border-border bg-white">
+        <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-8 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-amber-400/40 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 cursor-default group/pill mb-3">
-            <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
-            <span>Help Center & Knowledge Base</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary-light px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary mb-3">
+            <Sparkles size={12} className="text-primary" />
+            <span>Help Center &amp; Knowledge Base</span>
           </div>
 
           {/* Heading */}
-          <h1 className="mt-2 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/faqhero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
-            ANSWERS TO YOUR{" "}
-            <span
-              style={{
-                background: "linear-gradient(90deg, #ffaa5a 0%, #ff8914 50%, #f3a055 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              QUESTIONS.
-            </span>
+          <h1 className="text-3xl font-semibold tracking-tight text-text sm:text-4xl md:text-[40px] leading-tight">
+            Answers To Your Questions
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-lg mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/faqhero:text-white/95">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-text-light">
             Everything you need to know about our formulations, lab certifications, batch testing, and shipping.
           </p>
 
           {/* Live Reactive Search Bar */}
-          <div className="mt-5 max-w-xl mx-auto relative">
-            <div className="relative flex items-center bg-white/10 hover:bg-white/[0.14] backdrop-blur-xl border border-white/20 hover:border-amber-400/40 rounded-xl shadow-lg p-1 transition-all focus-within:border-[#ff8914] focus-within:bg-white/15">
-              <div className="pl-3 text-gray-400">
-                <Search size={16} className="text-[#ffaa5a]" />
+          <div className="mt-6 max-w-xl mx-auto relative">
+            <div className="relative flex items-center rounded-lg border border-border bg-white p-1 transition-colors focus-within:border-primary">
+              <div className="pl-3 text-text-muted">
+                <Search size={16} className="text-text-muted" />
               </div>
               <input
                 type="text"
                 placeholder="Search questions (e.g. whey isolate, creatine loading, shipping, FSSAI)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent outline-none font-modelica text-xs sm:text-sm px-2.5 py-2 text-white placeholder:text-gray-400"
+                className="w-full bg-transparent outline-none text-xs sm:text-sm px-2.5 py-2 text-text placeholder:text-text-muted"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="pr-2.5 text-gray-400 hover:text-white transition-colors cursor-pointer"
+                  className="pr-2.5 text-text-muted hover:text-text transition-colors cursor-pointer"
                 >
                   <X size={15} />
                 </button>
@@ -294,13 +240,14 @@ export default function FAQPage() {
             </div>
 
             {searchQuery && (
-              <p className="text-[11px] text-gray-400 mt-1.5 text-left pl-2">
+              <p className="text-[11px] text-text-muted mt-1.5 text-left pl-2">
                 Found {filteredQuestions.length} result{filteredQuestions.length !== 1 ? "s" : ""} for "{searchQuery}"
               </p>
             )}
           </div>
         </div>
       </section>
+
 
       {/* ── 2. CATEGORY FILTER TABS & QUESTIONS ── */}
       <section className="py-8 sm:py-12 md:py-14">
@@ -315,14 +262,11 @@ export default function FAQPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`group relative overflow-hidden px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer ${
                     active
-                      ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30 scale-[1.02]"
-                      : "bg-white text-gray-600 hover:text-gray-900 border border-[#ebdcd7] hover:border-[#5C3124]/40 hover:bg-[#fffcf9]"
+                      ? "btn-gradient text-white shadow-md shadow-primary/25 border border-amber-400/30 scale-[1.02]"
+                      : "bg-white text-gray-600 hover:text-gray-900 border border-primary-border hover:border-primary/40 hover:bg-[#fffcf9]"
                   }`}
                 >
                   <span className="relative z-10">{tab.label}</span>
-                  {active && (
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                  )}
                 </button>
               );
             })}
@@ -338,23 +282,22 @@ export default function FAQPage() {
                   className={`group relative overflow-hidden rounded-2xl transition-all duration-300 cursor-pointer border ${
                     isOpen
                       ? "border-amber-400/50 bg-gradient-to-br from-[#fdfbf9] to-white shadow-[0_8px_24px_rgba(92,49,36,0.08)] ring-1 ring-amber-400/20"
-                      : "border-[#ebdcd7] bg-white hover:border-amber-400/40 hover:bg-[#fdfbf9]/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_28px_rgba(92,49,36,0.08)] hover:-translate-y-0.5"
+                      : "border-primary-border bg-white hover:border-amber-400/40 hover:bg-[#fdfbf9]/60 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_28px_rgba(92,49,36,0.08)] hover:-translate-y-0.5"
                   }`}
                 >
                   {/* Subtle moving card sheen sweep on hover */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
 
                   <button
                     onClick={() => toggleItem(item.id)}
                     className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer gap-4 relative z-10"
                   >
                     <div className="flex flex-col gap-1 flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#5C3124] group-hover:text-amber-600 transition-colors">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-primary group-hover:text-amber-600 transition-colors">
                         {item.categoryLabel}
                       </span>
                       <h3
-                        className={`font-modelica font-semibold text-base sm:text-lg transition-colors leading-snug ${
-                          isOpen ? "text-[#5C3124]" : "text-gray-900 group-hover:text-[#5C3124]"
+                        className={`font-semibold text-base sm:text-lg transition-colors leading-snug ${
+                          isOpen ? "text-primary" : "text-gray-900 group-hover:text-primary"
                         }`}
                       >
                         {item.question}
@@ -364,12 +307,11 @@ export default function FAQPage() {
                     <div
                       className={`relative overflow-hidden w-8.5 h-8.5 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         isOpen
-                          ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] border border-amber-400/30 text-white rotate-180 shadow-md shadow-[#5C3124]/25"
-                          : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white group-hover:shadow-md group-hover:scale-105"
+                          ? "btn-gradient border border-amber-400/30 text-white rotate-180 shadow-md shadow-primary/25"
+                          : "bg-primary-light text-primary border border-primary-border group-hover:bg-gradient-to-r group-hover:from-primary group-hover:via-primary group-hover:to-primary-hover group-hover:border-amber-400/30 group-hover:text-white group-hover:shadow-md group-hover:scale-105"
                       }`}
                     >
                       <span className="relative z-10">{isOpen ? <Minus size={15} className="text-amber-100" /> : <Plus size={15} />}</span>
-                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                     </div>
                   </button>
 
@@ -383,7 +325,7 @@ export default function FAQPage() {
             })}
 
             {filteredQuestions.length === 0 && (
-              <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-[#ebdcd7]">
+              <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-primary-border">
                 <HelpCircle size={40} className="mx-auto text-gray-300 mb-3" />
                 <h4 className="text-base font-bold text-gray-800">No matching questions found</h4>
                 <p className="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
@@ -394,9 +336,8 @@ export default function FAQPage() {
                     setSearchQuery("");
                     setActiveTab("all");
                   }}
-                  className="mt-4 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold border border-amber-400/30 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 relative overflow-hidden group cursor-pointer inline-flex items-center justify-center"
+                  className="mt-4 px-5 py-2.5 rounded-xl btn-gradient text-white text-xs font-bold border border-amber-400/30 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 relative overflow-hidden group cursor-pointer inline-flex items-center justify-center"
                 >
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                   <span className="relative z-10">Reset Search Filter</span>
                 </button>
               </div>
@@ -406,7 +347,7 @@ export default function FAQPage() {
       </section>
 
       {/* ── 3. TRUST ACCREDITATION STRIP ── */}
-      <section className="py-12 sm:py-16 bg-white border-y border-[#ebdcd7]">
+      <section className="py-12 sm:py-16 bg-white border-y border-primary-border">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
@@ -435,13 +376,13 @@ export default function FAQPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden flex items-start gap-4 p-5 sm:p-5.5 rounded-2xl sm:rounded-3xl bg-[#faf8f6] border border-[#ebdcd7]/90 hover:border-amber-400/40 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+                  className="group relative overflow-hidden flex items-start gap-4 p-5 sm:p-5.5 rounded-2xl sm:rounded-3xl bg-bg-cream border border-primary-border/90 hover:border-amber-400/40 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
                 >
-                  <div className="w-11 h-11 rounded-2xl bg-white border border-[#ebdcd7]/80 flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:via-[#6d3a2b] group-hover:to-[#48261c] group-hover:text-amber-200 group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-[#5C3124]/20 transition-all duration-300 shadow-xs relative z-10">
+                  <div className="w-11 h-11 rounded-2xl bg-white border border-primary-border/80 flex items-center justify-center shrink-0 text-primary group-hover:bg-gradient-to-r group-hover:from-primary group-hover:via-primary group-hover:to-primary-hover group-hover:text-amber-200 group-hover:border-amber-400/40 group-hover:scale-105 group-hover:shadow-md group-hover:shadow-primary/20 transition-all duration-300 shadow-xs relative z-10">
                     <Icon size={19} className="transition-transform duration-300 group-hover:scale-110" />
                   </div>
                   <div className="relative z-10">
-                    <h4 className="font-toma text-sm font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight">
+                    <h4 className="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors tracking-tight">
                       {item.title}
                     </h4>
                     <p className="text-xs text-gray-500 mt-1 leading-relaxed font-light">
@@ -449,7 +390,6 @@ export default function FAQPage() {
                     </p>
                   </div>
                   {/* Subtle moving card sheen sweep on hover */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}
@@ -458,50 +398,39 @@ export default function FAQPage() {
       </section>
 
       {/* ── 4. STILL HAVE QUESTIONS? DIRECT CONTACT HERO ── */}
-      <section className="py-16 sm:py-20 bg-[#faf8f6]">
-        <div className="max-w-[1000px] mx-auto px-5 sm:px-6">
-          <div className="group/cta relative rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 border border-[#5C3124]/40 text-white shadow-2xl overflow-hidden transition-all duration-500">
-            {/* Decorative Corner Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
-            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
+      <section className="py-12 sm:py-16 bg-white border-t border-border">
+        <div className="max-w-[1170px] mx-auto px-4 sm:px-6">
+          <div className="relative rounded-2xl border border-border bg-gradient-to-r from-primary-light/60 via-white to-primary-light/40 p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
+            <div className="max-w-xl text-center md:text-left">
+              <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-primary bg-white px-3 py-1 rounded-full border border-primary-border shadow-xs mb-3">
+                Need Personal Guidance?
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-text tracking-tight leading-tight">
+                Still have questions about our supplements?
+              </h2>
+              <p className="text-xs sm:text-sm text-text-light mt-2 leading-relaxed font-normal">
+                Our certified sports nutritionists are available 7 days a week to help tailor your personalized supplement stack.
+              </p>
+            </div>
 
-            {/* Subtle sheen highlight across banner on hover */}
-            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
+            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
+              <a
+                href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team,%20I%20have%20a%20question%20regarding%20supplements."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary hover:bg-primary-hover active:scale-[0.98] text-white font-semibold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer"
+              >
+                <MessageCircle size={15} />
+                <span>WhatsApp Us</span>
+              </a>
 
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-              <div className="max-w-md">
-                <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">
-                  Need Personal Guidance?
-                </span>
-                <h3 className="font-toma text-2xl sm:text-3xl font-extrabold text-white mt-1 leading-snug">
-                  Still have questions about our supplements?
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-300 mt-2 font-light leading-relaxed">
-                  Our certified sports nutritionists are available 7 days a week to help tailor your personalized supplement stack.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                <a
-                  href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team,%20I%20have%20a%20question%20regarding%20supplements."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 cursor-pointer"
-                >
-                  <MessageCircle size={16} className="relative z-10 text-amber-200" />
-                  <span className="relative z-10 tracking-wider">WhatsApp Us</span>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
-                </a>
-
-                <Link
-                  to="/contact-us"
-                  className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] border border-white/20 hover:border-amber-400/40 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-black/20 cursor-pointer"
-                >
-                  <Mail size={15} className="relative z-10 text-amber-200" />
-                  <span className="relative z-10">Contact Support</span>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
-                </Link>
-              </div>
+              <Link
+                to="/contact-us"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border bg-white text-text hover:bg-bg-light font-semibold text-xs uppercase tracking-wider transition-all active:scale-[0.98] cursor-pointer"
+              >
+                <Mail size={15} className="text-text-secondary" />
+                <span>Contact Support</span>
+              </Link>
             </div>
           </div>
         </div>

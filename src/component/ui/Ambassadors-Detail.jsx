@@ -30,7 +30,7 @@ function StarRating({ rating, total }) {
         })}
       </div>
       {total && (
-        <span className="font-modelica text-sm text-[var(--color-text-light)]">
+        <span className="text-sm text-[var(--color-text-light)]">
           {total} reviews
         </span>
       )}
@@ -144,13 +144,13 @@ function ProductCard({ product }) {
         {/* Details */}
         <div className="flex-1 px-3 pt-3 pb-2 flex flex-col gap-1">
           <StarRating rating={product.rating} total={product.reviews} />
-          <p className="font-toma font-light text-lg leading-snug line-clamp-2">
+          <p className="font-light text-lg leading-snug line-clamp-2">
             {product.name}
           </p>
-          <p className="font-modelica text-sm text-[var(--color-text-light)]">
+          <p className="text-sm text-[var(--color-text-light)]">
             {product.category}
           </p>
-          <p className="font-modelica font-medium text-lg text-[var(--color-text)] pb-2">
+          <p className="font-medium text-lg text-[var(--color-text)] pb-2">
             {product.price}
           </p>
         </div>
@@ -158,7 +158,7 @@ function ProductCard({ product }) {
         {/* Shop Now */}
         <a
           href={product.link}
-          className="block text-center font-modelica font-extrabold text-md text-[var(--color-text)] rounded-[var(--radius-md)] py-3 px-4 transition-opacity duration-200 hover:opacity-80 "
+          className="block text-center font-extrabold text-md text-[var(--color-text)] rounded-[var(--radius-md)] py-3 px-4 transition-opacity duration-200 hover:opacity-80 "
           style={{ background: "#8cd7e1" }}
         >
           Shop Now
@@ -178,13 +178,13 @@ function AmbassadorRow({ item }) {
     >
       {/* ── Text Block ── */}
       <div className="w-full md:w-1/2 flex flex-col justify-center order-2 md:order-none">
-        <h2 className="font-toma text-2xl sm:text-3xl lg:text-4xl text-[var(--color-text)] font-black leading-tight">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[var(--color-text)] font-black leading-tight">
           {item.title}
         </h2>
-        <p className="font-modelica text-[var(--color-text-light)] text-lg sm:text-base leading-relaxed mt-3 italic">
+        <p className="text-[var(--color-text-light)] text-lg sm:text-base leading-relaxed mt-3 italic">
           {item.quote}
         </p>
-        <p className="font-modelica text-[var(--color-text-light)] text-md mt-2 italic">
+        <p className="text-[var(--color-text-light)] text-md mt-2 italic">
           {item.role}
         </p>
 

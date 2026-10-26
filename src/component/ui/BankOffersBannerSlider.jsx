@@ -164,7 +164,7 @@ export default function BankOffersBannerSlider() {
 
 
   return (
-    <section className="w-full py-6 sm:py-8 bg-[#faf8f6] overflow-hidden" aria-label="Bank Partner Offers Carousel">
+    <section className="w-full py-6 sm:py-8 bg-bg-cream overflow-hidden" aria-label="Bank Partner Offers Carousel">
       <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
         <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
           <Swiper
@@ -191,7 +191,6 @@ export default function BankOffersBannerSlider() {
                     style={{ background: gradient }}
                   >
                     {/* Subtle moving card sheen sweep on hover */}
-                    <div className="absolute inset-0 -translate-x-full group-hover/slide:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none z-20" />
 
                     {/* Decorative Festive Streamers & Background Texture */}
                     <div className="absolute inset-0 pointer-events-none opacity-30">

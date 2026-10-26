@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { registerUser } from "../../services/auth.service";
 import { googleLogin } from "../../api/auth.api";
 import { setToken } from "../../utils/storage";
@@ -21,10 +21,14 @@ import {
   Star,
   CheckCircle2,
   Sparkles,
+  Tag,
 } from "lucide-react";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  // Where to land after a successful signup (e.g. /checkouts for Buy Now).
+  const redirectTo = searchParams.get("redirect") || "/";
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -133,7 +137,7 @@ export default function RegisterPage() {
       if (token) {
         setToken(token);
         successToast("Account authenticated via Google!");
-        window.location.replace("/");
+        window.location.replace(redirectTo);
       } else {
         errorToast("Unable to process Google authentication");
       }
@@ -146,120 +150,174 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="h-screen max-h-screen w-full flex bg-[#faf8f6] font-modelica text-[#1c1c28] overflow-hidden">
+    <div className="min-h-screen w-full flex bg-[#f6f7fa] text-text">
       {/* ── LEFT PANEL: Authentic Athletic Brand Showcase (Desktop) ── */}
-      <div
-        className="hidden lg:flex flex-col justify-between w-[48%] xl:w-[46%] h-full relative overflow-hidden p-8 xl:p-12 text-white select-none shrink-0"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(16, 10, 8, 0.55) 0%, rgba(16, 10, 8, 0.82) 55%, rgba(10, 6, 5, 0.96) 100%), url('/images/gym-owner.webp') center/cover no-repeat",
-        }}
-      >
-        {/* Subtle Ambient Vignette & Warmth */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 pointer-events-none" />
+      <div className="hidden lg:flex flex-col justify-between w-[48%] xl:w-[46%] min-h-screen relative overflow-hidden p-6 lg:p-8 xl:p-12 bg-gradient-to-br from-[#f1f4f9] via-[#f8fafc] to-[#e8edf6] border-r border-border text-text select-none shrink-0">
+        {/* Subtle Ambient Radial Lighting */}
+        <div
+          className="pointer-events-none absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/5 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
+          aria-hidden="true"
+        />
 
-        {/* Top Header: Brand Logo & Official Badge */}
+        {/* Top Header: Official Store Badge */}
         <div className="relative z-10 flex items-center justify-between shrink-0">
-          <Link to="/" className="inline-block transition-transform hover:scale-[1.02]">
-            <img
-              src="/images/whitelogo.webp"
-              alt="Gomzi Nutrition"
-              className="h-10 xl:h-11 object-contain object-left"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/images/rag-icon-logo.png";
-                e.currentTarget.className = "h-10 xl:h-11 object-contain filter brightness-0 invert";
-              }}
-            />
-          </Link>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-white/10 text-amber-300 border border-white/20 backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             Official Brand Store
           </span>
         </div>
 
-        {/* Center: Hero Statement & Verified Review */}
-        <div className="relative z-10 flex flex-col gap-5 my-auto max-w-lg">
+        {/* Center: Hero Product & Value Proposition */}
+        <div className="relative z-10 my-auto py-4 flex flex-col gap-4 max-w-lg">
           <div className="flex flex-col gap-2">
-            <div className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-extrabold text-amber-400">
-              <Sparkles size={14} className="text-amber-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-light border border-primary-border text-primary text-xs font-bold tracking-wide uppercase w-fit shadow-xs">
+              <Sparkles size={13} className="text-primary" />
               <span>Join Gomzi Athlete Club</span>
             </div>
 
-            <h1 className="font-toma text-3xl xl:text-4xl font-black text-white tracking-tight leading-[1.1]">
-              START YOUR <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-orange-400">
-                TRANSFORMATION.
-              </span>
+            <h1 className="text-3xl xl:text-4xl font-extrabold text-primary tracking-tight leading-tight">
+              Start Your Journey. <br />
+              <span className="text-text">100% Authentic.</span>
             </h1>
 
-            <p className="text-xs xl:text-sm text-gray-300 leading-relaxed font-normal mt-1">
+            <p className="text-xs xl:text-sm text-text-light leading-relaxed font-normal">
               Create your account to unlock member discounts, earn rewards on every order, and access certified sports nutrition.
             </p>
           </div>
 
-          {/* Genuine Verified Customer Proof Card */}
-          <div className="relative bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-5 shadow-2xl">
-            <div className="flex items-center gap-1 text-amber-400 mb-2">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={14} fill="#fbbf24" strokeWidth={0} />
-              ))}
-              <span className="ml-2 text-xs font-bold text-white">4.9 / 5 Rating</span>
+          {/* Featured Product Hero Card */}
+          <div className="relative bg-white rounded-2xl border border-border p-3.5 xl:p-4 shadow-sm shadow-primary/5 flex items-center gap-4 hover:shadow-md transition-shadow">
+            <div className="relative w-20 h-24 xl:w-24 xl:h-28 shrink-0 flex items-center justify-center bg-[#f8fafc] rounded-xl border border-border/60 p-2">
+              <img
+                src="/images/protein-removebg.png"
+                alt="Gomzi 100% Whey Protein Blend"
+                className="w-full h-full object-contain filter drop-shadow-md hover:scale-105 transition-transform duration-300"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/images/Gomzi_Protein_Product_HD.webp";
+                }}
+              />
             </div>
-            <p className="text-xs text-gray-200 italic leading-relaxed">
-              "The cleanest isolate I’ve used. Zero bloating, instant solubility, and noticeably faster muscle recovery."
-            </p>
-            <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10 text-[11px]">
-              <span className="font-bold text-white">Verified Athlete Community</span>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                <CheckCircle2 size={12} /> 100% Authentic
-              </span>
+
+            <div className="flex-1 flex flex-col gap-1">
+              <div className="flex items-center gap-1 text-amber-500">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={12} fill="#f59e0b" strokeWidth={0} />
+                ))}
+                <span className="ml-1 text-[11px] font-bold text-text">4.9 / 5</span>
+                <span className="text-[10px] text-text-light">• Verified Athletes</span>
+              </div>
+
+              <h2 className="text-xs xl:text-sm font-bold text-text leading-snug">
+                Gomzi 100% Whey Protein Blend
+              </h2>
+
+              <p className="text-[10px] text-text-light leading-relaxed line-clamp-2">
+                Ultra-filtered isolate with 24g protein, zero added sugar, and instant solubility.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-1 mt-0.5">
+                <span className="px-1.5 py-0.5 rounded-md bg-primary-light text-primary text-[9px] font-bold border border-primary-border">
+                  24g Protein
+                </span>
+                <span className="px-1.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[9px] font-bold border border-emerald-200">
+                  Zero Spiking
+                </span>
+                <span className="px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[9px] font-bold border border-amber-200">
+                  Lab Tested
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Member Benefits List */}
+          <div className="grid grid-cols-1 gap-2">
+            <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/80 border border-border text-xs text-text shadow-xs">
+              <div className="w-7 h-7 rounded-lg bg-primary-light flex items-center justify-center text-primary shrink-0">
+                <Tag size={14} />
+              </div>
+              <div>
+                <p className="font-bold text-[12px] text-text">VIP Member Pricing</p>
+                <p className="text-[10px] text-text-light">
+                  Save extra on every direct factory-fresh order.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/80 border border-border text-xs text-text shadow-xs">
+              <div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+                <ShieldCheck size={14} />
+              </div>
+              <div>
+                <p className="font-bold text-[12px] text-text">100% Authentic & Lab Tested</p>
+                <p className="text-[10px] text-text-light">
+                  QR-verifiable third-party lab test certificates.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 p-2.5 rounded-xl bg-white/80 border border-border text-xs text-text shadow-xs">
+              <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+                <Truck size={14} />
+              </div>
+              <div>
+                <p className="font-bold text-[12px] text-text">Pan-India Express Dispatch</p>
+                <p className="text-[10px] text-text-light">
+                  Free shipping on eligible orders with real-time updates.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Footer / Copyright */}
-        <div className="relative z-10 flex items-center justify-between pt-4 border-t border-white/15 text-[11px] text-gray-300 shrink-0">
-          <span>© 2026 Gomzi Supplement by RAG</span>
-          <div className="flex items-center gap-3 text-gray-300">
-            <Link to="/privacy-policy" className="hover:text-white transition-colors">
-              Privacy
-            </Link>
-            <span>•</span>
-            <Link to="/terms-and-conditions" className="hover:text-white transition-colors">
-              Terms
-            </Link>
-          </div>
+        {/* Bottom Trust Indicators Strip */}
+        <div className="relative z-10 pt-3 border-t border-border flex items-center justify-between text-xs text-text-light shrink-0">
+          <span className="flex items-center gap-1 font-semibold text-[11px] text-text">
+            <ShieldCheck size={14} className="text-emerald-600" /> 100% Lab Tested
+          </span>
+          <span className="flex items-center gap-1 font-semibold text-[11px] text-text">
+            <CheckCircle2 size={14} className="text-primary" /> FSSAI Certified
+          </span>
+          <span className="flex items-center gap-1 font-semibold text-[11px] text-text">
+            <Sparkles size={14} className="text-primary" /> Pan-India Express
+          </span>
         </div>
       </div>
 
-      {/* ── RIGHT PANEL: Interactive Registration Card (No Scroll) ── */}
-      <div className="flex-1 h-full flex flex-col justify-center items-center px-4 sm:px-8 py-3 lg:py-4 relative overflow-y-auto lg:overflow-hidden">
-        {/* Top Navigation Row: Back to store & Mobile Logo */}
-        <div className="w-full max-w-[440px] flex items-center justify-between mb-2.5 shrink-0">
+      {/* ── RIGHT PANEL: Interactive Registration Card ── */}
+      <div className="flex-1 w-full min-h-screen flex flex-col justify-center items-center px-3 sm:px-6 md:px-8 py-4 sm:py-6 relative overflow-y-auto">
+        {/* Top Navigation Row: Back to store */}
+        <div className="w-full max-w-[440px] flex items-center justify-between mb-2 shrink-0">
           <button
             onClick={() => navigate("/")}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-[#5C3124] transition-colors py-1 px-2 rounded-lg hover:bg-black/[0.03] cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-light hover:text-primary transition-colors py-1.5 px-2.5 rounded-lg hover:bg-black/[0.03] cursor-pointer active:scale-95"
           >
             <ArrowLeft size={14} />
             Back to store
           </button>
-
-          <Link to="/" className="lg:hidden">
-            <img
-              src="/images/gomzi-supplements-dark.webp"
-              alt="Gomzi Supplements"
-              className="h-7 object-contain"
-            />
-          </Link>
         </div>
 
         {/* Registration Card Container */}
-        <div className="w-full max-w-[440px] bg-white rounded-2xl shadow-xl shadow-black/[0.03] border border-[#eee6e2] p-5 sm:p-6 xl:p-7 flex flex-col gap-3 shrink-0">
+        <div className="w-full max-w-[440px] bg-white rounded-2xl shadow-sm sm:shadow-lg shadow-black/[0.03] border border-border p-4 sm:p-6 xl:p-7 flex flex-col gap-3 my-auto">
           {/* Header */}
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col items-center text-center gap-1">
+            <Link to="/" className="inline-block mb-0.5" aria-label="Gomzi Nutrition Home">
+              <img
+                src="/images/gomzi-supplements-dark.webp"
+                alt="Gomzi Supplements"
+                className="h-8 sm:h-9 w-auto max-w-[170px] object-contain transition-transform duration-200 hover:scale-[1.02]"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/images/rag-icon-logo.png";
+                }}
+              />
+            </Link>
             <h2
-              className="font-toma text-[#1c1c28] leading-tight font-extrabold"
+              className="text-text leading-tight font-bold"
               style={{
                 fontSize: "clamp(1.4rem, 2.5vw, 1.8rem)",
                 letterSpacing: "-0.6px",
@@ -267,11 +325,11 @@ export default function RegisterPage() {
             >
               Create an account
             </h2>
-            <p className="font-modelica text-xs text-gray-500">
+            <p className="text-xs text-text-light">
               Already have an account?{" "}
               <Link
-                to="/login"
-                className="font-semibold text-[#5C3124] hover:text-[#48261c] underline underline-offset-2 decoration-[#5C3124]/40 hover:decoration-[#5C3124] transition-all"
+                to={`/login${searchParams.toString() ? `?${searchParams.toString()}` : ""}`}
+                className="font-bold text-primary hover:underline underline-offset-2 transition-all"
               >
                 Sign in
               </Link>
@@ -296,7 +354,7 @@ export default function RegisterPage() {
 
             <div className="flex items-center gap-3 my-0.5">
               <div className="flex-1 h-px bg-gray-200" />
-              <span className="font-modelica text-[10px] uppercase tracking-wider text-gray-400 font-medium">
+              <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">
                 or register with details
               </span>
               <div className="flex-1 h-px bg-gray-200" />
@@ -304,58 +362,82 @@ export default function RegisterPage() {
           </div>
 
           {/* Registration Form */}
-          <form onSubmit={handleRegister} className="flex flex-col gap-2.5">
+          <form onSubmit={handleRegister} autoComplete="off" className="flex flex-col gap-2.5">
+            {/* Hidden dummy fields to consume aggressive browser autofill heuristics */}
+            <input
+              type="text"
+              name="fake_username_remember"
+              style={{ display: "none" }}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
+            <input
+              type="password"
+              name="fake_password_remember"
+              style={{ display: "none" }}
+              tabIndex={-1}
+              autoComplete="new-password"
+              aria-hidden="true"
+            />
+
             {/* Row 1: First Name & Last Name */}
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
-                <label className="text-[11px] font-semibold text-gray-700 font-modelica">
+                <label className="text-[11px] font-semibold text-gray-700 ">
                   First Name
                 </label>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     focused.first_name
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <div className="pl-2.5 text-gray-400">
-                    <User size={14} className={focused.first_name ? "text-[#5C3124]" : ""} />
+                    <User size={14} className={focused.first_name ? "text-primary" : ""} />
                   </div>
                   <input
                     type="text"
+                    name="first_name"
+                    id="reg_first_name"
+                    autoComplete="off"
                     required
                     placeholder="First"
                     value={form.first_name}
                     onChange={(e) => handleChange("first_name", e.target.value)}
                     onFocus={() => handleFocus("first_name")}
                     onBlur={() => handleBlur("first_name")}
-                    className="w-full bg-transparent outline-none font-modelica text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
+                    className="w-full min-w-0 bg-transparent outline-none text-base sm:text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-[11px] font-semibold text-gray-700 font-modelica">
+                <label className="text-[11px] font-semibold text-gray-700 ">
                   Last Name
                 </label>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     focused.last_name
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <div className="pl-2.5 text-gray-400">
-                    <User size={14} className={focused.last_name ? "text-[#5C3124]" : ""} />
+                    <User size={14} className={focused.last_name ? "text-primary" : ""} />
                   </div>
                   <input
                     type="text"
+                    name="last_name"
+                    id="reg_last_name"
+                    autoComplete="off"
                     placeholder="Last"
                     value={form.last_name}
                     onChange={(e) => handleChange("last_name", e.target.value)}
                     onFocus={() => handleFocus("last_name")}
                     onBlur={() => handleBlur("last_name")}
-                    className="w-full bg-transparent outline-none font-modelica text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
+                    className="w-full min-w-0 bg-transparent outline-none text-base sm:text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
                   />
                 </div>
               </div>
@@ -364,55 +446,61 @@ export default function RegisterPage() {
             {/* Row 2: Email & Phone Number */}
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
-                <label className="text-[11px] font-semibold text-gray-700 font-modelica">
+                <label className="text-[11px] font-semibold text-gray-700 ">
                   Email Address
                 </label>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     focused.email
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <div className="pl-2.5 text-gray-400">
-                    <Mail size={14} className={focused.email ? "text-[#5C3124]" : ""} />
+                    <Mail size={14} className={focused.email ? "text-primary" : ""} />
                   </div>
                   <input
                     type="email"
+                    name="email"
+                    id="reg_email"
+                    autoComplete="off"
                     required
                     placeholder="athlete@gym.com"
                     value={form.email}
                     onChange={(e) => handleChange("email", e.target.value)}
                     onFocus={() => handleFocus("email")}
                     onBlur={() => handleBlur("email")}
-                    className="w-full bg-transparent outline-none font-modelica text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
+                    className="w-full min-w-0 bg-transparent outline-none text-base sm:text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-[11px] font-semibold text-gray-700 font-modelica">
+                <label className="text-[11px] font-semibold text-gray-700 ">
                   Phone Number
                 </label>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     focused.mobile
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <div className="pl-2.5 text-gray-400">
-                    <Phone size={14} className={focused.mobile ? "text-[#5C3124]" : ""} />
+                    <Phone size={14} className={focused.mobile ? "text-primary" : ""} />
                   </div>
                   <input
                     type="tel"
+                    name="mobile"
+                    id="reg_mobile"
+                    autoComplete="off"
                     required
                     placeholder="9876543210"
                     value={form.mobile}
                     onChange={(e) => handleChange("mobile", e.target.value)}
                     onFocus={() => handleFocus("mobile")}
                     onBlur={() => handleBlur("mobile")}
-                    className="w-full bg-transparent outline-none font-modelica text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
+                    className="w-full min-w-0 bg-transparent outline-none text-base sm:text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
                   />
                 </div>
               </div>
@@ -421,21 +509,26 @@ export default function RegisterPage() {
             {/* Row 3: Date of Birth & Password */}
             <div className="grid grid-cols-2 gap-2">
               <div className="flex flex-col gap-1">
-                <label className="text-[11px] font-semibold text-gray-700 font-modelica">
+                <label className="text-[11px] font-semibold text-gray-700 ">
                   Date of Birth
                 </label>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     focused.birth_date
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <div className="pl-2.5 text-gray-400">
-                    <Calendar size={14} className={focused.birth_date ? "text-[#5C3124]" : ""} />
+                    <Calendar size={14} className={focused.birth_date ? "text-primary" : ""} />
                   </div>
                   <input
                     type="text"
+                    name="birth_date"
+                    id="reg_birth_date"
+                    autoComplete="off"
+                    data-lpignore="true"
+                    data-form-type="other"
                     placeholder="DD / MM / YYYY"
                     value={form.birth_date}
                     onChange={(e) => {
@@ -454,27 +547,30 @@ export default function RegisterPage() {
                     onFocus={() => handleFocus("birth_date")}
                     onBlur={() => handleBlur("birth_date")}
                     maxLength={14}
-                    className="w-full bg-transparent outline-none font-modelica text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
+                    className="w-full min-w-0 bg-transparent outline-none text-base sm:text-xs px-2 py-2 text-gray-900 placeholder:text-gray-400"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-[11px] font-semibold text-gray-700 font-modelica">
+                <label className="text-[11px] font-semibold text-gray-700 ">
                   Password
                 </label>
                 <div
                   className={`relative flex items-center rounded-xl border bg-white transition-all duration-200 ${
                     focused.password
-                      ? "border-[#5C3124] ring-2 ring-[#5C3124]/15 shadow-sm"
+                      ? "border-primary ring-2 ring-primary/15 shadow-sm"
                       : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <div className="pl-2.5 text-gray-400">
-                    <Lock size={14} className={focused.password ? "text-[#5C3124]" : ""} />
+                    <Lock size={14} className={focused.password ? "text-primary" : ""} />
                   </div>
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="new_user_password"
+                    id="reg_password"
+                    autoComplete="new-password"
                     required
                     placeholder="••••••••••••"
                     value={form.password}
@@ -484,12 +580,12 @@ export default function RegisterPage() {
                     }}
                     onFocus={() => handleFocus("password")}
                     onBlur={() => handleBlur("password")}
-                    className="w-full bg-transparent outline-none font-modelica text-xs px-2 py-2 pr-8 text-gray-900 placeholder:text-gray-400"
+                    className="w-full min-w-0 bg-transparent outline-none text-base sm:text-xs px-2 py-2 pr-8 text-gray-900 placeholder:text-gray-400"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                    className="absolute right-1 text-gray-400 hover:text-gray-600 transition-colors p-2 min-w-[34px] min-h-[34px] flex items-center justify-center active:scale-90"
                   >
                     {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                   </button>
@@ -515,7 +611,7 @@ export default function RegisterPage() {
                   ))}
                 </div>
                 <span
-                  className="font-modelica text-[10px] font-semibold"
+                  className="text-[10px] font-semibold"
                   style={{ color: strengthColor[passwordStrength] }}
                 >
                   {strengthLabel[passwordStrength]}
@@ -527,7 +623,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative overflow-hidden w-full mt-1.5 py-3 rounded-xl font-toma text-white text-xs font-bold tracking-wide uppercase transition-all duration-300 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.99] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              className="group relative overflow-hidden w-full mt-1.5 py-3 rounded-xl text-white text-xs font-bold tracking-wide uppercase transition-all duration-200 bg-primary hover:bg-primary-hover active:scale-[0.99] shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
@@ -536,61 +632,60 @@ export default function RegisterPage() {
                 </>
               ) : (
                 <>
-                  <span className="relative z-10">Create Account</span>
-                  <ArrowRight size={15} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                  <span>Create Account</span>
+                  <ArrowRight size={15} className="text-white transition-transform duration-300 group-hover:translate-x-1" />
                 </>
               )}
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
             </button>
           </form>
 
           {/* Social Proof & Trust Strip */}
           <div className="pt-0.5">
-            <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-[#faf7f5] border border-[#eee4e0]">
+            <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-primary-light/50 border border-primary-border/60">
               <div className="flex flex-col items-center text-center">
-                <span className="font-toma text-xs font-bold text-[#1c1c28]">500k+</span>
-                <span className="text-[9px] text-gray-500 font-medium">Athletes</span>
+                <span className="text-xs font-bold text-text">500k+</span>
+                <span className="text-[9px] text-text-light font-medium">Athletes</span>
               </div>
-              <div className="flex flex-col items-center text-center border-x border-[#ebdcd7]">
+              <div className="flex flex-col items-center text-center border-x border-primary-border">
                 <div className="flex items-center gap-0.5">
                   <Star size={10} fill="#f59e0b" strokeWidth={0} className="text-[#f59e0b]" />
-                  <span className="font-toma text-xs font-bold text-[#1c1c28]">4.9</span>
+                  <span className="text-xs font-bold text-text">4.9</span>
                 </div>
-                <span className="text-[9px] text-gray-500 font-medium">12k+ Reviews</span>
+                <span className="text-[9px] text-text-light font-medium">12k+ Reviews</span>
               </div>
               <div className="flex flex-col items-center text-center">
-                <span className="font-toma text-xs font-bold text-[#5C3124]">100%</span>
-                <span className="text-[9px] text-gray-500 font-medium">Authentic</span>
+                <span className="text-xs font-bold text-primary">100%</span>
+                <span className="text-[9px] text-text-light font-medium">Authentic</span>
               </div>
             </div>
 
             {/* Micro Trust Guarantee Icons */}
-            <div className="flex items-center justify-between text-[10px] text-gray-500 pt-2 px-1">
+            <div className="flex items-center justify-between text-[10px] text-text-light pt-2 px-1">
               <span className="flex items-center gap-1">
-                <ShieldCheck size={13} className="text-[#5C3124]" /> 256-Bit SSL
+                <ShieldCheck size={13} className="text-primary" /> 256-Bit SSL
               </span>
               <span className="flex items-center gap-1">
-                <Truck size={13} className="text-[#5C3124]" /> Free Shipping
+                <Truck size={13} className="text-primary" /> Free Shipping
               </span>
               <span className="flex items-center gap-1">
-                <RefreshCw size={13} className="text-[#5C3124]" /> Easy Returns
+                <RefreshCw size={13} className="text-primary" /> Easy Returns
               </span>
             </div>
           </div>
 
           {/* Terms Agreement Footer */}
-          <p className="font-modelica text-[10px] text-center text-gray-400 leading-relaxed border-t border-gray-100 pt-2">
+          <p className="text-[10px] text-center text-gray-400 leading-relaxed border-t border-gray-100 pt-2">
             By creating an account, you agree to Gomzi's{" "}
             <Link
               to="/terms-and-conditions"
-              className="text-gray-600 underline hover:text-[#5C3124] transition-colors"
+              className="text-gray-600 underline hover:text-primary transition-colors"
             >
               Terms of Service
             </Link>{" "}
             and{" "}
             <Link
               to="/privacy-policy"
-              className="text-gray-600 underline hover:text-[#5C3124] transition-colors"
+              className="text-gray-600 underline hover:text-primary transition-colors"
             >
               Privacy Policy
             </Link>

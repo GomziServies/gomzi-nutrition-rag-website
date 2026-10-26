@@ -70,10 +70,10 @@ export default function PlantProteinSection() {
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
-            <div className="inline-block text-xs font-bold uppercase tracking-wider text-[#5C3124] bg-[#fdf6f4] border border-[#ebdcd7] px-3 py-1 rounded-full mb-2">
+            <div className="inline-block text-xs font-bold uppercase tracking-wider text-primary bg-primary-light border border-primary-border px-3 py-1 rounded-full mb-2">
               100% Vegan & Dairy-Free
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#1c1c28] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-text tracking-tight">
               Plant Protein
             </h2>
             <p className="text-sm text-gray-500 mt-1 max-w-xl">
@@ -85,14 +85,14 @@ export default function PlantProteinSection() {
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={() => swiperRef.current?.slidePrev()}
-              className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:text-white hover:border-[#5C3124] text-[#5C3124] flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer"
+              className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-primary hover:text-white hover:border-primary text-primary flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer"
               aria-label="Previous Slide"
             >
               <FiChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => swiperRef.current?.slideNext()}
-              className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-[#5C3124] hover:text-white hover:border-[#5C3124] text-[#5C3124] flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer"
+              className="w-10 h-10 rounded-full border border-gray-200 bg-white hover:bg-primary hover:text-white hover:border-primary text-primary flex items-center justify-center transition-all duration-200 shadow-xs cursor-pointer"
               aria-label="Next Slide"
             >
               <FiChevronRight className="w-5 h-5" />
@@ -126,16 +126,15 @@ export default function PlantProteinSection() {
                 <SwiperSlide key={item.id} className="h-auto">
                   <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200/90 hover:border-amber-400/40 p-4 h-full flex flex-col justify-between shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:-translate-y-1.5 transition-all duration-300 relative group overflow-hidden">
                     {/* Subtle moving card sheen sweep on hover */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
 
                     {/* Top Tag & Wishlist */}
                     <div className="relative z-10 flex items-center justify-between w-full mb-2">
-                      <span className="text-[10px] font-bold tracking-wider text-[#5C3124] bg-[#fdf6f4] border border-[#ebdcd7] group-hover:border-amber-400/40 px-2.5 py-0.5 rounded-full uppercase transition-colors">
+                      <span className="text-[10px] font-bold tracking-wider text-primary bg-primary-light border border-primary-border group-hover:border-amber-400/40 px-2.5 py-0.5 rounded-full uppercase transition-colors">
                         {item.tag}
                       </span>
                       <button
                         onClick={() => toggleWishlist(item.id)}
-                        className="w-8 h-8 rounded-full bg-gray-50 hover:bg-[#fdf6f4] flex items-center justify-center text-gray-400 hover:text-red-500 transition cursor-pointer"
+                        className="w-8 h-8 rounded-full bg-gray-50 hover:bg-primary-light flex items-center justify-center text-gray-400 hover:text-red-500 transition cursor-pointer"
                         aria-label="Wishlist"
                       >
                         {wishlist[item.id] ? (
@@ -172,14 +171,14 @@ export default function PlantProteinSection() {
                     </div>
 
                     {/* Highlight Subtext */}
-                    <p className="text-[11px] font-semibold text-[#5C3124] uppercase tracking-wider mt-2.5">
+                    <p className="text-[11px] font-semibold text-primary uppercase tracking-wider mt-2.5">
                       {item.highlight}
                     </p>
 
                     {/* Product Title */}
                     <h3
                       onClick={() => navigate(`/gomzi-supplement/${item.slug}`)}
-                      className="text-xs sm:text-[13px] font-bold text-gray-900 line-clamp-2 mt-1 leading-snug hover:text-[#5C3124] transition-colors cursor-pointer min-h-[36px]"
+                      className="text-xs sm:text-[13px] font-bold text-gray-900 line-clamp-2 mt-1 leading-snug hover:text-primary transition-colors cursor-pointer min-h-[36px]"
                     >
                       {item.name}
                     </h3>
@@ -193,7 +192,7 @@ export default function PlantProteinSection() {
                         ₹{item.originalPrice.toLocaleString("en-IN")}
                       </span>
                       {discountPct > 0 && (
-                        <span className="text-xs font-bold text-[#5C3124] bg-[#fdf6f4] px-1.5 py-0.5 rounded">
+                        <span className="text-xs font-bold text-primary bg-primary-light px-1.5 py-0.5 rounded">
                           {discountPct}% OFF
                         </span>
                       )}
@@ -202,11 +201,10 @@ export default function PlantProteinSection() {
                     {/* Action Button */}
                     <button
                       onClick={() => handleAddToCart(item)}
-                      className="group/btn relative overflow-hidden mt-4 w-full py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
+                      className="group/btn relative overflow-hidden mt-4 w-full py-2.5 rounded-xl btn-gradient border border-amber-400/30 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer"
                     >
                       <FiShoppingCart className="w-4 h-4 text-amber-200 transition-transform duration-300 group-hover/btn:scale-110" />
                       <span>Add to Cart</span>
-                      <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                     </button>
                   </div>
                 </SwiperSlide>
@@ -219,11 +217,10 @@ export default function PlantProteinSection() {
         <div className="mt-8 flex justify-center">
           <button
             onClick={() => navigate("/gomzi-supplement/plant-protein")}
-            className="group relative overflow-hidden bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white rounded-full px-8 py-2.5 font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center gap-2 cursor-pointer"
+            className="group relative overflow-hidden btn-gradient border border-amber-400/30 text-white rounded-full px-8 py-2.5 font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 flex items-center gap-2 cursor-pointer"
           >
             <span className="relative z-10">View All Plant Protein</span>
             <FiChevronRight className="relative z-10 w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </button>
         </div>
       </div>

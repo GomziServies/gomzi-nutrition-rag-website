@@ -38,13 +38,11 @@ const PROMISE_CARDS = [
 
 export default function BrandPromiseSection() {
   return (
-    <section className="w-full py-12 sm:py-16 md:py-20 bg-[#faf8f6] overflow-hidden">
+    <section className="w-full py-12 sm:py-16 md:py-20 bg-bg-cream overflow-hidden">
       <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
         {/* Main Card Container */}
-        <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-[#5C3124]/20 bg-gradient-to-br from-[#1c120c] via-[#2a170f] to-[#120a06]">
+        <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-primary/20 bg-gradient-to-br from-[#1c120c] via-[#2a170f] to-[#120a06]">
           {/* Ambient Lighting Glows */}
-          <div className="absolute -top-28 -left-28 w-96 h-96 bg-[#5C3124]/40 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-28 -right-28 w-96 h-96 bg-amber-600/15 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 px-6 sm:px-10 md:px-12 lg:px-16 py-10 sm:py-12 md:py-16">
             {/* Top Eyebrow Badge */}
@@ -131,10 +129,10 @@ export default function BrandPromiseSection() {
 
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-[#fdf6f4] text-gray-950 font-bold text-sm transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 group"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-primary-light text-gray-950 font-bold text-sm transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 group"
               >
                 <span>Read Our Quality Philosophy</span>
-                <FiArrowRight className="w-4 h-4 text-[#5C3124] group-hover:translate-x-1 transition-transform" />
+                <FiArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>

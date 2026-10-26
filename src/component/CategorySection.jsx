@@ -42,7 +42,7 @@ const swiperStyles = `
 
 .category-swiper .swiper-pagination-bullet-active{
     width:32px;
-    background:#5C3124;
+    background:#1b365d;
 }
 
 /* Custom Buttons */
@@ -56,15 +56,15 @@ const swiperStyles = `
     justify-content:center;
     border:1px solid #dbdee9;
     background:#fff;
-    color:#5C3124;
+    color:#1b365d;
     transition:.3s;
     box-shadow:0 4px 12px rgba(0,0,0,.06);
 }
 
 .slider-btn:hover{
-    background:#5C3124;
+    background:#1b365d;
     color:#fff;
-    border-color:#5C3124;
+    border-color:#1b365d;
     transform:translateY(-2px);
 }
 
@@ -101,7 +101,7 @@ const CategorySection = ({ category = "Whey Protein", title = "Top Protein Picks
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="font-toma text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
               {title}
             </h2>
 

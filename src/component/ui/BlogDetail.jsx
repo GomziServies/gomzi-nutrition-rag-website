@@ -42,8 +42,8 @@ const BlogDetail = () => {
 
   if (loading && !blog) {
     return (
-      <div className="min-h-screen bg-[#faf8f6] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-[#5C3124] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-bg-cream flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -66,7 +66,7 @@ const BlogDetail = () => {
         <section className="pt-10 md:pt-16 pb-8">
           <div className="max-w-[var(--container-width)] mx-auto px-4">
             {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-xs sm:text-sm font-modelica text-gray-400 mb-7 overflow-hidden">
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400 mb-7 overflow-hidden">
               <Link
                 to="/"
                 className="hover:text-primary transition-colors flex-shrink-0"
@@ -90,7 +90,7 @@ const BlogDetail = () => {
 
             {/* Category */}
             <div className="mb-5">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-modelica font-semibold uppercase tracking-wider">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary" />
 
                 {blog.category}
@@ -98,12 +98,12 @@ const BlogDetail = () => {
             </div>
 
             {/* Title */}
-            <h1 className="max-w-5xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-tomato font-bold leading-[1.05] text-gray-900">
+            <h1 className="max-w-5xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] text-gray-900">
               {blog.title}
             </h1>
 
             {/* Author */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 font-modelica">
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 ">
               {blog.reviewedBy ? (
                 <span>Reviewed by {blog.reviewedBy}</span>
               ) : (
@@ -145,7 +145,7 @@ const BlogDetail = () => {
               {blog.content?.intro?.map((paragraph, index) => (
                 <p
                   key={index}
-                  className="text-lg md:text-xl leading-8 text-gray-700 font-modelica"
+                  className="text-lg md:text-xl leading-8 text-gray-700"
                 >
                   {paragraph}
                 </p>
@@ -162,7 +162,7 @@ const BlogDetail = () => {
                 {section.paragraphs?.map((paragraph, paragraphIndex) => (
                   <p
                     key={paragraphIndex}
-                    className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
+                    className="mt-5 text-base md:text-lg leading-8 text-gray-700"
                   >
                     {paragraph}
                   </p>
@@ -174,7 +174,7 @@ const BlogDetail = () => {
                     {section.bullets.map((bullet, bulletIndex) => (
                       <li
                         key={bulletIndex}
-                        className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700 font-modelica"
+                        className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700"
                       >
                         <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
 
@@ -186,7 +186,7 @@ const BlogDetail = () => {
 
                 {/* Closing Paragraph */}
                 {section.closingParagraph && (
-                  <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 font-modelica">
+                  <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 ">
                     {section.closingParagraph}
                   </p>
                 )}
@@ -210,7 +210,7 @@ const BlogDetail = () => {
               border-primary/10
               text-primary
               text-sm
-              font-modelica
+             
               font-semibold
               hover:bg-primary
               hover:text-white
@@ -289,10 +289,9 @@ const BlogDetail = () => {
             <div className="mt-14 flex justify-center">
               <Link
                 to="/blog"
-                className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
+                className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-gradient border border-amber-400/30 text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer"
               >
                 <span className="relative z-10">← Back to Blog</span>
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </Link>
             </div>
           </div>
@@ -308,7 +307,7 @@ const BlogDetail = () => {
 
 const ArticleHeading = ({ children }) => {
   return (
-    <h2 className="text-2xl md:text-3xl lg:text-4xl font-tomato font-bold leading-tight text-gray-900">
+    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-gray-900">
       {children}
     </h2>
   );
@@ -324,7 +323,7 @@ const ProteinTable = ({ table }) => {
       <ArticleHeading>{table.heading}</ArticleHeading>
 
       <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="w-full min-w-[700px] border-collapse font-modelica">
+        <table className="w-full min-w-[700px] border-collapse ">
           <thead>
             <tr className="bg-primary text-white">
               {table.columns.map((column, index) => (
@@ -382,7 +381,7 @@ const ComparisonTable = ({ table }) => {
       <ArticleHeading>{table.heading}</ArticleHeading>
 
       <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="w-full min-w-[680px] border-collapse font-modelica">
+        <table className="w-full min-w-[680px] border-collapse ">
           <thead>
             <tr className="bg-primary text-white">
               {table.columns.map((column, index) => (
@@ -445,7 +444,7 @@ const ChoiceSection = ({ section }) => {
             key={index}
             className="rounded-2xl bg-white border border-gray-200 p-6"
           >
-            <h3 className="font-tomato text-xl font-bold text-primary">
+            <h3 className="text-xl font-bold text-primary">
               {option.title}
             </h3>
 
@@ -453,7 +452,7 @@ const ChoiceSection = ({ section }) => {
               {option.items.map((item, itemIndex) => (
                 <li
                   key={itemIndex}
-                  className="flex items-start gap-3 font-modelica text-gray-600 leading-7"
+                  className="flex items-start gap-3 text-gray-600 leading-7"
                 >
                   <span className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
 
@@ -484,7 +483,7 @@ const CautionSection = ({ section }) => {
           </span>
 
           <div>
-            <h3 className="font-modelica font-semibold text-gray-900">
+            <h3 className="font-semibold text-gray-900">
               {section.label}
             </h3>
 
@@ -492,7 +491,7 @@ const CautionSection = ({ section }) => {
               {section.paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
-                  className="font-modelica text-gray-700 leading-8"
+                  className="text-gray-700 leading-8"
                 >
                   {paragraph}
                 </p>
@@ -515,16 +514,16 @@ const ExpertSection = ({ section }) => {
       <ArticleHeading>{section.heading}</ArticleHeading>
 
       <div className="relative mt-6 rounded-2xl bg-white border border-gray-200 p-6 md:p-8">
-        <div className="absolute top-5 left-6 text-6xl font-tomato text-primary/10">
+        <div className="absolute top-5 left-6 text-6xl text-primary/10">
           “
         </div>
 
-        <blockquote className="relative pt-5 font-modelica text-lg md:text-xl leading-8 text-gray-700 italic">
+        <blockquote className="relative pt-5 text-lg md:text-xl leading-8 text-gray-700 italic">
           "{section.quote}"
         </blockquote>
 
         <div className="mt-6 pt-5 border-t border-gray-100">
-          <p className="font-modelica text-sm font-semibold text-gray-900">
+          <p className="text-sm font-semibold text-gray-900">
             - {section.author}
           </p>
         </div>
@@ -546,7 +545,7 @@ const CalculatorSection = ({ section }) => {
         {section.paragraphs.map((paragraph, index) => (
           <p
             key={index}
-            className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
+            className="mt-5 text-base md:text-lg leading-8 text-gray-700"
           >
             {paragraph}
           </p>
@@ -554,11 +553,11 @@ const CalculatorSection = ({ section }) => {
       </div>
 
       <div className="mt-7 rounded-2xl bg-gray-900 text-white p-6 md:p-8">
-        <p className="font-modelica text-xs uppercase tracking-[0.15em] text-white/50">
+        <p className="text-xs uppercase tracking-[0.15em] text-white/50">
           Simple formula
         </p>
 
-        <p className="mt-3 font-modelica text-lg md:text-xl font-semibold">
+        <p className="mt-3 text-lg md:text-xl font-semibold">
           {section.formula}
         </p>
       </div>
@@ -579,7 +578,7 @@ const GomziSection = ({ section }) => {
         {section.paragraphs.map((paragraph, index) => (
           <p
             key={index}
-            className="mt-4 first:mt-0 font-modelica text-gray-700 leading-8"
+            className="mt-4 first:mt-0 text-gray-700 leading-8"
           >
             {paragraph}
           </p>
@@ -604,7 +603,7 @@ const FaqSection = ({ faqs }) => {
             key={index}
             className="group rounded-2xl bg-white border border-gray-200 overflow-hidden"
           >
-            <summary className="list-none cursor-pointer px-5 md:px-6 py-5 flex items-center justify-between gap-5 font-modelica font-semibold text-gray-900">
+            <summary className="list-none cursor-pointer px-5 md:px-6 py-5 flex items-center justify-between gap-5 font-semibold text-gray-900">
               <span>{faq.question}</span>
 
               <span className="flex-shrink-0 text-primary text-xl transition-transform duration-300 group-open:rotate-45">
@@ -613,7 +612,7 @@ const FaqSection = ({ faqs }) => {
             </summary>
 
             <div className="px-5 md:px-6 pb-5">
-              <p className="font-modelica text-gray-600 leading-7">
+              <p className="text-gray-600 leading-7">
                 {faq.answer}
               </p>
             </div>
@@ -638,7 +637,7 @@ const BottomLine = ({ section }) => {
         {section.paragraphs?.map((paragraph, index) => (
           <p
             key={index}
-            className="mt-4 first:mt-0 font-modelica text-gray-700 leading-8"
+            className="mt-4 first:mt-0 text-gray-700 leading-8"
           >
             {paragraph}
           </p>
@@ -650,7 +649,7 @@ const BottomLine = ({ section }) => {
             {section.bullets.map((bullet, index) => (
               <li
                 key={index}
-                className="flex items-start gap-3 font-modelica text-gray-700 leading-8"
+                className="flex items-start gap-3 text-gray-700 leading-8"
               >
                 <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
 
@@ -663,7 +662,7 @@ const BottomLine = ({ section }) => {
         {/* Closing */}
         {section.closing && (
           <div className="mt-7 pt-6 border-t border-gray-100">
-            <p className="font-tomato text-xl md:text-2xl font-bold text-primary">
+            <p className="text-xl md:text-2xl font-bold text-primary">
               {section.closing}
             </p>
           </div>
@@ -689,7 +688,7 @@ const Sources = ({ sources }) => {
             href={source.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-start gap-3 font-modelica text-sm md:text-base text-primary hover:underline"
+            className="flex items-start gap-3 text-sm md:text-base text-primary hover:underline"
           >
             <span>•</span>
 
@@ -708,7 +707,7 @@ const Sources = ({ sources }) => {
 const RelatedReading = ({ items }) => {
   return (
     <section className="mt-12">
-      <h3 className="font-tomato text-2xl md:text-3xl font-bold text-gray-900">
+      <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
         Related Reading
       </h3>
 
@@ -723,7 +722,7 @@ const RelatedReading = ({ items }) => {
                 to={item.url}
                 className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition"
               >
-                <span className="font-modelica text-sm md:text-base text-gray-700">
+                <span className="text-sm md:text-base text-gray-700">
                   {item.title}
                 </span>
 
@@ -740,7 +739,7 @@ const RelatedReading = ({ items }) => {
               rel="noopener noreferrer"
               className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition"
             >
-              <span className="font-modelica text-sm md:text-base text-gray-700">
+              <span className="text-sm md:text-base text-gray-700">
                 {item.title}
               </span>
 
@@ -786,7 +785,7 @@ const FurtherReading = ({ items }) => {
                   transition
                 "
               >
-                <span className="font-modelica text-sm md:text-base text-gray-700">
+                <span className="text-sm md:text-base text-gray-700">
                   {item.title}
                 </span>
 
@@ -816,7 +815,7 @@ const FurtherReading = ({ items }) => {
                 transition
               "
             >
-              <span className="font-modelica text-sm md:text-base text-gray-700">
+              <span className="text-sm md:text-base text-gray-700">
                 {item.title}
               </span>
 

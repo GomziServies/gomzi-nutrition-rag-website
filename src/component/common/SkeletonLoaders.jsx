@@ -154,7 +154,7 @@ export const TrendingDealsSectionSkeleton = () => (
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
-            className="bg-white rounded-2xl overflow-hidden border border-[#ebdcd7]/80 shadow-xs p-4 flex flex-col justify-between"
+            className="bg-white rounded-2xl overflow-hidden border border-primary-border/80 shadow-xs p-4 flex flex-col justify-between"
           >
             <div>
               <div className="w-full aspect-square rounded-xl skeleton-shimmer mb-3" />
@@ -213,21 +213,28 @@ export const BrandShowcaseSkeleton = ({ count = 2 }) => (
  * 7. CategoryGridSkeleton
  * Category listing grid skeleton
  */
-export const CategoryGridSkeleton = ({ count = 6 }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+export const CategoryGridSkeleton = ({ count = 8 }) => (
+  <div className="grid grid-cols-2 items-stretch gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
     {[...Array(count)].map((_, i) => (
       <div
         key={i}
-        className="rounded-[22px] bg-white border border-gray-200/80 p-5 shadow-xs flex flex-col justify-between min-h-[360px] sm:min-h-[390px]"
+        className="flex h-full w-full flex-col overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-white"
       >
-        <div>
-          <div className="w-full h-48 rounded-xl skeleton-shimmer mb-4" />
-          <div className="h-4 w-28 rounded-full skeleton-shimmer mb-2" />
-          <div className="h-6 w-3/4 rounded-lg skeleton-shimmer mb-2" />
-          <div className="h-3.5 w-full rounded skeleton-shimmer mb-1" />
-          <div className="h-3.5 w-4/5 rounded skeleton-shimmer" />
+        <div className="flex h-[145px] xs:h-[165px] sm:h-[200px] md:h-[220px] w-full shrink-0 items-center justify-center bg-bg-light p-2.5 sm:p-4">
+          <div className="h-full w-full rounded-lg skeleton-shimmer" />
         </div>
-        <div className="h-10 w-full rounded-xl skeleton-shimmer mt-4" />
+        <div className="flex flex-1 flex-col p-3 sm:p-4">
+          <div className="mb-2 flex min-h-[38px] sm:min-h-[56px] flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2">
+            <div className="h-4 sm:h-5 w-24 sm:w-28 rounded skeleton-shimmer" />
+            <div className="h-3 sm:h-4 w-12 sm:w-16 shrink-0 rounded skeleton-shimmer" />
+          </div>
+          <div className="mb-1 h-3 sm:h-4 w-full rounded skeleton-shimmer" />
+          <div className="h-3 sm:h-4 w-4/5 rounded skeleton-shimmer" />
+          <div className="mt-auto pt-2.5 sm:pt-4">
+            <div className="divider mb-2.5 sm:mb-4" />
+            <div className="h-3.5 sm:h-4 w-24 sm:w-28 rounded skeleton-shimmer" />
+          </div>
+        </div>
       </div>
     ))}
   </div>
@@ -238,7 +245,7 @@ export const CategoryGridSkeleton = ({ count = 6 }) => (
  * High-fidelity skeleton loader for single product details page
  */
 export const ProductDetailSkeleton = () => (
-  <div className="bg-[#faf8f6] min-h-screen py-6 sm:py-10">
+  <div className="bg-bg-cream min-h-screen py-6 sm:py-10">
     <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12">
       {/* Breadcrumb */}
       <div className="h-4 w-60 rounded skeleton-shimmer mb-6" />

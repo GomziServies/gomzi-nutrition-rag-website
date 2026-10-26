@@ -16,10 +16,10 @@ function CartItem({ item }) {
   const qty = item.quantity || 1;
 
   return (
-    <div className="flex items-center gap-3.5 py-3 border-b border-[#ebdcd7] last:border-0">
+    <div className="flex items-center gap-3.5 py-3 border-b border-primary-border last:border-0">
       {/* Product Thumbnail with Qty Badge */}
       <div className="relative shrink-0">
-        <div className="w-16 h-16 rounded-xl bg-white border border-[#ebdcd7] p-1 flex items-center justify-center overflow-hidden">
+        <div className="w-16 h-16 rounded-xl bg-white border border-primary-border p-1 flex items-center justify-center overflow-hidden">
           <img
             src={imgSrc}
             alt={item.name}
@@ -30,19 +30,19 @@ function CartItem({ item }) {
             }}
           />
         </div>
-        <span className="absolute -top-1.5 -right-1.5 bg-[#5C3124] text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
+        <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
           {qty}
         </span>
       </div>
 
       {/* Title & Flavor Variant */}
       <div className="flex-1 min-w-0">
-        <p className="text-xs sm:text-sm font-bold text-[#1c1c28] leading-snug line-clamp-2">
+        <p className="text-xs sm:text-sm font-bold text-text leading-snug line-clamp-2">
           {item.name}
         </p>
         {item.flavour && (
           <p className="text-[11px] text-gray-500 font-medium mt-0.5">
-            Flavor: <span className="text-[#5C3124] font-semibold">{item.flavour}</span>
+            Flavor: <span className="text-primary font-semibold">{item.flavour}</span>
           </p>
         )}
         {originalPrice > discountedPrice && (
@@ -59,7 +59,7 @@ function CartItem({ item }) {
             ₹{(originalPrice * qty).toLocaleString()}
           </p>
         )}
-        <p className="text-xs sm:text-sm font-bold text-[#1c1c28]">
+        <p className="text-xs sm:text-sm font-bold text-text">
           ₹{(discountedPrice * qty).toLocaleString()}
         </p>
       </div>
@@ -143,14 +143,14 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
     <div className="flex flex-col gap-6">
       {/* Header (Desktop only) */}
       {!isMobile && (
-        <div className="flex items-center justify-between pb-4 border-b border-[#ebdcd7]">
-          <h3 className="font-toma text-lg font-black text-[#1c1c28] tracking-tight flex items-center gap-2">
-            <ShoppingBag size={18} className="text-[#5C3124]" />
+        <div className="flex items-center justify-between pb-4 border-b border-primary-border">
+          <h3 className="text-lg font-black text-text tracking-tight flex items-center gap-2">
+            <ShoppingBag size={18} className="text-primary" />
             <span>Order Summary ({totalItems})</span>
           </h3>
           <Link
             to="/cart"
-            className="text-xs font-bold text-[#5C3124] hover:underline"
+            className="text-xs font-bold text-primary hover:underline"
           >
             Edit Cart
           </Link>
@@ -158,7 +158,7 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
       )}
 
       {/* Itemized Cart List */}
-      <div className="flex flex-col divide-y divide-[#ebdcd7] max-h-72 overflow-y-auto pr-1 scrollbar-hide">
+      <div className="flex flex-col divide-y divide-primary-border max-h-72 overflow-y-auto pr-1 scrollbar-hide">
         {items.map((item, idx) => (
           <CartItem key={item.id || item._id || idx} item={item} />
         ))}
@@ -167,7 +167,7 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
       {/* Coupon / Promo Code Input */}
       <div className="flex flex-col gap-2 pt-2">
         <div className="flex items-center gap-2">
-          <div className="relative flex-1 flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl transition-all">
+          <div className="relative flex-1 flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
             <Tag size={15} className="ml-3.5 text-gray-400 shrink-0" />
             <input
               type="text"
@@ -177,7 +177,7 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
                 setCouponError("");
               }}
               placeholder="Promo code (e.g. GOMZI10)"
-              className="w-full bg-transparent text-xs sm:text-sm px-2.5 py-3 outline-none text-[#1c1c28] uppercase placeholder:normal-case placeholder:text-gray-400"
+              className="w-full bg-transparent text-xs sm:text-sm px-2.5 py-3 outline-none text-text uppercase placeholder:normal-case placeholder:text-gray-400"
             />
           </div>
 
@@ -185,10 +185,9 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
             type="button"
             onClick={handleApplyCoupon}
             disabled={couponLoading || !discountCode.trim()}
-            className="group relative overflow-hidden px-5 py-3 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-sm shadow-[#5C3124]/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="group relative overflow-hidden px-5 py-3 rounded-xl btn-gradient border border-amber-400/30 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-sm shadow-primary/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
             <span className="relative z-10">{couponLoading ? "Applying..." : "Apply"}</span>
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
           </button>
         </div>
 
@@ -217,7 +216,7 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
       </div>
 
       {/* Transparent Invoice Pricing Breakdown */}
-      <div className="flex flex-col gap-2.5 pt-4 border-t border-[#ebdcd7] text-xs sm:text-sm">
+      <div className="flex flex-col gap-2.5 pt-4 border-t border-primary-border text-xs sm:text-sm">
         <div className="flex justify-between items-center text-gray-600">
           <span>Subtotal ({totalItems} items)</span>
           <span className="font-semibold text-gray-900">
@@ -245,9 +244,9 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
         </div>
 
         {/* Final Payable Total */}
-        <div className="flex justify-between items-baseline pt-4 mt-2 border-t border-[#ebdcd7]">
+        <div className="flex justify-between items-baseline pt-4 mt-2 border-t border-primary-border">
           <div>
-            <span className="font-toma text-base sm:text-lg font-black text-[#1c1c28] block">
+            <span className="text-base sm:text-lg font-black text-text block">
               Total Payable
             </span>
             <span className="text-[11px] text-gray-500">
@@ -261,7 +260,7 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
                 ₹{subtotal.toLocaleString()}
               </span>
             )}
-            <span className="font-toma text-2xl sm:text-3xl font-black text-[#5C3124]">
+            <span className="text-2xl sm:text-3xl font-black text-primary">
               ₹{finalTotal.toLocaleString()}
             </span>
           </div>
@@ -269,7 +268,7 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
 
         {/* Total Savings Pill */}
         {totalSavings > 0 && (
-          <div className="mt-2 bg-[#f5eeeb] border border-[#ebdcd7] rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs font-bold text-[#5C3124]">
+          <div className="mt-2 bg-[#f5eeeb] border border-primary-border rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs font-bold text-primary">
             <span className="flex items-center gap-1.5">
               <Sparkles size={14} className="text-amber-500" />
               <span>Total Member Savings</span>
@@ -282,10 +281,10 @@ export default function CheckoutSummary({ coupon, setCoupon, clearCoupon, isMobi
       </div>
 
       {/* Authentic Certified Nutrition Guarantee */}
-      <div className="p-4 rounded-xl bg-white border border-[#ebdcd7] flex items-center gap-3">
+      <div className="p-4 rounded-xl bg-white border border-primary-border flex items-center gap-3">
         <ShieldCheck size={20} className="text-emerald-600 shrink-0" />
         <div className="text-[11px] text-gray-600 leading-tight">
-          <span className="font-bold text-[#1c1c28] block">
+          <span className="font-bold text-text block">
             100% Genuine Lab-Tested Guarantee
           </span>
           Direct dispatch from certified Gomzi facility. Every batch NABL verified.

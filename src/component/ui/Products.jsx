@@ -6,7 +6,6 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 import useProductCategories from "../../hooks/useProductCategories";
 import { getCompaniesApi } from "../../api/company.api";
-import CategoryHero from "../category/CategoryHero";
 import ComparisonSection from "../category/ComparisonSection";
 import FAQSection from "../category/FAQSection";
 import BottomContentSection from "../category/BottomContentSection";
@@ -168,7 +167,10 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   | Product API Query
   |--------------------------------------------------------------------------
   */
-  const activeCategory = category || pageData?.category || "";
+  const activeCategory =
+    category ||
+    pageData?.category ||
+    (categorySlug ? categorySlug.replace(/-/g, " ") : "");
   const activeBrand = selectedCompany !== "All Companies" ? selectedCompany : "";
 
   // Special nav modes (Best Sellers & Offer Zone) should not be sent as literal text searches to MongoDB
@@ -286,6 +288,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
       setSelectedCategory(category);
     } else if (pageData?.category) {
       setSelectedCategory(pageData.category);
+    } else if (categorySlug) {
+      setSelectedCategory(categorySlug.replace(/-/g, " "));
     } else {
       setSelectedCategory("All Products");
     }
@@ -297,7 +301,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     }
 
     setCurrentPage(1);
-  }, [category, pageData?.category, brandParam]);
+  }, [category, pageData?.category, categorySlug, brandParam]);
 
   const handleCategorySelect = (categoryName) => {
     setCurrentPage(1);
@@ -370,14 +374,12 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   return (
     <div className="w-full bg-bg py-6 sm:py-8 md:py-10 lg:py-12">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
-        <CategoryHero pageData={pageData} />
-
         {/* ================================================================
             DESKTOP TOOLBAR
         ================================================================ */}
-        <div className="hidden lg:flex items-center justify-between border-b border-[#ebdcd7] pb-4 mb-6">
+        <div className="hidden lg:flex items-center justify-between border-b border-primary-border pb-4 mb-6">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-[#ebdcd7] shadow-2xs">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-primary-border shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-xs font-bold text-gray-900">
                 {pagination.totalDocs ?? products.length}
@@ -386,7 +388,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             </div>
 
             {selectedCompany !== "All Companies" && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#5C3124]/10 border border-[#5C3124]/20 text-xs font-bold text-[#5C3124]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-primary/10 border border-primary/20 text-xs font-bold text-primary">
                 <Building2 className="w-3.5 h-3.5" />
                 <span>{selectedCompany}</span>
               </span>
@@ -410,20 +412,20 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           <div className="relative">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className="h-10 px-4 border border-[#ebdcd7] rounded-xl bg-white flex items-center gap-2.5 hover:border-[#5C3124] transition-all shadow-2xs cursor-pointer"
+              className="h-10 px-4 border border-primary-border rounded-xl bg-white flex items-center gap-2.5 hover:border-primary transition-all shadow-2xs cursor-pointer"
             >
-              <ArrowUpDown className="w-3.5 h-3.5 text-[#5C3124]" />
+              <ArrowUpDown className="w-3.5 h-3.5 text-primary" />
               <span className="text-xs font-medium text-gray-400">Sort by:</span>
               <span className="text-xs font-bold text-gray-900">{sortBy}</span>
               <ChevronDown
                 className={`w-3.5 h-3.5 text-gray-400 transition-transform ${
-                  isSortDropdownOpen ? "rotate-180 text-[#5C3124]" : ""
+                  isSortDropdownOpen ? "rotate-180 text-primary" : ""
                 }`}
               />
             </button>
 
             {isSortDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-md rounded-2xl border border-[#ebdcd7] shadow-xl p-1.5 z-50 overflow-hidden">
+              <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-md rounded-2xl border border-primary-border shadow-xl p-1.5 z-50 overflow-hidden">
                 {sortOptions.map((option) => {
                   const isSelected = sortBy === option;
                   return (
@@ -436,8 +438,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       }}
                       className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
                         isSelected
-                          ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white shadow-2xs"
-                          : "text-gray-700 hover:bg-[#fdf6f4] hover:text-[#5C3124]"
+                          ? "bg-gradient-to-r from-primary to-primary-hover text-white shadow-2xs"
+                          : "text-gray-700 hover:bg-primary-light hover:text-primary"
                       }`}
                     >
                       <span>{option}</span>
@@ -457,10 +459,10 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           {/* Category Selector */}
           <button
             onClick={() => setIsCategoryDrawerOpen(true)}
-            className="h-10 px-2.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between min-w-0"
+            className="h-10 px-2.5 rounded-xl border border-primary-border bg-white shadow-2xs flex items-center justify-between min-w-0"
           >
             <div className="flex items-center gap-1.5 min-w-0">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
+              <SlidersHorizontal className="w-3.5 h-3.5 text-primary shrink-0" />
               <span className="text-[11px] font-bold text-gray-900 truncate">
                 {selectedCategory === "All Products" ? "Category" : selectedCategory}
               </span>
@@ -471,10 +473,10 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           {/* Company Selector */}
           <button
             onClick={() => setIsCompanyDrawerOpen(true)}
-            className="h-10 px-2.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between min-w-0"
+            className="h-10 px-2.5 rounded-xl border border-primary-border bg-white shadow-2xs flex items-center justify-between min-w-0"
           >
             <div className="flex items-center gap-1.5 min-w-0">
-              <Building2 className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
+              <Building2 className="w-3.5 h-3.5 text-primary shrink-0" />
               <span className="text-[11px] font-bold text-gray-900 truncate">
                 {selectedCompany === "All Companies" ? "Brand" : selectedCompany}
               </span>
@@ -486,23 +488,23 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           <div className="relative">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className="w-full h-10 px-2.5 rounded-xl border border-[#ebdcd7] bg-white shadow-2xs flex items-center justify-between min-w-0"
+              className="w-full h-10 px-2.5 rounded-xl border border-primary-border bg-white shadow-2xs flex items-center justify-between min-w-0"
             >
               <div className="flex items-center gap-1.5 min-w-0">
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#5C3124] shrink-0" />
+                <ArrowUpDown className="w-3.5 h-3.5 text-primary shrink-0" />
                 <span className="text-[11px] font-bold text-gray-900 truncate">
                   {sortBy === "Featured" ? "Sort" : sortBy}
                 </span>
               </div>
               <ChevronDown
                 className={`w-3 h-3 text-gray-400 shrink-0 transition-transform ${
-                  isSortDropdownOpen ? "rotate-180 text-[#5C3124]" : ""
+                  isSortDropdownOpen ? "rotate-180 text-primary" : ""
                 }`}
               />
             </button>
 
             {isSortDropdownOpen && (
-              <div className="absolute right-0 left-0 mt-2 p-1.5 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-[#ebdcd7] z-50 overflow-hidden">
+              <div className="absolute right-0 left-0 mt-2 p-1.5 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-primary-border z-50 overflow-hidden">
                 {sortOptions.map((option) => {
                   const isSelected = sortBy === option;
                   return (
@@ -517,8 +519,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                           rounded-xl text-left text-xs font-semibold transition-colors
                           ${
                             isSelected
-                              ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white"
-                              : "text-gray-700 hover:bg-[#fdf6f4] hover:text-[#5C3124]"
+                              ? "bg-gradient-to-r from-primary to-primary-hover text-white"
+                              : "text-gray-700 hover:bg-primary-light hover:text-primary"
                           }`}
                     >
                       <span>{option}</span>
@@ -539,7 +541,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           isBestSeller ||
           isDeal ||
           Boolean(apiSearch)) && (
-          <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-white rounded-2xl border border-[#ebdcd7] shadow-2xs">
+          <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-white rounded-2xl border border-primary-border shadow-2xs">
             <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider pl-1">
               Active Filters:
             </span>
@@ -585,7 +587,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             )}
 
             {Boolean(apiSearch) && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-[#5C3124]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-primary">
                 <span>Search: "{apiSearch}"</span>
                 <button
                   onClick={() => {
@@ -594,7 +596,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                     const q = newParams.toString();
                     navigate(q ? `/gomzi-supplement?${q}` : `/gomzi-supplement`);
                   }}
-                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-[#5C3124]/10 transition-colors cursor-pointer"
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-primary/10 transition-colors cursor-pointer"
                   aria-label="Remove search filter"
                 >
                   <X className="w-3 h-3" />
@@ -603,11 +605,11 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             )}
 
             {selectedCategory !== "All Products" && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-[#5C3124]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-primary">
                 <span>Category: {selectedCategory}</span>
                 <button
                   onClick={() => handleCategorySelect("All Products")}
-                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-[#5C3124]/10 transition-colors cursor-pointer"
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-primary/10 transition-colors cursor-pointer"
                   aria-label="Remove category filter"
                 >
                   <X className="w-3 h-3" />
@@ -616,11 +618,11 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             )}
 
             {selectedCompany !== "All Companies" && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-[#5C3124]">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#fbf5f2] border border-[#f0ded8] text-primary">
                 <span>Company: {selectedCompany}</span>
                 <button
                   onClick={() => handleCompanySelect("All Companies")}
-                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-[#5C3124]/10 transition-colors cursor-pointer"
+                  className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-primary/10 transition-colors cursor-pointer"
                   aria-label="Remove company filter"
                 >
                   <X className="w-3 h-3" />
@@ -630,7 +632,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
             <button
               onClick={handleClearAllFilters}
-              className="text-xs font-semibold text-gray-500 hover:text-[#5C3124] underline ml-auto cursor-pointer"
+              className="text-xs font-semibold text-gray-500 hover:text-primary underline ml-auto cursor-pointer"
             >
               Clear All
             </button>
@@ -653,7 +655,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-widest text-[#5C3124]">
+                    <p className="text-xs font-medium uppercase tracking-widest text-primary">
                       Browse
                     </p>
                     <h3 className="text-2xl font-bold text-gray-900 mt-1">
@@ -691,7 +693,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                         }}
                         className={`w-full min-h-[56px] px-4 rounded-2xl flex items-center justify-between transition-all duration-200 ${
                           isSelected
-                            ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
+                            ? "btn-gradient text-white shadow-md shadow-primary/25 border border-amber-400/30"
                             : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
                         }`}
                       >
@@ -704,7 +706,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                             {isSelected ? (
                               <Check className="w-5 h-5 text-white" />
                             ) : (
-                              <div className="w-2 h-2 rounded-full bg-[#5C3124]/50" />
+                              <div className="w-2 h-2 rounded-full bg-primary/50" />
                             )}
                           </div>
                           <span className="font-semibold text-[15px]">
@@ -745,7 +747,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                 <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-widest text-[#5C3124]">
+                    <p className="text-xs font-medium uppercase tracking-widest text-primary">
                       Filter By
                     </p>
                     <h3 className="text-2xl font-bold text-gray-900 mt-1">
@@ -768,7 +770,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                     value={companySearchQuery}
                     onChange={(e) => setCompanySearchQuery(e.target.value)}
                     placeholder="Search company or brand..."
-                    className="w-full h-10 pl-9 pr-8 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#5C3124] focus:bg-white transition-all text-gray-800 placeholder:text-gray-400"
+                    className="w-full h-10 pl-9 pr-8 text-sm bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary focus:bg-white transition-all text-gray-800 placeholder:text-gray-400"
                   />
                   {companySearchQuery && (
                     <button
@@ -802,7 +804,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                         }}
                         className={`w-full min-h-[56px] px-4 rounded-2xl flex items-center justify-between transition-all duration-200 cursor-pointer ${
                           isSelected
-                            ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
+                            ? "btn-gradient text-white shadow-md shadow-primary/25 border border-amber-400/30"
                             : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
                         }`}
                       >
@@ -815,7 +817,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                             {isSelected ? (
                               <Check className="w-5 h-5 text-white" />
                             ) : (
-                              <Building2 className="w-4 h-4 text-[#5C3124]/60" />
+                              <Building2 className="w-4 h-4 text-primary/60" />
                             )}
                           </div>
                           <span className="font-semibold text-sm truncate">
@@ -858,8 +860,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             {/* 1. Categories Card */}
             <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="font-extrabold text-base text-black tracking-tight font-toma flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4 text-[#5C3124]" />
+                <h2 className="font-extrabold text-base text-black tracking-tight flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4 text-primary" />
                   <span>Categories</span>
                 </h2>
                 <span className="text-[11px] font-semibold text-gray-400">
@@ -877,7 +879,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                     <button
                       key={item.name}
                       onClick={() => handleCategorySelect(item.name)}
-                      className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 flex items-center justify-between"
+                      className="w-full text-left btn-gradient text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-primary/25 border border-amber-400/30 flex items-center justify-between"
                     >
                       <span className="truncate">{item.name}</span>
                       {item.count != null && (
@@ -903,10 +905,10 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             </div>
 
             {/* 2. Companies & Brands Card */}
-            <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-xs sticky top-24">
+            <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="font-extrabold text-base text-black tracking-tight font-toma flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-[#5C3124]" />
+                <h2 className="font-extrabold text-base text-black tracking-tight flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-primary" />
                   <span>Companies & Brands</span>
                 </h2>
                 <span className="text-[11px] font-semibold text-gray-400">
@@ -922,7 +924,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                   value={companySearchQuery}
                   onChange={(e) => setCompanySearchQuery(e.target.value)}
                   placeholder="Search brand or company..."
-                  className="w-full h-8 pl-8 pr-7 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#5C3124] focus:bg-white transition-all text-gray-800 placeholder:text-gray-400"
+                  className="w-full h-8 pl-8 pr-7 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-primary focus:bg-white transition-all text-gray-800 placeholder:text-gray-400"
                 />
                 {companySearchQuery && (
                   <button
@@ -937,10 +939,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               <div className="border-b border-gray-100 mb-3" />
 
               {/* Companies List */}
-              <div
-                className="flex flex-col space-y-1 max-h-[340px] overflow-y-auto pr-1 scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
+              <div className="flex flex-col space-y-1">
                 {filteredCompanies.map((item) => {
                   const isSelected = selectedCompany === item.name;
 
@@ -948,7 +947,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                     <button
                       key={item.name}
                       onClick={() => handleCompanySelect(item.name)}
-                      className="w-full text-left bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-[#5C3124]/25 border border-amber-400/30 flex items-center justify-between"
+                      className="w-full text-left btn-gradient text-white rounded-xl px-3.5 py-2 font-bold text-xs transition-all duration-300 cursor-pointer shadow-md shadow-primary/25 border border-amber-400/30 flex items-center justify-between"
                     >
                       <span className="truncate">{item.name}</span>
                       {item.count != null && (
@@ -984,12 +983,12 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             {/* Mobile Header */}
             <div className="lg:hidden mb-4 pb-3 border-b border-gray-200 flex items-center justify-between">
               <div>
-                <h2 className="font-toma text-lg font-bold text-text">
+                <h2 className="text-lg font-bold text-text">
                   {selectedCompany !== "All Companies"
                     ? selectedCompany
                     : selectedCategory}
                 </h2>
-                <span className="font-modelica text-xs text-text-light">
+                <span className="text-xs text-text-light">
                   {pagination.totalDocs ?? products.length} products found
                 </span>
               </div>
@@ -1017,7 +1016,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             {/* No Products Found State */}
             {products.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 bg-white rounded-3xl border border-gray-200/80 p-8 text-center my-6">
-                <div className="w-16 h-16 rounded-2xl bg-[#5C3124]/10 flex items-center justify-center text-[#5C3124] mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-4">
                   <Building2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-1">
@@ -1028,7 +1027,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                 </p>
                 <button
                   onClick={handleClearAllFilters}
-                  className="px-6 py-2.5 rounded-full bg-[#5C3124] hover:bg-[#48261c] text-white font-bold text-xs transition-all shadow-sm cursor-pointer"
+                  className="px-6 py-2.5 rounded-full bg-primary hover:bg-primary-hover text-white font-bold text-xs transition-all shadow-sm cursor-pointer"
                 >
                   Reset All Filters
                 </button>
@@ -1047,7 +1046,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                   className={`px-5 sm:px-6 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all ${
                     currentPage === 1
                       ? "border-gray-200 text-gray-300 cursor-not-allowed bg-transparent"
-                      : "border-gray-200 text-gray-700 hover:border-[#5C3124] hover:text-[#5C3124] hover:bg-[#fdf6f4] cursor-pointer"
+                      : "border-gray-200 text-gray-700 hover:border-primary hover:text-primary hover:bg-primary-light cursor-pointer"
                   }`}
                 >
                   Previous
@@ -1076,8 +1075,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                         aria-current={isActive ? "page" : undefined}
                         className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                           isActive
-                            ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
-                            : "border border-[#ebdcd7] text-gray-800 hover:border-[#5C3124] hover:text-[#5C3124] hover:bg-[#fdf6f4]"
+                            ? "bg-gradient-to-r from-primary to-primary-hover text-white shadow-md shadow-primary/25 border border-amber-400/30"
+                            : "border border-primary-border text-gray-800 hover:border-primary hover:text-primary hover:bg-primary-light"
                         }`}
                       >
                         {item}
@@ -1093,7 +1092,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                   className={`px-5 sm:px-6 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all ${
                     currentPage === pagination.totalPages
                       ? "border-gray-200 text-gray-300 cursor-not-allowed bg-transparent"
-                      : "border-gray-200 text-gray-700 hover:border-[#5C3124] hover:text-[#5C3124] hover:bg-[#fdf6f4] cursor-pointer"
+                      : "border-gray-200 text-gray-700 hover:border-primary hover:text-primary hover:bg-primary-light cursor-pointer"
                   }`}
                 >
                   Next

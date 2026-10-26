@@ -100,10 +100,10 @@ function IngredientRow({ item }) {
     >
       {/* Text Block - on mobile always comes AFTER image (order-2), on md it follows flex direction */}
       <div className="w-full md:w-1/2 flex flex-col justify-center gap-4 order-2 md:order-none">
-        <h2 className="font-toma text-2xl sm:text-3xl lg:text-5xl text-[var(--color-text)] leading-tight">
+        <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[var(--color-text)] leading-tight">
           {item.title}
         </h2>
-        <p className="font-modelica text-[var(--color-text-light)] text-base sm:text-lg leading-relaxed">
+        <p className="text-[var(--color-text-light)] text-base sm:text-lg leading-relaxed">
           {item.description}
         </p>
         <ul className="flex flex-col gap-0 list-none p-0 m-0">
@@ -113,7 +113,7 @@ function IngredientRow({ item }) {
               className="flex items-start gap-3  border-b border-[var(--color-border)] py-3 first:border-t first:border-[var(--color-border)]"
             >
               {/* <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[var(--color-text)] flex-shrink-0" /> */}
-              <span className="font-modelica text-base sm:text-xl font-medium text-[var(--color-text)] leading-relaxed">
+              <span className="text-base sm:text-xl font-medium text-[var(--color-text)] leading-relaxed">
                 {point}
               </span>
             </li>

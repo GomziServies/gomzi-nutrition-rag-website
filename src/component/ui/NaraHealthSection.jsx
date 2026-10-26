@@ -46,10 +46,10 @@ const pillars = [
 
 const NaraHealthSection = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#faf8f6] via-white to-[#faf8f6] py-14 sm:py-16 lg:py-24 border-b border-[#ebdcd7]/60">
+    <section className="relative overflow-hidden bg-gradient-to-b from-bg-cream via-white to-bg-cream py-14 sm:py-16 lg:py-24 border-b border-primary-border/60">
       {/* Ambient background glows */}
       <div
-        className="pointer-events-none absolute top-1/4 -left-20 h-96 w-96 rounded-full bg-[#5C3124]/5 blur-3xl"
+        className="pointer-events-none absolute top-1/4 -left-20 h-96 w-96 rounded-full bg-primary/5 blur-3xl"
         aria-hidden="true"
       />
       <div
@@ -62,14 +62,14 @@ const NaraHealthSection = () => {
           {/* ================= LEFT COLUMN ================= */}
           <div className="self-center">
             {/* Trust Eyebrow Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fdf6f4] border border-[#ebdcd7] text-[#5C3124] text-xs font-bold tracking-wide uppercase shadow-xs mb-4">
-              <Sparkles className="w-3.5 h-3.5 text-[#5C3124]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-light border border-primary-border text-primary text-xs font-bold tracking-wide uppercase shadow-xs mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>The Gomzi Standard</span>
             </div>
 
             {/* Section Headline */}
-            <h2 className="font-toma text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-[1.15] mb-4">
-              Why Gomzi <span className="bg-gradient-to-r from-[#5C3124] via-[#7a3f2f] to-[#5C3124] bg-clip-text text-transparent">Supplement</span>?
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-[1.15] mb-4">
+              Why Gomzi <span className="bg-gradient-to-r from-primary via-[#7a3f2f] to-primary bg-clip-text text-transparent">Supplement</span>?
             </h2>
 
             {/* Subtitle */}
@@ -85,13 +85,13 @@ const NaraHealthSection = () => {
                 return (
                   <div
                     key={idx}
-                    className="group relative flex items-start gap-3 p-3.5 rounded-2xl bg-white border border-[#ebdcd7]/80 hover:border-[#5C3124]/40 hover:shadow-md hover:shadow-[#5C3124]/5 transition-all duration-300"
+                    className="group relative flex items-start gap-3 p-3.5 rounded-2xl bg-white border border-primary-border/80 hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 transition-all duration-300"
                   >
-                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:border-amber-400/30 group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-xs">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-primary-light border border-primary-border text-primary group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover group-hover:border-amber-400/30 group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-xs">
                       <IconComponent className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-[#5C3124] transition-colors">
+                      <h3 className="font-bold text-gray-900 text-sm leading-snug group-hover:text-primary transition-colors">
                         {item.title}
                       </h3>
                       <p className="text-xs text-gray-500 leading-normal mt-0.5">
@@ -114,11 +114,11 @@ const NaraHealthSection = () => {
                   group relative overflow-hidden
                   inline-flex items-center justify-center gap-2.5
                   px-6 py-3.5
-                  bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c]
-                  hover:from-[#48261c] hover:to-[#381c14]
+                  btn-gradient
+                  hover:from-primary-hover hover:to-[#381c14]
                   text-white font-bold text-sm
                   rounded-xl
-                  shadow-md shadow-[#5C3124]/20 hover:shadow-xl hover:shadow-[#5C3124]/35
+                  shadow-md shadow-primary/20 hover:shadow-xl hover:shadow-primary/35
                   border border-amber-400/20
                   transition-all duration-300
                   hover:-translate-y-0.5 active:scale-[0.98]
@@ -129,7 +129,6 @@ const NaraHealthSection = () => {
                 <ArrowUpRight className="w-4 h-4 text-amber-200 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
 
                 {/* Subtle sheen highlight */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </a>
 
               {/* Button 2 - Open Founder Profile */}
@@ -141,9 +140,9 @@ const NaraHealthSection = () => {
                   group
                   inline-flex items-center justify-center gap-2.5
                   px-6 py-3.5
-                  bg-white hover:bg-[#fdf6f4]
-                  border-2 border-[#ebdcd7] hover:border-[#5C3124]
-                  text-[#3d1e15] hover:text-[#5C3124]
+                  bg-white hover:bg-primary-light
+                  border-2 border-primary-border hover:border-primary
+                  text-primary-deep hover:text-primary
                   font-bold text-sm
                   rounded-xl
                   shadow-xs hover:shadow-md
@@ -163,12 +162,12 @@ const NaraHealthSection = () => {
             <div className="relative w-full max-w-[480px]">
               {/* Backing Ambient Depth */}
               <div
-                className="pointer-events-none absolute -inset-4 rounded-[36px] bg-gradient-to-tr from-[#5C3124]/15 via-amber-500/10 to-transparent blur-2xl -z-10"
+                className="pointer-events-none absolute -inset-4 rounded-[36px] bg-gradient-to-tr from-primary/15 via-amber-500/10 to-transparent blur-2xl -z-10"
                 aria-hidden="true"
               />
 
               {/* Outer Presentation Frame */}
-              <div className="relative overflow-hidden rounded-[32px] bg-white p-2.5 shadow-2xl border border-[#ebdcd7]/80">
+              <div className="relative overflow-hidden rounded-[32px] bg-white p-2.5 shadow-2xl border border-primary-border/80">
                 <img
                   src="/images/Gomzi_Protein_Product_HD.webp"
                   alt="Gomzi Whey Protein Scoop & Shaker"

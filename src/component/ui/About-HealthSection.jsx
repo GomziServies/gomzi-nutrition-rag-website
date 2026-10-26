@@ -50,11 +50,11 @@ const AboutHealthSection = () => {
 
           {/* LEFT SIDE */}
           <div className="w-full lg:w-1/2">
-            <h2 className="font-toma text-3xl md:text-4xl lg:text-4xl mb-5 font-bold text-wider">
+            <h2 className="text-3xl md:text-4xl lg:text-4xl mb-5 font-bold text-wider">
               Gomzi Supplement by RAG is perfect for:
             </h2>
 
-            <p className="font-modelica text-text-blck text-lg mb-8 max-w-xl">
+            <p className="text-text text-lg mb-8 max-w-xl">
               From peak performance to everyday wellness, Gomzi Supplement by
               Gomzi Supplement brings balanced nutrition into every moment of
               your life.
@@ -75,7 +75,7 @@ const AboutHealthSection = () => {
                         alt=""
                         className="w-9 h-9 flex-shrink-0"
                       />
-                      <h3 className="font-modelica text-xl md:text-2xl text-black font-medium text-wide">
+                      <h3 className="text-xl md:text-2xl text-black font-medium text-wide">
                         {item.title}
                       </h3>
                     </div>
@@ -107,7 +107,7 @@ const AboutHealthSection = () => {
                         : "max-h-0 opacity-0"
                     }`}
                   >
-                    <p className="font-modelica text-text-light">
+                    <p className="text-text-light">
                       {item.content}
                     </p>
                   </div>

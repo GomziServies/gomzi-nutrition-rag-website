@@ -4,7 +4,7 @@ const Smallhookheading = ({ text1, text2 }) => {
   return (
     <div>
       <h2
-        className="font-toma font-black text-text text-3xl sm:text-4xl lg:text-4xl xl:text-5xl mb-5 md:mb-6 leading-tight"
+        className="font-black text-text text-3xl sm:text-4xl lg:text-4xl xl:text-5xl mb-5 md:mb-6 leading-tight"
         style={{ letterSpacing: "-0.3px" }}
       >
         {text1}

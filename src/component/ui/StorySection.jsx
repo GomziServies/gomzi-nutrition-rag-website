@@ -24,9 +24,9 @@ export default function StorySection() {
             <div className="lg:text-left">
               <h2
                 className="
-                  font-toma
+                 
                   font-black
-                  text-text-black
+                  text-text
                   text-[30px]
                   sm:text-[36px]
                   md:text-[42px]
@@ -45,8 +45,8 @@ export default function StorySection() {
               className="
                 mt-5
                 sm:mt-6
-                font-modelica
-                text-text-black
+               
+                text-text
                 text-[15px]
                 sm:text-[16px]
                 md:text-[17px]
@@ -96,7 +96,7 @@ export default function StorySection() {
                   rounded-[10px]
                   bg-[#95442c]
                   text-white
-                  font-toma
+                 
                   font-black
                   text-[14px]
                   sm:text-[15px]
@@ -157,7 +157,7 @@ function CheckListItem({ children }) {
         flex
         items-start
         gap-3
-        font-modelica
+       
         text-[15px]
         sm:text-[16px]
         md:text-[17px]

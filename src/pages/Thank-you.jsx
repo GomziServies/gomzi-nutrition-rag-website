@@ -161,8 +161,8 @@ export default function ThankYou() {
 
   if (loading) {
     return (
-      <div className="min-h-[70vh] flex flex-col items-center justify-center bg-[#faf8f6] font-modelica">
-        <div className="w-10 h-10 border-3 border-[#5C3124]/20 border-t-[#5C3124] rounded-full animate-spin mb-3" />
+      <div className="min-h-[70vh] flex flex-col items-center justify-center bg-bg-cream ">
+        <div className="w-10 h-10 border-3 border-primary/20 border-t-primary rounded-full animate-spin mb-3" />
         <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">
           Confirming Your Order...
         </p>
@@ -188,18 +188,18 @@ export default function ThankYou() {
     "GOMZI-CONFIRMED";
 
   return (
-    <div className="min-h-screen bg-[#faf8f6] px-4 py-8 md:py-14 font-modelica text-[#1c1c28]">
+    <div className="min-h-screen bg-bg-cream px-4 py-8 md:py-14 text-text">
       {showConfetti && (
         <Confetti
           recycle={false}
           numberOfPieces={250}
-          colors={["#5C3124", "#ff8914", "#10b981", "#fbbf24", "#3b82f6"]}
+          colors={["#1b365d", "#ff8914", "#10b981", "#fbbf24", "#3b82f6"]}
         />
       )}
 
       <div className="max-w-3xl mx-auto flex flex-col gap-6">
         {/* Success Card */}
-        <div className="bg-white border border-[#ebdcd7] rounded-3xl p-6 sm:p-10 text-center shadow-sm flex flex-col items-center">
+        <div className="bg-white border border-primary-border rounded-3xl p-6 sm:p-10 text-center shadow-sm flex flex-col items-center">
           {/* Animated Success Badge */}
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-6 shadow-sm">
             <CheckCircle2 size={42} className="text-emerald-600" />
@@ -209,7 +209,7 @@ export default function ThankYou() {
             Payment & Order Confirmed
           </span>
 
-          <h1 className="font-toma text-3xl sm:text-4xl font-black text-[#1c1c28] tracking-tight mb-2">
+          <h1 className="text-3xl sm:text-4xl font-black text-text tracking-tight mb-2">
             Thank You For Fueling With Gomzi!
           </h1>
 
@@ -217,40 +217,40 @@ export default function ThankYou() {
             Your sports nutrition order has been placed successfully. A confirmation summary has been logged and our fulfillment team is preparing your dispatch.
           </p>
 
-          <div className="inline-flex items-center gap-2 bg-[#f5eeeb] px-5 py-2.5 rounded-xl border border-[#ebdcd7]">
+          <div className="inline-flex items-center gap-2 bg-[#f5eeeb] px-5 py-2.5 rounded-xl border border-primary-border">
             <span className="text-xs font-bold text-gray-600">Order ID:</span>
-            <span className="font-mono text-sm sm:text-base font-black text-[#5C3124]">
+            <span className="font-mono text-sm sm:text-base font-black text-primary">
               #{orderId}
             </span>
           </div>
         </div>
 
         {/* Estimated Delivery Notification */}
-        <div className="bg-white rounded-2xl border border-[#ebdcd7] p-5 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-[#f5eeeb] text-[#5C3124] flex items-center justify-center shrink-0 border border-[#ebdcd7]">
+        <div className="bg-white rounded-2xl border border-primary-border p-5 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-[#f5eeeb] text-primary flex items-center justify-center shrink-0 border border-primary-border">
             <Truck size={22} />
           </div>
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block">
               Pan-India Express Dispatch
             </span>
-            <p className="font-bold text-xs sm:text-sm text-[#1c1c28]">
-              Estimated Delivery by <span className="text-[#5C3124] font-extrabold">{estimatedDelivery}</span>
+            <p className="font-bold text-xs sm:text-sm text-text">
+              Estimated Delivery by <span className="text-primary font-extrabold">{estimatedDelivery}</span>
             </p>
           </div>
         </div>
 
         {/* Order Details & Items Summary */}
         {order && (
-          <div className="bg-white border border-[#ebdcd7] rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-5">
-            <h2 className="font-toma text-xl font-black text-[#1c1c28] tracking-tight flex items-center gap-2 pb-3 border-b border-[#ebdcd7]">
-              <Package size={18} className="text-[#5C3124]" />
+          <div className="bg-white border border-primary-border rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-5">
+            <h2 className="text-xl font-black text-text tracking-tight flex items-center gap-2 pb-3 border-b border-primary-border">
+              <Package size={18} className="text-primary" />
               <span>Order Summary</span>
             </h2>
 
             {/* Products List */}
             {order.CART?.length > 0 && (
-              <div className="flex flex-col divide-y divide-[#ebdcd7]">
+              <div className="flex flex-col divide-y divide-primary-border">
                 {order.CART.map((item, idx) => {
                   const matchedMeta =
                     order.multiple_items?.[idx] ||
@@ -264,7 +264,7 @@ export default function ThankYou() {
                   return (
                     <div key={idx} className="py-3.5 flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3.5 min-w-0">
-                        <div className="w-14 h-14 rounded-xl bg-[#faf8f6] border border-[#ebdcd7] p-1.5 flex items-center justify-center shrink-0 shadow-xs overflow-hidden">
+                        <div className="w-14 h-14 rounded-xl bg-bg-cream border border-primary-border p-1.5 flex items-center justify-center shrink-0 shadow-xs overflow-hidden">
                           <img
                             src={imgSrc}
                             alt={item.name}
@@ -277,7 +277,7 @@ export default function ThankYou() {
                           />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-bold text-xs sm:text-sm text-[#1c1c28] truncate">
+                          <p className="font-bold text-xs sm:text-sm text-text truncate">
                             {item.name}
                           </p>
                           <p className="text-[11px] text-gray-500 font-medium">
@@ -286,7 +286,7 @@ export default function ThankYou() {
                         </div>
                       </div>
 
-                      <span className="font-bold text-xs sm:text-sm text-[#1c1c28] shrink-0">
+                      <span className="font-bold text-xs sm:text-sm text-text shrink-0">
                         ₹{(Number(itemPrice) * qty).toLocaleString()}
                       </span>
                     </div>
@@ -296,21 +296,21 @@ export default function ThankYou() {
             )}
 
             {/* Total Paid & Payment Method */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-[#ebdcd7]">
-              <div className="bg-[#faf8f6] rounded-xl p-3.5 border border-[#ebdcd7]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-primary-border">
+              <div className="bg-bg-cream rounded-xl p-3.5 border border-primary-border">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
                   Payment Method
                 </span>
-                <p className="font-bold text-xs sm:text-sm text-[#1c1c28] mt-1 uppercase">
+                <p className="font-bold text-xs sm:text-sm text-text mt-1 uppercase">
                   {order.purchase_mode || "Online Gateway"}
                 </p>
               </div>
 
-              <div className="bg-[#5C3124] text-white rounded-xl p-3.5 shadow-sm flex flex-col justify-between">
+              <div className="bg-primary text-white rounded-xl p-3.5 shadow-sm flex flex-col justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200">
                   Total Paid
                 </span>
-                <p className="font-toma text-xl font-black mt-0.5">
+                <p className="text-xl font-black mt-0.5">
                   ₹{Number(order.amount || 0).toLocaleString()}
                 </p>
               </div>
@@ -318,9 +318,9 @@ export default function ThankYou() {
 
             {/* Shipping Address */}
             {order.notes?.address_line_1 && (
-              <div className="bg-[#faf8f6] rounded-xl p-4 border border-[#ebdcd7]">
+              <div className="bg-bg-cream rounded-xl p-4 border border-primary-border">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-500 block mb-1 flex items-center gap-1">
-                  <MapPin size={12} className="text-[#5C3124]" />
+                  <MapPin size={12} className="text-primary" />
                   Shipping Destination
                 </span>
                 <p className="text-xs text-gray-700 leading-relaxed">
@@ -339,16 +339,15 @@ export default function ThankYou() {
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <Link
             to="/gomzi-supplement"
-            className="group relative overflow-hidden flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white text-xs font-extrabold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center justify-center gap-2 cursor-pointer text-center"
+            className="group relative overflow-hidden flex-1 py-4 px-6 rounded-xl btn-gradient border border-amber-400/30 text-white text-xs font-extrabold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 flex items-center justify-center gap-2 cursor-pointer text-center"
           >
             <span className="relative z-10">Continue Shopping</span>
             <ArrowRight size={15} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
           </Link>
 
           <Link
             to="/profile"
-            className="flex-1 py-4 px-6 rounded-xl bg-white hover:bg-gray-50 text-gray-800 border border-[#ebdcd7] text-xs font-extrabold uppercase tracking-wider transition-all text-center"
+            className="flex-1 py-4 px-6 rounded-xl bg-white hover:bg-gray-50 text-gray-800 border border-primary-border text-xs font-extrabold uppercase tracking-wider transition-all text-center"
           >
             <span>View My Orders & Tracking</span>
           </Link>

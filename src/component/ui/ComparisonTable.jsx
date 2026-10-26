@@ -64,7 +64,7 @@ function Cell({ value, isNara = false }) {
       ) : value === false ? (
         <CrossIcon muted={!isNara} />
       ) : (
-        <span className="text-sm md:text-base font-modelica text-text-light">
+        <span className="text-sm md:text-base text-text-light">
           {value}
         </span>
       )}
@@ -80,7 +80,7 @@ export default function ComparisonTable() {
         {/* Heading */}
         {/* <div className="text-center mb-10 md:mb-14">
           <h2
-            className="font-toma text-text font-black inline-block"
+            className="text-text font-black inline-block"
             style={{
               fontSize: "clamp(26px, 4vw, 48px)",
               lineHeight: "1.2",

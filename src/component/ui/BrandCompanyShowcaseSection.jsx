@@ -277,11 +277,10 @@ function BrandBannerSlider({ brand, slides, totalCount, onNavigate }) {
         </div>
         <button
           onClick={() => onNavigate(targetUrl)}
-          className="group relative overflow-hidden self-start sm:self-auto px-5 py-2 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-[#5C3124]/20 hover:shadow-lg hover:shadow-[#5C3124]/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
+          className="group relative overflow-hidden self-start sm:self-auto px-5 py-2 rounded-xl btn-gradient border border-amber-400/30 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
         >
           <span className="relative z-10">Explore {brand.name}</span>
           <FiArrowRight className="relative z-10 w-3.5 h-3.5 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
-          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
         </button>
       </div>
     );
@@ -734,7 +733,7 @@ export default function BrandCompanyShowcaseSection() {
 
               <button
                 onClick={() => navigate(`/gomzi-supplement?brand=${encodeURIComponent(brand.name)}`)}
-                className="text-xs font-bold text-[#5C3124] hover:text-[#3d1e15] flex items-center gap-1 group cursor-pointer"
+                className="text-xs font-bold text-primary hover:text-primary-deep flex items-center gap-1 group cursor-pointer"
               >
                 <span>View All ({totalCount})</span>
                 <FiChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -768,7 +767,7 @@ export default function BrandCompanyShowcaseSection() {
                           : `/product/${item.id || item._id}`
                       )
                     }
-                    className={`bg-white rounded-xl sm:rounded-2xl border border-[#dbdee9] hover:border-[#5C3124]/40 hover:shadow-xl transition-all duration-200 p-3.5 sm:p-4 flex flex-col justify-between relative cursor-pointer group/card w-[calc(50%-7px)] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)] xl:w-[calc(20%-16px)] max-w-[270px] min-w-[150px] ${
+                    className={`bg-white rounded-xl sm:rounded-2xl border border-[#dbdee9] hover:border-primary/40 hover:shadow-xl transition-all duration-200 p-3.5 sm:p-4 flex flex-col justify-between relative cursor-pointer group/card w-[calc(50%-7px)] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-14px)] lg:w-[calc(25%-15px)] xl:w-[calc(20%-16px)] max-w-[270px] min-w-[150px] ${
                       idx >= 4 ? "hidden sm:flex" : "flex"
                     }`}
                   >
@@ -811,14 +810,14 @@ export default function BrandCompanyShowcaseSection() {
                     </div>
 
                     {/* Rating Pill (Gomzi Signature Theme #5C3124 + Gold Star) */}
-                    <div className="flex items-center gap-1 bg-[#5C3124] text-white text-[11px] font-bold px-1.5 py-0.5 rounded w-fit mb-2 shadow-2xs">
+                    <div className="flex items-center gap-1 bg-primary text-white text-[11px] font-bold px-1.5 py-0.5 rounded w-fit mb-2 shadow-2xs">
                       <span>{validRating}</span>
                       <FaStar className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
                     </div>
 
                     {/* Product Title (2-Line Clamp) */}
                     <h5
-                      className="text-xs sm:text-[13px] font-bold text-[#1c1c28] group-hover/card:text-[#5C3124] transition-colors line-clamp-2 min-h-[38px] leading-snug mb-2"
+                      className="text-xs sm:text-[13px] font-bold text-text group-hover/card:text-primary transition-colors line-clamp-2 min-h-[38px] leading-snug mb-2"
                       title={item.name}
                     >
                       {item.name}
@@ -826,7 +825,7 @@ export default function BrandCompanyShowcaseSection() {
 
                     {/* Pricing */}
                     <div className="flex items-baseline gap-2 mb-1">
-                      <span className="text-base sm:text-lg font-extrabold text-[#1c1c28]">
+                      <span className="text-base sm:text-lg font-extrabold text-text">
                         ₹{rawPrice.toLocaleString("en-IN")}
                       </span>
                       {originalPrice > rawPrice && (
@@ -837,16 +836,16 @@ export default function BrandCompanyShowcaseSection() {
                     </div>
 
                     {/* Promotional Coupon Line (Gomzi Signature Theme) */}
-                    <p className="text-[11px] sm:text-xs font-bold text-[#5C3124] truncate mb-2.5">
+                    <p className="text-[11px] sm:text-xs font-bold text-primary truncate mb-2.5">
                       {promoText}
                     </p>
 
                     {/* Premium Member Price Box (Gomzi Brown Warm Palette) */}
-                    <div className="bg-[#fdf6f4] border border-[#ebdcd7] rounded-md px-2.5 py-1.5 flex items-center gap-1.5 mb-3.5 mt-auto">
-                      <div className="w-3.5 h-3.5 rounded-full bg-[#5C3124] text-amber-200 flex items-center justify-center text-[9px] font-bold flex-shrink-0">
+                    <div className="bg-primary-light border border-primary-border rounded-md px-2.5 py-1.5 flex items-center gap-1.5 mb-3.5 mt-auto">
+                      <div className="w-3.5 h-3.5 rounded-full bg-primary text-amber-200 flex items-center justify-center text-[9px] font-bold flex-shrink-0">
                         ★
                       </div>
-                      <span className="text-[11px] sm:text-xs font-bold text-[#5C3124] truncate">
+                      <span className="text-[11px] sm:text-xs font-bold text-primary truncate">
                         ₹{premiumMemberPrice.toLocaleString("en-IN")}{" "}
                         <span className="font-normal text-gray-600">
                           for Member
@@ -864,7 +863,7 @@ export default function BrandCompanyShowcaseSection() {
                           handleAddToCart(item);
                         }}
                         disabled={addingId === item.id}
-                        className="w-full py-1.5 sm:py-2 px-2.5 border-2 border-[#5C3124] bg-white hover:bg-[#fdf6f4] text-[#5C3124] text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-[0.98]"
+                        className="w-full py-1.5 sm:py-2 px-2.5 border-2 border-primary bg-white hover:bg-primary-light text-primary text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-[0.98]"
                       >
                         <FiShoppingCart className="w-3.5 h-3.5" />
                         <span>{addingId === item.id ? "Adding..." : "Add to Cart"}</span>
@@ -874,7 +873,7 @@ export default function BrandCompanyShowcaseSection() {
                       <button
                         type="button"
                         onClick={(e) => handleBuyNow(item, e)}
-                        className="w-full py-2 px-2.5 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer border border-amber-400/25 shadow-md shadow-[#5C3124]/20 hover:shadow-lg hover:shadow-[#5C3124]/35 active:scale-[0.98]"
+                        className="w-full py-2 px-2.5 btn-gradient text-white text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer border border-amber-400/25 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/35 active:scale-[0.98]"
                       >
                         Buy Now
                       </button>
@@ -888,12 +887,11 @@ export default function BrandCompanyShowcaseSection() {
             <div className="flex justify-center mt-7 sm:mt-9">
               <button
                 onClick={() => navigate(`/gomzi-supplement?brand=${encodeURIComponent(brand.name)}`)}
-                className="group relative overflow-hidden px-8 py-3 rounded-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold text-xs sm:text-sm shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
+                className="group relative overflow-hidden px-8 py-3 rounded-full btn-gradient border border-amber-400/30 text-white font-bold text-xs sm:text-sm shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"
               >
                 <span className="relative z-10">View All {brand.name}</span>
                 <FiChevronRight className="relative z-10 w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                 {/* Subtle ambient sheen */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
             </div>
           </div>

@@ -14,11 +14,11 @@ const CategoryHero = ({ pageData }) => {
   return (
     <div className="mb-8 lg:mb-10">
       {/* Editorial Overview Card */}
-      <div className="rounded-2xl sm:rounded-3xl bg-white border border-[#ebdcd7] p-5 sm:p-7 lg:p-8 shadow-xs">
+      <div className="rounded-2xl sm:rounded-3xl bg-white border border-primary-border p-5 sm:p-7 lg:p-8 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[2px] text-[#5C3124] mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-[#5C3124]" />
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[2px] text-primary mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
               <span>{pageData.tag || "Authentic Sports Nutrition"}</span>
             </div>
 
@@ -33,7 +33,7 @@ const CategoryHero = ({ pageData }) => {
               {badges.slice(0, 4).map((badge, idx) => (
                 <div
                   key={idx}
-                  className="px-3.5 py-2.5 rounded-xl bg-[#fdfaf8] border border-[#ebdcd7] flex items-center gap-2 shadow-2xs"
+                  className="px-3.5 py-2.5 rounded-xl bg-[#fdfaf8] border border-primary-border flex items-center gap-2 shadow-2xs"
                 >
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                     <CheckCircle2 className="w-3.5 h-3.5" />

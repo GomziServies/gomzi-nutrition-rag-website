@@ -90,9 +90,9 @@ function ProfileSection() {
   return (
     <div className="flex flex-col gap-6">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#ebdcd7]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-primary-border">
         <div>
-          <h2 className="font-toma text-2xl sm:text-3xl font-black text-[#1c1c28] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-text tracking-tight">
             {editing ? "Edit Profile Details" : "Personal Profile & Details"}
           </h2>
           <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
@@ -105,9 +105,8 @@ function ProfileSection() {
         {!editing ? (
           <button
             onClick={() => setEditing(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer self-start sm:self-auto shrink-0 relative overflow-hidden group"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl btn-gradient text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 border border-amber-400/30 cursor-pointer self-start sm:self-auto shrink-0 relative overflow-hidden group"
           >
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
             <Edit3 size={15} className="relative z-10 text-amber-200" />
             <span className="relative z-10">Edit Profile</span>
           </button>
@@ -123,9 +122,8 @@ function ProfileSection() {
             <button
               onClick={handleUpdate}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl btn-gradient text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 border border-amber-400/30 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
             >
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               {loading ? (
                 <>
                   <span className="relative z-10 w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -146,43 +144,43 @@ function ProfileSection() {
         /* ── VIEW MODE ── */
         <div className="flex flex-col gap-6">
           {/* 1. Personal Identity Card */}
-          <div className="bg-[#faf8f6] rounded-2xl border border-[#ebdcd7] p-5 sm:p-6">
-            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#ebdcd7]/80">
-              <User size={18} className="text-[#5C3124]" />
-              <h3 className="font-bold text-sm sm:text-base text-[#1c1c28]">
+          <div className="bg-bg-cream rounded-2xl border border-primary-border p-5 sm:p-6">
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-primary-border/80">
+              <User size={18} className="text-primary" />
+              <h3 className="font-bold text-sm sm:text-base text-text">
                 Personal Identity
               </h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+              <div className="bg-white rounded-xl p-3.5 border border-primary-border">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                   First Name
                 </span>
-                <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                <p className="font-bold text-sm text-text mt-1">
                   {user?.first_name || "—"}
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+              <div className="bg-white rounded-xl p-3.5 border border-primary-border">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                   Last Name
                 </span>
-                <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                <p className="font-bold text-sm text-text mt-1">
                   {user?.last_name || "—"}
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+              <div className="bg-white rounded-xl p-3.5 border border-primary-border">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                   Date of Birth
                 </span>
-                <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                <p className="font-bold text-sm text-text mt-1">
                   {user?.birth_date ? user.birth_date.split("T")[0] : "Not Provided"}
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+              <div className="bg-white rounded-xl p-3.5 border border-primary-border">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                   Athlete UID
                 </span>
@@ -194,21 +192,21 @@ function ProfileSection() {
           </div>
 
           {/* 2. Contact & Security Card */}
-          <div className="bg-[#faf8f6] rounded-2xl border border-[#ebdcd7] p-5 sm:p-6">
-            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#ebdcd7]/80">
-              <Mail size={18} className="text-[#5C3124]" />
-              <h3 className="font-bold text-sm sm:text-base text-[#1c1c28]">
+          <div className="bg-bg-cream rounded-2xl border border-primary-border p-5 sm:p-6">
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-primary-border/80">
+              <Mail size={18} className="text-primary" />
+              <h3 className="font-bold text-sm sm:text-base text-text">
                 Contact & Verification
               </h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7] flex items-center justify-between">
+              <div className="bg-white rounded-xl p-3.5 border border-primary-border flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                     Email Address
                   </span>
-                  <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                  <p className="font-bold text-sm text-text mt-1">
                     {user?.email || "—"}
                   </p>
                 </div>
@@ -219,17 +217,17 @@ function ProfileSection() {
                 )}
               </div>
 
-              <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7] flex items-center justify-between">
+              <div className="bg-white rounded-xl p-3.5 border border-primary-border flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                     Mobile Number
                   </span>
-                  <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                  <p className="font-bold text-sm text-text mt-1">
                     {user?.mobile ? `+91 ${user.mobile}` : "—"}
                   </p>
                 </div>
                 {user?.mobile && (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#5C3124] bg-[#f5eeeb] px-2 py-0.5 rounded border border-[#ebdcd7]">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-primary bg-[#f5eeeb] px-2 py-0.5 rounded border border-primary-border">
                     <Phone size={11} /> Primary OTP
                   </span>
                 )}
@@ -238,11 +236,11 @@ function ProfileSection() {
           </div>
 
           {/* 3. Shipping & Delivery Destination Card */}
-          <div className="bg-[#faf8f6] rounded-2xl border border-[#ebdcd7] p-5 sm:p-6">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#ebdcd7]/80">
+          <div className="bg-bg-cream rounded-2xl border border-primary-border p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-primary-border/80">
               <div className="flex items-center gap-2">
-                <MapPin size={18} className="text-[#5C3124]" />
-                <h3 className="font-bold text-sm sm:text-base text-[#1c1c28]">
+                <MapPin size={18} className="text-primary" />
+                <h3 className="font-bold text-sm sm:text-base text-text">
                   Default Delivery Address
                 </h3>
               </div>
@@ -253,45 +251,45 @@ function ProfileSection() {
 
             {user?.address?.address_line_1 || user?.address?.city ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+                <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-xl p-3.5 border border-primary-border">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                     Street Address
                   </span>
-                  <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                  <p className="font-bold text-sm text-text mt-1">
                     {user?.address?.address_line_1}
                     {user?.address?.address_line_2 ? `, ${user.address.address_line_2}` : ""}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+                <div className="bg-white rounded-xl p-3.5 border border-primary-border">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                     City
                   </span>
-                  <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                  <p className="font-bold text-sm text-text mt-1">
                     {user?.address?.city || "—"}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+                <div className="bg-white rounded-xl p-3.5 border border-primary-border">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                     State
                   </span>
-                  <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                  <p className="font-bold text-sm text-text mt-1">
                     {user?.address?.state || "—"}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-3.5 border border-[#ebdcd7]">
+                <div className="bg-white rounded-xl p-3.5 border border-primary-border">
                   <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
                     Postal PIN Code
                   </span>
-                  <p className="font-bold text-sm text-[#1c1c28] mt-1">
+                  <p className="font-bold text-sm text-text mt-1">
                     {user?.address?.pin_code || "—"}
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-xl p-6 border border-dashed border-[#ebdcd7] text-center">
+              <div className="bg-white rounded-xl p-6 border border-dashed border-primary-border text-center">
                 <p className="text-sm font-semibold text-gray-600 mb-2">
                   No default delivery address saved yet.
                 </p>
@@ -300,9 +298,8 @@ function ProfileSection() {
                 </p>
                 <button
                   onClick={() => setEditing(true)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 cursor-pointer relative overflow-hidden group"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl btn-gradient text-white text-xs font-bold hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 border border-amber-400/30 cursor-pointer relative overflow-hidden group"
                 >
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                   <MapPin size={13} className="relative z-10 text-amber-200" />
                   <span className="relative z-10">Add Delivery Address</span>
                 </button>
@@ -314,9 +311,9 @@ function ProfileSection() {
         /* ── EDIT FORM MODE ── */
         <form onSubmit={handleUpdate} className="flex flex-col gap-6">
           {/* Identity Fields */}
-          <div className="bg-[#faf8f6] rounded-2xl border border-[#ebdcd7] p-5 sm:p-6 flex flex-col gap-4">
-            <h3 className="font-bold text-sm text-[#1c1c28] flex items-center gap-2">
-              <User size={16} className="text-[#5C3124]" />
+          <div className="bg-bg-cream rounded-2xl border border-primary-border p-5 sm:p-6 flex flex-col gap-4">
+            <h3 className="font-bold text-sm text-text flex items-center gap-2">
+              <User size={16} className="text-primary" />
               Personal Credentials
             </h3>
 
@@ -331,7 +328,7 @@ function ProfileSection() {
                   value={form.first_name}
                   onChange={(e) => setForm({ ...form, first_name: e.target.value })}
                   placeholder="e.g. Rahul"
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -342,7 +339,7 @@ function ProfileSection() {
                   value={form.last_name}
                   onChange={(e) => setForm({ ...form, last_name: e.target.value })}
                   placeholder="e.g. Sharma"
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -352,13 +349,13 @@ function ProfileSection() {
                   type="date"
                   value={form.birth_date}
                   onChange={(e) => setForm({ ...form, birth_date: e.target.value })}
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-gray-700">Mobile Number</label>
-                <div className="flex items-center bg-white border border-[#ebdcd7] focus-within:border-[#5C3124] focus-within:ring-2 focus-within:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 transition-all">
+                <div className="flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 transition-all">
                   <span className="text-gray-400 font-bold mr-2 select-none">+91</span>
                   <input
                     type="tel"
@@ -373,9 +370,9 @@ function ProfileSection() {
           </div>
 
           {/* Address Fields */}
-          <div className="bg-[#faf8f6] rounded-2xl border border-[#ebdcd7] p-5 sm:p-6 flex flex-col gap-4">
-            <h3 className="font-bold text-sm text-[#1c1c28] flex items-center gap-2">
-              <MapPin size={16} className="text-[#5C3124]" />
+          <div className="bg-bg-cream rounded-2xl border border-primary-border p-5 sm:p-6 flex flex-col gap-4">
+            <h3 className="font-bold text-sm text-text flex items-center gap-2">
+              <MapPin size={16} className="text-primary" />
               Shipping Destination
             </h3>
 
@@ -389,7 +386,7 @@ function ProfileSection() {
                   value={form.address_line_1}
                   onChange={(e) => setForm({ ...form, address_line_1: e.target.value })}
                   placeholder="e.g. 402, Gymshark Heights"
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -402,7 +399,7 @@ function ProfileSection() {
                   value={form.address_line_2}
                   onChange={(e) => setForm({ ...form, address_line_2: e.target.value })}
                   placeholder="e.g. Ring Road, Near Fitness Center"
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -413,7 +410,7 @@ function ProfileSection() {
                   value={form.city}
                   onChange={(e) => setForm({ ...form, city: e.target.value })}
                   placeholder="e.g. Surat"
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -424,7 +421,7 @@ function ProfileSection() {
                   value={form.state}
                   onChange={(e) => setForm({ ...form, state: e.target.value })}
                   placeholder="e.g. Gujarat"
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -436,7 +433,7 @@ function ProfileSection() {
                   value={form.pin_code}
                   onChange={(e) => setForm({ ...form, pin_code: e.target.value })}
                   placeholder="e.g. 395007"
-                  className="w-full bg-white border border-[#ebdcd7] focus:border-[#5C3124] focus:ring-2 focus:ring-[#5C3124]/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
+                  className="w-full bg-white border border-primary-border focus:border-primary focus:ring-2 focus:ring-primary/15 rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-900 outline-none transition-all"
                 />
               </div>
 
@@ -446,7 +443,7 @@ function ProfileSection() {
                   type="text"
                   disabled
                   value="India"
-                  className="w-full bg-gray-100 border border-[#ebdcd7] rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-600 outline-none"
+                  className="w-full bg-gray-100 border border-primary-border rounded-xl px-3.5 py-3 text-xs sm:text-sm text-gray-600 outline-none"
                 />
               </div>
             </div>
@@ -457,9 +454,8 @@ function ProfileSection() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 border border-amber-400/30 flex items-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
+              className="px-6 py-3.5 rounded-xl btn-gradient text-white text-xs font-bold uppercase tracking-wider hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 border border-amber-400/30 flex items-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
             >
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               {loading ? (
                 <>
                   <span className="relative z-10 w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

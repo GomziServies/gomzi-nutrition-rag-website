@@ -1,213 +1,200 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Dumbbell,
-  Pill,
-  Leaf,
-  Apple,
-  ChevronRight,
-  Sparkles,
-} from "lucide-react";
-import { NAVIGATION_DEPARTMENTS } from "../../data/navigationCategories";
+import { ArrowRight, Sparkles, Layers, ShieldCheck } from "lucide-react";
+import { getCategoriesApi } from "../../api/category.api";
+import { getLocalCache, setLocalCache } from "../../utils/storage";
+
+const CATEGORIES_PAGE_CACHE_KEY = "gomzi_categories_page_cache";
+
+const resolveImageUrl = (img) => {
+  if (!img) return "/images/product-placeholder.webp";
+  if (
+    img.startsWith("http://") ||
+    img.startsWith("https://") ||
+    img.startsWith("/") ||
+    img.startsWith("blob:")
+  ) {
+    return img;
+  }
+  return `https://files.fggroup.in/${img}`;
+};
 
 /**
- * HealthKart-Style Category Flyout Dropdown Menu
- * - Left Panel: Sized generously (300px) so NO text ever truncates or clips.
- * - Right Panel: Rich subcategory flyout grid with smooth hover transitions.
- * - Clean outside-click and escape dismissal.
- *
- * @param {Object} props
- * @param {boolean} props.isOpen - Controls visibility
- * @param {Function} props.onClose - Dismissal callback
+ * Dynamic Category MegaMenu
+ * Completely replaces legacy static mock taxonomy with live verified categories from MongoDB.
  */
 export default function MegaMenu({ isOpen, onClose }) {
   const navigate = useNavigate();
-  const [activeDeptId, setActiveDeptId] = useState(
-    NAVIGATION_DEPARTMENTS[0]?.id || "sports-nutrition"
-  );
-  const [showSubMenu, setShowSubMenu] = useState(true);
+  const [categories, setCategories] = useState(() => {
+    const cached = getLocalCache(CATEGORIES_PAGE_CACHE_KEY);
+    return Array.isArray(cached?.categories) ? cached.categories : [];
+  });
+  const [totalProducts, setTotalProducts] = useState(() => {
+    const cached = getLocalCache(CATEGORIES_PAGE_CACHE_KEY);
+    return cached?.totalProducts || 0;
+  });
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let isMounted = true;
+    getCategoriesApi()
+      .then((res) => {
+        if (isMounted && res.data?.data) {
+          const data = res.data.data;
+          if (Array.isArray(data.categories)) {
+            const activeCats = data.categories
+              .filter((c) => c && c.status !== false)
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+            setCategories(activeCats);
+            const liveTotal =
+              data.totalProducts ||
+              activeCats.reduce((sum, c) => sum + (c.productCount || 0), 0);
+            setTotalProducts(liveTotal);
+
+            setLocalCache(CATEGORIES_PAGE_CACHE_KEY, {
+              categories: activeCats,
+              totalProducts: liveTotal,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.warn("MegaMenu category fetch error:", err.message);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const currentDepartment =
-    NAVIGATION_DEPARTMENTS.find((dept) => dept.id === activeDeptId) ||
-    NAVIGATION_DEPARTMENTS[0];
-
-  const handleItemClick = (query) => {
+  const handleCategoryClick = (cat) => {
     onClose();
-    navigate(`/gomzi-supplement?search=${encodeURIComponent(query)}`);
+    navigate(cat.url || `/gomzi-supplement/${cat.slug}`);
   };
 
-  const handleGroupHeaderClick = (group) => {
+  const handleViewAll = () => {
     onClose();
-    navigate(`/gomzi-supplement?search=${encodeURIComponent(group.title)}`);
-  };
-
-  const getDeptIcon = (iconName) => {
-    switch (iconName) {
-      case "dumbbell":
-        return <Dumbbell className="w-4 h-4 text-[#5C3124]" />;
-      case "pill":
-        return <Pill className="w-4 h-4 text-emerald-600" />;
-      case "leaf":
-        return <Leaf className="w-4 h-4 text-amber-600" />;
-      case "apple":
-        return <Apple className="w-4 h-4 text-rose-600" />;
-      default:
-        return <Sparkles className="w-4 h-4 text-[#5C3124]" />;
-    }
+    navigate("/category");
   };
 
   return (
     <div
-      className="absolute top-full left-0 mt-1.5 z-[9999] flex shadow-[0_16px_50px_rgba(0,0,0,0.18)] rounded-xl border border-[#dbdee9] bg-white animate-in fade-in slide-in-from-top-1 duration-150"
+      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-[9999] w-[920px] max-w-[95vw] shadow-[0_20px_60px_rgba(0,0,0,0.18)] rounded-2xl border border-primary-border bg-white animate-in fade-in slide-in-from-top-1 duration-150 overflow-hidden"
       role="menu"
       aria-label="Shop By Category Menu"
     >
-      {/* 
-        COLUMN 1: Primary Category List (Explicit 300px width - ZERO truncation)
-      */}
-      <div className="w-[290px] sm:w-[310px] bg-[#f8fafb] rounded-l-xl flex flex-col py-2.5 border-r border-[#e5e7eb] flex-shrink-0">
-        <div className="px-4 py-2 mb-1 border-b border-gray-100 flex items-center justify-between">
-          <span className="text-[11px] font-bold tracking-wider text-gray-500 uppercase">
-            Departments
-          </span>
-          <span className="text-[10px] text-gray-400 font-medium">
-            {NAVIGATION_DEPARTMENTS.length} Categories
-          </span>
+      {/* Header bar */}
+      <div className="px-6 py-3.5 bg-gradient-to-r from-bg-light via-white to-bg-light border-b border-primary-border flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-primary-light flex items-center justify-center text-primary">
+            <Layers size={14} />
+          </div>
+          <div>
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-text flex items-center gap-2">
+              <span>Product Categories</span>
+              <span className="text-[10px] font-semibold text-primary bg-primary-light px-2 py-0.5 rounded-full border border-primary-border">
+                {categories.length} Categories Live
+              </span>
+            </h3>
+            <p className="text-[11px] text-text-light">
+              100% verified formulations directly backed by laboratory assays
+            </p>
+          </div>
         </div>
 
-        <ul className="flex-1 space-y-1 list-none p-0 m-0 px-2">
-          {NAVIGATION_DEPARTMENTS.map((dept) => {
-            const isActive = dept.id === activeDeptId;
+        <button
+          type="button"
+          onClick={handleViewAll}
+          className="text-xs font-bold text-primary hover:text-primary-hover flex items-center gap-1.5 transition-colors cursor-pointer group"
+        >
+          <span>View All Categories</span>
+          <ArrowRight
+            size={13}
+            className="transition-transform group-hover:translate-x-0.5"
+          />
+        </button>
+      </div>
 
-            return (
-              <li key={dept.id}>
-                <button
-                  type="button"
-                  onMouseEnter={() => {
-                    setActiveDeptId(dept.id);
-                    setShowSubMenu(true);
+      {/* Categories Grid */}
+      <div className="p-5 max-h-[460px] overflow-y-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+          {categories.map((cat) => (
+            <button
+              key={cat._id || cat.slug}
+              type="button"
+              onClick={() => handleCategoryClick(cat)}
+              className="group flex items-center gap-3.5 p-3 rounded-xl border border-border bg-white hover:border-primary hover:bg-primary-light/30 hover:shadow-xs transition-all text-left cursor-pointer"
+            >
+              <div className="w-14 h-14 rounded-lg bg-bg-light flex items-center justify-center shrink-0 p-1 border border-border/40 group-hover:bg-white transition-colors">
+                <img
+                  src={resolveImageUrl(cat.image)}
+                  alt={cat.title}
+                  className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
+                  style={{ mixBlendMode: "multiply" }}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/images/product-placeholder.webp";
                   }}
-                  onClick={() => {
-                    onClose();
-                    navigate(`/gomzi-supplement?search=${encodeURIComponent(dept.name)}`);
-                  }}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 text-xs font-semibold text-left transition-all duration-150 cursor-pointer rounded-lg border-none ${
-                    isActive
-                      ? "bg-white text-[#5C3124] shadow-sm font-bold border-l-4 border-[#5C3124] ring-1 ring-[#5C3124]/15"
-                      : "text-[#2b2b36] hover:bg-[#fdf6f4] hover:text-[#5C3124] border-l-4 border-transparent bg-transparent"
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="flex-shrink-0 p-1.5 rounded-md bg-white border border-gray-100 shadow-2xs">
-                      {getDeptIcon(dept.icon)}
-                    </span>
-                    <span className="font-semibold whitespace-nowrap text-[#1c1c28]">
-                      {dept.name}
-                    </span>
-                  </div>
-                  <ChevronRight
-                    className={`w-4 h-4 flex-shrink-0 ml-2 transition-transform ${
-                      isActive
-                        ? "text-[#5C3124] translate-x-0.5"
-                        : "text-gray-400"
-                    }`}
-                  />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                />
+              </div>
 
-        {/* Bottom Explore all Categories Button */}
-        <div className="p-3 border-t border-gray-200 mt-2">
-          <button
-            type="button"
-            onClick={() => {
-              onClose();
-              navigate("/category");
-            }}
-            className="w-full py-2.5 px-3 bg-[#5C3124]/10 hover:bg-[#5C3124] hover:text-white text-[#5C3124] text-xs font-bold rounded-lg transition-colors cursor-pointer border border-[#5C3124]/20 text-center flex items-center justify-center gap-1.5 whitespace-nowrap"
-          >
-            <span>Browse All Categories</span>
-            <span>→</span>
-          </button>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-1 mb-0.5">
+                  <h4 className="text-xs font-bold text-text group-hover:text-primary transition-colors truncate">
+                    {cat.title}
+                  </h4>
+                  {cat.tag && (
+                    <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-primary-light text-primary border border-primary-border shrink-0">
+                      {cat.tag}
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-[11px] text-text-light line-clamp-1">
+                  {cat.spec || cat.subtitle || "Performance Formulation"}
+                </p>
+
+                <div className="mt-1 flex items-center justify-between text-[10px]">
+                  <span className="font-semibold text-gray-500">
+                    {cat.productCount
+                      ? `${cat.productCount} Products`
+                      : "Explore Range"}
+                  </span>
+                  <span className="text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                    Shop ›
+                  </span>
+                </div>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* 
-        COLUMN 2: Subcategories Flyout Grid (HealthKart .menuCont style)
-        Expands to the right with multi-column categorised links
-      */}
-      {showSubMenu && currentDepartment && (
-        <div className="hidden md:flex flex-col w-[540px] lg:w-[600px] p-6 bg-white rounded-r-xl max-h-[460px] overflow-y-auto scrollbar-thin">
-          {/* Header */}
-          <div className="border-b border-gray-100 pb-3 mb-4 flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-bold text-[#1c1c28]">
-                {currentDepartment.name}
-              </h3>
-              <p className="text-xs text-[#77777e] mt-0.5">
-                {currentDepartment.description}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                navigate(
-                  `/gomzi-supplement?search=${encodeURIComponent(
-                    currentDepartment.name
-                  )}`
-                );
-              }}
-              className="text-xs font-bold text-[#5C3124] hover:underline bg-transparent border-none cursor-pointer whitespace-nowrap"
-            >
-              View All {currentDepartment.name} ›
-            </button>
-          </div>
-
-          {/* Subcategories Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
-            {currentDepartment.groups.map((group) => (
-              <div key={group.slug} className="space-y-2">
-                <button
-                  type="button"
-                  onClick={() => handleGroupHeaderClick(group)}
-                  className="w-full text-left font-bold text-xs uppercase tracking-wide text-[#1c1c28] hover:text-[#5C3124] transition-colors border-none bg-transparent cursor-pointer p-0 group flex items-center justify-between"
-                >
-                  <span className="border-b-2 border-transparent group-hover:border-[#5C3124] pb-0.5">
-                    {group.title}
-                  </span>
-                  <span className="text-[10px] text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    ›
-                  </span>
-                </button>
-
-                <ul className="space-y-1.5 list-none p-0 m-0">
-                  {group.items.map((item) => (
-                    <li key={item.name}>
-                      <button
-                        type="button"
-                        onClick={() => handleItemClick(item.query)}
-                        className="w-full text-left text-xs text-[#515151] hover:text-[#5C3124] hover:bg-[#fdf6f4] hover:translate-x-0.5 px-2 py-1 rounded-md transition-all duration-150 bg-transparent border-none cursor-pointer flex items-center justify-between group/item"
-                      >
-                        <span className="truncate">{item.name}</span>
-                        {item.badge && (
-                          <span className="ml-1.5 px-1.5 py-0.2 text-[9px] font-bold rounded bg-amber-50 text-amber-700 border border-amber-200">
-                            {item.badge}
-                          </span>
-                        )}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+      {/* Footer Strip */}
+      <div className="px-6 py-3 bg-[#fdfbf9] border-t border-primary-border flex items-center justify-between text-xs">
+        <div className="flex items-center gap-4 text-text-light text-[11px]">
+          <span className="inline-flex items-center gap-1.5">
+            <ShieldCheck size={13} className="text-primary" />
+            <span>Third-Party Lab Tested</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 hidden sm:inline-flex">
+            <Sparkles size={13} className="text-primary" />
+            <span>Zero Protein Spiking</span>
+          </span>
         </div>
-      )}
+
+        <button
+          type="button"
+          onClick={handleViewAll}
+          className="text-xs font-bold text-primary hover:underline cursor-pointer"
+        >
+          Explore Full Catalog ({totalProducts}+ Formulations) →
+        </button>
+      </div>
     </div>
   );
 }

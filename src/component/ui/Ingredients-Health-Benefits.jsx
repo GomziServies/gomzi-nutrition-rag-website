@@ -39,7 +39,7 @@ function AccordionItem({ item, isOpen, onToggle }) {
         onClick={onToggle}
         className="w-full flex items-center justify-between py-2 sm:py-3 text-left group cursor-pointer"
       >
-        <span className="font-modelica text-lg text-white font-medium leading-snug pr-4">
+        <span className="text-lg text-white font-medium leading-snug pr-4">
           {item.title}
         </span>
         {/* Chevron box */}
@@ -77,7 +77,7 @@ function AccordionItem({ item, isOpen, onToggle }) {
             "max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease",
         }}
       >
-        <p className="font-modelica text-white/70 text-sm sm:text-base leading-relaxed pb-5">
+        <p className="text-white/70 text-sm sm:text-base leading-relaxed pb-5">
           {item.content}
         </p>
       </div>
@@ -110,7 +110,7 @@ export default function IngredientsHealthBenefits() {
           <div className="relative z-10 flex flex-col md:flex-row items-start gap-10 md:gap-8 p-8 sm:p-10 md:p-12 lg:p-14">
             {/* ── LEFT: Accordion ── */}
             <div className="w-full md:w-[55%] flex flex-col order-1 md:order-none">
-              <h2 className="font-toma text-2xl sm:text-3xl lg:text-4xl text-white font-black mb-6 lg:mb-8">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl text-white font-black mb-6 lg:mb-8">
                 Built for Performance. Backed by Science.
               </h2>
 
@@ -135,7 +135,7 @@ export default function IngredientsHealthBenefits() {
               {/* CTA Button */}
               <a
                 href="/gomzi-supplement"
-                className="text-center mt-6 w-full py-4 rounded-xl text-white font-modelica font-bold text-[var(--color-text)] text-sm sm:text-base transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
+                className="text-center mt-6 w-full py-4 rounded-xl text-white font-bold text-[var(--color-text)] text-sm sm:text-base transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
                 style={{ background: "#95442c" }}
               >
                 Shop Longevity products

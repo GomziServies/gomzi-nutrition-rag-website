@@ -59,7 +59,7 @@ export default function Cart() {
             className="w-48 mx-auto mb-6"
           />
 
-          <h2 className="font-toma text-3xl text-primary mb-3">
+          <h2 className="text-3xl text-primary mb-3">
             Your Cart is Empty
           </h2>
 
@@ -69,9 +69,8 @@ export default function Cart() {
 
           <button
             onClick={() => navigate("/gomzi-supplement")}
-            className="px-6 py-3 relative overflow-hidden group bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 cursor-pointer"
+            className="px-6 py-3 relative overflow-hidden group btn-gradient text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 cursor-pointer"
           >
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
             <span className="relative z-10">Start Shopping</span>
           </button>
         </div>
@@ -80,12 +79,12 @@ export default function Cart() {
   }
   return (
     <>
-      <div className="min-h-screen max-w-[var(--container-width)] mx-auto px-4 sm:px-8 lg:px-16 bg-bg text-text font-modelica">
+      <div className="min-h-screen max-w-[var(--container-width)] mx-auto px-4 sm:px-8 lg:px-16 bg-bg text-text ">
         {/* ══ FREE SHIPPING BANNER ══ */}
         {/* <div className="py-4 bg-bg">
           <div className="bg-[#8cd7e1] rounded-md px-4 sm:px-8 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex-1 min-w-0 w-full">
-              <p className="font-modelica font-medium text-sm sm:text-lg text-primary">
+              <p className="font-medium text-sm sm:text-lg text-primary">
                 Congratulations! You achieved free shipping!
               </p>
               <div className="mt-3 w-full h-[5px] bg-primary/30 rounded-full overflow-hidden">
@@ -96,7 +95,7 @@ export default function Cart() {
               </div>
             </div>
             <button
-              className="w-full sm:w-auto shrink-0 bg-bg text-primary cursor-pointer font-modelica font-semibold text-sm px-5 py-3 rounded-md shadow-sm hover:bg-bg-light transition-colors border border-border"
+              className="w-full sm:w-auto shrink-0 bg-bg text-primary cursor-pointer font-semibold text-sm px-5 py-3 rounded-md shadow-sm hover:bg-bg-light transition-colors border border-border"
               onClick={() => navigate("/gomzi-supplement")}
             >
               Continue shopping
@@ -111,7 +110,7 @@ export default function Cart() {
             {/* Heading & Clear All Button */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <h1 className="font-toma font-bold text-xl sm:text-2xl text-primary">
+                <h1 className="font-bold text-xl sm:text-2xl text-primary">
                   Your cart
                 </h1>
                 <span className="w-7 h-7 rounded-full bg-[#ff8914] text-white text-xs font-bold flex items-center justify-center">
@@ -154,7 +153,7 @@ export default function Cart() {
 
                     {/* Name + flavour - grows to fill space */}
                     <div className="flex-1 min-w-0">
-                      <p className="font-toma font-normal text-[13px] sm:text-[17px] leading-snug">
+                      <p className="font-normal text-[13px] sm:text-[17px] leading-snug">
                         {item.name}
                       </p>
                       {item.isFree && (
@@ -195,7 +194,7 @@ export default function Cart() {
                           <p className="text-text-light text-[11px] line-through leading-tight">
                             ₹{item.price}
                           </p>
-                          <p className="font-toma font-extrabold text-[16px] text-primary leading-tight mt-0.5">
+                          <p className="font-extrabold text-[16px] text-primary leading-tight mt-0.5">
                             ₹{item.discountPrice}
                           </p>
                         </div>
@@ -230,7 +229,7 @@ export default function Cart() {
                       <p className="text-text-light text-[13px] line-through leading-tight">
                         ₹{item.price}
                       </p>
-                      <p className="font-toma font-extrabold text-[18px] text-primary leading-tight mt-0.5">
+                      <p className="font-extrabold text-[18px] text-primary leading-tight mt-0.5">
                         ₹{item.discountPrice}
                       </p>
                     </div>
@@ -256,28 +255,28 @@ export default function Cart() {
           {/* ════ RIGHT - Order Summary ════ */}
           <div className="w-full lg:w-[380px] xl:w-[410px] shrink-0">
             <div className="bg-white border border-[#dbdee9] rounded-2xl shadow-sm p-4 sm:p-6 lg:sticky lg:top-6">
-              <h2 className="font-toma font-extrabold text-xl text-primary mb-4">
+              <h2 className="font-extrabold text-xl text-primary mb-4">
                 Order summary
               </h2>
 
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-green-600 font-bold text-sm font-modelica">
+                <span className="text-green-600 font-bold text-sm ">
                   Saving
                 </span>
-                <span className="text-green-600 font-bold text-sm font-modelica">
+                <span className="text-green-600 font-bold text-sm ">
                   −₹{saving.toFixed(2)}/-
                 </span>
               </div>
 
               <div className="flex justify-between items-center pb-4 mb-4 border-b border-border">
-                <span className="font-semibold text-sm text-text font-modelica">
+                <span className="font-semibold text-sm text-text ">
                   Subtotal
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-text-light text-xs line-through">
                     {/* €{origTotal.toFixed(2)} */}
                   </span>
-                  <span className="font-toma font-extrabold text-xl text-primary">
+                  <span className="font-extrabold text-xl text-primary">
                     ₹{subtotal.toFixed(2)}/-
                   </span>
                 </div>
@@ -285,17 +284,16 @@ export default function Cart() {
 
               <div className="flex items-center gap-2 mb-5">
                 <Stars filled={5} />
-                <span className="text-text-light text-xs font-modelica">
+                <span className="text-text-light text-xs ">
                   4.8 based on 245 Reviews
                 </span>
               </div>
 
               <button
-                className="group relative overflow-hidden w-full py-4 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-[15px] rounded-xl shadow-md shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] mb-3 cursor-pointer uppercase tracking-wider"
+                className="group relative overflow-hidden w-full py-4 btn-gradient border border-amber-400/30 text-white font-bold text-[15px] rounded-xl shadow-md shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] mb-3 cursor-pointer uppercase tracking-wider"
                 onClick={handleCheckout}
               >
                 <span>Check out</span>
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
 
               {/* <div className="grid grid-cols-2 gap-3 mb-3">
@@ -311,7 +309,7 @@ export default function Cart() {
                 <span className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center text-[9px] text-white">
                   ✓
                 </span>
-                <p className="text-green-600 text-xs font-semibold font-modelica">
+                <p className="text-green-600 text-xs font-semibold ">
                   Add another item to boost your discount!
                 </p>
               </div>

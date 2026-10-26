@@ -5,7 +5,7 @@ const Wavyheading = ({ text1, text2, text3 }) => {
   return (
     <div className="text-center mb-5 md:mb-0">
       <h2
-        className="font-toma text-text  inline-block relative"
+        className="text-text  inline-block relative"
         style={{
           fontSize: "clamp(28px, 4.5vw, 48px)",
           fontWeight: "950",

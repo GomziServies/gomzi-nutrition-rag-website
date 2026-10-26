@@ -35,10 +35,10 @@ export default function FuelingAthletesSection() {
 
             {/* Athlete name + description */}
             <div className="px-5 py-4 sm:px-6 sm:py-5 border-t border-border">
-              <p className="font-toma font-black text-text text-sm sm:text-base">
+              <p className="font-black text-text text-sm sm:text-base">
                 Urte Andriukaityte, Gomzi Supplement by RAG Ambassador
               </p>
-              <p className="font-modelica text-text-light text-xs sm:text-sm mt-0.5">
+              <p className="text-text-light text-xs sm:text-sm mt-0.5">
                 LTU beach volleyball national team Member of @lteam_official
               </p>
             </div>

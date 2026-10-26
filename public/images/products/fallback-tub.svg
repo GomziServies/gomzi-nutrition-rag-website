@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Supplement tub">
+  
+  <ellipse cx="200" cy="352" rx="96" ry="13" fill="#1c1c28" opacity="0.08"/>
+  <rect x="132" y="52" width="136" height="30" rx="8" fill="#1b365d"/>
+  <rect x="140" y="46" width="120" height="14" rx="6" fill="#0f1e35"/>
+  <path d="M132 82 h136 v34 c0 8 -68 22 -68 22 s-68 -14 -68 -22 z" fill="#ececef"/>
+  <path d="M128 108 h144 v186 c0 14 -14 22 -72 22 s-72 -8 -72 -22 z" fill="#ffffff" stroke="#d8d8dc" stroke-width="2"/>
+  <path d="M128 108 h26 v206 c-14 -2 -26 -8 -26 -18 z" fill="#ececef" opacity="0.7"/>
+  
+  <rect x="118" y="238" width="164" height="26" fill="#1b365d"/>
+  <text x="200" y="256" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#ffffff" text-anchor="middle">GOMZI</text>
+  
+  <text x="200" y="292" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#1c1c28" text-anchor="middle">PROTEIN</text>
+  <text x="200" y="311" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#6b6b73" text-anchor="middle">500 g</text>
+</svg>

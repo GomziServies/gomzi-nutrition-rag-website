@@ -130,8 +130,6 @@ export default function CompanyAdsSection() {
   return (
     <section className="w-full py-12 sm:py-16 bg-[#0f0e0d] text-white border-t border-b border-white/10 relative overflow-hidden">
       {/* Background Decorative Glow Elements */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12 relative z-10">
         {/* ================= HEADER ================= */}

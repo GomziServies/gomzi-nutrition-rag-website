@@ -14,15 +14,15 @@ function Sidebar({ activeTab, setActiveTab }) {
   const menuClass = (tab) =>
     `flex items-center justify-between w-full px-4 py-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer ${
       activeTab === tab
-        ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
-        : "text-gray-700 hover:bg-[#faf5f3] hover:text-[#5C3124]"
+        ? "btn-gradient text-white shadow-md shadow-primary/25 border border-amber-400/30"
+        : "text-gray-700 hover:bg-[#faf5f3] hover:text-primary"
     }`;
 
   const mobilePillClass = (tab) =>
     `flex items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer shrink-0 ${
       activeTab === tab
-        ? "bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-white shadow-md shadow-[#5C3124]/25 border border-amber-400/30"
-        : "bg-white text-gray-700 border border-[#ebdcd7] hover:bg-[#faf5f3]"
+        ? "btn-gradient text-white shadow-md shadow-primary/25 border border-amber-400/30"
+        : "bg-white text-gray-700 border border-primary-border hover:bg-[#faf5f3]"
     }`;
 
   const userInitials =
@@ -67,15 +67,15 @@ function Sidebar({ activeTab, setActiveTab }) {
       </div>
 
       {/* Desktop Vertical Nav Card */}
-      <div className="hidden lg:flex flex-col bg-white rounded-2xl md:rounded-3xl border border-[#ebdcd7] p-5 shadow-sm">
+      <div className="hidden lg:flex flex-col bg-white rounded-2xl md:rounded-3xl border border-primary-border p-5 shadow-sm">
         {/* Profile Identity Snippet */}
-        <div className="flex items-center gap-3.5 pb-5 border-b border-[#ebdcd7]">
-          <div className="w-12 h-12 rounded-xl bg-[#5C3124] text-white flex items-center justify-center font-toma text-base font-black shrink-0 border border-amber-300/30">
+        <div className="flex items-center gap-3.5 pb-5 border-b border-primary-border">
+          <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center text-base font-black shrink-0 border border-amber-300/30">
             {userInitials}
           </div>
 
           <div className="flex flex-col min-w-0">
-            <span className="font-bold text-sm text-[#1c1c28] truncate">
+            <span className="font-bold text-sm text-text truncate">
               {user?.first_name} {user?.last_name}
             </span>
             <span className="text-[11px] text-gray-500 truncate">

@@ -105,101 +105,49 @@ const certifications = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#faf8f6] font-modelica text-[#1c1c28]">
+    <div className="bg-bg-cream text-text">
       <SEO
         title="About Gomzi Nutrition by RAG - Certified Sports Nutrition & Manufacturing"
         description="Learn about Gomzi Nutrition: Founded by Dietitians & Manufacturing Experts in Surat. Certified FSSAI, ISO 22000 & WHO-GMP clean sports nutrition."
       />
 
-      {/* ── 1. LUXURY HERO BANNER (COMPACT & MODERN) ── */}
-      <section
-        className="group/abouthero relative overflow-hidden pt-8 pb-10 sm:pt-10 sm:pb-12 border-b border-[#3a1d15] hover:border-amber-400/35 transition-colors duration-500 text-white select-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 60% at 50% 15%, #3d1b12 0%, #170d09 45%, #0a0604 100%)",
-        }}
-      >
-        {/* Ambient atmospheric glows */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[550px] h-[220px] rounded-full pointer-events-none blur-[100px] transition-all duration-700 ease-out group-hover/abouthero:scale-110 group-hover/abouthero:opacity-60"
-          style={{ background: "rgba(92, 49, 36, 0.45)" }}
-        />
-        <div
-          className="absolute top-1/4 right-10 w-64 h-64 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/abouthero:scale-125 group-hover/abouthero:opacity-25"
-          style={{ background: "rgba(255, 137, 20, 0.12)" }}
-        />
-        <div
-          className="absolute bottom-10 left-10 w-60 h-60 rounded-full pointer-events-none blur-[90px] transition-all duration-700 ease-out group-hover/abouthero:scale-120 group-hover/abouthero:opacity-50"
-          style={{ background: "rgba(92, 49, 36, 0.3)" }}
-        />
-
-        {/* Subtle grid pattern overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.03] group-hover/abouthero:opacity-[0.06] transition-opacity duration-500"
-          style={{
-            backgroundImage:
-              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-
-        {/* Ambient RAG Background Typographic Watermark */}
-        <div className="absolute inset-0 flex justify-center items-center pointer-events-none select-none overflow-hidden">
-          <span
-            className="font-toma font-black uppercase leading-none text-white/[0.025] group-hover/abouthero:text-white/[0.045] tracking-widest transition-all duration-700 ease-out group-hover/abouthero:scale-105"
-            style={{ fontSize: "clamp(90px, 18vw, 220px)" }}
-          >
-            RAG
-          </span>
-        </div>
-
-        {/* Subtle Sheen Highlight Sweep across banner on hover */}
-        <div className="absolute inset-0 -translate-x-full group-hover/abouthero:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      {/* ── 1. HERO BANNER ── */}
+      <section className="w-full bg-white relative overflow-hidden">
+        {/* subtle warm bottom gradient to ease into next section */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#f5f6f8] pointer-events-none z-0" />
+        <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-10 text-center relative z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-amber-400/40 backdrop-blur-md text-[11px] font-semibold tracking-wider uppercase text-[#ffaa5a] hover:text-amber-200 transition-all duration-300 shadow-sm hover:shadow-md hover:scale-105 cursor-default group/pill mb-3">
-            <Sparkles size={12} className="text-[#ff8914] transition-transform duration-300 group-hover/pill:rotate-12 group-hover/pill:scale-110" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary-light px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary mb-3">
+            <Sparkles size={12} className="text-primary" />
             <span>Purity • Science • Athletic Legacy</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff8914] animate-pulse ml-0.5" />
           </div>
 
           {/* Heading */}
-          <h1 className="mt-3 sm:mt-4 font-toma text-white uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl font-black leading-tight transition-all duration-300 group-hover/abouthero:drop-shadow-[0_4px_24px_rgba(255,170,90,0.22)]">
-            <span>BORN FROM SCIENCE. </span>
-            <span
-              style={{
-                background: "linear-gradient(90deg, #ffaa5a 0%, #ff8914 50%, #f3a055 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              MADE FOR ATHLETES.
-            </span>
+          <h1 className="text-3xl font-semibold tracking-tight text-text sm:text-4xl md:text-[40px] leading-tight">
+            Born From Science. Made For Athletes.
           </h1>
 
           {/* Subtext */}
-          <p className="max-w-xl mx-auto mt-2 text-xs sm:text-sm leading-relaxed text-gray-300 font-light transition-colors duration-300 group-hover/abouthero:text-white/95">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-text-light">
             We didn't begin as marketers outsourcing formulas to anonymous factories. We started as the cGMP laboratory holding the highest standard. Here is why we put our name on the label.
           </p>
 
           {/* 4 Key Stat Metrics */}
-          <div className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 max-w-4xl mx-auto">
+          <div className="mx-auto mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {stats.map((s, idx) => (
               <div
                 key={idx}
-                className="group relative overflow-hidden flex flex-col items-center justify-center p-3 sm:p-3.5 rounded-xl bg-white/[0.04] backdrop-blur-xl border border-white/10 hover:border-amber-400/30 hover:bg-white/[0.07] hover:-translate-y-0.5 shadow-lg transition-all duration-300"
+                className="flex flex-col items-center justify-center rounded-xl border border-border bg-white p-4 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-200"
               >
-                <span className="relative z-10 font-toma text-xl sm:text-2xl md:text-3xl font-extrabold text-[#ffaa5a] tracking-tight group-hover:scale-105 transition-transform duration-300">
+                <span className="text-2xl font-bold tracking-tight text-primary md:text-3xl">
                   {s.value}
                 </span>
-                <span className="relative z-10 font-toma text-[11px] sm:text-xs font-bold text-white uppercase mt-0.5">
+                <span className="mt-1 text-xs font-semibold text-text">
                   {s.label}
                 </span>
-                <span className="relative z-10 text-[10px] text-gray-400 font-modelica mt-0.5 hidden sm:block">
+                <span className="mt-0.5 hidden text-[10px] text-text-light sm:block">
                   {s.sub}
                 </span>
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
             ))}
           </div>
@@ -207,23 +155,23 @@ export default function AboutPage() {
       </section>
 
       {/* ── 2. THE BRAND GENESIS & FACILITY SPLIT ── */}
-      <section className="py-12 sm:py-16 md:py-20 bg-[#faf8f6]">
+      <section className="py-12 sm:py-16 md:py-20 bg-[#f5f6f8]">
         <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left Content */}
             <div className="flex flex-col gap-6">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#5C3124]">
-                <Factory size={14} className="text-[#5C3124]" />
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+                <Factory size={14} className="text-primary" />
                 <span>Our Manufacturing Origin</span>
               </div>
 
-              <h2 className="font-toma text-3xl sm:text-4xl md:text-5xl font-black text-[#1c1c28] leading-[1.08] tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-text leading-[1.08] tracking-tight">
                 We are the manufacturer.
                 <br />
-                <span className="text-[#5C3124]">We don't cut corners.</span>
+                <span className="text-primary">We don't cut corners.</span>
               </h2>
 
-              <p className="font-modelica text-sm sm:text-base leading-relaxed text-gray-600 font-light">
+              <p className="text-sm sm:text-base leading-relaxed text-gray-600 font-light">
                 Most supplement brands buy off-the-shelf pre-mixes from contract blenders and market whatever gets handed back. At Gomzi Nutrition by RAG, our origins began inside the laboratory—managing dosing accuracy, micro-filtration, and HPLC batch testing for pharmaceutical clients.
               </p>
 
@@ -235,10 +183,10 @@ export default function AboutPage() {
                   "Formulated with digestive enzymes (Protease & Papain) for zero bloating and effortless mixing.",
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-[#fdf6f4] border border-[#ebdcd7] flex items-center justify-center shrink-0 mt-0.5">
-                      <CheckCircle2 size={13} className="text-[#5C3124]" />
+                    <div className="w-5 h-5 rounded-full bg-primary-light border border-primary-border flex items-center justify-center shrink-0 mt-0.5">
+                      <CheckCircle2 size={13} className="text-primary" />
                     </div>
-                    <span className="font-modelica text-xs sm:text-sm text-gray-700 leading-snug">
+                    <span className="text-xs sm:text-sm text-gray-700 leading-snug">
                       {item}
                     </span>
                   </div>
@@ -248,15 +196,14 @@ export default function AboutPage() {
               <div className="pt-4 flex items-center gap-4">
                 <Link
                   to="/gomzi-supplement"
-                  className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer"
+                  className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3.5 rounded-xl btn-gradient border border-amber-400/30 text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer"
                 >
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                   <span className="relative z-10">Explore Certified Catalog</span>
                   <ArrowRight size={15} className="relative z-10 text-amber-200 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
 
                 <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
-                  <MapPin size={15} className="text-[#5C3124]" />
+                  <MapPin size={15} className="text-primary" />
                   <span>Facility: Surat, India</span>
                 </div>
               </div>
@@ -264,7 +211,7 @@ export default function AboutPage() {
 
             {/* Right Facility Image & Glass Card */}
             <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden border border-[#ebdcd7] shadow-2xl bg-white group">
+              <div className="relative rounded-3xl overflow-hidden border border-primary-border shadow-2xl bg-white group">
                 <img
                   src="/images/about-manufacturing.jpg"
                   alt="Gomzi Nutrition Certified Facility in Surat"
@@ -275,7 +222,7 @@ export default function AboutPage() {
                 {/* Floating Bottom Card */}
                 <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/15 text-white">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#ffaa5a]">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#ff8914]">
                       Gomzi Lifesciences Facility
                     </span>
                     <span className="text-[10px] bg-white/15 px-2 py-0.5 rounded-full">
@@ -293,40 +240,30 @@ export default function AboutPage() {
       </section>
 
       {/* ── 3. LEADERSHIP & FORMULATION EXPERTISE ── */}
-      <section
-        className="py-16 sm:py-24 text-white relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(180deg, #120b08 0%, #1a0f0a 50%, #0d0705 100%)",
-        }}
-      >
-        <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-2xl mb-12 sm:mb-16">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#ffaa5a] mb-2">
-              <Users size={14} className="text-[#ff8914]" />
-              <span>Leadership & Vision</span>
+      <section className="py-14 sm:py-20 bg-white border-y border-border">
+        <div className="max-w-[1170px] mx-auto px-4 sm:px-6">
+          <div className="max-w-2xl mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary bg-primary-light px-3 py-1 rounded-full border border-primary-border mb-3">
+              <Users size={13} className="text-primary" />
+              <span>Leadership &amp; Vision</span>
             </div>
-            <h2 className="font-toma text-3xl sm:text-5xl uppercase leading-tight font-black tracking-tight text-white">
-              Guided By Dietetics.
-              <br />
-              <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-                Driven By Quality.
-              </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-text leading-tight">
+              Guided By Dietetics. Driven By Quality.
             </h2>
-            <p className="text-xs sm:text-sm text-gray-300 mt-3 font-light leading-relaxed">
+            <p className="text-xs sm:text-sm text-text-light mt-2.5 leading-relaxed font-normal">
               Every formula is spearheaded by practicing dietitians who understand physiological bio-availability and manufacturing executives who refuse to compromise batch standards.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {founders.map((founder) => (
               <div
                 key={founder.name}
-                className="group relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/40 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#5C3124]/30 transition-all duration-300 flex flex-col justify-between"
+                className="group relative rounded-2xl bg-bg-light/60 border border-border p-6 sm:p-8 hover:bg-white hover:border-primary/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="relative z-10">
-                  <div className="flex items-center gap-5 mb-6">
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#ff8914]/40 group-hover:border-amber-400 group-hover:shadow-lg group-hover:shadow-[#ffaa5a]/20 shrink-0 bg-[#1c120e] transition-all duration-300">
+                <div>
+                  <div className="flex items-center gap-4 sm:gap-5 mb-5">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-primary-border group-hover:border-primary/50 shrink-0 bg-primary-light shadow-xs transition-colors">
                       <img
                         src={founder.image}
                         alt={founder.name}
@@ -334,35 +271,34 @@ export default function AboutPage() {
                       />
                     </div>
                     <div>
-                      <h3 className="font-toma text-xl sm:text-2xl font-bold text-white tracking-tight group-hover:text-amber-100 transition-colors">
+                      <h3 className="text-lg sm:text-xl font-bold text-text tracking-tight group-hover:text-primary transition-colors">
                         {founder.name}
                       </h3>
-                      <p className="text-xs sm:text-sm text-[#ffaa5a] font-semibold mt-0.5">
+                      <p className="text-xs sm:text-sm text-sale font-semibold mt-0.5">
                         {founder.role}
                       </p>
                     </div>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-gray-300 leading-relaxed font-light mb-5">
+                  <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-normal mb-4">
                     {founder.bio}
                   </p>
 
-                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] italic text-xs text-gray-200 leading-relaxed mb-6 group-hover:border-white/10 transition-colors">
-                    "{founder.quote}"
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-white border border-border italic text-xs text-text-body leading-relaxed mb-6 shadow-xs border-l-4 border-l-primary">
+                    &ldquo;{founder.quote}&rdquo;
                   </div>
                 </div>
 
-                <div className="relative z-10 flex flex-wrap gap-2 pt-4 border-t border-white/[0.08]">
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
                   {founder.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 rounded-full text-[11px] font-medium bg-white/[0.05] text-gray-300 border border-white/10 group-hover:border-amber-400/30 group-hover:text-white transition-colors"
+                      className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-white text-text-secondary border border-border group-hover:border-primary-border group-hover:text-primary transition-colors"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
               </div>
             ))}
           </div>
@@ -370,65 +306,79 @@ export default function AboutPage() {
       </section>
 
       {/* ── 4. CHRONOLOGY TIMELINE: HOW WE GOT HERE ── */}
-      <section className="py-16 sm:py-24 bg-[#faf8f6]">
-        <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="text-center mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
+      <section className="py-14 sm:py-20 bg-bg-cream">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-xs font-bold uppercase tracking-widest text-primary">
               Our Evolution
             </span>
-            <h2 className="font-toma text-3xl sm:text-5xl font-black text-[#1c1c28] mt-1 tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-5xl font-black text-text mt-1 tracking-tight uppercase">
               How We Got Here
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 max-w-lg mx-auto mt-2">
-              From contract blending for third parties to building India’s cleanest direct-to-consumer nutrition brand.
+              From contract blending for third parties to building India's cleanest direct-to-consumer nutrition brand.
             </p>
           </div>
 
           <div className="relative">
-            {/* Center Timeline Line */}
-            <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-[2px] bg-[#ebdcd7]" />
+            {/* Center Timeline Line — sits exactly in the middle column of the CSS grid */}
+            <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary-border via-primary/40 to-primary-border pointer-events-none" />
 
-            <div className="flex flex-col gap-10 md:gap-14">
+            <div className="flex flex-col gap-8 md:gap-10">
               {timeline.map((item, idx) => {
                 const isEven = idx % 2 === 0;
+
+                const card = (
+                  <div className="group relative overflow-hidden p-6 sm:p-7 rounded-2xl bg-white border border-primary-border shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgba(27,54,93,0.12)] hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-lg font-black text-primary">{item.year}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-primary-light px-2.5 py-0.5 rounded-full border border-primary-border">
+                        {item.tag}
+                      </span>
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-primary transition-colors tracking-tight mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-light">
+                      {item.description}
+                    </p>
+                  </div>
+                );
+
                 return (
-                  <div
-                    key={item.year}
-                    className={`relative flex flex-col md:flex-row items-center gap-6 md:gap-12 ${
-                      isEven ? "md:flex-row" : "md:flex-row-reverse"
-                    }`}
-                  >
-                    {/* Content Card */}
-                    <div className="w-full md:w-1/2">
-                      <div className="group relative overflow-hidden p-6 sm:p-8 rounded-2xl bg-white border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-[#5C3124]/30 hover:-translate-y-1.5 transition-all duration-300">
-                        <div className="relative z-10">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-toma text-lg font-black text-[#5C3124]">
-                              {item.year}
-                            </span>
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8914] bg-[#fdf6f4] px-2.5 py-0.5 rounded-full border border-[#ebdcd7]">
-                              {item.tag}
-                            </span>
-                          </div>
-                          <h3 className="font-toma text-lg sm:text-xl font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight mb-2">
-                            {item.title}
-                          </h3>
-                          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-light">
-                            {item.description}
-                          </p>
+                  <div key={item.year} className="relative">
+                    {/* Mobile: full-width card with left accent line */}
+                    <div className="md:hidden flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center shrink-0 text-[11px] font-bold border-2 border-white shadow">
+                          {idx + 1}
                         </div>
-                        {/* High-contrast luxury travelling sheen sweep */}
-                        <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
+                        {idx < timeline.length - 1 && (
+                          <div className="flex-1 w-[2px] bg-primary-border mt-2" />
+                        )}
+                      </div>
+                      <div className="flex-1 pb-6">{card}</div>
+                    </div>
+
+                    {/* Desktop: strict 3-column grid — col 1 | center-node col | col 3 */}
+                    <div className="hidden md:grid grid-cols-[1fr_3.5rem_1fr] items-center gap-0">
+                      {/* Column 1 */}
+                      <div className={`pr-6 ${isEven ? "" : ""}`}>
+                        {isEven ? card : <span />}
+                      </div>
+
+                      {/* Column 2 — node is always centered here */}
+                      <div className="flex items-center justify-center">
+                        <div className="w-9 h-9 rounded-full bg-primary text-white border-4 border-white shadow-md flex items-center justify-center z-10 text-xs font-bold">
+                          {idx + 1}
+                        </div>
+                      </div>
+
+                      {/* Column 3 */}
+                      <div className="pl-6">
+                        {!isEven ? card : <span />}
                       </div>
                     </div>
-
-                    {/* Timeline Node Center Badge */}
-                    <div className="hidden md:flex w-9 h-9 rounded-full bg-[#5C3124] text-white border-4 border-white shadow-md items-center justify-center shrink-0 z-10 text-xs font-bold">
-                      {idx + 1}
-                    </div>
-
-                    {/* Empty half for spacing */}
-                    <div className="hidden md:block md:w-1/2" />
                   </div>
                 );
               })}
@@ -438,13 +388,13 @@ export default function AboutPage() {
       </section>
 
       {/* ── 5. THE 3 MANUFACTURING INTEGRITY PILLARS ── */}
-      <section className="py-14 sm:py-20 bg-white border-y border-[#ebdcd7]">
+      <section className="py-14 sm:py-20 bg-white border-y border-primary-border">
         <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#5C3124]">
+            <span className="text-xs font-bold uppercase tracking-widest text-primary">
               Uncompromising Standards
             </span>
-            <h2 className="font-toma text-3xl sm:text-4xl text-[#1c1c28] mt-1 font-extrabold tracking-tight uppercase">
+            <h2 className="text-3xl sm:text-4xl text-text mt-1 font-extrabold tracking-tight uppercase">
               The 3 Rules We Never Break
             </h2>
           </div>
@@ -455,16 +405,16 @@ export default function AboutPage() {
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden p-7 rounded-2xl bg-[#faf8f6] border border-[#ebdcd7] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+                  className="group relative overflow-hidden p-7 rounded-2xl bg-bg-cream border border-primary-border shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(92,49,36,0.12)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
                 >
                   <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] text-[#ffaa5a] flex items-center justify-center mb-5 shadow-md border border-amber-400/30 group-hover:scale-105 group-hover:border-amber-400/50 group-hover:shadow-lg group-hover:shadow-[#5C3124]/30 transition-all duration-300">
+                    <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center mb-5 shadow-sm group-hover:scale-105 transition-transform duration-300">
                       <Icon size={22} />
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C3124] bg-white px-2.5 py-1 rounded-md border border-[#ebdcd7] group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-white px-2.5 py-1 rounded-md border border-primary-border group-hover:border-amber-400/50 group-hover:bg-[#faeee9] transition-all duration-300">
                       {p.tag}
                     </span>
-                    <h3 className="font-toma text-xl font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors mt-3 mb-2 tracking-tight">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mt-3 mb-2 tracking-tight">
                       {p.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-light">
@@ -472,7 +422,6 @@ export default function AboutPage() {
                     </p>
                   </div>
                   {/* High-contrast luxury travelling sheen sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}
@@ -481,29 +430,36 @@ export default function AboutPage() {
       </section>
 
       {/* ── 6. CERTIFICATIONS ACCREDITATION ── */}
-      <section className="py-14 bg-[#faf8f6]">
+      <section className="py-10 sm:py-14 bg-bg-cream border-t border-primary-border">
         <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
+          <div className="text-center mb-8">
+            <span className="text-xs font-bold uppercase tracking-widest text-primary">Certified &amp; Compliant</span>
+            <h2 className="text-2xl sm:text-3xl font-black text-text mt-1 tracking-tight">
+              Regulated At Every Level
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-md mx-auto">
+              Every batch, every scoop — backed by India&apos;s highest food safety and pharmaceutical compliance frameworks.
+            </p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {certifications.map((c, idx) => {
               const Icon = c.icon;
               return (
                 <div
                   key={idx}
-                  className="group relative overflow-hidden flex items-start gap-3.5 p-5 rounded-2xl bg-white border border-[#ebdcd7] shadow-sm hover:shadow-[0_12px_28px_rgba(92,49,36,0.1)] hover:border-amber-400/40 hover:-translate-y-1.5 transition-all duration-300"
+                  className="group relative overflow-hidden flex items-start gap-3.5 p-5 rounded-2xl bg-white border border-primary-border shadow-sm hover:shadow-[0_12px_28px_rgba(27,54,93,0.1)] hover:border-primary/30 hover:-translate-y-1.5 transition-all duration-300"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#fdf6f4] border border-[#ebdcd7] flex items-center justify-center shrink-0 text-[#5C3124] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-[#ffaa5a] group-hover:border-amber-400/30 group-hover:scale-105 transition-all duration-300 shadow-xs relative z-10">
+                  <div className="w-10 h-10 rounded-xl bg-primary-light border border-primary-border flex items-center justify-center shrink-0 text-primary group-hover:bg-primary group-hover:text-white group-hover:border-primary group-hover:scale-105 transition-all duration-300 shadow-xs relative z-10">
                     <Icon size={18} />
                   </div>
                   <div className="relative z-10">
-                    <h4 className="font-toma text-sm font-bold text-gray-900 group-hover:text-[#5C3124] transition-colors tracking-tight">
+                    <h4 className="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors tracking-tight">
                       {c.title}
                     </h4>
                     <p className="text-xs text-gray-500 mt-0.5 leading-relaxed font-light">
                       {c.sub}
                     </p>
                   </div>
-                  {/* High-contrast luxury travelling sheen sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none z-20" />
                 </div>
               );
             })}
@@ -512,44 +468,35 @@ export default function AboutPage() {
       </section>
 
       {/* ── 7. EXPERIENCE THE DIFFERENCE CTA BANNER ── */}
-      <section className="py-16 sm:py-20 bg-[#faf8f6]">
-        <div className="max-w-[1200px] mx-auto px-5 sm:px-6">
-          <div className="group/cta relative rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-[#1c120e] via-[#261712] to-[#1c120e] hover:border-amber-400/40 border border-[#5C3124]/40 text-white shadow-2xl overflow-hidden transition-all duration-500 text-center sm:text-left flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Decorative Corner Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-br from-[#ff8914]/20 via-[#5C3124]/30 to-transparent rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
-            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#5C3124]/20 rounded-full blur-2xl pointer-events-none transition-transform duration-700 group-hover/cta:scale-110" />
-
-            {/* Subtle sheen highlight across banner on hover */}
-            <div className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
-            <div className="relative z-10 max-w-xl">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#ffaa5a]">
+      <section className="py-12 sm:py-16 bg-white border-t border-border">
+        <div className="max-w-[1170px] mx-auto px-4 sm:px-6">
+          <div className="relative rounded-2xl border border-border bg-gradient-to-r from-primary-light/60 via-white to-primary-light/40 p-8 sm:p-12 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
+            <div className="max-w-xl text-center md:text-left">
+              <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-primary bg-white px-3 py-1 rounded-full border border-primary-border shadow-xs mb-3">
                 Verified Purity In Every Scoop
               </span>
-              <h2 className="font-toma text-2xl sm:text-4xl font-extrabold text-white mt-1 leading-snug">
-                Experience the Gomzi Difference for Yourself.
+              <h2 className="text-2xl sm:text-3xl font-bold text-text tracking-tight">
+                Experience the Gomzi Difference
               </h2>
-              <p className="text-xs sm:text-sm text-gray-300 mt-2 font-light leading-relaxed">
-                Join 500,000+ elite athletes fueled by pure protein, transparent formulations, and zero compromises.
+              <p className="text-xs sm:text-sm text-text-light mt-2 leading-relaxed">
+                Join 500,000+ athletes fueled by pure protein, transparent formulations, and zero compromises.
               </p>
             </div>
 
-            <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full sm:w-auto shrink-0">
+            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <Link
                 to="/gomzi-supplement"
-                className="group relative overflow-hidden inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-[#6d3a2b] via-[#854432] to-[#5C3124] hover:from-[#5C3124] hover:to-[#48261c] border-2 border-amber-400/50 text-white font-toma font-extrabold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-[#5C3124]/40 hover:shadow-2xl hover:shadow-[#5C3124]/60 cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-white font-semibold text-xs uppercase tracking-wider hover:bg-primary-hover active:scale-[0.98] transition-all shadow-sm cursor-pointer"
               >
-                <span className="relative z-10 tracking-wider">Shop Catalog</span>
-                <ArrowRight size={16} className="relative z-10 text-amber-200 transition-transform duration-300 group-hover:translate-x-1" />
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
+                <span>Shop Catalog</span>
+                <ArrowRight size={15} />
               </Link>
 
               <Link
                 to="/faq"
-                className="group relative overflow-hidden inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] border border-white/20 hover:border-amber-400/40 text-white font-toma font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-black/20 cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border bg-white text-text hover:bg-bg-light font-semibold text-xs uppercase tracking-wider transition-all active:scale-[0.98] cursor-pointer"
               >
-                <span className="relative z-10">View FAQs</span>
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
+                <span>View FAQs</span>
               </Link>
             </div>
           </div>

@@ -21,13 +21,12 @@ const TrustAndGoalSection = () => {
     <section className="py-12 sm:py-16 lg:py-20 w-full overflow-hidden">
       <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-12 xl:px-16">
         {/* ================= LUXURY TRUST CARD ================= */}
-        <div className="group/section relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-[#fdfbf9] to-[#fbf8f5] border border-[#ebdcd7]/90 p-6 sm:p-10 md:p-12 lg:p-14 shadow-xl shadow-[#5C3124]/5 hover:shadow-[0_24px_50px_rgba(92,49,36,0.10)] hover:border-amber-400/40 transition-all duration-500">
+        <div className="group/section relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-[#fdfbf9] to-[#fbf8f5] border border-primary-border/90 p-6 sm:p-10 md:p-12 lg:p-14 shadow-xl shadow-primary/5 hover:shadow-[0_24px_50px_rgba(92,49,36,0.10)] hover:border-amber-400/40 transition-all duration-500">
           {/* Moving card sheen sweep on hover across section background */}
-          <div className="absolute inset-0 -translate-x-full group-hover/section:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.025] to-transparent pointer-events-none" />
 
           {/* Ambient radial glows with interactive expansion */}
           <div
-            className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-[#5C3124]/8 group-hover/section:bg-[#5C3124]/12 blur-3xl transition-all duration-700 group-hover/section:scale-110"
+            className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-primary/8 group-hover/section:bg-primary/12 blur-3xl transition-all duration-700 group-hover/section:scale-110"
             aria-hidden="true"
           />
           <div
@@ -39,15 +38,15 @@ const TrustAndGoalSection = () => {
             {/* ================= LEFT CONTENT ================= */}
             <div>
               {/* Trust Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fdf6f4] border border-[#ebdcd7] text-[#5C3124] text-xs font-bold tracking-wide uppercase shadow-xs mb-4">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#5C3124]" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-light border border-primary-border text-primary text-xs font-bold tracking-wide uppercase shadow-xs mb-4">
+                <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                 <span>100% Batch Transparency</span>
               </div>
 
               {/* Punchy Headline */}
-              <h2 className="font-toma text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-[1.15] mb-5">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-[1.15] mb-5">
                 See the lab report <br className="hidden sm:inline" />
-                <span className="bg-gradient-to-r from-[#5C3124] via-[#7d4332] to-[#5C3124] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-primary via-[#7d4332] to-primary bg-clip-text text-transparent">
                   before you buy
                 </span>
                 ,
@@ -66,24 +65,21 @@ const TrustAndGoalSection = () => {
 
               {/* 3 Verification Proof Chips with Card Sheen & Lift */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-8 max-w-xl">
-                <div className="group/chip relative overflow-hidden flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/95 border border-[#ebdcd7]/90 text-xs font-semibold text-gray-800 shadow-2xs hover:shadow-[0_10px_24px_rgba(92,49,36,0.10)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                  <div className="absolute inset-0 -translate-x-full group-hover/chip:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none" />
+                <div className="group/chip relative overflow-hidden flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/95 border border-primary-border/90 text-xs font-semibold text-gray-800 shadow-2xs hover:shadow-[0_10px_24px_rgba(92,49,36,0.10)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
                   <span className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 group-hover/chip:scale-110 transition-transform duration-300">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   </span>
                   <span className="relative z-10">Protein Content</span>
                 </div>
 
-                <div className="group/chip relative overflow-hidden flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/95 border border-[#ebdcd7]/90 text-xs font-semibold text-gray-800 shadow-2xs hover:shadow-[0_10px_24px_rgba(92,49,36,0.10)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                  <div className="absolute inset-0 -translate-x-full group-hover/chip:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none" />
+                <div className="group/chip relative overflow-hidden flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/95 border border-primary-border/90 text-xs font-semibold text-gray-800 shadow-2xs hover:shadow-[0_10px_24px_rgba(92,49,36,0.10)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
                   <span className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 group-hover/chip:scale-110 transition-transform duration-300">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   </span>
                   <span className="relative z-10">Heavy Metals Zero</span>
                 </div>
 
-                <div className="group/chip relative overflow-hidden flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/95 border border-[#ebdcd7]/90 text-xs font-semibold text-gray-800 shadow-2xs hover:shadow-[0_10px_24px_rgba(92,49,36,0.10)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                  <div className="absolute inset-0 -translate-x-full group-hover/chip:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.035] to-transparent pointer-events-none" />
+                <div className="group/chip relative overflow-hidden flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/95 border border-primary-border/90 text-xs font-semibold text-gray-800 shadow-2xs hover:shadow-[0_10px_24px_rgba(92,49,36,0.10)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
                   <span className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 group-hover/chip:scale-110 transition-transform duration-300">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   </span>
@@ -100,11 +96,11 @@ const TrustAndGoalSection = () => {
                     group relative overflow-hidden
                     inline-flex items-center justify-center gap-2.5
                     px-7 py-3.5
-                    bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c]
-                    hover:from-[#48261c] hover:to-[#381c14]
+                    btn-gradient
+                    hover:from-primary-hover hover:to-[#381c14]
                     text-white font-bold text-sm
                     rounded-xl sm:rounded-2xl
-                    shadow-md shadow-[#5C3124]/25 hover:shadow-xl hover:shadow-[#5C3124]/40
+                    shadow-md shadow-primary/25 hover:shadow-xl hover:shadow-primary/40
                     border border-amber-400/20
                     transition-all duration-300
                     hover:-translate-y-0.5 active:scale-[0.98]
@@ -116,7 +112,6 @@ const TrustAndGoalSection = () => {
                   <Download className="w-4 h-4 text-amber-200/80 transition-transform duration-300 group-hover:translate-y-0.5" />
 
                   {/* Subtle sheen highlight */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 </button>
 
                 {/* Secondary Preview Link */}
@@ -128,20 +123,19 @@ const TrustAndGoalSection = () => {
                     group/preview relative overflow-hidden
                     inline-flex items-center justify-center gap-2
                     px-5 py-3.5
-                    bg-white hover:bg-[#fdf6f4]
-                    border-2 border-[#ebdcd7] hover:border-amber-400/50
-                    text-[#3d1e15] hover:text-[#5C3124]
+                    bg-white hover:bg-primary-light
+                    border-2 border-primary-border hover:border-amber-400/50
+                    text-primary-deep hover:text-primary
                     font-bold text-sm
                     rounded-xl sm:rounded-2xl
-                    shadow-xs hover:shadow-md hover:shadow-[#5C3124]/10
+                    shadow-xs hover:shadow-md hover:shadow-primary/10
                     transition-all duration-300
                     hover:-translate-y-0.5 active:scale-[0.98]
                     cursor-pointer whitespace-nowrap
                   "
                 >
-                  <ExternalLink className="w-4 h-4 text-[#5C3124] group-hover/preview:scale-110 transition-transform duration-300" />
+                  <ExternalLink className="w-4 h-4 text-primary group-hover/preview:scale-110 transition-transform duration-300" />
                   <span className="relative z-10">Preview in Browser</span>
-                  <div className="absolute inset-0 -translate-x-full group-hover/preview:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.05] to-transparent pointer-events-none" />
                 </a>
               </div>
 
@@ -156,14 +150,13 @@ const TrustAndGoalSection = () => {
             <div className="relative">
               {/* Soft ambient aura */}
               <div
-                className="pointer-events-none absolute -inset-2 rounded-3xl bg-gradient-to-r from-[#5C3124]/10 to-amber-500/10 blur-xl transition-all duration-500"
+                className="pointer-events-none absolute -inset-2 rounded-3xl bg-gradient-to-r from-primary/10 to-amber-500/10 blur-xl transition-all duration-500"
                 aria-hidden="true"
               />
 
               {/* Framed Certificate Container */}
-              <div className="group/cert relative overflow-hidden rounded-2xl sm:rounded-3xl bg-white p-3 sm:p-5 border border-[#ebdcd7]/90 shadow-xl hover:shadow-[0_20px_45px_rgba(92,49,36,0.14)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-500 cursor-pointer">
+              <div className="group/cert relative overflow-hidden rounded-2xl sm:rounded-3xl bg-white p-3 sm:p-5 border border-primary-border/90 shadow-xl hover:shadow-[0_20px_45px_rgba(92,49,36,0.14)] hover:border-amber-400/40 hover:-translate-y-1 transition-all duration-500 cursor-pointer">
                 {/* Subtle moving sheen sweep on hover across certificate card */}
-                <div className="absolute inset-0 -translate-x-full group-hover/cert:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.04] to-transparent pointer-events-none z-10" />
 
                 <img
                   src="/images/report.webp"
@@ -173,8 +166,7 @@ const TrustAndGoalSection = () => {
                 />
 
                 {/* Floating Seal 1: NABL Accreditation */}
-                <div className="group/seal1 relative overflow-hidden absolute top-5 right-5 sm:top-7 sm:right-7 bg-white/95 backdrop-blur-md border border-[#ebdcd7] hover:border-amber-400/40 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 px-3 py-1.5 rounded-xl flex items-center gap-2">
-                  <div className="absolute inset-0 -translate-x-full group-hover/seal1:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.04] to-transparent pointer-events-none" />
+                <div className="group/seal1 relative overflow-hidden absolute top-5 right-5 sm:top-7 sm:right-7 bg-white/95 backdrop-blur-md border border-primary-border hover:border-amber-400/40 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 px-3 py-1.5 rounded-xl flex items-center gap-2">
                   <span className="relative z-10 w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="relative z-10 text-[11px] font-bold text-gray-900 tracking-tight">
                     NABL Accredited
@@ -183,7 +175,6 @@ const TrustAndGoalSection = () => {
 
                 {/* Floating Seal 2: Verified Protein Result */}
                 <div className="group/seal2 relative overflow-hidden absolute bottom-5 left-5 sm:bottom-7 sm:left-7 bg-[#18110D]/95 backdrop-blur-md border border-amber-400/30 hover:border-amber-400/60 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 px-3.5 py-2 rounded-xl flex items-center gap-2.5 text-white">
-                  <div className="absolute inset-0 -translate-x-full group-hover/seal2:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                   <ShieldCheck className="relative z-10 w-4 h-4 text-emerald-400 flex-shrink-0" />
                   <div className="relative z-10">
                     <p className="text-[11px] font-bold text-white tracking-tight leading-tight">

@@ -36,22 +36,22 @@ export default function CartPopover({
   return (
     <div
       id="cartPop"
-      className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-[#dbdee9] z-[999999] overflow-hidden text-[#1c1c28] animate-in fade-in slide-in-from-top-2 duration-200"
+      className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border border-[#dbdee9] z-[999999] overflow-hidden text-text animate-in fade-in slide-in-from-top-2 duration-200"
       role="dialog"
       aria-label="Shopping Cart Preview"
     >
       {/* Popover Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-[#f8fafb] border-b border-[#e3e3e3]">
         <div className="flex items-center gap-2">
-          <ShoppingBag className="w-4 h-4 text-[#5C3124]" />
-          <span className="text-xs font-bold uppercase tracking-wider text-[#1c1c28]">
+          <ShoppingBag className="w-4 h-4 text-primary" />
+          <span className="text-xs font-bold uppercase tracking-wider text-text">
             My Cart ({cartCount} {cartCount === 1 ? "Item" : "Items"})
           </span>
         </div>
         <Link
           to="/cart"
           onClick={onClose}
-          className="text-xs font-semibold text-[#5C3124] hover:underline"
+          className="text-xs font-semibold text-primary hover:underline"
         >
           View Full Cart
         </Link>
@@ -60,10 +60,10 @@ export default function CartPopover({
       {/* Popover Body */}
       {items.length === 0 ? (
         <div className="p-8 text-center flex flex-col items-center justify-center">
-          <div className="w-14 h-14 rounded-full bg-[#f4f4f4] flex items-center justify-center mb-3 text-gray-400">
+          <div className="w-14 h-14 rounded-full bg-bg-page flex items-center justify-center mb-3 text-gray-400">
             <ShoppingBag className="w-7 h-7" />
           </div>
-          <p className="text-sm font-bold text-[#1c1c28] mb-1">
+          <p className="text-sm font-bold text-text mb-1">
             Your Cart is Empty!
           </p>
           <p className="text-xs text-[#77777e] mb-4 max-w-xs">
@@ -74,7 +74,7 @@ export default function CartPopover({
               if (onClose) onClose();
               navigate("/gomzi-supplement");
             }}
-            className="px-5 py-2 bg-[#5C3124] hover:bg-[#48261c] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer border-none shadow-sm"
+            className="px-5 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors cursor-pointer border-none shadow-sm"
           >
             Explore Supplements
           </button>
@@ -107,7 +107,7 @@ export default function CartPopover({
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-xs font-semibold text-[#1c1c28] truncate group-hover:text-[#5C3124] transition-colors">
+                    <h4 className="text-xs font-semibold text-text truncate group-hover:text-primary transition-colors">
                       {item.name}
                     </h4>
                     {(item.variationName || item.flavour) && (
@@ -116,7 +116,7 @@ export default function CartPopover({
                       </p>
                     )}
                     <div className="flex items-center justify-between mt-1.5">
-                      <span className="text-xs font-bold text-[#1c1c28]">
+                      <span className="text-xs font-bold text-text">
                         ₹{itemPrice.toLocaleString("en-IN")}{" "}
                         <span className="text-[11px] font-normal text-gray-500">
                           × {item.quantity}
@@ -146,16 +146,16 @@ export default function CartPopover({
 
           {/* Popover Footer with Subtotal and Action */}
           <div className="p-4 bg-[#fbfbfb] border-t border-[#e3e3e3] space-y-3">
-            <div className="flex items-center justify-between text-xs font-semibold text-[#1c1c28]">
+            <div className="flex items-center justify-between text-xs font-semibold text-text">
               <span>Subtotal:</span>
-              <span className="text-sm font-bold text-[#5C3124]">
+              <span className="text-sm font-bold text-primary">
                 ₹{subtotal.toLocaleString("en-IN")}
               </span>
             </div>
 
             <button
               onClick={handleProceed}
-              className="w-full py-2.5 px-4 bg-[#5C3124] hover:bg-[#48261c] text-white text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer border-none shadow-sm"
+              className="w-full py-2.5 px-4 bg-primary hover:bg-primary-hover text-white text-xs sm:text-sm font-bold rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer border-none shadow-sm"
             >
               <span>Proceed to Cart</span>
               <ArrowRight className="w-4 h-4" />

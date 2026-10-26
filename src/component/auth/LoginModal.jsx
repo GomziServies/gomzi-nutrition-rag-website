@@ -246,10 +246,9 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
             <button
               onClick={handleLogin}
               disabled={loading}
-              className="group relative overflow-hidden w-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer disabled:opacity-60"
+              className="group relative overflow-hidden w-full btn-gradient border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer disabled:opacity-60"
             >
               <span className="relative z-10">{loading ? "Signing In..." : "Sign In"}</span>
-              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
             </button>
           </div>
         ) : (
@@ -276,19 +275,17 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
               <button
                 onClick={handleSendOTP}
                 disabled={loading}
-                className="group relative overflow-hidden w-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer disabled:opacity-60"
+                className="group relative overflow-hidden w-full btn-gradient border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer disabled:opacity-60"
               >
                 <span className="relative z-10">Send OTP</span>
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
               </button>
             ) : (
               <button
                 onClick={handleVerifyOTP}
                 disabled={loading}
-                className="group relative overflow-hidden w-full bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 cursor-pointer disabled:opacity-60"
+                className="group relative overflow-hidden w-full btn-gradient border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer disabled:opacity-60"
               >
                 <span className="relative z-10">Verify OTP</span>
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
               </button>
             )}
           </div>

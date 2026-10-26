@@ -23,11 +23,11 @@ export default function ProductCarouselSection({
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-10">
       <div className="flex items-end justify-between mb-5">
         <div>
-          <h2 className="font-toma text-xl sm:text-2xl font-bold text-text">
+          <h2 className="text-xl sm:text-2xl font-bold text-text">
             {title}
           </h2>
           {subtitle && (
-            <p className="font-modelica text-sm text-text-light mt-1">
+            <p className="text-sm text-text-light mt-1">
               {subtitle}
             </p>
           )}

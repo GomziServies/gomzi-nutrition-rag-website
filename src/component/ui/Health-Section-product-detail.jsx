@@ -88,11 +88,11 @@ const HelthSectionproductdetail = () => {
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
             {/* LEFT SIDE */}
             <div className="w-full lg:w-1/2">
-              <h2 className="font-toma text-3xl md:text-4xl lg:text-4xl mb-5 font-bold text-wider">
+              <h2 className="text-3xl md:text-4xl lg:text-4xl mb-5 font-bold text-wider">
                 Gomzi Supplement by RAG is perfect for:
               </h2>
 
-              <p className="font-modelica text-text-blck text-lg mb-8 max-w-xl">
+              <p className="text-text text-lg mb-8 max-w-xl">
                 From peak performance to everyday wellness, Gomzi Supplement by
                 Rag brings balanced nutrition into every moment of your life.
               </p>
@@ -112,7 +112,7 @@ const HelthSectionproductdetail = () => {
                           alt=""
                           className="w-9 h-9 flex-shrink-0"
                         />
-                        <h3 className="font-modelica text-xl md:text-2xl text-black font-medium text-wide">
+                        <h3 className="text-xl md:text-2xl text-black font-medium text-wide">
                           {item.title}
                         </h3>
                       </div>
@@ -144,7 +144,7 @@ const HelthSectionproductdetail = () => {
                           : "max-h-0 opacity-0"
                       }`}
                     >
-                      <p className="font-modelica text-text-light">
+                      <p className="text-text-light">
                         {item.content}
                       </p>
                     </div>
@@ -184,11 +184,11 @@ const HelthSectionproductdetail = () => {
 
             {/* RIGHT CONTENT */}
             <div className="w-full lg:w-1/2 order-1 lg:order-2">
-              <h2 className="font-toma text-3xl md:text-4xl lg:text-4xl mb-5 font-bold text-wider">
+              <h2 className="text-3xl md:text-4xl lg:text-4xl mb-5 font-bold text-wider">
                 What's inside?
               </h2>
 
-              <p className="font-modelica text-text-blck text-lg mb-8 max-w-xl">
+              <p className="text-text text-lg mb-8 max-w-xl">
                 Packed with all the essentials for balanced nutrition, RAG
                 Nutrition products are crafted to elevate your health and
                 wellness with every ingredient.
@@ -203,7 +203,7 @@ const HelthSectionproductdetail = () => {
                       onClick={() => toggleIngredient(index)}
                       className="flex items-center justify-between py-3 cursor-pointer"
                     >
-                      <h3 className="font-modelica text-xl md:text-2xl text-black font-medium text-wide">
+                      <h3 className="text-xl md:text-2xl text-black font-medium text-wide">
                         {item.title}
                       </h3>
 
@@ -234,7 +234,7 @@ const HelthSectionproductdetail = () => {
                           : "max-h-0 opacity-0"
                       }`}
                     >
-                      <p className="font-modelica text-text-light">
+                      <p className="text-text-light">
                         {item.content}
                       </p>
                     </div>

@@ -36,13 +36,13 @@ export default function LatestBlogs() {
                 </span>
               </div>
               <div className="p-5">
-                <p className="text-xs text-gray-400 font-modelica mb-2">
+                <p className="text-xs text-gray-400 mb-2">
                   {blog.date}
                 </p>
-                <h3 className="text-base font-bold text-gray-900 mb-2 font-tomato line-clamp-2">
+                <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2">
                   {blog.title}
                 </h3>
-                <p className="text-sm text-gray-600 font-modelica line-clamp-2">
+                <p className="text-sm text-gray-600 line-clamp-2">
                   {blog.desc}
                 </p>
                 <div className="mt-4">
@@ -65,7 +65,7 @@ export default function LatestBlogs() {
         <div className="text-center mt-10">
           <a
             href="/blog"
-            className="inline-block px-8 py-3 text-white font-modelica font-semibold rounded-lg transition-colors"
+            className="inline-block px-8 py-3 text-white font-semibold rounded-lg transition-colors"
             style={{ backgroundColor: "#003873" }}
             onMouseEnter={(e) => (e.target.style.backgroundColor = "#002a5c")}
             onMouseLeave={(e) => (e.target.style.backgroundColor = "#003873")}

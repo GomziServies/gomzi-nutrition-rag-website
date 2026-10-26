@@ -74,9 +74,8 @@ function VerifyEmail() {
             {success && (
               <button
                 onClick={() => navigate("/login")}
-                className="mt-8 px-6 py-3 relative overflow-hidden group bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+                className="mt-8 px-6 py-3 relative overflow-hidden group btn-gradient text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
               >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 <span className="relative z-10">Continue to Login →</span>
               </button>
             )}
@@ -84,9 +83,8 @@ function VerifyEmail() {
             {!success && (
               <button
                 onClick={() => navigate("/")}
-                className="mt-8 px-6 py-3 relative overflow-hidden group bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+                className="mt-8 px-6 py-3 relative overflow-hidden group btn-gradient text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
               >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                 <span className="relative z-10">Back to Home</span>
               </button>
             )}

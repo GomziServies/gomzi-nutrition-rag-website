@@ -50,22 +50,21 @@ export default function TransparencySection() {
   const toggle = (id) => setOpenId((prev) => (prev === id ? null : id));
 
   return (
-    <section className="bg-[#faf8f6] py-12 sm:py-16 md:py-20 w-full overflow-hidden border-t border-[#ebdcd7]/60">
+    <section className="bg-bg-cream py-12 sm:py-16 md:py-20 w-full overflow-hidden border-t border-primary-border/60">
       <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-16">
         {/* Main Card */}
-        <div className="group/transparency relative w-full rounded-3xl overflow-hidden bg-white p-6 sm:p-10 lg:p-12 border border-[#ebdcd7]/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(92,49,36,0.08)] hover:border-amber-400/40 transition-all duration-500">
+        <div className="group/transparency relative w-full rounded-3xl overflow-hidden bg-white p-6 sm:p-10 lg:p-12 border border-primary-border/90 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(92,49,36,0.08)] hover:border-amber-400/40 transition-all duration-500">
           {/* Subtle moving card sheen sweep on hover across whole transparency section */}
-          <div className="absolute inset-0 -translate-x-full group-hover/transparency:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-[#5C3124]/[0.025] to-transparent pointer-events-none" />
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
             {/* ── LEFT: Story & Streamlined Accordion ── */}
             <div className="w-full lg:w-[50%] flex flex-col">
-              <span className="uppercase tracking-[3px] text-xs font-bold text-[#5C3124] block mb-2">
+              <span className="uppercase tracking-[3px] text-xs font-bold text-primary block mb-2">
                 100% LABEL TRANSPARENCY
               </span>
 
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-950 tracking-tight leading-tight">
                 What's Inside{" "}
-                <span className="text-[#5C3124]">Every Scoop?</span>
+                <span className="text-primary">Every Scoop?</span>
               </h2>
 
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl mt-3 mb-6 font-normal">
@@ -75,7 +74,7 @@ export default function TransparencySection() {
               </p>
 
               {/* Accordion Rows */}
-              <div className="divide-y divide-[#ebdcd7]/80 border-y border-[#ebdcd7]/80">
+              <div className="divide-y divide-primary-border/80 border-y border-primary-border/80">
                 {benefits.map((item) => {
                   const isOpen = openId === item.id;
                   return (
@@ -89,8 +88,8 @@ export default function TransparencySection() {
                           <span
                             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all duration-300 flex-shrink-0 relative overflow-hidden ${
                               isOpen
-                                ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white shadow-xs border border-amber-400/30"
-                                : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30"
+                                ? "bg-gradient-to-r from-primary to-primary-hover text-white shadow-xs border border-amber-400/30"
+                                : "bg-primary-light text-primary border border-primary-border group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover group-hover:text-white group-hover:border-amber-400/30"
                             }`}
                           >
                             {item.id}
@@ -99,8 +98,8 @@ export default function TransparencySection() {
                           <span
                             className={`text-sm sm:text-base font-bold leading-snug transition-colors ${
                               isOpen
-                                ? "text-[#5C3124]"
-                                : "text-gray-900 group-hover:text-[#5C3124]"
+                                ? "text-primary"
+                                : "text-gray-900 group-hover:text-primary"
                             }`}
                           >
                             {item.title}
@@ -108,15 +107,15 @@ export default function TransparencySection() {
                         </div>
 
                         <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className="hidden sm:inline-flex text-[11px] font-bold text-[#5C3124] bg-[#fdf6f4] border border-[#ebdcd7] px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                          <span className="hidden sm:inline-flex text-[11px] font-bold text-primary bg-primary-light border border-primary-border px-2.5 py-0.5 rounded-full whitespace-nowrap">
                             {item.stat}
                           </span>
 
                           <span
                             className={`w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-300 relative overflow-hidden ${
                               isOpen
-                                ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white rotate-180 border border-amber-400/30 shadow-xs"
-                                : "bg-[#fdf6f4] text-[#5C3124] border border-[#ebdcd7] group-hover:bg-gradient-to-r group-hover:from-[#5C3124] group-hover:to-[#48261c] group-hover:text-white group-hover:border-amber-400/30"
+                                ? "bg-gradient-to-r from-primary to-primary-hover text-white rotate-180 border border-amber-400/30 shadow-xs"
+                                : "bg-primary-light text-primary border border-primary-border group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-primary-hover group-hover:text-white group-hover:border-amber-400/30"
                             }`}
                           >
                             <ChevronDown size={15} />
@@ -146,7 +145,6 @@ export default function TransparencySection() {
             <div className="w-full lg:w-[48%] flex-shrink-0 flex flex-col items-center justify-center">
               <div className="relative w-full flex items-center justify-center p-2 sm:p-4">
                 {/* Ambient glow */}
-                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
 
                 <img
                   src="/images/scoop.webp"
@@ -160,7 +158,7 @@ export default function TransparencySection() {
               </div>
 
               {/* Verification & Lab Certificate Pill */}
-              <div className="mt-4 flex items-center justify-between w-full max-w-md bg-[#faf8f6] border border-[#ebdcd7] rounded-xl px-4 py-2.5 text-xs shadow-2xs">
+              <div className="mt-4 flex items-center justify-between w-full max-w-md bg-bg-cream border border-primary-border rounded-xl px-4 py-2.5 text-xs shadow-2xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="font-bold text-gray-900">
@@ -170,7 +168,7 @@ export default function TransparencySection() {
                 <a
                   href="/pdf/product-report.pdf"
                   download="Batch_Report.pdf"
-                  className="font-bold text-[#5C3124] hover:underline flex items-center gap-1 cursor-pointer"
+                  className="font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   <span>View Certificate</span>
                   <Download size={13} />

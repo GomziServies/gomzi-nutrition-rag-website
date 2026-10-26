@@ -1100,11 +1100,11 @@ export default function Inquiry() {
         }
       `}</style>
 
-      <div className="inquiry-theme-scope min-h-screen bg-white pt-8 sm:pt-12 pb-16 sm:pb-20 font-inter">
+      <div className="inquiry-theme-scope min-h-screen bg-white pt-8 sm:pt-12 pb-16 sm:pb-20 ">
         {isSuccess && <Confetti numberOfPieces={250} recycle={false} />}
 
         {/* Brand Logo & Hero Header */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 text-center font-inter">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 text-center ">
           <div className="flex justify-center mb-4 sm:mb-5">
             <a
               href="/"
@@ -1128,7 +1128,7 @@ export default function Inquiry() {
         </section>
 
         {/* Main Application Container */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 font-inter">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 ">
           {isSuccess ? (
             /* SUCCESS CELEBRATION VIEW */
             <div className="emp-card-box p-6 sm:p-12 text-center animate-fadeIn">
@@ -2676,7 +2676,7 @@ export default function Inquiry() {
                         submitting ||
                         sendingOtp
                       }
-                      className="group relative overflow-hidden w-full sm:w-auto h-[48px] px-8 sm:px-10 bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2.5 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base cursor-pointer"
+                      className="group relative overflow-hidden w-full sm:w-auto h-[48px] px-8 sm:px-10 btn-gradient border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2.5 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base cursor-pointer"
                     >
                       {submitting ? (
                         <>
@@ -2698,7 +2698,6 @@ export default function Inquiry() {
                           <ArrowRight className="relative z-10 w-5 h-5 flex-shrink-0 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                         </>
                       )}
-                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                     </button>
                   </div>
                 </div>
@@ -2799,7 +2798,7 @@ export default function Inquiry() {
               <button
                 type="submit"
                 disabled={verifyingOtp || otpValue.length < 4}
-                className="group relative overflow-hidden w-full h-[46px] bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 disabled:opacity-50 text-sm cursor-pointer"
+                className="group relative overflow-hidden w-full h-[46px] btn-gradient border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 disabled:opacity-50 text-sm cursor-pointer"
               >
                 {verifyingOtp ? (
                   <>
@@ -2812,7 +2811,6 @@ export default function Inquiry() {
                     <ArrowRight className="relative z-10 w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
                   </>
                 )}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
               </button>
             </form>
 

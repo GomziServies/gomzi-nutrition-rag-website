@@ -64,7 +64,7 @@ function RatingBar({ star, count, total }) {
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="text-xs text-[var(--color-text-light)] w-4 text-right font-[var(--font-modelica)]">
+      <span className="text-xs text-[var(--color-text-light)] w-4 text-right ">
         {count}
       </span>
     </div>
@@ -213,24 +213,24 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
       >
         {/* Header */}
         <div className="text-center mb-7">
-          <h3 className="font-tomato text-2xl sm:text-3xl font-bold text-gray-900">
+          <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Share your experience
           </h3>
 
-          <p className="mt-2 text-sm text-gray-500 font-modelica">
+          <p className="mt-2 text-sm text-gray-500 ">
             Your feedback helps other customers make better choices.
           </p>
         </div>
 
         {/* Rating */}
         <div className="flex flex-col items-center mb-7">
-          <p className="text-sm font-semibold text-gray-800 font-modelica mb-3">
+          <p className="text-sm font-semibold text-gray-800 mb-3">
             How would you rate this product?
           </p>
 
           <InteractiveStarRating rating={rating} onChange={setRating} />
 
-          <p className="mt-2 text-xs text-gray-400 font-modelica">
+          <p className="mt-2 text-xs text-gray-400 ">
             {rating === 5
               ? "Excellent"
               : rating === 4
@@ -252,7 +252,7 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
               font-semibold
               text-gray-800
               mb-2
-              font-modelica
+             
             "
           >
             Tell us what you think
@@ -277,7 +277,7 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
               focus:border-primary
               resize-none
               transition
-              font-modelica
+             
             "
             placeholder="What did you like about this product? Share your honest experience..."
             maxLength={1000}
@@ -286,11 +286,11 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
           />
 
           <div className="flex justify-between mt-2">
-            <span className="text-xs text-gray-400 font-modelica">
+            <span className="text-xs text-gray-400 ">
               Your honest feedback is appreciated.
             </span>
 
-            <span className="text-xs text-gray-400 font-modelica">
+            <span className="text-xs text-gray-400 ">
               {body.length}/1000
             </span>
           </div>
@@ -300,7 +300,7 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
         <div className="flex gap-2 items-start mb-6 p-3 rounded-lg bg-gray-50">
           <span className="text-sm">🔒</span>
 
-          <p className="text-xs leading-5 text-gray-500 font-modelica">
+          <p className="text-xs leading-5 text-gray-500 ">
             Your review may be displayed publicly on the product page.
           </p>
         </div>
@@ -323,7 +323,7 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
               hover:bg-gray-50
               transition
               disabled:opacity-50
-              font-modelica
+             
             "
           >
             Cancel
@@ -338,24 +338,23 @@ function WriteReviewForm({ product, onClose, closing, onSubmit }) {
               px-7
               py-3
               rounded-xl
-              bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c]
-              hover:from-[#48261c] hover:to-[#381c14]
+              btn-gradient
+              hover:from-primary-hover hover:to-[#381c14]
               text-white
               text-sm
               font-bold
               border border-amber-400/30
-              shadow-md shadow-[#5C3124]/25
-              hover:shadow-lg hover:shadow-[#5C3124]/40
+              shadow-md shadow-primary/25
+              hover:shadow-lg hover:shadow-primary/40
               hover:-translate-y-0.5 active:scale-[0.98]
               transition-all duration-300
               disabled:opacity-50
               disabled:cursor-not-allowed
               disabled:hover:translate-y-0
-              font-modelica
+             
               cursor-pointer
             "
           >
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
             <span className="relative z-10">{submitting ? "Posting..." : "Post Review"}</span>
           </button>
         </div>
@@ -456,7 +455,7 @@ export default function CustomerReviews(props) {
       <div className="bg-[var(--color-bg-light)] py-8">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-16">
           {/* Header */}
-          <h2 className="text-2xl sm:text-3xl font-bold text-[var(--color-text)] mb-6 font-[var(--font-toma)]">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[var(--color-text)] mb-6 ">
             Customer Reviews
           </h2>
 
@@ -467,11 +466,11 @@ export default function CustomerReviews(props) {
               <div className="flex-shrink-0 sm:pr-8 md:pr-15 pb-5 sm:pb-0">
                 <StarRating rating={5} size="lg" />
                 <div className="flex items-baseline gap-2 mt-2">
-                  <span className="text-5xl font-bold text-[var(--color-text)] font-[var(--font-toma)]">
+                  <span className="text-5xl font-bold text-[var(--color-text)] ">
                     {avgRating} out of 5
                   </span>
                 </div>
-                <p className="text-base text-[var(--color-text-light)] mt-1 font-[var(--font-modelica)]">
+                <p className="text-base text-[var(--color-text-light)] mt-1 ">
                   Based on {totalReviews} reviews
                 </p>
               </div>
@@ -500,9 +499,8 @@ export default function CustomerReviews(props) {
               <div className="flex-shrink-0 sm:pl-8 flex items-center justify-start sm:justify-center">
                 <button
                   onClick={handleWriteReview}
-                  className="relative overflow-hidden group bg-gradient-to-r from-[#5C3124] via-[#6d3a2b] to-[#48261c] hover:from-[#48261c] hover:to-[#381c14] text-white font-bold text-sm px-8 py-3.5 w-full rounded-xl border border-amber-400/30 shadow-md shadow-[#5C3124]/25 hover:shadow-lg hover:shadow-[#5C3124]/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 font-modelica whitespace-nowrap cursor-pointer"
+                  className="relative overflow-hidden group btn-gradient text-white font-bold text-sm px-8 py-3.5 w-full rounded-xl border border-amber-400/30 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 whitespace-nowrap cursor-pointer"
                 >
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
                   <span className="relative z-10">{formState === "open" ? "Cancel Review" : "Write a Review"}</span>
                 </button>
               </div>
@@ -549,7 +547,7 @@ export default function CustomerReviews(props) {
               <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] text-[var(--color-text-light)] hover:bg-[var(--color-section)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-[var(--font-modelica)]"
+                className="w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] text-[var(--color-text-light)] hover:bg-[var(--color-section)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors "
               >
                 <svg
                   className="w-4 h-4"
@@ -569,9 +567,9 @@ export default function CustomerReviews(props) {
                 <button
                   key={p}
                   onClick={() => setCurrentPage(p)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] text-sm font-semibold transition-colors font-[var(--font-modelica)] border ${
+                  className={`w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] text-sm font-semibold transition-colors  border ${
                     currentPage === p
-                      ? "bg-gradient-to-r from-[#5C3124] to-[#48261c] text-white border-amber-400/30 shadow-xs"
+                      ? "bg-gradient-to-r from-primary to-primary-hover text-white border-amber-400/30 shadow-xs"
                       : "border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-section)]"
                   }`}
                 >
@@ -583,7 +581,7 @@ export default function CustomerReviews(props) {
                 onClick={() =>
                   setCurrentPage((p) => Math.min(totalPages, p + 1))
                 }
-                className="w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] text-[var(--color-text-light)] hover:bg-[var(--color-section)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-[var(--font-modelica)]"
+                className="w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] text-[var(--color-text-light)] hover:bg-[var(--color-section)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors "
               >
                 <svg
                   className="w-4 h-4"
@@ -602,7 +600,7 @@ export default function CustomerReviews(props) {
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(totalPages)}
-                className="w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] text-[var(--color-text-light)] hover:bg-[var(--color-section)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors font-[var(--font-modelica)]"
+                className="w-8 h-8 flex items-center justify-center rounded-[var(--radius-sm)] border border-[var(--color-border)] text-[var(--color-text-light)] hover:bg-[var(--color-section)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors "
               >
                 <svg
                   className="w-4 h-4"

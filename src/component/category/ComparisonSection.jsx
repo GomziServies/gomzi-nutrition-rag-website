@@ -91,7 +91,7 @@ const ComparisonSection = ({ data }) => {
             Comparison Table
         =========================== */}
 
-      <div className="mt-8 overflow-hidden rounded-3xl border border-[#5C3124] bg-white">
+      <div className="mt-8 overflow-hidden rounded-3xl border border-primary bg-white">
         <div className="px-5 sm:px-6 py-5 border-b border-[#dbdee9]">
           <h3 className="font-bold text-lg">{data.table.title}</h3>
         </div>
@@ -99,7 +99,7 @@ const ComparisonSection = ({ data }) => {
         <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full">
             <thead>
-              <tr className="bg-[#5C3124] text-white uppercase tracking-widest text-xs">
+              <tr className="bg-primary text-white uppercase tracking-widest text-xs">
                 {data.table.headers.map((header, index) => (
                   <th
                     key={index}
@@ -141,7 +141,7 @@ const ComparisonSection = ({ data }) => {
               className="rounded-2xl border border-[#dbdee9] bg-white overflow-hidden"
             >
               {/* Feature / first column */}
-              <div className="bg-[#5C3124] text-white px-4 py-3">
+              <div className="bg-primary text-white px-4 py-3">
                 <p className="text-xs uppercase tracking-widest opacity-80">
                   {data.table.headers[0]}
                 </p>
@@ -153,7 +153,7 @@ const ComparisonSection = ({ data }) => {
               <div className="divide-y divide-[#dbdee9]">
                 {row.slice(1).map((cell, cellIndex) => (
                   <div key={cellIndex} className="px-4 py-4">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-[#5C3124]">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-primary">
                       {data.table.headers[cellIndex + 1]}
                     </p>
 
