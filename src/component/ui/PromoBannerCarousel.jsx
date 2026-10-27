@@ -8,41 +8,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getPromoBannersApi } from "../../api/banner.api";
 import { getLocalCache, setLocalCache } from "../../utils/storage";
 
-const PROMO_BANNERS_CACHE_KEY = "gomzi_promo_banners_cache";
-
-const FALLBACK_SLIDES = [
-  {
-    image: "/images/banners/banner-sale-myprotein.svg",
-    alt: "Myprotein - your workout deserves better nutrition, up to 50% off",
-    href: "/gomzi-supplement?search=myprotein",
-  },
-  {
-    image: "/images/banners/banner-sale-muscleblaze.svg",
-    alt: "MuscleBlaze - power every single rep, up to 40% off",
-    href: "/gomzi-supplement?search=muscleblaze",
-  },
-  {
-    image: "/images/banners/banner-combo-performance.svg",
-    alt: "Performance power combos - whey, creatine and a free shaker",
-    href: "/gomzi-supplement?search=fuel+one",
-  },
-  {
-    image: "/images/banners/banner-creatine.svg",
-    alt: "Creatine monohydrate - pure strength, zero compromise",
-    href: "/gomzi-supplement?search=creatine",
-  },
-  {
-    image: "/images/banners/banner-preworkout.svg",
-    alt: "Pre-workout formulas - train like you mean it",
-    href: "/gomzi-supplement?search=pre-workout",
-  },
-];
+const PROMO_BANNERS_CACHE_KEY = "gomzi_promo_banners_live_cache";
 
 /**
  * Resolve absolute or remote S3 / FG Group image path.
  */
 const resolveImageUrl = (img) => {
-  if (!img) return "/images/banners/banner-combo-performance.svg";
+  if (!img) return "";
   if (
     img.startsWith("http://") ||
     img.startsWith("https://") ||
@@ -57,16 +29,19 @@ const resolveImageUrl = (img) => {
 
 /**
  * Wide promotional banner carousel.
- * Dynamic: Fetches from RAG Admin / Backend with fallback to initial brand graphics.
+ * Live data: Fetches directly from RAG Admin / Backend.
+ * Renders nothing (null) if no active promotional banners are configured.
  */
 export default function PromoBannerCarousel() {
   const navigate = useNavigate();
   const [slides, setSlides] = useState(() => {
     const cached = getLocalCache(PROMO_BANNERS_CACHE_KEY);
     if (Array.isArray(cached) && cached.length > 0) {
-      return cached;
+      // Filter out any stale dummy data from earlier versions
+      const valid = cached.filter((c) => c && c.image && !c.image.includes("/images/banners/"));
+      if (valid.length > 0) return valid;
     }
-    return FALLBACK_SLIDES;
+    return [];
   });
   const [swiper, setSwiper] = useState(null);
   const [active, setActive] = useState(0);
@@ -80,7 +55,7 @@ export default function PromoBannerCarousel() {
         if (!isMounted) return;
 
         const banners = res?.data?.data?.banners;
-        if (Array.isArray(banners) && banners.length > 0) {
+        if (Array.isArray(banners)) {
           const activeBanners = banners
             .filter((b) => b.status !== false && Boolean(b.image || b.desktop_image))
             .map((b) => ({
@@ -90,13 +65,11 @@ export default function PromoBannerCarousel() {
               href: b.url || b.shop_link || "/gomzi-supplement",
             }));
 
-          if (activeBanners.length > 0) {
-            setSlides(activeBanners);
-            setLocalCache(PROMO_BANNERS_CACHE_KEY, activeBanners);
-          }
+          setSlides(activeBanners);
+          setLocalCache(PROMO_BANNERS_CACHE_KEY, activeBanners);
         }
-      } catch (err) {
-        // Fallback slides remain seamlessly active if API fails
+      } catch {
+        // Silent catch: no dummy fallback data
       }
     };
 
@@ -119,98 +92,114 @@ export default function PromoBannerCarousel() {
     }
   };
 
+  // If no live banners are configured, do not render any dummy section
+  if (!slides || slides.length === 0) {
+    return null;
+  }
+
   const slidesKey = slides.map((s) => s._id || s.image).join(",");
 
   return (
     <section className="w-full bg-white" aria-label="Promotional Offer Banners">
-      <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-6 md:py-8">
+      <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-3 md:py-4">
         <div className="relative">
-          <Swiper
-            key={slidesKey}
-            modules={[Autoplay, Pagination]}
-            onSwiper={setSwiper}
-            onSlideChange={(s) => setActive(s.realIndex)}
-            slidesPerView={1}
-            loop={slides.length > 1}
-            speed={500}
-            autoplay={
-              slides.length > 1
-                ? { delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true }
-                : false
-            }
-            pagination={{ clickable: true }}
-            className="!overflow-hidden !rounded-xl"
-          >
-            {slides.map((slide, index) => (
-              <SwiperSlide key={slide._id || slide.image || index}>
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => handleNavigate(slide.href)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleNavigate(slide.href);
-                    }
-                  }}
-                  className="block w-full cursor-pointer overflow-hidden rounded-xl"
-                >
-                  <img
-                    src={resolveImageUrl(slide.image)}
-                    alt={slide.alt}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    className="block h-auto w-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = "/images/banners/banner-combo-performance.svg";
-                    }}
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Edge navigation arrows */}
-          {slides.length > 1 && (
+          {slides.length === 1 ? (
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => handleNavigate(slides[0].href)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleNavigate(slides[0].href);
+                }
+              }}
+              className="block w-full cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300 hover:shadow-md focus:outline-none"
+            >
+              <img
+                src={resolveImageUrl(slides[0].image)}
+                alt={slides[0].alt}
+                loading="eager"
+                className="block h-auto w-full select-none"
+              />
+            </div>
+          ) : (
             <>
+              <Swiper
+                key={slidesKey}
+                modules={[Autoplay, Pagination]}
+                onSwiper={setSwiper}
+                onSlideChange={(s) => setActive(s.realIndex)}
+                slidesPerView={1}
+                loop={slides.length > 1}
+                speed={500}
+                autoplay={{ delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+                pagination={{ clickable: true }}
+                className="!overflow-hidden !rounded-xl"
+              >
+                {slides.map((slide, index) => (
+                  <SwiperSlide key={slide._id || slide.image || index}>
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => handleNavigate(slide.href)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          handleNavigate(slide.href);
+                        }
+                      }}
+                      className="block w-full cursor-pointer overflow-hidden rounded-xl bg-white"
+                    >
+                      <img
+                        src={resolveImageUrl(slide.image)}
+                        alt={slide.alt}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        className="block h-auto w-full select-none"
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              {/* Edge navigation arrows */}
               <button
                 type="button"
                 onClick={() => swiper?.slidePrev()}
                 aria-label="Previous banner"
-                className="absolute left-4 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
+                className="absolute left-3 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 type="button"
                 onClick={() => swiper?.slideNext()}
                 aria-label="Next banner"
-                className="absolute right-4 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
+                className="absolute right-3 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-4 w-4" />
               </button>
-            </>
-          )}
 
-          {/* Pill pagination dots */}
-          {slides.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/45 px-3 py-2 backdrop-blur-sm">
-              {slides.map((slide, i) => (
-                <button
-                  key={slide._id || slide.image || i}
-                  type="button"
-                  onClick={() => swiper?.slideToLoop(i)}
-                  aria-label={`Go to banner ${i + 1}`}
-                  className={`h-1.5 rounded-full border-none p-0 transition-all duration-300 ${
-                    active === i ? "w-4 bg-white" : "w-1.5 bg-white/50"
-                  }`}
-                />
-              ))}
-            </div>
+              {/* Pill pagination dots */}
+              <div className="absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 backdrop-blur-sm">
+                {slides.map((slide, i) => (
+                  <button
+                    key={slide._id || slide.image || i}
+                    type="button"
+                    onClick={() => swiper?.slideToLoop(i)}
+                    aria-label={`Go to banner ${i + 1}`}
+                    className={`h-1.5 rounded-full border-none p-0 transition-all duration-300 ${
+                      active === i ? "w-4 bg-white" : "w-1.5 bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>
     </section>
   );
 }
+
 

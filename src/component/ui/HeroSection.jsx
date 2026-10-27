@@ -48,7 +48,9 @@ export default function HeroSection() {
             list.map((b) => ({
               ...b,
               desktop_image:
-                b.desktop_image || b.mobile_image || FALLBACK_BANNER.desktop_image,
+                b.desktop_image || b.image || FALLBACK_BANNER.desktop_image,
+              mobile_image:
+                b.mobile_image || b.mobileImage || b.desktop_image || b.image || FALLBACK_BANNER.mobile_image,
             }))
           );
         }
@@ -84,7 +86,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full bg-bg-light">
+    <section className="relative w-full bg-white">
       <div className="relative w-full overflow-hidden">
         <Swiper
           modules={[Autoplay]}
@@ -107,14 +109,14 @@ export default function HeroSection() {
             <SwiperSlide key={slide._id || slide.id || index}>
               <div
                 onClick={() => handleSlideNavigation(slide.shop_link || slide.shopLink)}
-                className="w-full cursor-pointer bg-bg-page"
+                className="w-full cursor-pointer bg-white flex justify-center items-center overflow-hidden"
               >
                 <img
-                  src={resolveImageUrl(slide.desktop_image)}
+                  src={resolveImageUrl(slide.desktop_image || slide.image)}
                   alt={slide.alt_text || slide.title || "Gomzi Nutrition"}
                   fetchPriority={index === 0 ? "high" : "low"}
                   loading={index === 0 ? "eager" : "lazy"}
-                  className="block h-auto w-full select-none"
+                  className="block w-full h-auto sm:max-h-[380px] lg:max-h-[420px] select-none"
                   onError={(e) => {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = FALLBACK_BANNER.desktop_image;
@@ -140,8 +142,8 @@ export default function HeroSection() {
               className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 sm:flex"
             />
 
-            <div className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
-              <div className="flex items-center gap-2 rounded-full bg-black/40 px-3 py-2 backdrop-blur-sm">
+            <div className="absolute bottom-2 sm:bottom-4 left-1/2 z-20 -translate-x-1/2">
+              <div className="flex items-center gap-1.5 sm:gap-2 rounded-full bg-black/40 px-2.5 py-1.5 sm:px-3 sm:py-2 backdrop-blur-sm">
                 {banners.map((_, i) => (
                   <button
                     key={i}

@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, FreeMode, Mousewheel } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { getCategoriesApi } from "../../api/category.api";
 import { getLocalCache, setLocalCache } from "../../utils/storage";
 import SectionHeader from "../common/SectionHeader";
-import Marquee from "../common/Marquee";
 import CategoryRangeCard from "../common/CategoryRangeCard";
 
 const CATEGORIES_CACHE_KEY = "gomzi_categories_cache";
@@ -53,6 +57,7 @@ const normalizeCategories = (rawList = []) => {
 
 export default function SeasonFavoritesSection() {
   const navigate = useNavigate();
+  const [swiperRef, setSwiperRef] = useState(null);
 
   // Initialize from cache if available from /category page or previous load
   const [categories, setCategories] = useState(() => {
@@ -121,21 +126,67 @@ export default function SeasonFavoritesSection() {
             ))}
           </div>
         ) : (
-          <Marquee duration={55} className="px-4 md:px-0">
-            {categories.map((cat) => (
-              <div key={cat.id} className="mx-2 flex items-stretch">
-                <CategoryRangeCard
-                  className="w-[260px] sm:w-[280px] shrink-0"
-                  title={cat.title}
-                  subtitle={cat.subtitle}
-                  image={cat.image}
-                  badge={cat.badge}
-                  count={cat.productCount}
-                  to={cat.url || "/category"}
-                />
-              </div>
-            ))}
-          </Marquee>
+          <div className="relative group">
+            <Swiper
+              modules={[Autoplay, FreeMode, Mousewheel]}
+              onSwiper={setSwiperRef}
+              grabCursor={true}
+              freeMode={{ enabled: true, momentum: true }}
+              mousewheel={{ forceToAxis: true, releaseOnEdges: true }}
+              loop={categories.length > 4}
+              speed={650}
+              autoplay={{
+                delay: 2200,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: false,
+              }}
+              slidesPerView={1.2}
+              spaceBetween={16}
+              breakpoints={{
+                480: { slidesPerView: 1.6, spaceBetween: 16 },
+                640: { slidesPerView: 2.3, spaceBetween: 18 },
+                768: { slidesPerView: 3.1, spaceBetween: 20 },
+                1024: { slidesPerView: 4, spaceBetween: 20 },
+              }}
+              className="w-full select-none cursor-grab active:cursor-grabbing pb-2"
+            >
+              {categories.map((cat) => (
+                <SwiperSlide key={cat.id} className="h-auto !flex items-stretch">
+                  <CategoryRangeCard
+                    className="w-full h-full"
+                    title={cat.title}
+                    subtitle={cat.subtitle}
+                    image={cat.image}
+                    badge={cat.badge}
+                    count={cat.productCount}
+                    to={cat.url || "/category"}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
+            {/* Edge navigation arrows for desktop */}
+            {categories.length > 4 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => swiperRef?.slidePrev()}
+                  aria-label="Previous Category"
+                  className="absolute -left-3 top-1/2 z-20 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-primary shadow-md border border-border/80 transition-all hover:bg-primary hover:text-white sm:flex"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => swiperRef?.slideNext()}
+                  aria-label="Next Category"
+                  className="absolute -right-3 top-1/2 z-20 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-primary shadow-md border border-border/80 transition-all hover:bg-primary hover:text-white sm:flex"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </>
+            )}
+          </div>
         )}
       </div>
     </section>

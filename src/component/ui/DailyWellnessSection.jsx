@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
-
 import { fetchProducts } from "../../services/product.service";
 import ProductCard from "../common/ProductCard";
 import SectionHeader from "../common/SectionHeader";
@@ -75,6 +73,8 @@ export default function DailyWellnessSection() {
           tabs={TABS}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+          onViewAll={() => navigate(`/gomzi-supplement?search=${activeTab === "omegas" ? "fish oil" : activeTab}`)}
+          showAllLabel="View All"
         />
 
         <div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-4 lg:gap-5">
@@ -89,16 +89,6 @@ export default function DailyWellnessSection() {
                   badge={idx === 0 ? "Trending Now" : undefined}
                 />
               ))}
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <button
-            onClick={() => navigate("/gomzi-supplement?search=wellness")}
-            className="view-all"
-          >
-            View All
-            <ChevronRight className="h-3 w-3" />
-          </button>
         </div>
       </div>
     </section>

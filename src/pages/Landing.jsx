@@ -12,6 +12,7 @@ import AdsBannerSection from "../component/ui/AdsBannerSection";
 import FitFoodRangeSection from "../component/ui/FitFoodRangeSection";
 import PreIntraWorkoutSection from "../component/ui/PreIntraWorkoutSection";
 import BrandRangeSection from "../component/ui/BrandRangeSection";
+import CustomerFeedbackSection from "../component/ui/CustomerFeedbackSection";
 import BlackFeatureBar from "../component/common/Black-Feature-Bar";
 
 /**
@@ -19,6 +20,7 @@ import BlackFeatureBar from "../component/common/Black-Feature-Bar";
  *   hero -> category marquee -> offer banners -> top products
  *   -> flagship banner -> top protein picks -> daily wellness
  *   -> fit food range -> ads banner -> pre/intra workout -> brand range
+ *   -> customer feedback -> feature bar
  */
 const Landing = () => {
   return (
@@ -36,6 +38,7 @@ const Landing = () => {
         <AdsBannerSection />
         <PreIntraWorkoutSection />
         <BrandRangeSection />
+        <CustomerFeedbackSection />
       </main>
       <BlackFeatureBar />
     </>

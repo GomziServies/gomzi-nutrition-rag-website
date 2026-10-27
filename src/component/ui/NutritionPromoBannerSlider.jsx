@@ -7,16 +7,8 @@ import "swiper/css/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getNutritionPromoBannersApi } from "../../api/banner.api";
 
-const FALLBACK_BANNERS = [
-  {
-    image: "/images/deals/koshaveda-shilajit-bogo-banner.jpg",
-    alt: "MuscleBlaze Koshaveda Shilajit - Buy 1 Get 1 Free",
-    url: "/gomzi-supplement?search=shilajit",
-  },
-];
-
 const resolveImageUrl = (img) => {
-  if (!img) return FALLBACK_BANNERS[0].image;
+  if (!img) return "";
   if (
     img.startsWith("http://") ||
     img.startsWith("https://") ||
@@ -31,11 +23,12 @@ const resolveImageUrl = (img) => {
 
 /**
  * Flagship landscape promotional banner.
- * Dynamic: Fetches from RAG Admin / Backend with single-banner or multi-slide swiper.
+ * Live data: Fetches directly from RAG Admin / Backend.
+ * Renders nothing (null) if no active flagship banners are configured.
  */
 export default function NutritionPromoBannerSlider() {
   const navigate = useNavigate();
-  const [banners, setBanners] = useState(FALLBACK_BANNERS);
+  const [banners, setBanners] = useState([]);
   const [swiper, setSwiper] = useState(null);
   const [active, setActive] = useState(0);
 
@@ -48,7 +41,7 @@ export default function NutritionPromoBannerSlider() {
         if (!isMounted) return;
 
         const rawList = res?.data?.data?.banners;
-        if (Array.isArray(rawList) && rawList.length > 0) {
+        if (Array.isArray(rawList)) {
           const activeList = rawList
             .filter((b) => b.status !== false && Boolean(b.image || b.desktop_image))
             .map((b) => ({
@@ -58,12 +51,10 @@ export default function NutritionPromoBannerSlider() {
               url: b.url || b.shop_link || "/gomzi-supplement",
             }));
 
-          if (activeList.length > 0) {
-            setBanners(activeList);
-          }
+          setBanners(activeList);
         }
-      } catch (err) {
-        // Fallback banner remains seamlessly active if API fails
+      } catch {
+        // Silent catch: no dummy fallback data
       }
     };
 
@@ -86,11 +77,16 @@ export default function NutritionPromoBannerSlider() {
     }
   };
 
+  // If no live banners are configured, do not render any dummy section
+  if (!banners || banners.length === 0) {
+    return null;
+  }
+
   const bannersKey = banners.map((b) => b._id || b.image).join(",");
 
   return (
     <section className="w-full bg-white" aria-label="Flagship Promotional Banner">
-      <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-6 md:py-8">
+      <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-3 md:py-4">
         <div className="relative">
           {banners.length === 1 ? (
             <div
@@ -103,17 +99,13 @@ export default function NutritionPromoBannerSlider() {
                   handleNavigate(banners[0].url);
                 }
               }}
-              className="hk-card cursor-pointer overflow-hidden rounded-xl"
+              className="hk-card cursor-pointer overflow-hidden rounded-xl bg-white"
             >
               <img
                 src={resolveImageUrl(banners[0].image)}
                 alt={banners[0].alt}
-                className="block h-auto w-full object-cover"
+                className="block h-auto w-full select-none"
                 loading="lazy"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = FALLBACK_BANNERS[0].image;
-                }}
               />
             </div>
           ) : (
@@ -142,17 +134,13 @@ export default function NutritionPromoBannerSlider() {
                           handleNavigate(banner.url);
                         }
                       }}
-                      className="block w-full cursor-pointer overflow-hidden rounded-xl"
+                      className="block w-full cursor-pointer overflow-hidden rounded-xl bg-white"
                     >
                       <img
                         src={resolveImageUrl(banner.image)}
                         alt={banner.alt}
                         loading={index === 0 ? "eager" : "lazy"}
-                        className="block h-auto w-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = FALLBACK_BANNERS[0].image;
-                        }}
+                        className="block h-auto w-full select-none"
                       />
                     </div>
                   </SwiperSlide>
@@ -164,21 +152,21 @@ export default function NutritionPromoBannerSlider() {
                 type="button"
                 onClick={() => swiper?.slidePrev()}
                 aria-label="Previous banner"
-                className="absolute left-4 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
+                className="absolute left-3 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-4 w-4" />
               </button>
               <button
                 type="button"
                 onClick={() => swiper?.slideNext()}
                 aria-label="Next banner"
-                className="absolute right-4 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
+                className="absolute right-3 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/70 sm:flex"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-4 w-4" />
               </button>
 
               {/* Pill pagination dots */}
-              <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/45 px-3 py-2 backdrop-blur-sm">
+              <div className="absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 backdrop-blur-sm">
                 {banners.map((banner, i) => (
                   <button
                     key={banner._id || banner.image || i}

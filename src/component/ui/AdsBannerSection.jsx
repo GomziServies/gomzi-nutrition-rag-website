@@ -2,21 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getStaticBannerApi, getAdBannersApi } from "../../api/banner.api";
 
-/**
- * Fallback Creatine banner (default when offline or DB has no active banners)
- */
-const FALLBACK_BANNERS = [
-  {
-    image: "/images/banners/banner-creatine.svg",
-    alt: "Creatine monohydrate - pure strength, zero compromise",
-    url: "/gomzi-supplement?search=creatine",
-    title: "Pure Strength, Zero Compromise",
-    subtitle: "Unflavoured micronised monohydrate, lab tested for purity and potency.",
-  },
-];
-
 const resolveImageUrl = (img) => {
-  if (!img) return FALLBACK_BANNERS[0].image;
+  if (!img) return "";
   if (
     img.startsWith("http://") ||
     img.startsWith("https://") ||
@@ -33,10 +20,11 @@ const resolveImageUrl = (img) => {
  * Static Promotional Banner Section.
  * Displays a single static banner configured from the RAG Admin panel.
  * Admin can upload/update the banner image, title, and target destination URL.
+ * Renders nothing (null) if no banner is active.
  */
 export default function AdsBannerSection() {
   const navigate = useNavigate();
-  const [banner, setBanner] = useState(FALLBACK_BANNERS[0]);
+  const [banner, setBanner] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -78,8 +66,8 @@ export default function AdsBannerSection() {
             subtitle: data.subtitle || "",
           });
         }
-      } catch (err) {
-        console.warn("Using fallback static banner:", err);
+      } catch {
+        // Silent catch: no dummy fallback
       }
     };
 
@@ -89,6 +77,10 @@ export default function AdsBannerSection() {
       isMounted = false;
     };
   }, []);
+
+  if (!banner || !banner.image) {
+    return null;
+  }
 
   const handleClick = () => {
     const target = banner.url || "/gomzi-supplement?search=creatine";
@@ -103,23 +95,18 @@ export default function AdsBannerSection() {
 
   return (
     <section id="static-banner-section" className="w-full bg-white">
-      <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-6 md:py-8">
+      <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-3 md:py-4">
         <button
           type="button"
           onClick={handleClick}
-          className="group relative block w-full cursor-pointer overflow-hidden rounded-xl bg-neutral-50 shadow-sm transition-all duration-300 hover:shadow-md focus:outline-none"
+          className="group relative block w-full cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300 hover:shadow-md focus:outline-none"
           aria-label={banner.alt || banner.title || "Featured static banner"}
         >
           <img
             src={imgSrc}
             alt={banner.alt || banner.title || "Featured Banner"}
             loading="lazy"
-            className="block h-auto w-full transition-transform duration-500 ease-out group-hover:scale-[1.01]"
-            onError={(e) => {
-              if (e.target.src !== FALLBACK_BANNERS[0].image) {
-                e.target.src = FALLBACK_BANNERS[0].image;
-              }
-            }}
+            className="block h-auto w-full select-none transition-transform duration-500 ease-out group-hover:scale-[1.01]"
           />
         </button>
       </div>
@@ -129,3 +116,4 @@ export default function AdsBannerSection() {
 
 // Named alias export for explicit semantics
 export { AdsBannerSection as StaticBannerSection };
+

@@ -49,21 +49,22 @@ export default function TopProteinPicksSection() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("yeast-plant");
   const [productsCache, setProductsCache] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(true);
 
   const activeTabConfig = TABS.find((t) => t.id === activeTab) || TABS[0];
+  const currentProducts = productsCache[activeTab] || [];
+  const loading = currentProducts.length === 0 && fetching;
 
   useEffect(() => {
     let isMounted = true;
 
-    // Use cached products for this tab if already fetched
-    if (productsCache[activeTab] && productsCache[activeTab].length > 0) {
-      setLoading(false);
+    // Skip API call if products are already cached for this tab
+    if (productsCache[activeTab]?.length > 0) {
       return;
     }
 
     const fetchTabProducts = async () => {
-      setLoading(true);
+      setFetching(true);
       try {
         const res = await getProductsApi(activeTabConfig.query);
         if (!isMounted) return;
@@ -111,7 +112,7 @@ export default function TopProteinPicksSection() {
         console.error(`Failed to fetch protein products for tab ${activeTab}:`, err);
       } finally {
         if (isMounted) {
-          setLoading(false);
+          setFetching(false);
         }
       }
     };
@@ -121,9 +122,7 @@ export default function TopProteinPicksSection() {
     return () => {
       isMounted = false;
     };
-  }, [activeTab, activeTabConfig]);
-
-  const currentProducts = productsCache[activeTab] || [];
+  }, [activeTab, activeTabConfig, productsCache]);
 
   const handleViewAll = () => {
     navigate(activeTabConfig.targetUrl || "/gomzi-supplement");
@@ -143,7 +142,7 @@ export default function TopProteinPicksSection() {
 
         {loading ? (
           /* Loading Skeletons matching exact product grid structure */
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {Array.from({ length: 4 }).map((_, idx) => (
               <ProductCardSkeleton key={`top-protein-skeleton-${idx}`} />
             ))}
@@ -162,24 +161,34 @@ export default function TopProteinPicksSection() {
             </button>
           </div>
         ) : (
-          /* Swiper Carousel with live catalog products */
-          <Swiper
-            spaceBetween={16}
-            slidesPerView={1.2}
-            breakpoints={{
-              480: { slidesPerView: 1.5, spaceBetween: 16 },
-              640: { slidesPerView: 2.2, spaceBetween: 18 },
-              768: { slidesPerView: 3, spaceBetween: 20 },
-              1024: { slidesPerView: 4, spaceBetween: 24 },
-            }}
-            className="pb-2"
-          >
-            {currentProducts.map((product) => (
-              <SwiperSlide key={product.id} className="h-auto">
-                <ProductCard product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <>
+            {/* Mobile View: 2x2 Grid (4 products: 2 up and 2 down) */}
+            <div className="grid grid-cols-2 items-stretch gap-3 sm:hidden">
+              {currentProducts.slice(0, 4).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {/* Tablet & Desktop View: Swiper Carousel */}
+            <div className="hidden sm:block">
+              <Swiper
+                spaceBetween={18}
+                slidesPerView={2.2}
+                breakpoints={{
+                  640: { slidesPerView: 2.2, spaceBetween: 18 },
+                  768: { slidesPerView: 3, spaceBetween: 20 },
+                  1024: { slidesPerView: 4, spaceBetween: 24 },
+                }}
+                className="pb-2"
+              >
+                {currentProducts.map((product) => (
+                  <SwiperSlide key={product.id} className="h-auto">
+                    <ProductCard product={product} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </>
         )}
       </div>
     </section>
