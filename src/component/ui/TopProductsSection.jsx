@@ -192,7 +192,7 @@ export default function TopProductsSection() {
                             e.stopPropagation();
                             navigate(url);
                           }}
-                          className="flex h-10 w-full items-center justify-center gap-2 rounded-sm border border-sale bg-white text-sm font-semibold text-sale transition-colors hover:bg-sale-light"
+                          className="flex h-10 w-full items-center justify-center gap-2 rounded-sm border border-primary bg-white text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-white cursor-pointer"
                         >
                           <Star className="h-4 w-4" />
                           View Product
