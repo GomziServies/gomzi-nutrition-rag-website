@@ -113,7 +113,7 @@ export default function Cart() {
                 <h1 className="font-bold text-xl sm:text-2xl text-primary">
                   Your cart
                 </h1>
-                <span className="w-7 h-7 rounded-full bg-[#ff8914] text-white text-xs font-bold flex items-center justify-center">
+                <span className="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shadow-xs">
                   {totalQty}
                 </span>
               </div>

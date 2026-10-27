@@ -92,6 +92,7 @@ export const addProductToCart = async (product, quantity = 1, selectedVariation 
     const productName = product?.name || rawProduct?.name || "Product";
 
     if (!token) {
+      addGuestCartItem({ product, quantity, selectedVariation });
       if (typeof window !== "undefined") {
         const currentPath = window.location.pathname + window.location.search;
         window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;

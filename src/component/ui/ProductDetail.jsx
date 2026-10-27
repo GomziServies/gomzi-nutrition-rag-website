@@ -158,6 +158,11 @@ export default function NARAProductPage() {
     const isUserLoggedIn =
       isAuthenticated || Boolean(localStorage.getItem("authorization"));
     if (!isUserLoggedIn) {
+      addGuestCartItem({
+        product,
+        quantity: 1,
+        selectedVariation,
+      });
       navigate(
         `/login?redirect=${encodeURIComponent(
           location.pathname + location.search

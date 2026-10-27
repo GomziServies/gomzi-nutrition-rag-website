@@ -1,15 +1,25 @@
 import toast from "react-hot-toast";
 
-export const successToast = (message) => {
-  toast.success(message);
+/**
+ * Global Toast Utility Wrapper
+ * All toast notifications dismiss automatically after 3000ms (3 seconds).
+ */
+export const successToast = (message, options = {}) => {
+  return toast.success(message, {
+    duration: 3000,
+    ...options,
+  });
 };
 
-export const errorToast = (message) => {
-  toast.error(message);
+export const errorToast = (message, options = {}) => {
+  return toast.error(message, {
+    duration: 3000,
+    ...options,
+  });
 };
 
-export const loadingToast = (message) => {
-  return toast.loading(message);
+export const loadingToast = (message, options = {}) => {
+  return toast.loading(message, options);
 };
 
 export const dismissToast = (id) => {

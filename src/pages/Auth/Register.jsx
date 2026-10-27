@@ -4,6 +4,7 @@ import { registerUser } from "../../services/auth.service";
 import { googleLogin } from "../../api/auth.api";
 import { setToken } from "../../utils/storage";
 import { successToast, errorToast } from "../../utils/toast";
+import { syncGuestCart } from "../../utils/syncGuestCart";
 import { GoogleLogin } from "@react-oauth/google";
 import {
   User,
@@ -136,6 +137,11 @@ export default function RegisterPage() {
       const token = result?.data?.data?.authorization;
       if (token) {
         setToken(token);
+        try {
+          await syncGuestCart();
+        } catch (e) {
+          console.warn("Guest cart sync warning:", e);
+        }
         successToast("Account authenticated via Google!");
         window.location.replace(redirectTo);
       } else {

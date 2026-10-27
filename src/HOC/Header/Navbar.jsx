@@ -8,6 +8,15 @@ import {
   ChevronDown,
   ChevronRight,
   LogOut,
+  Home,
+  ShoppingBag,
+  LayoutGrid,
+  Dumbbell,
+  HelpCircle,
+  Info,
+  BookOpen,
+  PhoneCall,
+  MapPin,
 } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
@@ -18,6 +27,49 @@ import {
   HEADER_NAV_LINKS,
   QUICK_NAV_LINKS,
 } from "../../data/navigationCategories";
+
+const MOBILE_DRAWER_LINKS = [
+  {
+    label: "Home",
+    to: "/",
+    icon: Home,
+  },
+  {
+    label: "Shop",
+    to: "/gomzi-supplement",
+    icon: ShoppingBag,
+  },
+  {
+    label: "Categories",
+    to: "/category",
+    icon: LayoutGrid,
+  },
+  {
+    label: "Wholesale & Gyms",
+    to: "/wholesale",
+    icon: Dumbbell,
+  },
+  {
+    label: "Faqs",
+    to: "/faq",
+    icon: HelpCircle,
+  },
+  {
+    label: "About Us",
+    to: "/about",
+    icon: Info,
+  },
+  {
+    label: "Blogs",
+    to: "/blog",
+    icon: BookOpen,
+  },
+  {
+    label: "Contact Us",
+    to: "/contact-us",
+    icon: PhoneCall,
+  },
+];
 
   /**
 
@@ -488,8 +540,8 @@ export default function Navbar() {
                   />
                 </svg>
 
-                {/* Orange Circular Count Badge (HealthKart .total-count) */}
-                <span className="absolute -top-1 -right-1 bg-sale text-white text-[12px] font-medium h-5 w-5 rounded-full flex items-center justify-center">
+                {/* Brand Primary Circular Count Badge */}
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[11px] font-bold h-5 w-5 rounded-full flex items-center justify-center shadow-xs">
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
               </Link>
@@ -615,81 +667,115 @@ export default function Navbar() {
           />
 
           {/* Sliding Drawer */}
-          <div className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[99999] shadow-2xl flex flex-col lg:hidden animate-in slide-in-from-left duration-300 overflow-hidden">
-            {/* Drawer Header */}
-            <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-[#f8fafb]">
-              <img
-                src="/images/rag-icon-logo.png"
-                alt="Gomzi Nutrition"
-                className="h-9 w-auto object-contain"
-              />
+          <div className="fixed top-0 left-0 bottom-0 w-[300px] sm:w-[320px] max-w-[85vw] bg-white z-[99999] shadow-2xl flex flex-col lg:hidden animate-in slide-in-from-left duration-300 overflow-hidden">
+            {/* Drawer Header (Navy Blue with Close 'X' and Login/Sign Up) */}
+            <div className="bg-primary px-4 py-3.5 flex items-center justify-between shrink-0 shadow-xs">
               <button
+                type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="p-1.5 text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer rounded-lg"
+                className="p-1 text-white hover:text-white/80 bg-transparent border-none cursor-pointer rounded-lg transition-colors flex items-center justify-center -ml-1"
                 aria-label="Close navigation"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6 stroke-[2.2]" />
               </button>
+
+              {isAuthenticated ? (
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/profile"
+                    onClick={() => setDrawerOpen(false)}
+                    className="bg-white text-primary font-bold text-xs px-4 py-2 rounded-md shadow-xs text-decoration-none truncate max-w-[150px] transition-colors hover:bg-gray-50"
+                  >
+                    {user?.name ? user.name.split(" ")[0] : "My Account"}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDrawerOpen(false);
+                      logout();
+                    }}
+                    className="p-1.5 text-white hover:text-white/80 bg-white/20 border-none rounded-md cursor-pointer transition-colors"
+                    title="Sign Out"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setDrawerOpen(false)}
+                  className="bg-white text-primary hover:bg-gray-50 font-bold text-xs sm:text-sm px-6 py-2 rounded-md shadow-xs text-decoration-none transition-colors"
+                >
+                  Login / Sign Up
+                </Link>
+              )}
             </div>
 
             {/* Drawer Scrollable Content */}
-            <div className="flex-1 overflow-y-auto divide-y divide-gray-100 scrollbar-thin">
-              {/* Standard Page Links */}
-              <div className="py-2">
-                <div className="px-4 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                  Menu
-                </div>
-                {HEADER_NAV_LINKS.map((link) => {
-                  const active = isLinkActive(link.href);
+            <div className="flex-1 overflow-y-auto bg-white flex flex-col justify-between scrollbar-thin">
+              {/* Menu List */}
+              <div className="divide-y divide-gray-100/70">
+                {MOBILE_DRAWER_LINKS.map((item) => {
+                  const active = isLinkActive(item.to);
 
                   return (
                     <Link
-                      key={link.label}
-                      to={link.href}
+                      key={item.label}
+                      to={item.to}
                       onClick={() => setDrawerOpen(false)}
-                      className={`flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-decoration-none transition-colors rounded-lg mx-2 my-0.5 ${
+                      className={`flex items-center justify-between px-5 py-3.5 transition-colors text-decoration-none group ${
                         active
-                          ? "text-white bg-primary font-bold shadow-xs"
-                          : "text-[#2b2b36] hover:text-primary hover:bg-primary-light"
+                          ? "bg-primary-light text-primary"
+                          : "hover:bg-gray-50/90 text-[#374151]"
                       }`}
                     >
-                      <span>{link.label}</span>
-                      {active && <span className="w-1.5 h-1.5 rounded-full bg-amber-300" />}
+                      <div className="flex items-center gap-3.5">
+                        <item.icon
+                          className={`w-[18px] h-[18px] transition-colors shrink-0 ${
+                            active
+                              ? "text-primary"
+                              : "text-[#6b7280] group-hover:text-primary"
+                          }`}
+                          strokeWidth={1.9}
+                        />
+                        <span
+                          className={`text-[13px] ${
+                            active
+                              ? "font-bold text-primary"
+                              : "font-medium text-[#374151] group-hover:text-primary"
+                          }`}
+                        >
+                          {item.label}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        {active && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        )}
+                        <ChevronRight
+                          className={`w-4 h-4 transition-colors ${
+                            active
+                              ? "text-primary"
+                              : "text-gray-400 group-hover:text-primary"
+                          }`}
+                        />
+                      </div>
                     </Link>
                   );
                 })}
               </div>
 
-              {/* Account Controls */}
-              <div className="p-4 bg-gray-50 space-y-2">
-                {isAuthenticated ? (
-                  <>
-                    <Link
-                      to="/profile"
-                      onClick={() => setDrawerOpen(false)}
-                      className="block w-full py-2.5 text-center text-xs font-bold text-text bg-white border border-[#dbdee9] rounded-lg text-decoration-none"
-                    >
-                      My Profile & Orders
-                    </Link>
-                    <button
-                      onClick={() => {
-                        setDrawerOpen(false);
-                        logout();
-                      }}
-                      className="block w-full py-2.5 text-center text-xs font-bold text-red-600 bg-red-50 rounded-lg border-none cursor-pointer"
-                    >
-                      Sign Out
-                    </button>
-                  </>
-                ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setDrawerOpen(false)}
-                    className="block w-full py-2.5 text-center text-xs font-bold text-white bg-primary hover:bg-primary-hover rounded-lg text-decoration-none"
-                  >
-                    Login / Sign Up
-                  </Link>
-                )}
+              {/* Bottom Utilities: Store Locator */}
+              <div className="p-4 bg-[#fbfbfb] border-t border-gray-100/90 mt-2">
+                {/* Store Locator Button */}
+                <Link
+                  to="/contact-us"
+                  onClick={() => setDrawerOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border-2 border-primary bg-primary-light/70 text-primary hover:bg-primary-light text-xs font-bold transition-all text-decoration-none shadow-2xs"
+                >
+                  <MapPin className="w-4 h-4 text-primary shrink-0" />
+                  <span>Store Locator</span>
+                </Link>
               </div>
             </div>
           </div>

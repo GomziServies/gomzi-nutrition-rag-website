@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import ProductCard from "../common/ProductCard";
 import useProducts from "../../hooks/useProducts";
-import { addProductToCart } from "../../services/cartStorage.service";
+import { addProductToCart, addGuestCartItem } from "../../services/cartStorage.service";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 import useProductCategories from "../../hooks/useProductCategories";
@@ -306,6 +306,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     const isUserLoggedIn =
       isAuthenticated || Boolean(localStorage.getItem("authorization"));
     if (!isUserLoggedIn) {
+      addGuestCartItem({ product, quantity: 1 });
       navigate(
         `/login?redirect=${encodeURIComponent(
           location.pathname + location.search

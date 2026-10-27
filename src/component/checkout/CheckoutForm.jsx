@@ -292,16 +292,16 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
         {/* Save Info Checkbox */}
         <label
           onClick={() => setSaveInfo(!saveInfo)}
-          className="flex items-center gap-2.5 mt-1 cursor-pointer select-none"
+          className="flex items-start sm:items-center gap-2.5 mt-1 cursor-pointer select-none"
         >
           <div
-            className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
+            className={`w-4.5 h-4.5 rounded border shrink-0 aspect-square flex items-center justify-center transition-all mt-0.5 sm:mt-0 ${
               saveInfo ? "bg-primary border-primary" : "bg-white border-gray-300"
             }`}
           >
-            {saveInfo && <CheckCircle2 size={12} className="text-white" />}
+            {saveInfo && <CheckCircle2 size={12} className="text-white shrink-0" />}
           </div>
-          <span className="text-xs font-medium text-gray-600">
+          <span className="text-xs font-medium text-gray-600 leading-tight">
             Save this address for fast 1-click checkout on future orders
           </span>
         </label>
@@ -314,22 +314,22 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
           <span>Shipping Method</span>
         </h2>
 
-        <div className="p-4 rounded-xl border border-primary-border bg-bg-cream flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0">
+        <div className="p-3.5 sm:p-4 rounded-xl border border-primary-border bg-bg-cream flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="w-9 h-9 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0 aspect-square">
               <Truck size={18} />
             </div>
-            <div>
-              <p className="text-xs sm:text-sm font-bold text-text">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs sm:text-sm font-bold text-text leading-tight">
                 Priority Pan-India Express (Bluedart / Delhivery)
               </p>
-              <p className="text-[11px] text-gray-500">
+              <p className="text-[11px] text-gray-500 mt-0.5 leading-normal">
                 Estimated Delivery: 2-4 business days with live SMS tracking
               </p>
             </div>
           </div>
 
-          <span className="text-xs font-extrabold uppercase text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+          <span className="text-xs font-extrabold uppercase text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shrink-0">
             FREE
           </span>
         </div>
@@ -354,34 +354,34 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
               setPayMethod("ONLINE");
               updatePaymentMode("ONLINE");
             }}
-            className={`p-4 rounded-xl border transition-all cursor-pointer ${
+            className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
               payMethod === "ONLINE"
                 ? "border-primary bg-[#fdfaf9] ring-2 ring-primary/15 shadow-sm"
                 : "border-primary-border bg-white hover:border-gray-300"
             }`}
           >
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3 min-w-0 flex-1">
                 <div
-                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                  className={`w-4.5 h-4.5 rounded-full border-2 shrink-0 aspect-square flex items-center justify-center mt-0.5 transition-colors ${
                     payMethod === "ONLINE" ? "border-primary" : "border-gray-300"
                   }`}
                 >
                   {payMethod === "ONLINE" && (
-                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <div className="w-2 h-2 rounded-full bg-primary shrink-0 aspect-square" />
                   )}
                 </div>
-                <div>
-                  <span className="text-xs sm:text-sm font-bold text-text block">
+                <div className="min-w-0 flex-1">
+                  <span className="text-xs sm:text-sm font-bold text-text block leading-tight">
                     Online Payment (Instant & Recommended)
                   </span>
-                  <span className="text-[11px] text-gray-500">
+                  <span className="text-[11px] text-gray-500 block mt-1 leading-normal">
                     UPI (Google Pay, PhonePe, Paytm), Cards, NetBanking, Wallets
                   </span>
                 </div>
               </div>
 
-              <span className="text-[10px] font-bold text-[#3395ff] bg-blue-50 px-2 py-0.5 rounded border border-blue-200 uppercase tracking-wider shrink-0">
+              <span className="text-[10px] font-bold text-[#3395ff] bg-blue-50 px-2 py-0.5 rounded border border-blue-200 uppercase tracking-wider shrink-0 mt-0.5">
                 Razorpay
               </span>
             </div>
@@ -402,34 +402,34 @@ export default function CheckoutForm({ coupon, finalTotal = 0 }) {
               setPayMethod("Cash On Delivery");
               updatePaymentMode("Cash On Delivery");
             }}
-            className={`p-4 rounded-xl border transition-all cursor-pointer ${
+            className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
               payMethod === "Cash On Delivery"
                 ? "border-primary bg-[#fdfaf9] ring-2 ring-primary/15 shadow-sm"
                 : "border-primary-border bg-white hover:border-gray-300"
             }`}
           >
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3 min-w-0 flex-1">
                 <div
-                  className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                  className={`w-4.5 h-4.5 rounded-full border-2 shrink-0 aspect-square flex items-center justify-center mt-0.5 transition-colors ${
                     payMethod === "Cash On Delivery" ? "border-primary" : "border-gray-300"
                   }`}
                 >
                   {payMethod === "Cash On Delivery" && (
-                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <div className="w-2 h-2 rounded-full bg-primary shrink-0 aspect-square" />
                   )}
                 </div>
-                <div>
-                  <span className="text-xs sm:text-sm font-bold text-text block">
+                <div className="min-w-0 flex-1">
+                  <span className="text-xs sm:text-sm font-bold text-text block leading-tight">
                     Cash on Delivery (COD)
                   </span>
-                  <span className="text-[11px] text-gray-500">
+                  <span className="text-[11px] text-gray-500 block mt-1 leading-normal">
                     Pay via cash or UPI QR code to the courier at your doorstep
                   </span>
                 </div>
               </div>
 
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 uppercase tracking-wider shrink-0">
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 uppercase tracking-wider shrink-0 mt-0.5">
                 Doorstep
               </span>
             </div>

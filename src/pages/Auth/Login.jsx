@@ -3,6 +3,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { loginUser, sendOTP, verifyOTP } from "../../services/auth.service";
 import { setToken } from "../../utils/storage";
 import { successToast, errorToast } from "../../utils/toast";
+import { syncGuestCart } from "../../utils/syncGuestCart";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleLogin } from "../../api/auth.api";
 import {
@@ -89,6 +90,11 @@ export default function LoginPage() {
       const token = response?.data?.authorization;
       if (token) {
         setToken(token);
+        try {
+          await syncGuestCart();
+        } catch (e) {
+          console.warn("Guest cart sync warning:", e);
+        }
         successToast("Welcome back! Login successful");
         window.location.replace(redirectTo);
       } else {
@@ -185,6 +191,11 @@ export default function LoginPage() {
       const token = result?.data?.data?.authorization;
       if (token) {
         setToken(token);
+        try {
+          await syncGuestCart();
+        } catch (e) {
+          console.warn("Guest cart sync warning:", e);
+        }
         successToast("Verification successful! Welcome back");
         window.location.replace(redirectTo);
       } else {
@@ -212,6 +223,11 @@ export default function LoginPage() {
       const token = result?.data?.data?.authorization;
       if (token) {
         setToken(token);
+        try {
+          await syncGuestCart();
+        } catch (e) {
+          console.warn("Guest cart sync warning:", e);
+        }
         successToast("Google login successful!");
         window.location.replace(redirectTo);
       } else {

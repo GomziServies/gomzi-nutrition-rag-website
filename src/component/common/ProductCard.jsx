@@ -5,7 +5,7 @@ import {
   getProductImageUrl,
   getFallbackProductImage,
 } from "../../utils/productAdapter";
-import { addProductToCart } from "../../services/cartStorage.service";
+import { addProductToCart, addGuestCartItem } from "../../services/cartStorage.service";
 import { successToast, errorToast } from "../../utils/toast";
 import useAuth from "../../hooks/useAuth";
 
@@ -87,6 +87,7 @@ export default function ProductCard({
     const isUserLoggedIn =
       isAuthenticated || Boolean(localStorage.getItem("authorization"));
     if (!isUserLoggedIn) {
+      addGuestCartItem({ product, quantity: 1 });
       navigate(
         `/login?redirect=${encodeURIComponent(
           location.pathname + location.search
@@ -100,7 +101,6 @@ export default function ProductCard({
         await onAddToCart(product);
       } else {
         await addProductToCart(product);
-        successToast(`${product.name} added to cart`);
       }
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
@@ -114,8 +114,9 @@ export default function ProductCard({
     const isUserLoggedIn =
       isAuthenticated || Boolean(localStorage.getItem("authorization"));
     if (!isUserLoggedIn) {
+      addGuestCartItem({ product, quantity: 1 });
       navigate(
-        `/login?redirect=${encodeURIComponent(url)}&from=${encodeURIComponent(
+        `/login?redirect=${encodeURIComponent("/cart")}&from=${encodeURIComponent(
           location.pathname + location.search
         )}`
       );
@@ -138,7 +139,7 @@ export default function ProductCard({
     return (
       <article
         onClick={handleCardClick}
-        className={`group relative flex flex-col justify-between rounded-xl sm:rounded-2xl border border-gray-200/90 bg-white p-3 sm:p-4 shadow-xs transition-all duration-300 hover:border-sale/60 hover:shadow-md cursor-pointer ${className}`}
+        className={`group relative flex flex-col justify-between rounded-xl sm:rounded-2xl border border-gray-200/90 bg-white p-3 sm:p-4 shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-md cursor-pointer ${className}`}
       >
         {/* Top: Left Image + Right Details */}
         <div className="flex items-start gap-3 sm:gap-4">
@@ -201,7 +202,7 @@ export default function ProductCard({
 
             {/* Premium Member Price */}
             <div className="mt-2 flex items-center gap-1.5 text-[11px] sm:text-xs text-gray-700">
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-sale bg-white text-[9px] font-black text-sale shadow-2xs">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-primary bg-white text-[9px] font-black text-primary shadow-2xs">
                 ★
               </span>
               <span className="truncate">
@@ -218,9 +219,9 @@ export default function ProductCard({
             type="button"
             onClick={handleAddToCart}
             disabled={busy}
-            className="flex items-center justify-center gap-1.5 rounded-lg border-2 border-sale bg-white py-2 px-2 text-center text-xs sm:text-sm font-bold text-sale transition-colors hover:bg-sale-light active:scale-[0.99] disabled:opacity-60 cursor-pointer shadow-2xs"
+            className="flex items-center justify-center gap-1.5 rounded-lg border-2 border-primary bg-white py-2 px-2 text-center text-xs sm:text-sm font-bold text-primary transition-colors hover:bg-primary-light active:scale-[0.99] disabled:opacity-60 cursor-pointer shadow-2xs"
           >
-            <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-sale shrink-0" />
+            <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary shrink-0" />
             <span className="truncate">{added ? "Added!" : busy ? "Adding..." : "Add to Cart"}</span>
           </button>
 
@@ -228,7 +229,7 @@ export default function ProductCard({
             type="button"
             onClick={handleBuyNow}
             disabled={busy}
-            className="flex items-center justify-center rounded-lg bg-sale hover:bg-sale-hover py-2 px-2 text-center text-xs sm:text-sm font-bold text-white transition-colors active:scale-[0.99] disabled:opacity-60 cursor-pointer shadow-xs"
+            className="flex items-center justify-center rounded-lg bg-primary hover:bg-primary-hover py-2 px-2 text-center text-xs sm:text-sm font-bold text-white transition-colors active:scale-[0.99] disabled:opacity-60 cursor-pointer shadow-xs"
           >
             <span className="truncate">Buy Now</span>
           </button>

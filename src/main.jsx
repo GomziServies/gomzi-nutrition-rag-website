@@ -20,6 +20,12 @@ createRoot(document.getElementById("root")).render(
         position="top-center"
         toastOptions={{
           duration: 3000,
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 3000,
+          },
         }}
       />
     </HelmetProvider>
