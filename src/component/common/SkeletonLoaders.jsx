@@ -8,13 +8,36 @@ import React from "react";
  * - Aspect-square image container with floating rating badge
  * - Authenticity line, title, prices, and full-width CTA button
  */
-export const ProductCardSkeleton = ({ className = "" }) => (
-  <div
-    className={`bg-white rounded-3xl border border-gray-200/80 p-3 sm:p-4.5 flex flex-col justify-between shadow-xs ${className}`}
-  >
-    <div>
-      {/* Top Tag & Wishlist */}
-      <div className="flex items-center justify-between w-full mb-2">
+export const ProductCardSkeleton = ({ className = "", variant = "vertical" }) => {
+  if (variant === "horizontal") {
+    return (
+      <div
+        className={`bg-white rounded-xl sm:rounded-2xl border border-gray-200/90 p-3 sm:p-4 flex flex-col justify-between shadow-xs ${className}`}
+      >
+        <div className="flex items-start gap-3 sm:gap-4">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl skeleton-shimmer shrink-0" />
+          <div className="flex-1 space-y-2 py-1">
+            <div className="h-4 w-full rounded skeleton-shimmer" />
+            <div className="h-4 w-2/3 rounded skeleton-shimmer" />
+            <div className="h-5 w-24 rounded skeleton-shimmer mt-2" />
+            <div className="h-3.5 w-32 rounded skeleton-shimmer mt-1" />
+          </div>
+        </div>
+        <div className="mt-3 pt-2.5 border-t border-gray-100 grid grid-cols-2 gap-2 sm:gap-3">
+          <div className="h-9 rounded-lg skeleton-shimmer" />
+          <div className="h-9 rounded-lg skeleton-shimmer" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`bg-white rounded-3xl border border-gray-200/80 p-3 sm:p-4.5 flex flex-col justify-between shadow-xs ${className}`}
+    >
+      <div>
+        {/* Top Tag & Wishlist */}
+        <div className="flex items-center justify-between w-full mb-2">
         <div className="h-5 w-20 rounded-full skeleton-shimmer" />
         <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full skeleton-shimmer shrink-0" />
       </div>
@@ -45,7 +68,8 @@ export const ProductCardSkeleton = ({ className = "" }) => (
     {/* CTA Button */}
     <div className="w-full h-10 sm:h-11 rounded-xl skeleton-shimmer" />
   </div>
-);
+  );
+};
 
 /**
  * 2. HeroSkeleton

@@ -949,18 +949,19 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
             {/* Product Grid / Skeletons */}
             {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6">
-                {[...Array(9)].map((_, index) => (
-                  <ProductCardSkeleton key={index} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 lg:gap-5">
+                {[...Array(6)].map((_, index) => (
+                  <ProductCardSkeleton key={index} variant="horizontal" />
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 lg:gap-5">
                 {products.map((product) => (
                   <ProductCard
                     key={product._id}
                     product={product}
                     onAddToCart={handleAddToCart}
+                    variant="horizontal"
                   />
                 ))}
               </div>
