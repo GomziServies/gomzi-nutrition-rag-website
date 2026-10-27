@@ -15,7 +15,7 @@ import ProductsGrid from "./ProductsGrid";
 import ProductCarouselSection from "./ProductCarouselSection";
 import FAQSection from "./FAQItem";
 import CustomerReviews from "./CustomerReviews";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import useProducts from "../../hooks/useProducts";
 import { addToCart } from "../../services/product.service";
 import { successToast, errorToast } from "../../utils/toast";
@@ -45,6 +45,8 @@ const categorySlugMap = {
 
 export default function NARAProductPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const { product, loading } = useProducts({ slug });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -153,6 +155,15 @@ export default function NARAProductPage() {
   ];
 
   const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      errorToast("Please login to add items to your cart");
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     try {
       setCartLoading(true);
 
@@ -166,22 +177,10 @@ export default function NARAProductPage() {
             }
           : {},
       };
-      // console.log("Payload for addToCart:", payload);
-      // console.log("Is user authenticated?", isAuthenticated);
-      if (isAuthenticated) {
-        const result = await addToCart(payload);
 
-        if (result.success) {
-          successToast("Added to cart");
-          setIsCartOpen(true);
-        }
-      } else {
-        addGuestCartItem({
-          product,
-          quantity: 1,
-          selectedVariation,
-        });
+      const result = await addToCart(payload);
 
+      if (result.success) {
         successToast("Added to cart");
         setIsCartOpen(true);
       }

@@ -91,45 +91,39 @@ export const addProductToCart = async (product, quantity = 1, selectedVariation 
     const variationId = selectedVariation?._id || (rawProduct.variations?.[0]?._id) || null;
     const productName = product?.name || rawProduct?.name || "Product";
 
-    if (token) {
-      const payload = {
-        item_id: productId,
-        item_type: "FG_MEAL_PRODUCT",
-        quantity,
-        notes: variationId ? { variation_id: variationId } : {},
-      };
-      try {
-        const response = await addToCartApi(payload);
-        if (response && (response.status === 200 || response.status === 201 || response.data?.status === 200)) {
-          successToast(`Added ${productName} to cart!`);
-          if (typeof window !== "undefined") {
-            window.dispatchEvent(new Event("cartUpdated"));
-          }
-          return true;
-        }
-      } catch (apiErr) {
-        console.warn("API addToCart failed, saving to guest cart:", apiErr);
+    if (!token) {
+      errorToast("Please login to add items to your cart");
+      if (typeof window !== "undefined") {
+        const currentPath = window.location.pathname + window.location.search;
+        window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
       }
-    }
-
-    addGuestCartItem({
-      product,
-      quantity,
-      selectedVariation,
-    });
-    successToast(`Added ${productName} to cart!`);
-    return true;
-  } catch (err) {
-    console.error("Failed to add to cart:", err);
-    try {
-      addGuestCartItem({ product, quantity, selectedVariation });
-      const fallbackName = product?.name || "Product";
-      successToast(`Added ${fallbackName} to cart!`);
-      return true;
-    } catch {
-      errorToast("Failed to add to cart");
       return false;
     }
+
+    const payload = {
+      item_id: productId,
+      item_type: "FG_MEAL_PRODUCT",
+      quantity,
+      notes: variationId ? { variation_id: variationId } : {},
+    };
+    try {
+      const response = await addToCartApi(payload);
+      if (response && (response.status === 200 || response.status === 201 || response.data?.status === 200)) {
+        successToast(`Added ${productName} to cart!`);
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("cartUpdated"));
+        }
+        return true;
+      }
+    } catch (apiErr) {
+      console.warn("API addToCart failed:", apiErr);
+      errorToast(apiErr?.response?.data?.message || "Failed to add to cart");
+      return false;
+    }
+  } catch (err) {
+    console.error("Failed to add to cart:", err);
+    errorToast("Failed to add to cart");
+    return false;
   }
 };
 

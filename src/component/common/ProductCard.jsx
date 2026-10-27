@@ -6,7 +6,7 @@ import {
   getFallbackProductImage,
 } from "../../utils/productAdapter";
 import { addProductToCart } from "../../services/cartStorage.service";
-import { successToast } from "../../utils/toast";
+import { successToast, errorToast } from "../../utils/toast";
 import useAuth from "../../hooks/useAuth";
 
 /**
@@ -78,6 +78,15 @@ export default function ProductCard({
 
   const handleAddToCart = async (e) => {
     e.stopPropagation();
+    if (!isAuthenticated) {
+      errorToast("Please login to add items to your cart");
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     setBusy(true);
     try {
       if (onAddToCart) {
@@ -95,6 +104,15 @@ export default function ProductCard({
 
   const handleBuyNow = async (e) => {
     e.stopPropagation();
+    if (!isAuthenticated) {
+      errorToast("Please login to continue checkout");
+      navigate(
+        `/login?redirect=${encodeURIComponent(url)}&from=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     setBusy(true);
     try {
       if (onAddToCart) {
@@ -102,18 +120,7 @@ export default function ProductCard({
       } else {
         await addProductToCart(product);
       }
-
-      // Buy Now opens the product's own page. If the visitor is not signed in
-      // yet, send them through login first and land back on that page.
-      if (isAuthenticated) {
-        navigate(url);
-      } else {
-        navigate(
-          `/login?redirect=${encodeURIComponent(url)}&from=${encodeURIComponent(
-            location.pathname + location.search
-          )}`
-        );
-      }
+      navigate(url);
     } finally {
       setBusy(false);
     }

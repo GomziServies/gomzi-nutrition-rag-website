@@ -2,10 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import ProductCard from "../common/ProductCard";
 import useProducts from "../../hooks/useProducts";
 import { addProductToCart } from "../../services/cartStorage.service";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 import useProductCategories from "../../hooks/useProductCategories";
 import { getCompaniesApi } from "../../api/company.api";
+import useAuth from "../../hooks/useAuth";
+import { errorToast } from "../../utils/toast";
 import ComparisonSection from "../category/ComparisonSection";
 import FAQSection from "../category/FAQSection";
 import BottomContentSection from "../category/BottomContentSection";
@@ -73,6 +75,8 @@ const websiteCategories = [
 
 const ProductsGrid = ({ categorySlug, pageData }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const [searchParams] = useSearchParams();
 
   const category = searchParams.get("category") || "";
@@ -272,6 +276,15 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   };
 
   const handleAddToCart = async (product) => {
+    if (!isAuthenticated) {
+      errorToast("Please login to add items to your cart");
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     await addProductToCart(product);
   };
 
