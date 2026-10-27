@@ -152,9 +152,9 @@ input[type="radio"] {
   }
 
   .offer-tab:hover {
-    background: #f9fafb;
-    border-color: #9ca3af;
-    color: #111827;
+    background: var(--color-primary-light);
+    border-color: var(--color-primary-border);
+    color: var(--color-primary);
   }
 
   .offer-tab:active {
@@ -162,16 +162,16 @@ input[type="radio"] {
   }
 
   .offer-tab-active {
-    background: #1c120e;
-    color: #ffffff;
-    border-color: #1c120e;
-    box-shadow: 0 4px 12px rgba(28, 18, 14, 0.18);
+    background: #1b365d !important;
+    color: #ffffff !important;
+    border-color: #1b365d !important;
+    box-shadow: 0 4px 12px rgba(27, 54, 93, 0.25);
   }
 
   .offer-tab-active:hover {
-    background: #2a1b15;
-    border-color: #2a1b15;
-    color: #ffffff;
+    background: #14294a !important;
+    border-color: #14294a !important;
+    color: #ffffff !important;
   }
 
   /* =========================================

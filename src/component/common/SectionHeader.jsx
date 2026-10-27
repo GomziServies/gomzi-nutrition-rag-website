@@ -37,7 +37,20 @@ export default function SectionHeader({
                 key={tab.id}
                 type="button"
                 onClick={() => onTabChange?.(tab.id)}
-                className={`offer-tab ${active ? "offer-tab-active" : ""}`}
+                className={`offer-tab transition-all duration-200 cursor-pointer ${
+                  active
+                    ? "!bg-[#1b365d] !text-white !border-[#1b365d] shadow-md hover:!bg-[#14294a]"
+                    : "hover:!bg-[#f1f4f9] hover:!text-[#1b365d] hover:!border-[#dce3ee]"
+                }`}
+                style={
+                  active
+                    ? {
+                        backgroundColor: "#1b365d",
+                        color: "#ffffff",
+                        borderColor: "#1b365d",
+                      }
+                    : undefined
+                }
               >
                 {tab.label}
               </button>

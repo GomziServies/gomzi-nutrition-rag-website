@@ -66,6 +66,7 @@ export default function HeroSection() {
             .map((b) => ({
               _id: b._id || b.id,
               desktop_image: b.desktop_image || b.image,
+              mobile_image: b.mobile_image || b.mobileImage || "",
               alt_text: b.alt_text || b.title || "Gomzi Nutrition",
               shop_link: b.shop_link || b.shopLink || "/gomzi-supplement",
             }));
@@ -132,13 +133,21 @@ export default function HeroSection() {
                 onClick={() => handleSlideNavigation(slide.shop_link || slide.shopLink)}
                 className="w-full cursor-pointer bg-white flex justify-center items-center overflow-hidden"
               >
-                <img
-                  src={resolveImageUrl(slide.desktop_image || slide.image)}
-                  alt={slide.alt_text || slide.title || "Gomzi Nutrition"}
-                  fetchPriority={index === 0 ? "high" : "low"}
-                  loading={index === 0 ? "eager" : "lazy"}
-                  className="block w-full h-auto sm:max-h-[380px] lg:max-h-[420px] select-none"
-                />
+                <picture className="block w-full">
+                  {slide.mobile_image ? (
+                    <source
+                      media="(max-width: 640px)"
+                      srcSet={resolveImageUrl(slide.mobile_image)}
+                    />
+                  ) : null}
+                  <img
+                    src={resolveImageUrl(slide.desktop_image || slide.image)}
+                    alt={slide.alt_text || slide.title || "Gomzi Nutrition"}
+                    fetchPriority={index === 0 ? "high" : "low"}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    className="block w-full h-auto sm:max-h-[380px] lg:max-h-[420px] select-none object-contain sm:object-cover"
+                  />
+                </picture>
               </div>
             </SwiperSlide>
           ))}
