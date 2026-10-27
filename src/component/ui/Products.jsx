@@ -71,60 +71,19 @@ const websiteCategories = [
   },
 ];
 
-const categorySlugMap = {
-  "Whey Protein": "whey-protein",
-  "Plant Protein": "plant-protein",
-  "Mass Gainer": "mass-gainer",
-  "Pre Workout": "pre-workout",
-  BCAA: "bcaa",
-  Creatine: "creatine",
-  "Meal Replacement": "meal-replacement",
-  "Wellness & Health": "wellness-health",
-};
-
-/**
- * Generates an array of page numbers and ellipsis indicators.
- */
-const getPaginationItems = (currentPage, totalPages) => {
-  if (!totalPages || totalPages <= 1) return [];
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-
-  if (currentPage <= 2) {
-    return [1, 2, 3, "...", totalPages];
-  }
-
-  if (currentPage === 3) {
-    return [1, 2, 3, 4, "...", totalPages];
-  }
-
-  if (currentPage === totalPages - 2) {
-    return [1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
-  }
-
-  if (currentPage >= totalPages - 1) {
-    return [1, "...", totalPages - 2, totalPages - 1, totalPages];
-  }
-
-  return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
-};
-
-
 const ProductsGrid = ({ categorySlug, pageData }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
   const brandParam = searchParams.get("brand") || searchParams.get("company") || "";
 
-  const [selectedCategory, setSelectedCategory] = useState(
-    category || "All Products",
-  );
-  const [selectedCompany, setSelectedCompany] = useState(
-    brandParam || "All Companies",
-  );
+  const selectedCategory =
+    category ||
+    pageData?.category ||
+    (categorySlug ? categorySlug.replace(/-/g, " ") : "All Products");
+
+  const selectedCompany = brandParam || "All Companies";
   const [companySearchQuery, setCompanySearchQuery] = useState("");
   const [companiesList, setCompaniesList] = useState([]);
 
@@ -132,7 +91,6 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   const [isCompanyDrawerOpen, setIsCompanyDrawerOpen] = useState(false);
   const [sortBy, setSortBy] = useState("Featured");
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
   /*
   |--------------------------------------------------------------------------
@@ -164,7 +122,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
   /*
   |--------------------------------------------------------------------------
-  | Product API Query
+  | Product API Query - All Products on a Single Page (No Pagination)
   |--------------------------------------------------------------------------
   */
   const activeCategory =
@@ -205,9 +163,9 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
     }
   }
 
-  const { products, loading, pagination, hasProducts } = useProducts({
-    page: currentPage,
-    limit: 12,
+  const { products, loading, pagination } = useProducts({
+    page: 1,
+    limit: 1000,
     search: apiSearch,
     category: activeCategory,
     brand: activeBrand,
@@ -218,7 +176,6 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   const {
     categories: categoryData,
     totalProducts,
-    loading: categoriesLoading,
   } = useProductCategories();
 
   const backendCategoryCounts = useMemo(() => {
@@ -280,39 +237,15 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
       top: 0,
       behavior: "smooth",
     });
-  }, [currentPage]);
-
-  // Sync state when URL params change
-  useEffect(() => {
-    if (category) {
-      setSelectedCategory(category);
-    } else if (pageData?.category) {
-      setSelectedCategory(pageData.category);
-    } else if (categorySlug) {
-      setSelectedCategory(categorySlug.replace(/-/g, " "));
-    } else {
-      setSelectedCategory("All Products");
-    }
-
-    if (brandParam) {
-      setSelectedCompany(brandParam);
-    } else {
-      setSelectedCompany("All Companies");
-    }
-
-    setCurrentPage(1);
-  }, [category, pageData?.category, categorySlug, brandParam]);
+  }, [category, brandParam, rawSearch]);
 
   const handleCategorySelect = (categoryName) => {
-    setCurrentPage(1);
     const newParams = new URLSearchParams(searchParams);
 
     if (categoryName === "All Products") {
       newParams.delete("category");
-      setSelectedCategory("All Products");
     } else {
       newParams.set("category", categoryName);
-      setSelectedCategory(categoryName);
     }
 
     const queryStr = newParams.toString();
@@ -320,17 +253,14 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   };
 
   const handleCompanySelect = (companyName) => {
-    setCurrentPage(1);
     const newParams = new URLSearchParams(searchParams);
 
     if (!companyName || companyName === "All Companies") {
       newParams.delete("brand");
       newParams.delete("company");
-      setSelectedCompany("All Companies");
     } else {
       newParams.set("brand", companyName);
       newParams.delete("company");
-      setSelectedCompany(companyName);
     }
 
     const queryStr = newParams.toString();
@@ -338,23 +268,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   };
 
   const handleClearAllFilters = () => {
-    setCurrentPage(1);
-    setSelectedCategory("All Products");
-    setSelectedCompany("All Companies");
     navigate("/gomzi-supplement");
-  };
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber < 1 || pageNumber > pagination.totalPages) {
-      return;
-    }
-
-    setCurrentPage(pageNumber);
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
   };
 
   const handleAddToCart = async (product) => {
@@ -432,7 +346,6 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                     <button
                       key={option}
                       onClick={() => {
-                        setCurrentPage(1);
                         setSortBy(option);
                         setIsSortDropdownOpen(false);
                       }}
@@ -512,7 +425,6 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       key={option}
                       onClick={() => {
                         setSortBy(option);
-                        setCurrentPage(1);
                         setIsSortDropdownOpen(false);
                       }}
                       className={`w-full flex items-center justify-between px-3 py-2
@@ -1034,71 +946,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               </div>
             )}
 
-            {/* ============================================================
-                PAGINATION
-            ============================================================ */}
-            {pagination.totalPages > 1 && (
-              <div className="mt-14 mb-6 flex flex-wrap items-center justify-end gap-2 sm:gap-2.5 select-none">
-                <button
-                  type="button"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`px-5 sm:px-6 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all ${
-                    currentPage === 1
-                      ? "border-gray-200 text-gray-300 cursor-not-allowed bg-transparent"
-                      : "border-gray-200 text-gray-700 hover:border-primary hover:text-primary hover:bg-primary-light cursor-pointer"
-                  }`}
-                >
-                  Previous
-                </button>
-
-                <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                  {getPaginationItems(currentPage, pagination.totalPages).map((item, index) => {
-                    if (item === "...") {
-                      return (
-                        <span
-                          key={`ellipsis-${index}`}
-                          className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 font-bold select-none text-sm tracking-wider"
-                        >
-                          ...
-                        </span>
-                      );
-                    }
-
-                    const isActive = currentPage === item;
-
-                    return (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => handlePageChange(item)}
-                        aria-current={isActive ? "page" : undefined}
-                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                          isActive
-                            ? "bg-gradient-to-r from-primary to-primary-hover text-white shadow-md shadow-primary/25 border border-amber-400/30"
-                            : "border border-primary-border text-gray-800 hover:border-primary hover:text-primary hover:bg-primary-light"
-                        }`}
-                      >
-                        {item}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === pagination.totalPages}
-                  className={`px-5 sm:px-6 py-2 rounded-full border text-xs sm:text-sm font-semibold transition-all ${
-                    currentPage === pagination.totalPages
-                      ? "border-gray-200 text-gray-300 cursor-not-allowed bg-transparent"
-                      : "border-gray-200 text-gray-700 hover:border-primary hover:text-primary hover:bg-primary-light cursor-pointer"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            )}
+            {/* No pagination needed: all products rendered on a single page */}
           </div>
         </div>
       </div>
@@ -1114,11 +962,11 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
       )}
 
       {/* ================================================================
-          BOTTOM CONTENT
+          BOTTOM CONTENT (Comparison Section commented out)
       ================================================================ */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 mt-10">
+      {/* <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 mt-10">
         <ComparisonSection data={pageData.sections?.comparisonSection} />
-      </div>
+      </div> */}
 
       <FAQSection faq={pageData.sections?.faq || pageData.faq} />
 

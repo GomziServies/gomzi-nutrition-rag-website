@@ -5,22 +5,39 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
 import { getHeroBannerApi } from "../../api/banner.api";
+import { getLocalCache, setLocalCache } from "../../utils/storage";
 import CarouselControls from "../common/CarouselControls";
 
-const FALLBACK_BANNER = {
-  _id: "gomzi-hero-banner",
-  desktop_image: "/images/banners/current-hero-banner.jpg",
-  alt_text: "Science-Backed Nutrition For Everyday Performance - Gomzi Nutrition",
-  shop_link: "/gomzi-supplement",
+const HERO_BANNERS_CACHE_KEY = "gomzi_hero_banners_live_cache";
+
+/**
+ * Resolve absolute or remote S3 / FG Group image path.
+ */
+const resolveImageUrl = (img) => {
+  if (!img) return "";
+  if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/")) {
+    return img;
+  }
+  return `https://files.fggroup.in/${img}`;
 };
 
 /**
  * Hero banner carousel.
- * Full-bleed imagery, minimal chrome, quiet pagination.
+ * Live data: Displays only live banners configured via RAG Admin.
+ * Zero dummy/mock images.
  */
 export default function HeroSection() {
   const navigate = useNavigate();
-  const [banners, setBanners] = useState([FALLBACK_BANNER]);
+  const [banners, setBanners] = useState(() => {
+    const cached = getLocalCache(HERO_BANNERS_CACHE_KEY);
+    if (Array.isArray(cached) && cached.length > 0) {
+      const valid = cached.filter(
+        (c) => c && (c.desktop_image || c.image) && !String(c.desktop_image || c.image).includes("current-hero-banner")
+      );
+      if (valid.length > 0) return valid;
+    }
+    return [];
+  });
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
 
@@ -39,23 +56,27 @@ export default function HeroSection() {
           list = raw.banners;
         } else if (Array.isArray(raw) && raw.length > 0) {
           list = raw;
-        } else if (raw.desktop_image || raw.mobile_image) {
+        } else if (raw.desktop_image || raw.image) {
           list = [raw];
         }
 
         if (list.length > 0) {
-          setBanners(
-            list.map((b) => ({
-              ...b,
-              desktop_image:
-                b.desktop_image || b.image || FALLBACK_BANNER.desktop_image,
-              mobile_image:
-                b.mobile_image || b.mobileImage || b.desktop_image || b.image || FALLBACK_BANNER.mobile_image,
-            }))
-          );
+          const liveList = list
+            .filter((b) => b.status !== false && Boolean(b.desktop_image || b.image))
+            .map((b) => ({
+              _id: b._id || b.id,
+              desktop_image: b.desktop_image || b.image,
+              alt_text: b.alt_text || b.title || "Gomzi Nutrition",
+              shop_link: b.shop_link || b.shopLink || "/gomzi-supplement",
+            }));
+
+          if (liveList.length > 0) {
+            setBanners(liveList);
+            setLocalCache(HERO_BANNERS_CACHE_KEY, liveList);
+          }
         }
       } catch {
-        // keep the fallback banner
+        // Silent catch: zero dummy fallback images
       }
     };
 
@@ -64,14 +85,6 @@ export default function HeroSection() {
       isMounted = false;
     };
   }, []);
-
-  const resolveImageUrl = (img) => {
-    if (!img) return FALLBACK_BANNER.desktop_image;
-    if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/")) {
-      return img;
-    }
-    return `https://files.fggroup.in/${img}`;
-  };
 
   const handleSlideNavigation = (link) => {
     if (!link) {
@@ -84,6 +97,14 @@ export default function HeroSection() {
       navigate(link.startsWith("/") ? link : `/${link}`);
     }
   };
+
+  if (!banners || banners.length === 0) {
+    return (
+      <section className="relative w-full bg-white">
+        <div className="w-full h-[180px] sm:h-[260px] md:h-[320px] lg:h-[380px] bg-gray-100 animate-pulse" />
+      </section>
+    );
+  }
 
   return (
     <section className="relative w-full bg-white">
@@ -117,10 +138,6 @@ export default function HeroSection() {
                   fetchPriority={index === 0 ? "high" : "low"}
                   loading={index === 0 ? "eager" : "lazy"}
                   className="block w-full h-auto sm:max-h-[380px] lg:max-h-[420px] select-none"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = FALLBACK_BANNER.desktop_image;
-                  }}
                 />
               </div>
             </SwiperSlide>
@@ -162,3 +179,4 @@ export default function HeroSection() {
     </section>
   );
 }
+
