@@ -17,6 +17,7 @@ import { getAllCustomerFeedbackApi } from "../../api/feedback.api";
 /**
  * Curated high-converting testimonials for initial/fallback render
  */
+/*
 const DEFAULT_TESTIMONIALS = [
   {
     id: "fb-1",
@@ -69,6 +70,7 @@ const DEFAULT_TESTIMONIALS = [
     verified: true,
   },
 ];
+*/
 
 /**
  * Extract initials for avatar monogram
@@ -98,9 +100,23 @@ const getAvatarTheme = (name) => {
 };
 
 export default function CustomerFeedbackSection() {
-  const [feedbacks, setFeedbacks] = useState(DEFAULT_TESTIMONIALS);
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [swiperRef, setSwiperRef] = useState(null);
-  const [totalCount, setTotalCount] = useState(1280);
+  const [totalCount, setTotalCount] = useState(0);
+  const [expandedIds, setExpandedIds] = useState(() => new Set());
+
+  const toggleReadMore = (id) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -138,13 +154,14 @@ export default function CustomerFeedbackSection() {
             });
 
           if (liveList.length > 0) {
-            // Combine live reviews with curated showcase
-            setFeedbacks([...liveList, ...DEFAULT_TESTIMONIALS]);
-            setTotalCount(1200 + liveList.length * 15);
+            setFeedbacks(liveList);
+            setTotalCount(liveList.length);
           }
         }
       } catch {
-        // keep curated showcase active seamlessly
+        // keep empty on network failure
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -154,6 +171,10 @@ export default function CustomerFeedbackSection() {
       isMounted = false;
     };
   }, []);
+
+  if (!loading && feedbacks.length === 0) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-[#f8fafc] py-10 md:py-14 border-t border-b border-border/60" aria-label="Customer Feedback">
@@ -217,6 +238,9 @@ export default function CustomerFeedbackSection() {
             freeMode={{ enabled: true, momentum: true }}
             loop={feedbacks.length > 3}
             speed={500}
+            observer={true}
+            observeParents={true}
+            watchOverflow={true}
             autoplay={{
               delay: 4500,
               disableOnInteraction: false,
@@ -229,83 +253,116 @@ export default function CustomerFeedbackSection() {
               768: { slidesPerView: 2.2, spaceBetween: 20 },
               1024: { slidesPerView: 3, spaceBetween: 24 },
             }}
-            className="w-full select-none cursor-grab active:cursor-grabbing pb-2"
+            className="w-full select-none cursor-grab active:cursor-grabbing pb-2 feedback-swiper [&_.swiper-wrapper]:!flex [&_.swiper-wrapper]:!items-stretch [&_.swiper-slide]:!h-auto [&_.swiper-slide]:!flex [&_.swiper-slide]:!flex-col"
           >
-            {feedbacks.map((fb, idx) => (
-              <SwiperSlide key={`${fb.id}-${idx}`} className="h-auto !flex items-stretch">
-                <div className="w-full flex flex-col justify-between rounded-2xl border border-border/80 bg-white p-5 sm:p-6 shadow-xs transition-all duration-300 hover:shadow-md hover:border-primary/40 relative">
-                  <div>
-                    {/* Top row: Star rating + Quote Icon */}
-                    <div className="flex items-center justify-between mb-3.5">
-                      <div className="flex items-center gap-1">
-                        {Array.from({ length: 5 }).map((_, starIdx) => {
-                          const filled = starIdx < fb.rating;
-                          return (
-                            <Star
-                              key={starIdx}
-                              className={`w-4 h-4 ${
-                                filled
-                                  ? "fill-amber-400 text-amber-400"
-                                  : "fill-gray-200 text-gray-200"
-                              }`}
-                            />
-                          );
-                        })}
-                      </div>
-                      <Quote className="w-6 h-6 text-primary/15" />
-                    </div>
+            {feedbacks.map((fb, idx) => {
+              const isExpanded = expandedIds.has(fb.id);
+              const isLong = (fb.comment || "").length > 80;
 
-                    {/* Review Text */}
-                    <p className="text-sm text-text-body font-normal leading-relaxed line-clamp-4 mb-4">
-                      "{fb.comment}"
-                    </p>
-                  </div>
-
-                  <div>
-                    {/* Product Tag */}
-                    {fb.productName && (
-                      <div className="mb-3.5">
-                        <span className="inline-block text-[11px] font-medium text-primary bg-primary-light px-2.5 py-1 rounded-md max-w-full truncate">
-                          Purchased: {fb.productName}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Reviewer Signature Card */}
-                    <div className="flex items-center gap-3 pt-3 border-t border-border/40">
-                      {(() => {
-                        const theme = getAvatarTheme(fb.name);
-                        return (
-                          <div
-                            className={`group/avatar relative overflow-hidden w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-xs shrink-0 transition-transform duration-300 hover:scale-105 ${theme.bg}`}
-                          >
-                            <span className={`relative z-10 ${theme.text}`}>
-                              {getInitials(fb.name)}
-                            </span>
-                          </div>
-                        );
-                      })()}
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5">
-                          <h4 className="text-xs sm:text-sm font-bold text-text truncate">
-                            {fb.name}
-                          </h4>
-                          {fb.verified && (
-                            <span title="Verified Customer">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                            </span>
-                          )}
+              return (
+                <SwiperSlide key={`${fb.id}-${idx}`} className="!h-auto !flex !flex-col">
+                  <div className="flex-1 w-full flex flex-col justify-between rounded-2xl border border-border/80 bg-white p-5 sm:p-6 shadow-xs transition-all duration-300 hover:shadow-md hover:border-primary/40 relative">
+                    <div className="flex-1 flex flex-col">
+                      {/* Top row: Star rating + Quote Icon */}
+                      <div className="flex items-center justify-between mb-3.5">
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: 5 }).map((_, starIdx) => {
+                            const filled = starIdx < fb.rating;
+                            return (
+                              <Star
+                                key={starIdx}
+                                className={`w-4 h-4 ${
+                                  filled
+                                    ? "fill-amber-400 text-amber-400"
+                                    : "fill-gray-200 text-gray-200"
+                                }`}
+                              />
+                            );
+                          })}
                         </div>
-                        <p className="text-[11px] text-text-light font-medium truncate">
-                          {fb.date}
+                        <Quote className="w-6 h-6 text-primary/15" />
+                      </div>
+
+                      {/* Review Text with consistent height and Read More */}
+                      <div className="flex-1 flex flex-col justify-start mb-4">
+                        <p
+                          className={`text-sm text-text-body font-normal leading-relaxed transition-all duration-200 ${
+                            isExpanded ? "" : "line-clamp-3"
+                          }`}
+                        >
+                          "{fb.comment}"
                         </p>
+
+                        {isLong && (
+                          <button
+                            type="button"
+                            onClick={() => toggleReadMore(fb.id)}
+                            className="mt-2 self-start text-xs font-bold text-primary hover:text-primary-hover inline-flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 transition-colors"
+                          >
+                            <span>{isExpanded ? "Read Less" : "Read More"}</span>
+                            <span className="text-[10px]">{isExpanded ? "▲" : "▼"}</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-auto pt-2">
+                      {/* Product Tag */}
+                      <div className="mb-3.5 min-h-[26px] flex items-center">
+                        {fb.productName ? (
+                          <span className="inline-block text-[11px] font-medium text-primary bg-primary-light px-2.5 py-1 rounded-md max-w-full truncate">
+                            Purchased: {fb.productName}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      {/* Reviewer Signature Card */}
+                      <div className="flex items-center gap-3 pt-3 border-t border-border/40">
+                        {(() => {
+                          const theme = getAvatarTheme(fb.name);
+                          return (
+                            <div
+                              className={`group/avatar relative overflow-hidden w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-xs shrink-0 transition-transform duration-300 hover:scale-105 ${theme.bg}`}
+                            >
+                              <span className={`relative z-10 ${theme.text}`}>
+                                {getInitials(fb.name)}
+                              </span>
+                            </div>
+                          );
+                        })()}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <h4 className="text-xs sm:text-sm font-bold text-text truncate">
+                              {fb.name}
+                            </h4>
+                            {fb.verified && (
+                              <span title="Verified Customer">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-text-light font-medium truncate">
+                            {fb.date}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
+          <style>{`
+            .feedback-swiper .swiper-wrapper {
+              display: flex !important;
+              align-items: stretch !important;
+            }
+            .feedback-swiper .swiper-slide {
+              height: auto !important;
+              display: flex !important;
+              flex-direction: column !important;
+            }
+          `}</style>
         </div>
       </div>
     </section>
