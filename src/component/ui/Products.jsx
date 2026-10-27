@@ -768,7 +768,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
           {/* ================================================================
               DESKTOP SIDEBAR (DUAL FILTERS: CATEGORIES + COMPANIES)
           ================================================================ */}
-          <aside className="hidden lg:block w-72 flex-shrink-0 space-y-6">
+          <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-6 self-start max-h-[calc(100vh-2.5rem)] overflow-y-auto overscroll-contain pr-1 space-y-5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 [scrollbar-width:thin] [scrollbar-color:#e5e7eb_transparent]">
             {/* 1. Categories Card */}
             <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
@@ -850,8 +850,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
               <div className="border-b border-gray-100 mb-3" />
 
-              {/* Companies List */}
-              <div className="flex flex-col space-y-1">
+              {/* Companies List with dedicated separate scrollbar */}
+              <div className="flex flex-col space-y-1 max-h-72 overflow-y-auto overscroll-contain pr-1.5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 [scrollbar-width:thin] [scrollbar-color:#e5e7eb_transparent]">
                 {filteredCompanies.map((item) => {
                   const isSelected = selectedCompany === item.name;
 
