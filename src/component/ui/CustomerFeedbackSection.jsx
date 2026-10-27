@@ -81,22 +81,20 @@ const getInitials = (name) => {
 };
 
 /**
- * Avatar background color generator based on user name
+ * Avatar brand theme generator based on user name
  */
-const getAvatarColor = (name) => {
-  const colors = [
-    "bg-emerald-600",
-    "bg-blue-600",
-    "bg-indigo-600",
-    "bg-amber-600",
-    "bg-teal-600",
-    "bg-purple-600",
+const getAvatarTheme = (name) => {
+  const brandThemes = [
+    { bg: "btn-gradient border border-amber-400/30 shadow-md shadow-primary/25", text: "text-amber-100" },
+    { bg: "bg-gradient-to-br from-[#1b365d] to-[#0f1e35] border border-amber-400/30 shadow-md shadow-primary/20", text: "text-amber-200" },
+    { bg: "bg-gradient-to-tr from-[#1b365d] to-[#ff8914] border border-amber-400/40 shadow-md shadow-[#ff8914]/20", text: "text-white" },
+    { bg: "bg-gradient-to-br from-[#14294a] to-[#1b365d] border border-primary-border shadow-md shadow-primary/20", text: "text-amber-100" },
   ];
   let hash = 0;
   for (let i = 0; i < (name || "").length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return colors[Math.abs(hash) % colors.length];
+  return brandThemes[Math.abs(hash) % brandThemes.length];
 };
 
 export default function CustomerFeedbackSection() {
@@ -275,13 +273,18 @@ export default function CustomerFeedbackSection() {
 
                     {/* Reviewer Signature Card */}
                     <div className="flex items-center gap-3 pt-3 border-t border-border/40">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 ${getAvatarColor(
-                          fb.name
-                        )}`}
-                      >
-                        {getInitials(fb.name)}
-                      </div>
+                      {(() => {
+                        const theme = getAvatarTheme(fb.name);
+                        return (
+                          <div
+                            className={`group/avatar relative overflow-hidden w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-xs shrink-0 transition-transform duration-300 hover:scale-105 ${theme.bg}`}
+                          >
+                            <span className={`relative z-10 ${theme.text}`}>
+                              {getInitials(fb.name)}
+                            </span>
+                          </div>
+                        );
+                      })()}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5">
                           <h4 className="text-xs sm:text-sm font-bold text-text truncate">

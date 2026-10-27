@@ -9,65 +9,80 @@ import React from "react";
  * - Authenticity line, title, prices, and full-width CTA button
  */
 export const ProductCardSkeleton = ({ className = "", variant = "vertical" }) => {
-  if (variant === "horizontal") {
-    return (
-      <div
-        className={`bg-white rounded-xl sm:rounded-2xl border border-gray-200/90 p-3 sm:p-4 flex flex-col justify-between shadow-xs ${className}`}
-      >
-        <div className="flex items-start gap-3 sm:gap-4">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl skeleton-shimmer shrink-0" />
-          <div className="flex-1 space-y-2 py-1">
-            <div className="h-4 w-full rounded skeleton-shimmer" />
-            <div className="h-4 w-2/3 rounded skeleton-shimmer" />
-            <div className="h-5 w-24 rounded skeleton-shimmer mt-2" />
-            <div className="h-3.5 w-32 rounded skeleton-shimmer mt-1" />
-          </div>
-        </div>
-        <div className="mt-3 pt-2.5 border-t border-gray-100 grid grid-cols-2 gap-2 sm:gap-3">
-          <div className="h-9 rounded-lg skeleton-shimmer" />
-          <div className="h-9 rounded-lg skeleton-shimmer" />
+  const renderHorizontal = () => (
+    <div
+      className={`bg-white rounded-xl sm:rounded-2xl border border-gray-200/90 p-3 sm:p-4 flex flex-col justify-between shadow-xs ${className}`}
+    >
+      <div className="flex items-start gap-3 sm:gap-4">
+        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl skeleton-shimmer shrink-0" />
+        <div className="flex-1 space-y-2 py-1">
+          <div className="h-4 w-full rounded skeleton-shimmer" />
+          <div className="h-4 w-2/3 rounded skeleton-shimmer" />
+          <div className="h-5 w-24 rounded skeleton-shimmer mt-2" />
+          <div className="h-3.5 w-32 rounded skeleton-shimmer mt-1" />
         </div>
       </div>
-    );
-  }
+      <div className="mt-3 pt-2.5 border-t border-gray-100 grid grid-cols-2 gap-2 sm:gap-3">
+        <div className="h-9 rounded-lg skeleton-shimmer" />
+        <div className="h-9 rounded-lg skeleton-shimmer" />
+      </div>
+    </div>
+  );
 
-  return (
+  const renderVertical = () => (
     <div
       className={`bg-white rounded-3xl border border-gray-200/80 p-3 sm:p-4.5 flex flex-col justify-between shadow-xs ${className}`}
     >
       <div>
         {/* Top Tag & Wishlist */}
         <div className="flex items-center justify-between w-full mb-2">
-        <div className="h-5 w-20 rounded-full skeleton-shimmer" />
-        <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full skeleton-shimmer shrink-0" />
+          <div className="h-5 w-20 rounded-full skeleton-shimmer" />
+          <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full skeleton-shimmer shrink-0" />
+        </div>
+
+        {/* Product Image Box */}
+        <div className="relative w-full aspect-square rounded-2xl skeleton-shimmer my-2 flex items-center justify-center overflow-hidden">
+          {/* Rating Badge Placeholder */}
+          <div className="absolute bottom-2 left-2 h-5 w-16 rounded-md bg-white/70 backdrop-blur-xs" />
+        </div>
+
+        {/* Subtitle / Authenticity Line */}
+        <div className="h-3 w-36 rounded skeleton-shimmer mt-2.5 mb-1.5" />
+
+        {/* Title (2 lines) */}
+        <div className="space-y-1.5 min-h-[36px] sm:min-h-[40px] mb-2.5">
+          <div className="h-3.5 sm:h-4 w-full rounded skeleton-shimmer" />
+          <div className="h-3.5 sm:h-4 w-3/4 rounded skeleton-shimmer" />
+        </div>
+
+        {/* Price Block */}
+        <div className="flex items-baseline gap-2 mb-2">
+          <div className="h-5 sm:h-6 w-16 rounded skeleton-shimmer" />
+          <div className="h-3.5 w-12 rounded skeleton-shimmer" />
+          <div className="h-4 w-14 rounded skeleton-shimmer" />
+        </div>
+
+        {/* Premium Member Pill */}
+        <div className="w-full h-7 rounded-md skeleton-shimmer mb-3" />
       </div>
 
-      {/* Product Image Box */}
-      <div className="relative w-full aspect-square rounded-2xl skeleton-shimmer my-2 flex items-center justify-center overflow-hidden">
-        {/* Rating Badge Placeholder */}
-        <div className="absolute bottom-2 left-2 h-5 w-16 rounded-md bg-white/70 backdrop-blur-xs" />
-      </div>
-
-      {/* Subtitle / Authenticity Line */}
-      <div className="h-3 w-36 rounded skeleton-shimmer mt-2.5 mb-1.5" />
-
-      {/* Title (2 lines) */}
-      <div className="space-y-1.5 min-h-[36px] sm:min-h-[40px] mb-2.5">
-        <div className="h-3.5 sm:h-4 w-full rounded skeleton-shimmer" />
-        <div className="h-3.5 sm:h-4 w-3/4 rounded skeleton-shimmer" />
-      </div>
-
-      {/* Price Block */}
-      <div className="flex items-baseline gap-2 mb-3.5">
-        <div className="h-5 sm:h-6 w-16 rounded skeleton-shimmer" />
-        <div className="h-3.5 w-12 rounded skeleton-shimmer" />
-        <div className="h-4 w-14 rounded skeleton-shimmer" />
+      {/* Stacked CTA Buttons */}
+      <div className="flex flex-col gap-2">
+        <div className="w-full h-8 sm:h-9 rounded-lg skeleton-shimmer" />
+        <div className="w-full h-8 sm:h-9 rounded-lg skeleton-shimmer" />
       </div>
     </div>
+  );
 
-    {/* CTA Button */}
-    <div className="w-full h-10 sm:h-11 rounded-xl skeleton-shimmer" />
-  </div>
+  if (variant === "horizontal") return renderHorizontal();
+  if (variant === "vertical") return renderVertical();
+
+  // Responsive mode: Horizontal on mobile, Vertical on desktop
+  return (
+    <>
+      <div className="sm:hidden w-full">{renderHorizontal()}</div>
+      <div className="hidden sm:block h-full">{renderVertical()}</div>
+    </>
   );
 };
 
