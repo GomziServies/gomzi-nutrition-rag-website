@@ -100,7 +100,8 @@ export default function TopProteinPicksSection() {
               url: `/product/${p.slug || p._id || p.id}`,
               raw: p,
             };
-          });
+          })
+          .filter((p) => p.price > 0 && Boolean(p.image));
 
         if (isMounted) {
           setProductsCache((prev) => ({

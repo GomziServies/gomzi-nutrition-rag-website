@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { FiHeart, FiShoppingCart, FiChevronRight } from "react-icons/fi";
 import { FaHeart, FaStar } from "react-icons/fa";
-import { successToast } from "../../utils/toast";
+import { successToast, errorToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { normalizeProduct, filterProductsByCategory, isRealProduct } from "../../utils/productAdapter";
 import { ProductCardSkeleton } from "../common/SkeletonLoaders";
+import useAuth from "../../hooks/useAuth";
 
 // Authentic Gomzi Nutrition Products mapped by Category
 const CATEGORY_TABS = [
@@ -40,6 +41,8 @@ export default function TopBrandsSection() {
   const [isLoadingApi, setIsLoadingApi] = useState(false);
   const swiperRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   // Load real products per active category from RAG API (http://localhost:3005)
   useEffect(() => {
@@ -89,10 +92,30 @@ export default function TopBrandsSection() {
   };
 
   const handleAddToCart = async (product) => {
+    const isUserLoggedIn =
+      isAuthenticated || Boolean(localStorage.getItem("authorization"));
+    if (!isUserLoggedIn) {
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     await addProductToCart(product);
   };
 
   const handleBuyNow = async (product) => {
+    const isUserLoggedIn =
+      isAuthenticated || Boolean(localStorage.getItem("authorization"));
+    if (!isUserLoggedIn) {
+      navigate(
+        `/login?redirect=${encodeURIComponent("/cart")}&from=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     await addProductToCart(product);
     navigate("/cart");
   };

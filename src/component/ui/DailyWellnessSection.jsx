@@ -31,26 +31,29 @@ export default function DailyWellnessSection() {
 
         const list = Array.isArray(res.data) ? res.data : [];
         setProducts(
-          list.slice(0, 4).map((p, idx) => {
-            const selling = Number(p.sellingPrice || p.discountPrice || p.price || 0);
-            const original = Number(p.price || 0);
-            return {
-              id: p._id || `wellness-${idx}`,
-              slug: p.slug || p._id,
-              name: p.name,
-              image:
-                p.displayImages?.[0] ||
-                p.image ||
-                "/images/product-placeholder.webp",
-              price: selling,
-              originalPrice: original > selling ? original : selling * 1.25,
-              premiumPrice: Math.round(selling * 0.95),
-              rating: Number(p.rating?.average) || 4.5,
-              totalReviews: Number(p.rating?.totalReviews) || 0,
-              badge: p.badges?.[0] || undefined,
-              raw: p,
-            };
-          })
+          list
+            .map((p, idx) => {
+              const selling = Number(p.sellingPrice || p.discountPrice || p.price || 0);
+              const original = Number(p.price || 0);
+              return {
+                id: p._id || `wellness-${idx}`,
+                slug: p.slug || p._id,
+                name: p.name,
+                image:
+                  p.displayImages?.[0] ||
+                  p.image ||
+                  "",
+                price: selling,
+                originalPrice: original > selling ? original : selling * 1.25,
+                premiumPrice: Math.round(selling * 0.95),
+                rating: Number(p.rating?.average) || 4.5,
+                totalReviews: Number(p.rating?.totalReviews) || 0,
+                badge: p.badges?.[0] || undefined,
+                raw: p,
+              };
+            })
+            .filter((p) => Boolean(p.image))
+            .slice(0, 4)
         );
       } catch {
         if (isMounted) setProducts([]);

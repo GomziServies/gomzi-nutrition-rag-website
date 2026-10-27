@@ -32,17 +32,23 @@ export default function CategoryRangeCard({
     <>
       {/* Image plate — responsive height with smooth multiply blend */}
       <div className="relative flex h-[145px] xs:h-[165px] sm:h-[200px] md:h-[220px] w-full shrink-0 items-center justify-center bg-bg-light p-2.5 sm:p-4">
-        <img
-          src={image || "/images/product-placeholder.webp"}
-          alt={title}
-          loading="lazy"
-          className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
-          style={{ mixBlendMode: "multiply" }}
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = "/images/product-placeholder.webp";
-          }}
-        />
+        {image ? (
+          <img
+            src={image}
+            alt={title}
+            loading="lazy"
+            className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+            style={{ mixBlendMode: "multiply" }}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-xs font-semibold uppercase text-primary">
+            {title}
+          </div>
+        )}
         {badge && (
           <span className="absolute left-2 top-2 sm:left-3 sm:top-3 inline-flex items-center gap-1 sm:gap-1.5 rounded-full bg-white/95 backdrop-blur-xs px-2 py-0.5 sm:px-3 sm:py-1.5 text-[9px] sm:text-[11px] font-bold uppercase tracking-wide text-text shadow-xs border border-border/40">
             <span className="h-1 sm:h-1.5 w-1 sm:w-1.5 rounded-full bg-primary" />

@@ -92,7 +92,6 @@ export const addProductToCart = async (product, quantity = 1, selectedVariation 
     const productName = product?.name || rawProduct?.name || "Product";
 
     if (!token) {
-      errorToast("Please login to add items to your cart");
       if (typeof window !== "undefined") {
         const currentPath = window.location.pathname + window.location.search;
         window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
@@ -117,6 +116,15 @@ export const addProductToCart = async (product, quantity = 1, selectedVariation 
       }
     } catch (apiErr) {
       console.warn("API addToCart failed:", apiErr);
+      if (apiErr?.response?.status === 401) {
+        localStorage.removeItem("authorization");
+        errorToast("Session expired. Please login to continue");
+        if (typeof window !== "undefined") {
+          const currentPath = window.location.pathname + window.location.search;
+          window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
+        }
+        return false;
+      }
       errorToast(apiErr?.response?.data?.message || "Failed to add to cart");
       return false;
     }

@@ -33,20 +33,23 @@ export default function FitFoodRangeSection() {
 
         const list = Array.isArray(res.data) ? res.data : [];
         setProducts(
-          list.slice(0, 4).map((p, idx) => ({
-            id: p._id || `fitfood-${idx}`,
-            slug: p.slug || p._id,
-            name: p.name,
-            image:
-              p.displayImages?.[0] ||
-              p.image ||
-              "/images/product-placeholder.webp",
-            price: Number(p.sellingPrice || p.discountPrice || p.price || 0),
-            originalPrice: Number(p.price || 0),
-            rating: p.rating?.average || 4.4,
-            totalReviews: p.rating?.totalReviews || 0,
-            raw: p,
-          }))
+          list
+            .map((p, idx) => ({
+              id: p._id || `fitfood-${idx}`,
+              slug: p.slug || p._id,
+              name: p.name,
+              image:
+                p.displayImages?.[0] ||
+                p.image ||
+                "",
+              price: Number(p.sellingPrice || p.discountPrice || p.price || 0),
+              originalPrice: Number(p.price || 0),
+              rating: p.rating?.average || 4.4,
+              totalReviews: p.rating?.totalReviews || 0,
+              raw: p,
+            }))
+            .filter((p) => Boolean(p.image))
+            .slice(0, 4)
         );
       } catch {
         if (isMounted) setProducts([]);

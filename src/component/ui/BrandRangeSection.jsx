@@ -6,122 +6,28 @@ import { getLocalCache, setLocalCache } from "../../utils/storage";
 
 const COMPANIES_CACHE_KEY = "gomzi_companies_brand_rail_cache";
 
-const FALLBACK_BRAND_LOGOS = {
-  "truebasics": "/images/brands/truebasics.svg",
-  "ronnie coleman": "/images/brands/ronnie-coleman.svg",
-  "optimum nutrition": "/images/brands/optimum-nutrition.svg",
-  "optimum nutrition (on)": "/images/brands/optimum-nutrition.svg",
-  "gritzo": "/images/brands/gritzo.svg",
-  "fuel one": "/images/brands/fuel-one.svg",
-  "isopure": "/images/brands/isopure.svg",
-  "dymatize": "/images/brands/dymatize.svg",
-  "muscleblaze": "/images/brands/muscleblaze.svg",
-  "muscletech": "/images/brands/muscletech.svg",
-  "myprotein": "/images/brands/myprotein.svg",
-  "gnc": "/images/brands/gnc.svg",
-  "as-it-is": "/images/brands/as-it-is.svg",
-  "asitis": "/images/brands/as-it-is.svg",
-  "hk vitals": "/images/brands/hk-vitals.svg",
-  "gomzi nutrition": "/images/brands/gomzi.svg",
-};
-
-const DEFAULT_BRANDS = [
-  {
-    id: "b1",
-    name: "TrueBasics",
-    logo: "/images/brands/truebasics.svg",
-    href: "/gomzi-supplement?search=truebasics",
-  },
-  {
-    id: "b2",
-    name: "Ronnie Coleman",
-    logo: "/images/brands/ronnie-coleman.svg",
-    href: "/gomzi-supplement?search=ronnie",
-  },
-  {
-    id: "b3",
-    name: "Optimum Nutrition",
-    logo: "/images/brands/optimum-nutrition.svg",
-    href: "/gomzi-supplement?search=optimum",
-  },
-  {
-    id: "b4",
-    name: "Gritzo",
-    logo: "/images/brands/gritzo.svg",
-    href: "/gomzi-supplement?search=gritzo",
-  },
-  {
-    id: "b5",
-    name: "Fuel One",
-    logo: "/images/brands/fuel-one.svg",
-    href: "/gomzi-supplement?search=fuel",
-  },
-  {
-    id: "b6",
-    name: "Isopure",
-    logo: "/images/brands/isopure.svg",
-    href: "/gomzi-supplement?search=isopure",
-  },
-  {
-    id: "b7",
-    name: "Dymatize",
-    logo: "/images/brands/dymatize.svg",
-    href: "/gomzi-supplement?search=dymatize",
-  },
-  {
-    id: "b8",
-    name: "MuscleBlaze",
-    logo: "/images/brands/muscleblaze.svg",
-    href: "/gomzi-supplement?search=muscleblaze",
-  },
-  {
-    id: "b9",
-    name: "MuscleTech",
-    logo: "/images/brands/muscletech.svg",
-    href: "/gomzi-supplement?search=muscletech",
-  },
-  {
-    id: "b10",
-    name: "MyProtein",
-    logo: "/images/brands/myprotein.svg",
-    href: "/gomzi-supplement?search=myprotein",
-  },
-  {
-    id: "b11",
-    name: "GNC",
-    logo: "/images/brands/gnc.svg",
-    href: "/gomzi-supplement?search=gnc",
-  },
-  {
-    id: "b12",
-    name: "AS-IT-IS",
-    logo: "/images/brands/as-it-is.svg",
-    href: "/gomzi-supplement?search=asitis",
-  },
-  {
-    id: "b13",
-    name: "HK Vitals",
-    logo: "/images/brands/hk-vitals.svg",
-    href: "/gomzi-supplement?search=shilajit",
-  },
-  {
-    id: "b14",
-    name: "Gomzi Nutrition",
-    logo: "/images/brands/gomzi.svg",
-    href: "/gomzi-supplement",
-  },
-];
-
 function resolveLogo(comp) {
   if (comp.logo && typeof comp.logo === "string" && comp.logo.trim()) {
     const clean = comp.logo.trim();
-    if (clean.startsWith("http://") || clean.startsWith("https://") || clean.startsWith("/")) {
+    if (clean.startsWith("http://") || clean.startsWith("https://")) {
       return clean;
+    }
+    if (clean.startsWith("/")) {
+      return clean.includes("/images/brands/") ? "" : clean;
     }
     return `https://files.fggroup.in/${clean}`;
   }
-  const key = (comp.name || comp.slug || "").toLowerCase().trim();
-  return FALLBACK_BRAND_LOGOS[key] || "";
+  if (comp.image && typeof comp.image === "string" && comp.image.trim()) {
+    const clean = comp.image.trim();
+    if (clean.startsWith("http://") || clean.startsWith("https://")) {
+      return clean;
+    }
+    if (clean.startsWith("/")) {
+      return clean.includes("/images/brands/") ? "" : clean;
+    }
+    return `https://files.fggroup.in/${clean}`;
+  }
+  return "";
 }
 
 function resolveHref(comp) {
@@ -134,6 +40,7 @@ function resolveHref(comp) {
 /**
  * HealthKart "Brand Range" rail.
  * Loaded dynamically from Admin Panel Companies catalog (/public/v1/companies).
+ * Zero static mock/fallback brand SVGs.
  */
 export default function BrandRangeSection() {
   const navigate = useNavigate();
@@ -142,9 +49,10 @@ export default function BrandRangeSection() {
   const [brands, setBrands] = useState(() => {
     const cached = getLocalCache(COMPANIES_CACHE_KEY);
     if (Array.isArray(cached) && cached.length > 0) {
-      return cached;
+      const valid = cached.filter((c) => c && c.logo && !c.logo.includes("/images/brands/"));
+      if (valid.length > 0) return valid;
     }
-    return DEFAULT_BRANDS;
+    return [];
   });
 
   useEffect(() => {
@@ -163,7 +71,8 @@ export default function BrandRangeSection() {
               logo: resolveLogo(c),
               href: resolveHref(c),
               tagline: c.tagline || "",
-            }));
+            }))
+            .filter((c) => Boolean(c.logo));
 
           if (activeCompanies.length > 0) {
             setBrands(activeCompanies);
@@ -179,6 +88,10 @@ export default function BrandRangeSection() {
       isMounted = false;
     };
   }, []);
+
+  if (!brands || brands.length === 0) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-white border-t border-b border-gray-100 py-6 md:py-8 overflow-hidden">

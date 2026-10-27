@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -13,13 +13,14 @@ import {
   FiChevronLeft,
 } from "react-icons/fi";
 import { FaHeart, FaStar } from "react-icons/fa";
-import { successToast } from "../../utils/toast";
+import { successToast, errorToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { getCompaniesApi } from "../../api/company.api";
 import { getCompanyAdsApi } from "../../api/company-ad.api";
 import { BrandShowcaseSkeleton } from "../common/SkeletonLoaders";
 import { normalizeProduct, isRealProduct } from "../../utils/productAdapter";
+import useAuth from "../../hooks/useAuth";
 
 // Sleek Dynamic Theme Palettes for Database-Driven Brand Showcases
 const DYNAMIC_THEMES = [
@@ -405,6 +406,8 @@ function BrandBannerSlider({ brand, slides, totalCount, onNavigate }) {
 
 export default function BrandCompanyShowcaseSection() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const [wishlist, setWishlist] = useState({});
   const [addingId, setAddingId] = useState(null);
   const [brandProductsMap, setBrandProductsMap] = useState({});
@@ -680,6 +683,16 @@ export default function BrandCompanyShowcaseSection() {
   };
 
   const handleAddToCart = async (product) => {
+    const isUserLoggedIn =
+      isAuthenticated || Boolean(localStorage.getItem("authorization"));
+    if (!isUserLoggedIn) {
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     try {
       setAddingId(product.id);
       await addProductToCart(product);
@@ -690,6 +703,16 @@ export default function BrandCompanyShowcaseSection() {
 
   const handleBuyNow = async (product, e) => {
     if (e) e.stopPropagation();
+    const isUserLoggedIn =
+      isAuthenticated || Boolean(localStorage.getItem("authorization"));
+    if (!isUserLoggedIn) {
+      navigate(
+        `/login?redirect=${encodeURIComponent("/cart")}&from=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     await addProductToCart(product);
     navigate("/cart");
   };

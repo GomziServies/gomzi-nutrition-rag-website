@@ -164,10 +164,7 @@ const CategorySection = ({ category = "Whey Protein", title = "Top Protein Picks
         >
           {validProducts.map((product) => (
             <SwiperSlide key={product._id}>
-              <ProductCard
-                product={product}
-                onAddToCart={(p) => addProductToCart(p)}
-              />
+              <ProductCard product={product} />
             </SwiperSlide>
           ))}
         </Swiper>

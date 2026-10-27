@@ -2,19 +2,39 @@ import { Link } from "react-router-dom";
 import { Truck, ShieldCheck, RotateCcw, Zap } from "lucide-react";
 
 /**
- * HealthKart sale strip.
- * Sits directly below the header, dark grey bar with rotating offers.
+ * Gomzi Nutrition Top Announcement & Trust Bar.
+ * Styled in Brand Deep Navy (#0f1e35) with high-contrast amber/gold accents.
  */
 const OFFERS = [
-  { icon: Zap, text: "Upto 60% Off on top brands", href: "/gomzi-supplement?search=deal" },
-  { icon: Truck, text: "Free shipping on orders above ₹999", href: "/gomzi-supplement" },
-  { icon: ShieldCheck, text: "100% genuine products, direct from brands", href: "/about" },
-  { icon: RotateCcw, text: "Easy 14-day returns", href: "/refund-policy" },
+  {
+    icon: Zap,
+    highlight: "Upto 60% Off",
+    suffix: " on top brands",
+    href: "/gomzi-supplement?search=deal",
+  },
+  {
+    icon: Truck,
+    highlight: "Free shipping",
+    suffix: " on orders above ₹999",
+    href: "/gomzi-supplement",
+  },
+  {
+    icon: ShieldCheck,
+    highlight: "100% genuine",
+    suffix: " products, direct from brands",
+    href: "/about",
+  },
+  {
+    icon: RotateCcw,
+    highlight: "Easy 14-day",
+    suffix: " returns",
+    href: "/refund-policy",
+  },
 ];
 
 export default function AnnouncementBar() {
   return (
-    <div className="w-full bg-[#45484e] overflow-hidden select-none">
+    <div className="w-full bg-[#0f1e35] border-b border-[#1b365d]/70 shadow-xs overflow-hidden select-none">
       {/* ── MOBILE: Smooth Infinite Running Ticker (< md) ── */}
       <div className="md:hidden flex overflow-hidden py-1.5 relative">
         <div
@@ -29,11 +49,18 @@ export default function AnnouncementBar() {
                 <Link
                   key={`m1-${i}`}
                   to={offer.href}
-                  className="flex shrink-0 items-center gap-1.5 text-[11px] font-medium text-white/95 hover:text-white transition-colors whitespace-nowrap"
+                  className="group flex shrink-0 items-center gap-1.5 text-[11px] whitespace-nowrap transition-colors"
                 >
-                  <Icon className="h-3.5 w-3.5 shrink-0" />
-                  <span>{offer.text}</span>
-                  <span className="text-white/30 ml-2 select-none">•</span>
+                  <Icon className="h-3.5 w-3.5 shrink-0 text-amber-400 group-hover:scale-110 transition-transform" />
+                  <span>
+                    <strong className="font-bold text-amber-300">
+                      {offer.highlight}
+                    </strong>
+                    <span className="font-medium text-white/95">
+                      {offer.suffix}
+                    </span>
+                  </span>
+                  <span className="text-white/25 ml-2 select-none">•</span>
                 </Link>
               );
             })}
@@ -48,11 +75,18 @@ export default function AnnouncementBar() {
                   key={`m2-${i}`}
                   to={offer.href}
                   tabIndex={-1}
-                  className="flex shrink-0 items-center gap-1.5 text-[11px] font-medium text-white/95 hover:text-white transition-colors whitespace-nowrap"
+                  className="group flex shrink-0 items-center gap-1.5 text-[11px] whitespace-nowrap transition-colors"
                 >
-                  <Icon className="h-3.5 w-3.5 shrink-0" />
-                  <span>{offer.text}</span>
-                  <span className="text-white/30 ml-2 select-none">•</span>
+                  <Icon className="h-3.5 w-3.5 shrink-0 text-amber-400 group-hover:scale-110 transition-transform" />
+                  <span>
+                    <strong className="font-bold text-amber-300">
+                      {offer.highlight}
+                    </strong>
+                    <span className="font-medium text-white/95">
+                      {offer.suffix}
+                    </span>
+                  </span>
+                  <span className="text-white/25 ml-2 select-none">•</span>
                 </Link>
               );
             })}
@@ -66,12 +100,19 @@ export default function AnnouncementBar() {
           const Icon = offer.icon;
           return (
             <Link
-              key={offer.text}
+              key={offer.highlight}
               to={offer.href}
-              className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-white/90 hover:text-white transition-colors whitespace-nowrap"
+              className="group flex shrink-0 items-center gap-2 text-xs whitespace-nowrap transition-colors"
             >
-              <Icon className="h-3.5 w-3.5 shrink-0" />
-              <span>{offer.text}</span>
+              <Icon className="h-3.5 w-3.5 shrink-0 text-amber-400 group-hover:scale-110 transition-transform" />
+              <span>
+                <strong className="font-bold text-amber-300 group-hover:text-amber-200 transition-colors">
+                  {offer.highlight}
+                </strong>
+                <span className="font-medium text-white/90 group-hover:text-white transition-colors">
+                  {offer.suffix}
+                </span>
+              </span>
             </Link>
           );
         })}

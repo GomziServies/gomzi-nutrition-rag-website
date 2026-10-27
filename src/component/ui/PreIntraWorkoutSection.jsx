@@ -76,7 +76,7 @@ export default function PreIntraWorkoutSection() {
               raw: p,
             };
           })
-          .filter((p) => p.price > 0)
+          .filter((p) => p.price > 0 && Boolean(p.image))
           .slice(0, 4);
 
         // If specific search had fewer than 4 items, fallback query to general supplements
@@ -123,22 +123,7 @@ export default function PreIntraWorkoutSection() {
 
   const displayedProducts = productsCache[activeTab] || [];
 
-  const handleAddToCart = async (product) => {
-    try {
-      await addProductToCart({
-        _id: product.id,
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        original_price: product.originalPrice,
-        image: product.image,
-        slug: product.slug || product.id,
-      });
-      successToast(`${product.name} added to cart`);
-    } catch {
-      // safe fallback
-    }
-  };
+
 
   return (
     <section className="w-full bg-white">
@@ -179,7 +164,6 @@ export default function PreIntraWorkoutSection() {
               <ProductCard
                 key={product.id}
                 product={product}
-                onAddToCart={() => handleAddToCart(product)}
               />
             ))}
           </div>

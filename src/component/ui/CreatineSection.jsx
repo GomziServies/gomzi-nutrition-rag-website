@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -7,10 +7,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { FiHeart, FiShoppingCart, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { FaHeart, FaStar } from "react-icons/fa";
-import { successToast } from "../../utils/toast";
+import { successToast, errorToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { normalizeProduct, isRealProduct } from "../../utils/productAdapter";
+import useAuth from "../../hooks/useAuth";
 
 // Authentic Gomzi Nutrition Creatine Products
 const CREATINE_PRODUCTS = [];
@@ -20,6 +21,8 @@ export default function CreatineSection() {
   const [apiProducts, setApiProducts] = useState([]);
   const swiperRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     let isMounted = true;
@@ -59,6 +62,16 @@ export default function CreatineSection() {
   };
 
   const handleAddToCart = async (product) => {
+    const isUserLoggedIn =
+      isAuthenticated || Boolean(localStorage.getItem("authorization"));
+    if (!isUserLoggedIn) {
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          location.pathname + location.search
+        )}`
+      );
+      return;
+    }
     await addProductToCart(product);
   };
 

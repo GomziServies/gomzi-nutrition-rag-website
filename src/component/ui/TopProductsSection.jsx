@@ -41,7 +41,7 @@ export default function TopProductsSection() {
             tag: p.badges?.[0] || "",
             raw: p,
           }))
-          .filter((p) => p.price > 0)
+          .filter((p) => p.price > 0 && Boolean(p.image))
           .sort((a, b) => b.rating - a.rating || b.reviews - a.reviews)
           .slice(0, 4);
 
@@ -135,7 +135,7 @@ export default function TopProductsSection() {
                         className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
-                          e.currentTarget.src = getFallbackProductImage(product.raw);
+                          e.currentTarget.style.display = "none";
                         }}
                       />
                     </div>
@@ -203,7 +203,7 @@ export default function TopProductsSection() {
                             e.stopPropagation();
                             navigate(url);
                           }}
-                          className="btn btn-dark h-10 w-full text-sm"
+                          className="btn btn-primary h-10 w-full text-sm font-semibold transition-colors duration-200 cursor-pointer"
                         >
                           Buy Now
                         </button>

@@ -155,8 +155,9 @@ export default function NARAProductPage() {
   ];
 
   const handleAddToCart = async () => {
-    if (!isAuthenticated) {
-      errorToast("Please login to add items to your cart");
+    const isUserLoggedIn =
+      isAuthenticated || Boolean(localStorage.getItem("authorization"));
+    if (!isUserLoggedIn) {
       navigate(
         `/login?redirect=${encodeURIComponent(
           location.pathname + location.search
@@ -183,6 +184,8 @@ export default function NARAProductPage() {
       if (result.success) {
         successToast("Added to cart");
         setIsCartOpen(true);
+      } else {
+        errorToast(result.message || "Failed to add item to cart");
       }
     } catch (err) {
       errorToast("Something went wrong");

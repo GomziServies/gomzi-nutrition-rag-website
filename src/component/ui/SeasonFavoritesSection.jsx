@@ -15,13 +15,16 @@ const CATEGORIES_CACHE_KEY = "gomzi_categories_cache";
 const CATEGORIES_PAGE_CACHE_KEY = "gomzi_categories_page_cache";
 
 const resolveImageUrl = (img) => {
-  if (!img || typeof img !== "string" || !img.trim()) return "/images/product-placeholder.webp";
+  if (!img || typeof img !== "string" || !img.trim()) return "";
   const clean = img.trim();
+  if (clean.includes("/images/product-placeholder")) return "";
   if (
     clean.startsWith("http://") ||
-    clean.startsWith("https://") ||
-    clean.startsWith("/")
+    clean.startsWith("https://")
   ) {
+    return clean;
+  }
+  if (clean.startsWith("/")) {
     return clean;
   }
   return `https://files.fggroup.in/${clean}`;
@@ -52,7 +55,7 @@ const normalizeCategories = (rawList = []) => {
     });
   }
 
-  return result;
+  return result.filter((cat) => Boolean(cat.image));
 };
 
 export default function SeasonFavoritesSection() {

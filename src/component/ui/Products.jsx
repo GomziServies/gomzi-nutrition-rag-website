@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import ProductCard from "../common/ProductCard";
 import useProducts from "../../hooks/useProducts";
 import { addProductToCart } from "../../services/cartStorage.service";
@@ -95,6 +95,33 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   const [isCompanyDrawerOpen, setIsCompanyDrawerOpen] = useState(false);
   const [sortBy, setSortBy] = useState("Featured");
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
+  const sidebarRef = useRef(null);
+
+  /*
+  |--------------------------------------------------------------------------
+  | Prevent Sidebar Wheel Scroll from Chaining to Main Window
+  |--------------------------------------------------------------------------
+  */
+  useEffect(() => {
+    const el = sidebarRef.current;
+    if (!el) return;
+
+    const onWheel = (e) => {
+      const isScrollingDown = e.deltaY > 0;
+      const isAtBottom = el.scrollHeight - el.scrollTop <= el.clientHeight + 1;
+      const isAtTop = el.scrollTop <= 0;
+
+      // Lock scroll from propagating to window when reaching edge
+      if ((isScrollingDown && isAtBottom) || (!isScrollingDown && isAtTop)) {
+        e.preventDefault();
+      }
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+    };
+  }, []);
 
   /*
   |--------------------------------------------------------------------------
@@ -276,8 +303,9 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   };
 
   const handleAddToCart = async (product) => {
-    if (!isAuthenticated) {
-      errorToast("Please login to add items to your cart");
+    const isUserLoggedIn =
+      isAuthenticated || Boolean(localStorage.getItem("authorization"));
+    if (!isUserLoggedIn) {
       navigate(
         `/login?redirect=${encodeURIComponent(
           location.pathname + location.search
@@ -778,10 +806,10 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             MAIN CONTENT
         ================================================================ */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 mt-5">
-          {/* ================================================================
-              DESKTOP SIDEBAR (DUAL FILTERS: CATEGORIES + COMPANIES)
-          ================================================================ */}
-          <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-6 self-start max-h-[calc(100vh-2.5rem)] overflow-y-auto overscroll-contain pr-1 space-y-5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 [scrollbar-width:thin] [scrollbar-color:#e5e7eb_transparent]">
+          <aside
+            ref={sidebarRef}
+            className="hidden lg:block w-72 flex-shrink-0 sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-y-auto overscroll-contain pr-1.5 space-y-5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 [scrollbar-width:thin] [scrollbar-color:#e5e7eb_transparent]"
+          >
             {/* 1. Categories Card */}
             <div className="bg-white rounded-3xl border border-gray-200/90 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
@@ -863,8 +891,8 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
               <div className="border-b border-gray-100 mb-3" />
 
-              {/* Companies List with dedicated separate scrollbar */}
-              <div className="flex flex-col space-y-1 max-h-72 overflow-y-auto overscroll-contain pr-1.5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 [scrollbar-width:thin] [scrollbar-color:#e5e7eb_transparent]">
+              {/* Companies List */}
+              <div className="flex flex-col space-y-1">
                 {filteredCompanies.map((item) => {
                   const isSelected = selectedCompany === item.name;
 

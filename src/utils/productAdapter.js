@@ -8,28 +8,12 @@
  * Pick a sensible packshot for products the catalogue has no image for.
  * Keeps a grid of image-less products looking deliberate instead of broken.
  */
-export const getFallbackProductImage = (product) => {
-  const name = `${product?.name || ""} ${product?.category || ""} ${
-    product?.categories || ""
-  }`.toLowerCase();
-
-  if (/\bbar\b|chocolate bar|protein bar/.test(name)) {
-    return "/images/products/fallback-bar.svg";
-  }
-  if (/butter|oats?|muesli|granola|spread|peanut/.test(name)) {
-    return "/images/products/fallback-pouch.svg";
-  }
-  if (/shaker|bottle/.test(name)) {
-    return "/images/products/fallback-bottle.svg";
-  }
-  if (/powder|isolate|supplement|multivitamin|vitamin/.test(name)) {
-    return "/images/products/fallback-powder.svg";
-  }
-  return "/images/products/fallback-tub.svg";
+export const getFallbackProductImage = () => {
+  return "";
 };
 
 export const getProductImageUrl = (product) => {
-  if (!product) return "/images/products/fallback-tub.svg";
+  if (!product) return "";
 
   // Check direct resolved image
   if (typeof product.resolvedImage === "string" && product.resolvedImage.trim()) {
