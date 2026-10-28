@@ -8,8 +8,6 @@ import useProducts from "../hooks/useProducts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import { Pagination } from "swiper/modules";
-import { isRealProduct } from "../utils/productAdapter";
-import { addProductToCart } from "../services/cartStorage.service";
 
 const swiperStyles = `
 .category-swiper{
@@ -33,7 +31,7 @@ const swiperStyles = `
 .category-swiper .swiper-pagination-bullet{
     width:10px;
     height:10px;
-    background:#dbdee9;
+    background:#D9C8B6;
     opacity:1;
     margin:0 5px !important;
     border-radius:999px;
@@ -42,7 +40,7 @@ const swiperStyles = `
 
 .category-swiper .swiper-pagination-bullet-active{
     width:32px;
-    background:#1b365d;
+    background:#95442c;
 }
 
 /* Custom Buttons */
@@ -54,17 +52,17 @@ const swiperStyles = `
     display:flex;
     align-items:center;
     justify-content:center;
-    border:1px solid #dbdee9;
+    border:1px solid #E8D9C8;
     background:#fff;
-    color:#1b365d;
+    color:#95442c;
     transition:.3s;
-    box-shadow:0 4px 12px rgba(0,0,0,.06);
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
 }
 
 .slider-btn:hover{
-    background:#1b365d;
+    background:#95442c;
     color:#fff;
-    border-color:#1b365d;
+    border-color:#95442c;
     transform:translateY(-2px);
 }
 
@@ -75,25 +73,15 @@ const swiperStyles = `
 }
 `;
 
-const CategorySection = ({ category = "Whey Protein", title = "Top Protein Picks" }) => {
+const CategorySection = ({ category }) => {
   const swiperRef = useRef(null);
-
-  const isProteinOrSports =
-    !category ||
-    category.toLowerCase().includes("whey") ||
-    category.toLowerCase().includes("sports") ||
-    category.toLowerCase().includes("protein");
-
   const { products, loading } = useProducts({
     page: 1,
-    limit: 12,
-    search: isProteinOrSports ? "Whey" : "",
-    category: isProteinOrSports ? "" : category,
+    limit: 8,
+    category,
   });
 
-  const validProducts = (products || []).filter(isRealProduct);
-
-  if (loading || validProducts.length === 0) return null;
+  if (loading || products.length === 0) return null;
   return (
     <>
       <style>{swiperStyles}</style>
@@ -101,8 +89,8 @@ const CategorySection = ({ category = "Whey Protein", title = "Top Protein Picks
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
-              {title}
+            <h2 className="font-toma text-3xl md:text-4xl font-bold">
+              Best Selling
             </h2>
 
             <p className="mt-2 text-gray-500">
@@ -111,7 +99,7 @@ const CategorySection = ({ category = "Whey Protein", title = "Top Protein Picks
 
             {/* <Link
               to={`/gomzi-supplement?category=${encodeURIComponent(category)}`}
-              className="inline-flex items-center gap-2 mt-5 text-[#95442c] font-semibold hover:gap-3 transition-all"
+              className="inline-flex items-center gap-2 mt-5 text-primary font-semibold hover:gap-3 transition-all"
             >
               View all products
               <ChevronRight size={18} />
@@ -162,7 +150,7 @@ const CategorySection = ({ category = "Whey Protein", title = "Top Protein Picks
           }}
           className="category-swiper"
         >
-          {validProducts.map((product) => (
+          {products.map((product) => (
             <SwiperSlide key={product._id}>
               <ProductCard product={product} />
             </SwiperSlide>

@@ -1,786 +1,522 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import {
-  Search,
-  User,
-  Menu,
-  X,
-  ChevronDown,
-  ChevronRight,
-  LogOut,
-  Home,
-  ShoppingBag,
-  LayoutGrid,
-  Dumbbell,
-  HelpCircle,
-  Info,
-  BookOpen,
-  PhoneCall,
-  MapPin,
-} from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import useCart from "../../hooks/useCart";
 import { fetchProducts } from "../../services/product.service";
-import CartPopover from "./CartPopover";
-import MegaMenu from "./MegaMenu";
-import {
-  HEADER_NAV_LINKS,
-  QUICK_NAV_LINKS,
-} from "../../data/navigationCategories";
-
-const MOBILE_DRAWER_LINKS = [
-  {
-    label: "Home",
-    to: "/",
-    icon: Home,
-  },
-  {
-    label: "Shop",
-    to: "/gomzi-supplement",
-    icon: ShoppingBag,
-  },
-  {
-    label: "Categories",
-    to: "/category",
-    icon: LayoutGrid,
-  },
-  {
-    label: "Wholesale & Gyms",
-    to: "/wholesale",
-    icon: Dumbbell,
-  },
-  {
-    label: "Faqs",
-    to: "/faq",
-    icon: HelpCircle,
-  },
-  {
-    label: "About Us",
-    to: "/about",
-    icon: Info,
-  },
-  {
-    label: "Blogs",
-    to: "/blog",
-    icon: BookOpen,
-  },
-  {
-    label: "Contact Us",
-    to: "/contact-us",
-    icon: PhoneCall,
-  },
+const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "Shop", href: "/gomzi-supplement" },
+  { label: "Categories", href: "/category" },
+  { label: "Faqs", href: "/faq" },
+  { label: "About Us", href: "/about" },
+  { label: "Blogs", href: "/blog" },
+  { label: "Contact Us", href: "/contact-us" },
 ];
 
-  /**
+function NavLink({ href, label, onClick, isActive }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(href);
+      }}
+      className={`relative inline-block text-sm font-bold whitespace-nowrap transition-colors duration-200 font-modelica bg-transparent border-none cursor-pointer ${
+        isActive ? "text-secondary" : "text-text hover:text-hover"
+      }`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {label}
+      <span
+        className="absolute -bottom-0.5 left-0 w-full h-px bg-secondary transition-transform duration-300 origin-left"
+        style={{ transform: hovered || isActive ? "scaleX(1)" : "scaleX(0)" }}
+      />
+    </button>
+  );
+}
 
- * HealthKart 2-Tier Master Navbar Component
- *
- * Tier 1: Brand logo, prominent center search bar with live auto-suggest,
- *         profile/login controls, and shopping cart popover.
- * Tier 2: 'Shop By Category' mega-menu trigger, horizontal quick-access categories,
- *         and customer support utilities.
- * Responsive: Collapsible mobile drawer with full category taxonomy accordion.
- */
+function DropdownButton({ label, isOpen, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="relative inline-flex items-center gap-1 text-text text-sm font-bold whitespace-nowrap transition-colors duration-200 hover:text-hover font-modelica bg-transparent border-none cursor-pointer p-0"
+    >
+      {label}
+      <svg
+        className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200"
+        style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+      </svg>
+      <span
+        className="absolute -bottom-0.5 left-0 w-full h-px bg-secondary transition-transform duration-300 origin-left"
+        style={{ transform: hovered ? "scaleX(1)" : "scaleX(0)" }}
+      />
+    </button>
+  );
+}
+
+function IconBtn({ label, children, className = "", onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      className={`text-text-light hover:text-text transition-colors duration-200 p-1 flex items-center justify-center rounded-sm cursor-pointer bg-transparent border-none ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const navRef = useRef(null);
 
-  const { isAuthenticated, user, logout } = useAuth();
-  const { items: cartItems, cartId, deleteItem } = useCart();
-
-  // Search State
-  const [searchQuery, setSearchQuery] = useState("");
-  const [productSuggestions, setProductSuggestions] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
-
-  // Menus & Drawers State
-  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
-  const [cartPopoverOpen, setCartPopoverOpen] = useState(false);
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [navTop, setNavTop] = useState(0);
+  const [navHeight, setNavHeight] = useState(64);
+  const { isAuthenticated } = useAuth();
+  const [productSuggestions, setProductSuggestions] = useState([]);
 
-  // Popover Timer ref for smooth hover transitions without flickering
-  const cartTimerRef = useRef(null);
-  const searchContainerRef = useRef(null);
-  const megaMenuContainerRef = useRef(null);
-
-  const cartCount =
-    cartItems?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0;
-
-  // Close menus on route change
+  // ── Track navbar top + height dynamically (scroll + resize) ──
   useEffect(() => {
-    setMegaMenuOpen(false);
-    setCartPopoverOpen(false);
-    setProfileDropdownOpen(false);
-    setDrawerOpen(false);
-    setMobileSearchOpen(false);
-    setSearchFocused(false);
-  }, [location.pathname]);
-
-  // Handle click outside for search, profile, and mega menu
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        searchContainerRef.current &&
-        !searchContainerRef.current.contains(event.target)
-      ) {
-        setSearchFocused(false);
-      }
-      if (
-        megaMenuContainerRef.current &&
-        !megaMenuContainerRef.current.contains(event.target)
-      ) {
-        setMegaMenuOpen(false);
+    const updateNavRect = () => {
+      if (navRef.current) {
+        const rect = navRef.current.getBoundingClientRect();
+        setNavTop(rect.top);
+        setNavHeight(rect.height);
       }
     };
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        setMegaMenuOpen(false);
-        setSearchFocused(false);
-        setProfileDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleKeyDown);
+    updateNavRect();
+    window.addEventListener("scroll", updateNavRect);
+    window.addEventListener("resize", updateNavRect);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("scroll", updateNavRect);
+      window.removeEventListener("resize", updateNavRect);
     };
   }, []);
 
-  // Debounced product suggestions (300ms)
   useEffect(() => {
-    const query = searchQuery.trim();
-    if (query.length < 2) {
-      setProductSuggestions([]);
-      setIsSearching(false);
-      return;
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  const handleNavigation = (href) => {
+    navigate(href);
+    setDrawerOpen(false);
+    setAboutOpen(false);
+  };
+
+  const isActive = (href) => location.pathname === href;
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    const value = searchQuery.trim();
+
+    if (!value) return;
+
+    navigate(`/gomzi-supplement?search=${encodeURIComponent(value)}`);
+
+    setSearchQuery("");
+    setSearchOpen(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSearchSubmit();
+    if (e.key === "Escape") {
+      setSearchOpen(false);
+      setSearchQuery("");
     }
+  };
 
-    setIsSearching(true);
-    const timer = setTimeout(async () => {
-      try {
-        const result = await fetchProducts({
-          page: 1,
-          limit: 6,
-          search: query,
-        });
-        if (result.success && Array.isArray(result.data)) {
-          setProductSuggestions(result.data);
-        } else {
-          setProductSuggestions([]);
-        }
-      } catch (err) {
-        console.error("Search fetch error:", err);
+  useEffect(() => {
+    const searchProducts = async () => {
+      if (searchQuery.trim().length < 2) {
         setProductSuggestions([]);
-      } finally {
-        setIsSearching(false);
+        return;
       }
-    }, 300);
 
-    return () => clearTimeout(timer);
+      const result = await fetchProducts({
+        page: 1,
+        limit: 5,
+        search: searchQuery,
+      });
+
+      if (result.success) {
+        setProductSuggestions(result.data || []);
+      }
+    };
+
+    const timeout = setTimeout(searchProducts, 300);
+
+    return () => clearTimeout(timeout);
   }, [searchQuery]);
 
-  // Search submission
-  const handleSearchSubmit = (e) => {
-    if (e) e.preventDefault();
-    const query = searchQuery.trim();
-    if (!query) return;
-
-    navigate(`/gomzi-supplement?search=${encodeURIComponent(query)}`);
-    setSearchFocused(false);
-    setMobileSearchOpen(false);
-  };
-
-  const handleSuggestionSelect = (productName) => {
-    setSearchQuery("");
-    setProductSuggestions([]);
-    setSearchFocused(false);
-    navigate(`/gomzi-supplement?search=${encodeURIComponent(productName)}`);
-  };
-
-  // Hover handlers for Cart Popover
-  const handleCartMouseEnter = () => {
-    if (cartTimerRef.current) clearTimeout(cartTimerRef.current);
-    setCartPopoverOpen(true);
-  };
-
-  const handleCartMouseLeave = () => {
-    cartTimerRef.current = setTimeout(() => {
-      setCartPopoverOpen(false);
-    }, 250);
-  };
-
-  const isLinkActive = (href) => {
-    const currentPath = location.pathname;
-
-    // Home: ONLY active on exact "/"
-    if (href === "/") {
-      return currentPath === "/";
-    }
-
-    // Shop: active on "/gomzi-supplement" or nested product view
-    if (href === "/gomzi-supplement") {
-      return (
-        currentPath === "/gomzi-supplement" ||
-        currentPath.startsWith("/gomzi-supplement/") ||
-        currentPath.startsWith("/product/")
-      );
-    }
-
-    // Categories: active on "/category"
-    if (href === "/category") {
-      return currentPath === "/category" || currentPath.startsWith("/category/");
-    }
-
-    // Faqs: active on "/faq"
-    if (href === "/faq") {
-      return currentPath === "/faq" || currentPath.startsWith("/faq/");
-    }
-
-    // About Us: active on "/about"
-    if (href === "/about") {
-      return currentPath === "/about" || currentPath.startsWith("/about/");
-    }
-
-    // Blogs: active on "/blog"
-    if (href === "/blog") {
-      return currentPath === "/blog" || currentPath.startsWith("/blog/");
-    }
-
-    // Contact Us: active on "/contact-us"
-    if (href === "/contact-us") {
-      return currentPath === "/contact-us" || currentPath.startsWith("/contact-us/");
-    }
-
-    if (href.includes("?")) {
-      const [path, query] = href.split("?");
-      return currentPath === path && location.search.includes(query);
-    }
-
-    return currentPath === href;
-  };
-
   return (
-    <header className="w-full bg-white relative z-50 shadow-header">
-      {/* =========================================================================
-          TIER 1: MIDDLE HEADER (Logo | Search | Login | Cart)
-          ========================================================================= */}
-      <div className="w-full bg-white">
-        <div className="max-w-[1170px] mx-auto px-4 md:px-0 h-[64px] md:h-[87px] flex items-center justify-between gap-4 lg:gap-8">
-          {/* LEFT: Mobile Hamburger & Brand Logo */}
-          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0 md:w-1/4">
-            {/* Hamburger Button (Mobile Only) */}
-            <button
-              onClick={() => setDrawerOpen(true)}
-              className="lg:hidden p-2 text-text bg-transparent border-none cursor-pointer rounded-md hover:bg-bg-light transition-colors"
-              aria-label="Open mobile navigation"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
+    <>
+      {/* ── MAIN NAV BAR ── */}
+      <nav
+        ref={navRef}
+        className="w-full bg-bg border-b border-border sticky top-0 z-50 shadow-sm font-modelica"
+      >
+        <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-18 py-1.5">
+          <div className="relative flex items-center justify-between h-16">
+            {/* LEFT */}
+            <div className="flex items-center gap-8">
+              {/* Hamburger */}
+              <button
+                onClick={() => {
+                  setDrawerOpen((p) => !p);
+                  setSearchOpen(false);
+                }}
+                className="lg:hidden text-text hover:text-hover transition-colors p-1 bg-transparent border-none cursor-pointer"
+                aria-label={drawerOpen ? "Close menu" : "Open menu"}
+              >
+                {drawerOpen ? (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.8}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.8}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                )}
+              </button>
 
-            {/* Brand Logo - Official Gomzi Supplements Logo */}
-            <Link
-              to="/"
-              className="flex items-center text-decoration-none group"
-              aria-label="Gomzi Nutrition Home"
+              {/* Logo - desktop */}
+              <button
+                onClick={() => handleNavigation("/")}
+                className="hidden lg:flex flex-shrink-0 bg-transparent border-none cursor-pointer p-0"
+              >
+                <img
+                  src="/images/rag-logo.webp"
+                  alt="Gomzi Supplement by RAG"
+                  className="h-12 w-auto object-contain"
+                />
+              </button>
+            </div>
+
+            {/* CENTER: Desktop nav links */}
+            <ul className="hidden lg:flex items-center gap-7 list-none m-0 p-0">
+              {navLinks.map((link) =>
+                link.dropdown ? (
+                  <li key={link.label} className="relative">
+                    <DropdownButton
+                      label={link.label}
+                      isOpen={aboutOpen}
+                      onClick={() => setAboutOpen((p) => !p)}
+                    />
+                    {aboutOpen && (
+                      <div className="absolute top-full left-0 mt-2 bg-bg border border-border shadow-md rounded-md py-2 min-w-[160px] z-50">
+                        {link.dropdown.map((item) => (
+                          <button
+                            key={item.label}
+                            onClick={() => handleNavigation(item.href)}
+                            className={`block w-full text-left px-4 py-2.5 text-sm font-bold transition-colors duration-150 font-modelica bg-transparent border-none cursor-pointer ${
+                              isActive(item.href)
+                                ? "bg-secondary text-white"
+                                : "text-text-light hover:bg-bg-light hover:text-text"
+                            }`}
+                          >
+                            {item.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </li>
+                ) : (
+                  <li key={link.label}>
+                    <NavLink
+                      href={link.href}
+                      label={link.label}
+                      onClick={handleNavigation}
+                      isActive={isActive(link.href)}
+                    />
+                  </li>
+                ),
+              )}
+            </ul>
+
+            {/* CENTER: Logo - mobile */}
+            <button
+              onClick={() => handleNavigation("/")}
+              className="absolute left-1/2 -translate-x-1/2 lg:hidden bg-transparent border-none cursor-pointer p-0"
             >
               <img
-                src="/images/gomzi-supplements-dark.webp"
-                alt="Gomzi Supplements"
-                className="h-8 sm:h-10 md:h-11 w-auto max-w-[150px] md:max-w-[210px] object-contain transition-transform duration-200 group-hover:scale-[1.02]"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/images/rag-icon-logo.png";
-                }}
+                src="/images/rag-logo.webp"
+                alt="Gomzi Supplement by RAG"
+                className="h-12 w-auto object-contain"
               />
-            </Link>
-          </div>
+            </button>
 
-          {/* CENTER: Prominent HealthKart-Style Search Bar (Desktop) */}
-          <div
-            ref={searchContainerRef}
-            className="hidden md:flex flex-1 max-w-[654px] relative"
-          >
-            <form
-              onSubmit={handleSearchSubmit}
-              className="w-full relative flex items-center"
-            >
-              <div
-                className={`w-full h-11 md:h-12 flex items-center rounded-sm bg-white border transition-colors duration-150 px-3 gap-2 ${
-                  searchFocused ? "border-primary" : "border-border-2"
-                }`}
+            {/* RIGHT: Icons */}
+            <div className="flex items-center gap-3 sm:gap-4">
+              <IconBtn
+                label="Search"
+                onClick={() => {
+                  setSearchOpen((p) => !p);
+                  setDrawerOpen(false);
+                  setSearchQuery("");
+                }}
               >
-                {/* Search Magnifier Icon */}
-                <span className="text-text-muted flex-shrink-0">
-                  <Search className="w-4 h-4" />
-                </span>
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
+                </svg>
+              </IconBtn>
 
-                {/* Search Input Field */}
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setSearchFocused(true)}
-                  placeholder="Search for products & brands..."
-                  className="w-full bg-transparent border-none outline-none text-sm text-text placeholder:text-text-muted h-full appearance-none"
-                  autoComplete="off"
-                />
+              <IconBtn
+                label="Account"
+                className="hidden lg:flex"
+                onClick={() =>
+                  handleNavigation(isAuthenticated ? "/profile" : "/login")
+                }
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="8" r="4" />
+                  <path strokeLinecap="round" d="M5 20c0-4 3-6 7-6s7 2 7 6" />
+                </svg>
+              </IconBtn>
 
-                {/* Clear Input Button */}
-                {searchQuery && (
+              <button
+                onClick={() => handleNavigation("/cart")}
+                aria-label="Cart"
+                className="relative text-text-light hover:text-text transition-colors duration-200 p-1 flex items-center justify-center bg-transparent border-none cursor-pointer"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.6 8M17 13l1.6 8"
+                  />
+                  <circle cx="8" cy="21" r="1" />
+                  <circle cx="17" cy="21" r="1" />
+                </svg>
+                <span className="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── SEARCH BAR  ── */}
+      <div
+        className="fixed left-0 right-0 bg-bg shadow-lg z-[102]"
+        style={{
+          top: navTop,
+          height: searchOpen ? navHeight : 0,
+          overflow: searchOpen ? "visible" : "hidden",
+          transition: "height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-10 h-full flex items-center">
+          <div className="relative w-full max-w-3xl mx-auto">
+            <input
+              type="text"
+              placeholder="Search pages... (e.g. FAQ, Cart, About)"
+              autoFocus={searchOpen}
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+              className="w-full h-14 px-6 pr-14 text-base bg-bg-light border-2 border-border rounded-full focus:outline-none focus:border-secondary transition-colors font-modelica text-text placeholder:text-text-light"
+            />
+            <button
+              onClick={handleSearchSubmit}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-text-light hover:text-text transition-colors bg-transparent border-none cursor-pointer"
+              aria-label="Search"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                viewBox="0 0 24 24"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
+              </svg>
+            </button>
+
+            {/* Suggestions Dropdown */}
+            {productSuggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border rounded-2xl shadow-lg overflow-hidden">
+                {productSuggestions.map((product) => (
                   <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setProductSuggestions([]);
-                    }}
-                    className="p-1 text-text-muted hover:text-text bg-transparent border-none cursor-pointer"
-                    aria-label="Clear search query"
+                    key={product._id}
+                    onClick={() =>
+                      navigate(
+                        `/gomzi-supplement?search=${encodeURIComponent(product.name)}`,
+                      )
+                    }
+                    className="w-full text-left px-5 py-3 hover:bg-gray-50"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    {product.name}
                   </button>
-                )}
-              </div>
-            </form>
-
-            {/* Live Autocomplete Suggestions Dropdown */}
-            {searchFocused && (productSuggestions.length > 0 || isSearching) && (
-              <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-[#dbdee9] overflow-hidden z-[999999] animate-in fade-in duration-150">
-                {isSearching && productSuggestions.length === 0 ? (
-                  <div className="px-4 py-3 text-xs text-gray-500 flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                    Searching supplements...
-                  </div>
-                ) : (
-                  <>
-                    <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                        Suggested Products
-                      </span>
-                      <span className="text-[11px] text-gray-400">
-                        {productSuggestions.length} found
-                      </span>
-                    </div>
-
-                    <div className="max-h-72 overflow-y-auto divide-y divide-gray-50">
-                      {productSuggestions.map((product) => {
-                        const price =
-                          product.variation?.[0]?.discountPrice ||
-                          product.discountPrice ||
-                          product.price;
-
-                        return (
-                          <button
-                            key={product._id}
-                            type="button"
-                            onClick={() => handleSuggestionSelect(product.name)}
-                            className="w-full px-4 py-2.5 text-left flex items-center justify-between hover:bg-[#fbf9f8] transition-colors border-none bg-transparent cursor-pointer group"
-                          >
-                            <div className="flex items-center gap-3 min-w-0 pr-2">
-                              <img
-                                src={
-                                  product.displayImages?.[0] ||
-                                  "/images/product-placeholder.webp"
-                                }
-                                alt={product.name}
-                                className="w-8 h-8 object-contain rounded bg-gray-50 flex-shrink-0"
-                                onError={(e) => {
-                                  e.target.src =
-                                    "/images/product-placeholder.webp";
-                                }}
-                              />
-                              <div className="min-w-0">
-                                <p className="text-xs font-semibold text-text truncate group-hover:text-primary transition-colors">
-                                  {product.name}
-                                </p>
-                                <span className="text-[10px] text-gray-400">
-                                  {product.category || "Authentic Supplement"}
-                                </span>
-                              </div>
-                            </div>
-                            {price && (
-                              <span className="text-xs font-bold text-primary flex-shrink-0">
-                                ₹{Number(price).toLocaleString("en-IN")}
-                              </span>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <div className="p-2.5 bg-gray-50 border-t border-gray-100 text-center">
-                      <button
-                        type="button"
-                        onClick={handleSearchSubmit}
-                        className="text-xs font-bold text-primary hover:underline bg-transparent border-none cursor-pointer"
-                      >
-                        View all results for "{searchQuery}" →
-                      </button>
-                    </div>
-                  </>
-                )}
+                ))}
               </div>
             )}
           </div>
 
-          {/* RIGHT: User Account & Cart Section (HealthKart .hk-header-cart) */}
-          <div className="flex items-center gap-3 sm:gap-6 flex-shrink-0 md:w-1/4 md:justify-end">
-            {/* Mobile Search Icon Trigger */}
-            <button
-              onClick={() => setMobileSearchOpen((prev) => !prev)}
-              className="md:hidden p-2 text-text bg-transparent border-none cursor-pointer"
-              aria-label="Toggle search input"
+          <button
+            onClick={() => {
+              setSearchOpen(false);
+              setSearchQuery("");
+            }}
+            className="ml-4 p-2 text-text-light hover:text-text transition-colors bg-transparent border-none cursor-pointer"
+            aria-label="Close search"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              viewBox="0 0 24 24"
             >
-              <Search className="w-5 h-5" />
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-            {/* User Profile / Login Button */}
-            {isAuthenticated ? (
-              <div className="relative">
+      {/* ── BACKDROP ── */}
+      <div
+        onClick={() => {
+          setDrawerOpen(false);
+          setSearchOpen(false);
+          setSearchQuery("");
+        }}
+        className="fixed left-0 right-0 bottom-0 bg-black/30 z-[100] transition-opacity duration-300 lg:hidden"
+        style={{
+          top: `${navTop + navHeight}px`,
+          opacity: drawerOpen || searchOpen ? 1 : 0,
+          pointerEvents: drawerOpen || searchOpen ? "auto" : "none",
+        }}
+      />
+
+      {/* ── LEFT DRAWER ── */}
+      <div
+        className="fixed left-0 bottom-0 w-full sm:w-80 bg-bg z-[101] shadow-lg border-r border-border font-modelica overflow-y-auto flex flex-col lg:hidden"
+        style={{
+          top: `${navTop + navHeight}px`,
+          transform: drawerOpen ? "translateX(0)" : "translateX(-100%)",
+          transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        <nav className="flex-1 py-2">
+          {navLinks.map((link) =>
+            link.dropdown ? (
+              <div key={link.label}>
                 <button
-                  onClick={() => setProfileDropdownOpen((prev) => !prev)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-sm border border-border-2 hover:border-primary text-xs font-medium text-text bg-transparent cursor-pointer transition-colors"
-                  aria-expanded={profileDropdownOpen}
+                  onClick={() => setAboutOpen((p) => !p)}
+                  className="flex items-center justify-between w-full px-5 py-4 text-base font-bold text-text border-b border-section bg-transparent border-l-0 border-r-0 border-t-0 cursor-pointer font-modelica hover:bg-bg-light transition-colors"
                 >
-                  <div className="w-6 h-6 rounded-full bg-primary-light flex items-center justify-center text-primary">
-                    <User className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="hidden sm:inline max-w-[100px] truncate">
-                    {user?.name || "Account"}
-                  </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-text-muted" />
+                  {link.label}
+                  <svg
+                    className="w-4 h-4 transition-transform duration-200"
+                    style={{
+                      transform: aboutOpen ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
                 </button>
-
-                {/* Profile Flyout Dropdown */}
-                {profileDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#dbdee9] py-1.5 z-[999999] animate-in fade-in duration-150">
-                    <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-xs font-bold text-text truncate">
-                        {user?.name || "Athlete"}
-                      </p>
-                      <p className="text-[11px] text-gray-500 truncate">
-                        {user?.email}
-                      </p>
-                    </div>
-
-                    <Link
-                      to="/profile"
-                      onClick={() => setProfileDropdownOpen(false)}
-                      className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
-                    >
-                      My Profile & Orders
-                    </Link>
-
-                    <button
-                      onClick={() => {
-                        setProfileDropdownOpen(false);
-                        logout();
-                      }}
-                      className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors bg-transparent border-none cursor-pointer"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      <span>Sign Out</span>
-                    </button>
+                {aboutOpen && (
+                  <div className="bg-bg-light">
+                    {link.dropdown.map((item) => (
+                      <button
+                        key={item.label}
+                        onClick={() => handleNavigation(item.href)}
+                        className={`block w-full text-left px-5 py-3.5 pl-9 text-[15px] font-semibold border-b border-border font-modelica transition-colors bg-transparent border-l-0 border-r-0 border-t-0 cursor-pointer ${
+                          isActive(item.href)
+                            ? "text-secondary bg-section"
+                            : "text-text-light hover:text-text hover:bg-section"
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="btn btn-primary text-decoration-none"
-              >
-                Login
-              </Link>
-            )}
-
-            {/* HealthKart Styled Cart Icon with Live Badge & Popover */}
-            <div
-              className="relative"
-              onMouseEnter={handleCartMouseEnter}
-              onMouseLeave={handleCartMouseLeave}
-            >
-              <Link
-                to="/cart"
-                onClick={() => setCartPopoverOpen(false)}
-                className="relative p-1.5 flex items-center justify-center text-text hover:text-primary transition-colors text-decoration-none"
-                aria-label={`Cart with ${cartCount} items`}
-              >
-                {/* HealthKart Authentic Cart SVG */}
-                <svg
-                  width="27"
-                  height="25"
-                  viewBox="0 0 29 27"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="transition-transform group-hover:scale-105"
-                >
-                  <path
-                    d="M11 26C11.5523 26 12 25.3284 12 24.5C12 23.6716 11.5523 23 11 23C10.4477 23 10 23.6716 10 24.5C10 25.3284 10.4477 26 11 26Z"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M24 26C24.5523 26 25 25.3284 25 24.5C25 23.6716 24.5523 23 24 23C23.4477 23 23 23.6716 23 24.5C23 25.3284 23.4477 26 24 26Z"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M1 1H5.90909L9.19818 17.9603C9.31041 18.5434 9.6178 19.0672 10.0665 19.4401C10.5153 19.8129 11.0768 20.0109 11.6527 19.9995H23.5818C24.1578 20.0109 24.7193 19.8129 25.168 19.4401C25.6168 19.0672 25.9241 18.5434 26.0364 17.9603L28 7.33318H7.13636"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-
-                {/* Brand Primary Circular Count Badge */}
-                <span className="absolute -top-1 -right-1 bg-primary text-white text-[11px] font-bold h-5 w-5 rounded-full flex items-center justify-center shadow-xs">
-                  {cartCount > 99 ? "99+" : cartCount}
-                </span>
-              </Link>
-
-              {/* Cart Popover Dropdown */}
-              {cartPopoverOpen && (
-                <CartPopover
-                  items={cartItems}
-                  cartCount={cartCount}
-                  cartId={cartId}
-                  deleteItem={deleteItem}
-                  onClose={() => setCartPopoverOpen(false)}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Search Expandable Bar */}
-        {mobileSearchOpen && (
-          <div className="md:hidden px-4 pb-3 pt-1 border-t border-gray-100 bg-[#f8fafb] animate-in slide-in-from-top-1 duration-150">
-            <form
-              onSubmit={handleSearchSubmit}
-              className="relative flex items-center"
-            >
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products & categories..."
-                className="w-full h-10 px-4 pl-9 text-xs bg-white border border-[#dbdee9] rounded-lg outline-none focus:border-primary"
-                autoFocus
-              />
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 pointer-events-none" />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 p-1 text-gray-400 bg-transparent border-none"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </form>
-          </div>
-        )}
-      </div>
-
-      {/* =========================================================================
-          TIER 2: LOWER NAV BAR (Shop By Category | Home | Shop | Categories | ...)
-          ========================================================================= */}
-      <nav className="hidden lg:block w-full bg-white border-t-2 border-border relative">
-        <div
-          ref={megaMenuContainerRef}
-          className="max-w-[1170px] mx-auto px-4 md:px-0 h-[70px] flex items-center justify-center relative"
-        >
-          <ul className="flex w-full items-center justify-center gap-6 lg:gap-8 list-none p-0 m-0 h-full">
-            {HEADER_NAV_LINKS.map((link) => {
-              const active = isLinkActive(link.href);
-
-              if (link.hasDropdown) {
-                const isDropdownActive = active || megaMenuOpen;
-                return (
-                  <li key={link.label} className="h-full flex items-center">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setMegaMenuOpen((prev) => !prev);
-                      }}
-                      className={`flex items-center gap-1.5 px-0 py-5 text-sm font-medium transition-colors duration-150 text-decoration-none select-none cursor-pointer border-b-2 -mb-px ${
-                        isDropdownActive
-                          ? "border-primary text-primary"
-                          : "border-transparent text-text hover:text-primary"
-                      }`}
-                      aria-expanded={megaMenuOpen}
-                    >
-                      <span>{link.label}</span>
-                      <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          isDropdownActive ? "rotate-180" : "text-text-muted"
-                        }`}
-                      />
-                    </button>
-                  </li>
-                );
-              }
-
-              return (
-                <li key={link.label} className="h-full flex items-center">
-                  <Link
-                    to={link.href}
-                    className={`flex items-center px-0 py-5 text-sm font-medium transition-colors duration-150 text-decoration-none select-none cursor-pointer border-b-2 -mb-px ${
-                      active
-                        ? "border-primary text-primary"
-                        : "border-transparent text-text hover:text-primary"
-                    }`}
-                  >
-                    <span>{link.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* Category Dropdown MegaMenu (Opens on Click only) */}
-          <MegaMenu
-            isOpen={megaMenuOpen}
-            onClose={() => setMegaMenuOpen(false)}
-          />
-        </div>
-      </nav>
-
-      {/* =========================================================================
-          TIER 3: MOBILE ACCORDION DRAWER (Offcanvas Sidebar)
-          ========================================================================= */}
-      {drawerOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            onClick={() => setDrawerOpen(false)}
-            className="fixed inset-0 bg-black/40 z-[99998] transition-opacity duration-300 lg:hidden"
-          />
-
-          {/* Sliding Drawer */}
-          <div className="fixed top-0 left-0 bottom-0 w-[300px] sm:w-[320px] max-w-[85vw] bg-white z-[99999] shadow-2xl flex flex-col lg:hidden animate-in slide-in-from-left duration-300 overflow-hidden">
-            {/* Drawer Header (Navy Blue with Close 'X' and Login/Sign Up) */}
-            <div className="bg-primary px-4 py-3.5 flex items-center justify-between shrink-0 shadow-xs">
               <button
-                type="button"
-                onClick={() => setDrawerOpen(false)}
-                className="p-1 text-white hover:text-white/80 bg-transparent border-none cursor-pointer rounded-lg transition-colors flex items-center justify-center -ml-1"
-                aria-label="Close navigation"
+                key={link.label}
+                onClick={() => handleNavigation(link.href)}
+                className={`block w-full text-left px-5 py-4 text-base font-bold border-b border-section font-modelica transition-colors bg-transparent border-l-0 border-r-0 border-t-0 cursor-pointer ${
+                  isActive(link.href)
+                    ? "text-secondary bg-bg-light"
+                    : "text-text hover:bg-bg-light hover:text-hover"
+                }`}
               >
-                <X className="w-6 h-6 stroke-[2.2]" />
+                {link.label}
               </button>
-
-              {isAuthenticated ? (
-                <div className="flex items-center gap-2">
-                  <Link
-                    to="/profile"
-                    onClick={() => setDrawerOpen(false)}
-                    className="bg-white text-primary font-bold text-xs px-4 py-2 rounded-md shadow-xs text-decoration-none truncate max-w-[150px] transition-colors hover:bg-gray-50"
-                  >
-                    {user?.name ? user.name.split(" ")[0] : "My Account"}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDrawerOpen(false);
-                      logout();
-                    }}
-                    className="p-1.5 text-white hover:text-white/80 bg-white/20 border-none rounded-md cursor-pointer transition-colors"
-                    title="Sign Out"
-                  >
-                    <LogOut className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setDrawerOpen(false)}
-                  className="bg-white text-primary hover:bg-gray-50 font-bold text-xs sm:text-sm px-6 py-2 rounded-md shadow-xs text-decoration-none transition-colors"
-                >
-                  Login / Sign Up
-                </Link>
-              )}
-            </div>
-
-            {/* Drawer Scrollable Content */}
-            <div className="flex-1 overflow-y-auto bg-white flex flex-col justify-between scrollbar-thin">
-              {/* Menu List */}
-              <div className="divide-y divide-gray-100/70">
-                {MOBILE_DRAWER_LINKS.map((item) => {
-                  const active = isLinkActive(item.to);
-
-                  return (
-                    <Link
-                      key={item.label}
-                      to={item.to}
-                      onClick={() => setDrawerOpen(false)}
-                      className={`flex items-center justify-between px-5 py-3.5 transition-colors text-decoration-none group ${
-                        active
-                          ? "bg-primary-light text-primary"
-                          : "hover:bg-gray-50/90 text-[#374151]"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3.5">
-                        <item.icon
-                          className={`w-[18px] h-[18px] transition-colors shrink-0 ${
-                            active
-                              ? "text-primary"
-                              : "text-[#6b7280] group-hover:text-primary"
-                          }`}
-                          strokeWidth={1.9}
-                        />
-                        <span
-                          className={`text-[13px] ${
-                            active
-                              ? "font-bold text-primary"
-                              : "font-medium text-[#374151] group-hover:text-primary"
-                          }`}
-                        >
-                          {item.label}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {active && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                        )}
-                        <ChevronRight
-                          className={`w-4 h-4 transition-colors ${
-                            active
-                              ? "text-primary"
-                              : "text-gray-400 group-hover:text-primary"
-                          }`}
-                        />
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-
-              {/* Bottom Utilities: Store Locator */}
-              <div className="p-4 bg-[#fbfbfb] border-t border-gray-100/90 mt-2">
-                {/* Store Locator Button */}
-                <Link
-                  to="/contact-us"
-                  onClick={() => setDrawerOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border-2 border-primary bg-primary-light/70 text-primary hover:bg-primary-light text-xs font-bold transition-all text-decoration-none shadow-2xs"
-                >
-                  <MapPin className="w-4 h-4 text-primary shrink-0" />
-                  <span>Store Locator</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-    </header>
+            ),
+          )}
+        </nav>
+      </div>
+    </>
   );
 }

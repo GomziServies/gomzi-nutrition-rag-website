@@ -31,18 +31,18 @@ const founders = [
 export default function ManufacturingSection() {
   return (
     <section className="w-full overflow-hidden bg-section py-12 sm:py-14 md:py-16 lg:py-20">
-      <div className="mx-auto w-full max-w-[var(--container-width)] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+      <div className="site-container">
         {/* Section Heading */}
         <div className="mb-8 sm:mb-10 md:mb-12">
           <h2
             className="
               text-3xl
               sm:text-4xl
-              md:text-5xl
+              md:text-4xl
               font-black
               leading-[1.1]
               tracking-tight
-              text-text
+              text-text-black
             "
           >
             Leadership
@@ -102,7 +102,7 @@ export default function ManufacturingSection() {
                     md:text-[26px]
                     font-bold
                     leading-tight
-                    text-text
+                    text-text-black
                   "
                 >
                   {founder.name}
@@ -143,7 +143,7 @@ export default function ManufacturingSection() {
                     leading-[1.7]
                     sm:leading-[1.75]
                     text-gray-600
-                   
+                    font-modelica
                     text-left
                   "
                 >

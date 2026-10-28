@@ -1,49 +1,45 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
-import ScrollToTop from "../component/common/ScrollToTop";
+import { lazy } from "react";
+import NotFound, { RouteError } from "../pages/NotFound";
+import { createBrowserRouter } from "react-router-dom";
 import Wrapper from "../HOC/Wrapper";
 import Landing from "../pages/Landing";
-import Allproducts from "../pages/Allproducts";
-import FAQ from "../pages/FAQ";
-import ProductDetailPage from "../pages/Productdetailpage";
-import Ingredients from "../pages/Ingredients";
-import Ambassador from "../pages/About/Ambassador";
-import About from "../pages/About/About";
-import ContactUs from "../pages/About/Contact-Us";
-import Inquiry from "../pages/Inquiry/Inquiry";
-import Cart from "../component/ui/Cart";
-import Checkouts from "../pages/Checkouts";
-import Blog from "../pages/Blog";
-import BlogDetail from "../component/ui/BlogDetail";
-import LoginPage from "../pages/Auth/Login";
-import RegisterPage from "../pages/Auth/Register";
-import VerifyEmail from "../pages/Auth/VerifyEmail";
-import ProfilePage from "../pages/Profile/ProfilePage";
-import ThankYou from "../pages/Thank-you";
-import PrivacyPolicy from "../pages/About/LegalPrivacy";
-import TermsConditions from "../pages/About/LegalTerms";
-import RefundPolicy from "../pages/About/ReturnsPolicy";
-import ShippingPolicy from "../pages/About/DeliveryPolicy";
-import CategoriesSection from "../pages/Categories";
-import WholesaleB2B from "../pages/WholesaleB2B";
-
-const RootLayout = () => (
-  <>
-    <ScrollToTop />
-    <Outlet />
-  </>
-);
+const Allproducts = lazy(() => import("../pages/Allproducts"));
+const Deals = lazy(() => import("../pages/Deals"));
+const WholesaleB2B = lazy(() => import("../pages/WholesaleB2B"));
+const FAQ = lazy(() => import("../pages/FAQ"));
+const ProductDetailPage = lazy(() => import("../pages/Productdetailpage"));
+const Ingredients = lazy(() => import("../pages/Ingredients"));
+const Ambassador = lazy(() => import("../pages/About/Ambassador"));
+const About = lazy(() => import("../pages/About/About"));
+const ContactUs = lazy(() => import("../pages/About/Contact-Us"));
+const Inquiry = lazy(() => import("../pages/Inquiry/Inquiry"));
+const Cart = lazy(() => import("../component/ui/Cart"));
+const Checkouts = lazy(() => import("../pages/Checkouts"));
+const Blog = lazy(() => import("../pages/Blog"));
+const BlogDetail = lazy(() => import("../component/ui/BlogDetail"));
+const LoginPage = lazy(() => import("../pages/Auth/Login"));
+const RegisterPage = lazy(() => import("../pages/Auth/Register"));
+const VerifyEmail = lazy(() => import("../pages/Auth/VerifyEmail"));
+const ProfilePage = lazy(() => import("../pages/Profile/ProfilePage"));
+const ThankYou = lazy(() => import("../pages/Thank-you"));
+const PrivacyPolicy = lazy(() => import("../pages/About/LegalPrivacy"));
+const TermsConditions = lazy(() => import("../pages/About/LegalTerms"));
+const RefundPolicy = lazy(() => import("../pages/About/ReturnsPolicy"));
+const ShippingPolicy = lazy(() => import("../pages/About/DeliveryPolicy"));
+const CategoriesSection = lazy(() => import("../pages/Categories"));
 
 export const Route = createBrowserRouter([
   {
-    element: <RootLayout />,
+    element: <Wrapper />,
+    errorElement: <RouteError />,
     children: [
+      { path: "/wholesale", element: <WholesaleB2B /> },
+      { path: "/deals", element: <Deals /> },
+      { path: "*", element: <NotFound /> },
       {
-        element: <Wrapper />,
-        children: [
-          {
-            path: "/",
-            element: <Landing />,
-          },
+        path: "/",
+        element: <Landing />,
+      },
 
       {
         path: "/gomzi-supplement",
@@ -144,26 +140,6 @@ export const Route = createBrowserRouter([
         path: "/category",
         element: <CategoriesSection />,
       },
-
-      {
-        path: "/wholesale",
-        element: <WholesaleB2B />,
-      },
-
-      {
-        path: "/b2b",
-        element: <WholesaleB2B />,
-      },
-
-      {
-        path: "/gym-supply",
-        element: <WholesaleB2B />,
-      },
-
-      {
-        path: "/b2b-wholesale",
-        element: <WholesaleB2B />,
-      },
     ],
   },
 
@@ -191,7 +167,5 @@ export const Route = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
-  },
-    ],
   },
 ]);

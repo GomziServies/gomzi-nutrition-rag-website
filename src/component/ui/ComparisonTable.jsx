@@ -1,21 +1,6 @@
 import Wavyheading from "../common/Wavyheading";
 import WavyImageUnderline from "../common/WavyImageUnderline";
 
-// ─── Data ───────────────────────────────────────
-const rows = [
-  {
-    label: "Optimal calorie intake",
-    nara: true,
-    fastFood: false,
-    other: false,
-  },
-  { label: "Great taste", nara: true, fastFood: true, other: false },
-  { label: "Healthy and nutritious", nara: true, fastFood: false, other: true },
-  { label: "Weight management", nara: true, fastFood: false, other: true },
-  { label: "Plant-based protein", nara: true, fastFood: false, other: false },
-  { label: "Soy-free", nara: true, fastFood: true, other: false },
-];
-
 // ─── Icons ──────────────────────────────────────
 function CheckIcon() {
   return (
@@ -56,7 +41,7 @@ function Cell({ value, isNara = false }) {
   return (
     <td
       className={`py-4 md:py-5 text-center align-middle ${
-        isNara ? "bg-[#95442c]/30" : ""
+        isNara ? "bg-primary/30" : ""
       }`}
     >
       {value === true ? (
@@ -64,7 +49,7 @@ function Cell({ value, isNara = false }) {
       ) : value === false ? (
         <CrossIcon muted={!isNara} />
       ) : (
-        <span className="text-sm md:text-base text-text-light">
+        <span className="text-sm md:text-base font-modelica text-text-light">
           {value}
         </span>
       )}
@@ -80,7 +65,7 @@ export default function ComparisonTable() {
         {/* Heading */}
         {/* <div className="text-center mb-10 md:mb-14">
           <h2
-            className="text-text font-black inline-block"
+            className="font-toma text-text font-black inline-block"
             style={{
               fontSize: "clamp(26px, 4vw, 48px)",
               lineHeight: "1.2",

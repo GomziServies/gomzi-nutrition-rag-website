@@ -1,5 +1,22 @@
 import Hookheading from "../common/Hookheading";
+import ProductCard from "../common/ProductCard";
 
+const product = {
+  id: 1,
+  badge: "LONGEVITY MONTH",
+  discount: "-40%",
+  image: "/images/p1off.webp",
+  stars: 5,
+  reviews: 17,
+  name: "Gomzi Supplement by RAG LONGEVITY CHOCOLATE",
+  category: "Longevity",
+  price: 4250,
+  originalPrice: 7080,
+};
+
+const handleAddToCart = (product) => {
+  console.log("Add to cart:", product);
+};
 
 export default function FuelingAthletesSection() {
   return (
@@ -35,10 +52,10 @@ export default function FuelingAthletesSection() {
 
             {/* Athlete name + description */}
             <div className="px-5 py-4 sm:px-6 sm:py-5 border-t border-border">
-              <p className="font-black text-text text-sm sm:text-base">
+              <p className="font-toma font-black text-text text-sm sm:text-base">
                 Urte Andriukaityte, Gomzi Supplement by RAG Ambassador
               </p>
-              <p className="text-text-light text-xs sm:text-sm mt-0.5">
+              <p className="font-modelica text-text-light text-xs sm:text-sm mt-0.5">
                 LTU beach volleyball national team Member of @lteam_official
               </p>
             </div>

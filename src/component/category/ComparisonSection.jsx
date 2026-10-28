@@ -91,9 +91,9 @@ const ComparisonSection = ({ data }) => {
             Comparison Table
         =========================== */}
 
-      <div className="mt-8 overflow-hidden rounded-3xl border border-primary bg-white">
-        <div className="px-5 sm:px-6 py-5 border-b border-[#dbdee9]">
-          <h3 className="font-bold text-lg">{data.table.title}</h3>
+      <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-white shadow-2xs">
+        <div className="px-5 sm:px-6 py-5 border-b border-border">
+          <h3 className="font-bold text-lg text-text">{data.table.title}</h3>
         </div>
 
         <div className="hidden md:block overflow-x-auto">
@@ -113,7 +113,7 @@ const ComparisonSection = ({ data }) => {
 
             <tbody>
               {data.table.rows.map((row, index) => (
-                <tr key={index} className="border-t border-[#dbdee9]">
+                <tr key={index} className="border-t border-[#E8D9C8]">
                   {row.map((cell, i) => (
                     <td
                       key={i}
@@ -138,7 +138,7 @@ const ComparisonSection = ({ data }) => {
           {data.table.rows.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className="rounded-2xl border border-[#dbdee9] bg-white overflow-hidden"
+              className="rounded-2xl border border-border bg-white overflow-hidden shadow-2xs"
             >
               {/* Feature / first column */}
               <div className="bg-primary text-white px-4 py-3">
@@ -150,7 +150,7 @@ const ComparisonSection = ({ data }) => {
               </div>
 
               {/* Remaining columns */}
-              <div className="divide-y divide-[#dbdee9]">
+              <div className="divide-y divide-border">
                 {row.slice(1).map((cell, cellIndex) => (
                   <div key={cellIndex} className="px-4 py-4">
                     <p className="text-xs font-semibold uppercase tracking-wider text-primary">

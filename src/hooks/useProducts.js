@@ -1,62 +1,40 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchProducts } from "../services/product.service";
 
-const useProducts = ({
-  page = 1,
-  limit = 9,
-  category = "",
-  brand = "",
-  company = "",
-  search = "",
-  sort = "",
-  sortOrder = "",
-  slug = "",
-  id = "",
-}) => {
+export default function useProducts({ page = 1, limit = 9, category = "", search = "", sort = "", sortOrder = "", slug = "" } = {}) {
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState(null);
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(true);
-  const hasProducts = products.length > 0;
+  const [error, setError] = useState("");
+  const [attempt, setAttempt] = useState(0);
+  const retry = useCallback(() => setAttempt(value => value + 1), []);
   useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-
-      const result = await fetchProducts({
-        page,
-        limit,
-        category,
-        brand,
-        company,
-        search,
-        sort,
-        sortOrder,
-        slug,
-        id,
-      });
-
-      if (result.success) {
-        if (slug || id) {
-          setProduct(result.data || null);
-        } else {
-          setProducts(result.data || []);
+    let active = true;
+    setLoading(true);
+    setError("");
+    setProduct(null);
+    const load = async () => {
+      try {
+        const result = await fetchProducts({ page, limit, category, search, sort, sortOrder, slug });
+        if (!active) return;
+        if (!result.success) throw new Error(result.message);
+        if (slug) setProduct(Array.isArray(result.data) ? result.data[0] || null : result.data || null);
+        else {
+          setProducts(Array.isArray(result.data) ? result.data : []);
           setPagination(result.pagination || {});
         }
+      } catch (failure) {
+        if (!active) return;
+        setProducts([]);
+        setPagination({});
+        setError(failure.message || "We couldn't load the products. Please try again.");
+      } finally {
+        if (active) setLoading(false);
       }
-
-      setLoading(false);
     };
-
-    loadProducts();
-  }, [page, limit, category, brand, company, sort, search, sortOrder, slug, id]);
-
-  return {
-    products,
-    product,
-    pagination,
-    loading,
-    hasProducts,
-  };
-};
-
-export default useProducts;
+    load();
+    return () => { active = false; };
+  }, [page, limit, category, search, sort, sortOrder, slug, attempt]);
+  return { products, product, pagination, loading, error, retry, hasProducts: products.length > 0 };
+}

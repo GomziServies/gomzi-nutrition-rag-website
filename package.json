@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "test": "node --test tests/cart-storage.test.mjs && node tests/cart-sync-smoke.mjs && node tests/render-smoke.mjs && node tests/storefront-ui-smoke.mjs && node tests/wholesale-smoke.mjs",
+    "check": "npm run lint && npm run build && npm test",
+    "preview": "vite preview",
+    "content:generate": "node scripts/generate-website-content.mjs",
+    "prebuild": "npm run content:generate"
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.5",
@@ -29,6 +33,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.7",
     "@eslint/js": "^9.39.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -37,6 +42,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "sharp": "^0.35.5",
     "vite": "^8.0.0-beta.13"
   },
   "overrides": {

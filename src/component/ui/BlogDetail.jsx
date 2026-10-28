@@ -1,52 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 
 import SEO from "../../component/SEO";
-import { blogs as staticBlogs } from "../../data/blogs";
-import { getBlogBySlugApi } from "../../api/blog.api";
-
-const resolveImageUrl = (img) => {
-  if (!img) return "/images/blog-1.webp";
-  if (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("/")) {
-    return img;
-  }
-  return `https://files.fggroup.in/${img}`;
-};
+import { blogs } from "../../data/blogs";
 
 const BlogDetail = () => {
   const { slug } = useParams();
-  const initialBlog = staticBlogs.find((item) => item.slug === slug) || null;
-  const [blog, setBlog] = useState(initialBlog);
-  const [loading, setLoading] = useState(!initialBlog);
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchBlog = async () => {
-      try {
-        const res = await getBlogBySlugApi(slug);
-        if (isMounted && res.data?.data?.blog) {
-          setBlog(res.data.data.blog);
-        }
-      } catch (err) {
-        console.warn("Failed to fetch live article by slug:", err.message);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    fetchBlog();
-    return () => {
-      isMounted = false;
-    };
-  }, [slug]);
-
-  if (loading && !blog) {
-    return (
-      <div className="min-h-screen bg-bg-cream flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  const blog = blogs.find((item) => item.slug === slug);
 
   if (!blog) {
     return <Navigate to="/blog" replace />;
@@ -64,9 +25,9 @@ const BlogDetail = () => {
             HEADER
         ================================================== */}
         <section className="pt-10 md:pt-16 pb-8">
-          <div className="max-w-[var(--container-width)] mx-auto px-4">
+          <div className="site-container">
             {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400 mb-7 overflow-hidden">
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-modelica text-gray-400 mb-7 overflow-hidden">
               <Link
                 to="/"
                 className="hover:text-primary transition-colors flex-shrink-0"
@@ -90,7 +51,7 @@ const BlogDetail = () => {
 
             {/* Category */}
             <div className="mb-5">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-modelica font-semibold uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary" />
 
                 {blog.category}
@@ -98,12 +59,12 @@ const BlogDetail = () => {
             </div>
 
             {/* Title */}
-            <h1 className="max-w-5xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] text-gray-900">
+            <h1 className="max-w-5xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-tomato font-bold leading-[1.05] text-gray-900">
               {blog.title}
             </h1>
 
             {/* Author */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 ">
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500 font-modelica">
               {blog.reviewedBy ? (
                 <span>Reviewed by {blog.reviewedBy}</span>
               ) : (
@@ -124,10 +85,10 @@ const BlogDetail = () => {
             FEATURE IMAGE
         ================================================== */}
         <section className="pb-10 md:pb-14">
-          <div className="max-w-[var(--container-width)] mx-auto px-4">
+          <div className="site-container">
             <div className="overflow-hidden rounded-2xl md:rounded-3xl bg-white">
               <img
-                src={resolveImageUrl(blog.image)}
+                src={blog.image}
                 alt={blog.title}
                 className="w-full h-auto object-cover"
               />
@@ -145,7 +106,7 @@ const BlogDetail = () => {
               {blog.content?.intro?.map((paragraph, index) => (
                 <p
                   key={index}
-                  className="text-lg md:text-xl leading-8 text-gray-700"
+                  className="text-lg md:text-xl leading-8 text-gray-700 font-modelica"
                 >
                   {paragraph}
                 </p>
@@ -162,7 +123,7 @@ const BlogDetail = () => {
                 {section.paragraphs?.map((paragraph, paragraphIndex) => (
                   <p
                     key={paragraphIndex}
-                    className="mt-5 text-base md:text-lg leading-8 text-gray-700"
+                    className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
                   >
                     {paragraph}
                   </p>
@@ -174,7 +135,7 @@ const BlogDetail = () => {
                     {section.bullets.map((bullet, bulletIndex) => (
                       <li
                         key={bulletIndex}
-                        className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700"
+                        className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700 font-modelica"
                       >
                         <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
 
@@ -186,7 +147,7 @@ const BlogDetail = () => {
 
                 {/* Closing Paragraph */}
                 {section.closingParagraph && (
-                  <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 ">
+                  <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 font-modelica">
                     {section.closingParagraph}
                   </p>
                 )}
@@ -210,7 +171,7 @@ const BlogDetail = () => {
               border-primary/10
               text-primary
               text-sm
-             
+              font-modelica
               font-semibold
               hover:bg-primary
               hover:text-white
@@ -289,9 +250,22 @@ const BlogDetail = () => {
             <div className="mt-14 flex justify-center">
               <Link
                 to="/blog"
-                className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-gradient border border-amber-400/30 text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer"
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  px-6
+                  py-3
+                  rounded-xl
+                  bg-primary
+                  text-white
+                  font-modelica
+                  font-semibold
+                  hover:opacity-90
+                  transition
+                "
               >
-                <span className="relative z-10">← Back to Blog</span>
+                ← Back to Blog
               </Link>
             </div>
           </div>
@@ -307,7 +281,7 @@ const BlogDetail = () => {
 
 const ArticleHeading = ({ children }) => {
   return (
-    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-gray-900">
+    <h2 className="text-2xl md:text-3xl lg:text-4xl font-tomato font-bold leading-tight text-gray-900">
       {children}
     </h2>
   );
@@ -322,8 +296,8 @@ const ProteinTable = ({ table }) => {
     <section className="mt-14">
       <ArticleHeading>{table.heading}</ArticleHeading>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="w-full min-w-[700px] border-collapse ">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-white">
+        <table className="w-full min-w-[700px] border-collapse font-modelica">
           <thead>
             <tr className="bg-primary text-white">
               {table.columns.map((column, index) => (
@@ -341,7 +315,7 @@ const ProteinTable = ({ table }) => {
             {table.rows.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50"
+                className="border-b border-border last:border-b-0 hover:bg-gray-50"
               >
                 {row.map((cell, cellIndex) => (
                   <td
@@ -380,8 +354,8 @@ const ComparisonTable = ({ table }) => {
     <section className="mt-14">
       <ArticleHeading>{table.heading}</ArticleHeading>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="w-full min-w-[680px] border-collapse ">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-white">
+        <table className="w-full min-w-[680px] border-collapse font-modelica">
           <thead>
             <tr className="bg-primary text-white">
               {table.columns.map((column, index) => (
@@ -399,7 +373,7 @@ const ComparisonTable = ({ table }) => {
             {table.rows.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-gray-200 last:border-b-0"
+                className="border-b border-border last:border-b-0"
               >
                 {row.map((cell, cellIndex) => (
                   <td
@@ -442,9 +416,9 @@ const ChoiceSection = ({ section }) => {
         {section.options.map((option, index) => (
           <div
             key={index}
-            className="rounded-2xl bg-white border border-gray-200 p-6"
+            className="rounded-2xl bg-white border border-border p-6"
           >
-            <h3 className="text-xl font-bold text-primary">
+            <h3 className="font-tomato text-xl font-bold text-primary">
               {option.title}
             </h3>
 
@@ -452,7 +426,7 @@ const ChoiceSection = ({ section }) => {
               {option.items.map((item, itemIndex) => (
                 <li
                   key={itemIndex}
-                  className="flex items-start gap-3 text-gray-600 leading-7"
+                  className="flex items-start gap-3 font-modelica text-gray-600 leading-7"
                 >
                   <span className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
 
@@ -483,7 +457,7 @@ const CautionSection = ({ section }) => {
           </span>
 
           <div>
-            <h3 className="font-semibold text-gray-900">
+            <h3 className="font-modelica font-semibold text-gray-900">
               {section.label}
             </h3>
 
@@ -491,7 +465,7 @@ const CautionSection = ({ section }) => {
               {section.paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
-                  className="text-gray-700 leading-8"
+                  className="font-modelica text-gray-700 leading-8"
                 >
                   {paragraph}
                 </p>
@@ -513,17 +487,17 @@ const ExpertSection = ({ section }) => {
     <section className="mt-14">
       <ArticleHeading>{section.heading}</ArticleHeading>
 
-      <div className="relative mt-6 rounded-2xl bg-white border border-gray-200 p-6 md:p-8">
-        <div className="absolute top-5 left-6 text-6xl text-primary/10">
+      <div className="relative mt-6 rounded-2xl bg-white border border-border p-6 md:p-8">
+        <div className="absolute top-5 left-6 text-6xl font-tomato text-primary/10">
           “
         </div>
 
-        <blockquote className="relative pt-5 text-lg md:text-xl leading-8 text-gray-700 italic">
-          "{section.quote}"
+        <blockquote className="relative pt-5 font-modelica text-lg md:text-xl leading-8 text-gray-700 italic">
+          &ldquo;{section.quote}&rdquo;
         </blockquote>
 
-        <div className="mt-6 pt-5 border-t border-gray-100">
-          <p className="text-sm font-semibold text-gray-900">
+        <div className="mt-6 pt-5 border-t border-border">
+          <p className="font-modelica text-sm font-semibold text-gray-900">
             - {section.author}
           </p>
         </div>
@@ -545,7 +519,7 @@ const CalculatorSection = ({ section }) => {
         {section.paragraphs.map((paragraph, index) => (
           <p
             key={index}
-            className="mt-5 text-base md:text-lg leading-8 text-gray-700"
+            className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
           >
             {paragraph}
           </p>
@@ -553,11 +527,11 @@ const CalculatorSection = ({ section }) => {
       </div>
 
       <div className="mt-7 rounded-2xl bg-gray-900 text-white p-6 md:p-8">
-        <p className="text-xs uppercase tracking-[0.15em] text-white/50">
+        <p className="font-modelica text-xs uppercase tracking-[0.15em] text-white/50">
           Simple formula
         </p>
 
-        <p className="mt-3 text-lg md:text-xl font-semibold">
+        <p className="mt-3 font-modelica text-lg md:text-xl font-semibold">
           {section.formula}
         </p>
       </div>
@@ -578,7 +552,7 @@ const GomziSection = ({ section }) => {
         {section.paragraphs.map((paragraph, index) => (
           <p
             key={index}
-            className="mt-4 first:mt-0 text-gray-700 leading-8"
+            className="mt-4 first:mt-0 font-modelica text-gray-700 leading-8"
           >
             {paragraph}
           </p>
@@ -601,9 +575,9 @@ const FaqSection = ({ faqs }) => {
         {faqs.map((faq, index) => (
           <details
             key={index}
-            className="group rounded-2xl bg-white border border-gray-200 overflow-hidden"
+            className="group rounded-2xl bg-white border border-border overflow-hidden"
           >
-            <summary className="list-none cursor-pointer px-5 md:px-6 py-5 flex items-center justify-between gap-5 font-semibold text-gray-900">
+            <summary className="list-none cursor-pointer px-5 md:px-6 py-5 flex items-center justify-between gap-5 font-modelica font-semibold text-gray-900">
               <span>{faq.question}</span>
 
               <span className="flex-shrink-0 text-primary text-xl transition-transform duration-300 group-open:rotate-45">
@@ -612,7 +586,7 @@ const FaqSection = ({ faqs }) => {
             </summary>
 
             <div className="px-5 md:px-6 pb-5">
-              <p className="text-gray-600 leading-7">
+              <p className="font-modelica text-gray-600 leading-7">
                 {faq.answer}
               </p>
             </div>
@@ -632,12 +606,12 @@ const BottomLine = ({ section }) => {
     <section className="mt-14">
       <ArticleHeading>{section.heading}</ArticleHeading>
 
-      <div className="mt-6 rounded-2xl bg-white border border-gray-200 p-6 md:p-8">
+      <div className="mt-6 rounded-2xl bg-white border border-border p-6 md:p-8">
         {/* Paragraphs */}
         {section.paragraphs?.map((paragraph, index) => (
           <p
             key={index}
-            className="mt-4 first:mt-0 text-gray-700 leading-8"
+            className="mt-4 first:mt-0 font-modelica text-gray-700 leading-8"
           >
             {paragraph}
           </p>
@@ -649,7 +623,7 @@ const BottomLine = ({ section }) => {
             {section.bullets.map((bullet, index) => (
               <li
                 key={index}
-                className="flex items-start gap-3 text-gray-700 leading-8"
+                className="flex items-start gap-3 font-modelica text-gray-700 leading-8"
               >
                 <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
 
@@ -661,8 +635,8 @@ const BottomLine = ({ section }) => {
 
         {/* Closing */}
         {section.closing && (
-          <div className="mt-7 pt-6 border-t border-gray-100">
-            <p className="text-xl md:text-2xl font-bold text-primary">
+          <div className="mt-7 pt-6 border-t border-border">
+            <p className="font-tomato text-xl md:text-2xl font-bold text-primary">
               {section.closing}
             </p>
           </div>
@@ -678,7 +652,7 @@ const BottomLine = ({ section }) => {
 
 const Sources = ({ sources }) => {
   return (
-    <section className="mt-14 pt-8 border-t border-gray-200">
+    <section className="mt-14 pt-8 border-t border-border">
       <ArticleHeading>Further Reading & Sources</ArticleHeading>
 
       <div className="mt-5 space-y-3">
@@ -688,7 +662,7 @@ const Sources = ({ sources }) => {
             href={source.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-start gap-3 text-sm md:text-base text-primary hover:underline"
+            className="flex items-start gap-3 font-modelica text-sm md:text-base text-primary hover:underline"
           >
             <span>•</span>
 
@@ -707,7 +681,7 @@ const Sources = ({ sources }) => {
 const RelatedReading = ({ items }) => {
   return (
     <section className="mt-12">
-      <h3 className="text-2xl md:text-3xl font-bold text-gray-900">
+      <h3 className="font-tomato text-2xl md:text-3xl font-bold text-gray-900">
         Related Reading
       </h3>
 
@@ -720,9 +694,9 @@ const RelatedReading = ({ items }) => {
               <Link
                 key={index}
                 to={item.url}
-                className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition"
+                className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-border hover:border-primary/30 hover:shadow-sm transition"
               >
-                <span className="text-sm md:text-base text-gray-700">
+                <span className="font-modelica text-sm md:text-base text-gray-700">
                   {item.title}
                 </span>
 
@@ -737,9 +711,9 @@ const RelatedReading = ({ items }) => {
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition"
+              className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-border hover:border-primary/30 hover:shadow-sm transition"
             >
-              <span className="text-sm md:text-base text-gray-700">
+              <span className="font-modelica text-sm md:text-base text-gray-700">
                 {item.title}
               </span>
 
@@ -758,7 +732,7 @@ const RelatedReading = ({ items }) => {
 
 const FurtherReading = ({ items }) => {
   return (
-    <section className="mt-14 pt-8 border-t border-gray-200">
+    <section className="mt-14 pt-8 border-t border-border">
       <ArticleHeading>Further Reading</ArticleHeading>
 
       <div className="mt-5 space-y-3">
@@ -779,13 +753,13 @@ const FurtherReading = ({ items }) => {
                   rounded-xl
                   bg-white
                   border
-                  border-gray-200
+                  border-border
                   hover:border-primary/30
                   hover:shadow-sm
                   transition
                 "
               >
-                <span className="text-sm md:text-base text-gray-700">
+                <span className="font-modelica text-sm md:text-base text-gray-700">
                   {item.title}
                 </span>
 
@@ -809,13 +783,13 @@ const FurtherReading = ({ items }) => {
                 rounded-xl
                 bg-white
                 border
-                border-gray-200
+                border-border
                 hover:border-primary/30
                 hover:shadow-sm
                 transition
               "
             >
-              <span className="text-sm md:text-base text-gray-700">
+              <span className="font-modelica text-sm md:text-base text-gray-700">
                 {item.title}
               </span>
 

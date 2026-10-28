@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useId, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SEO from "../../component/SEO";
 import { states, getCities } from "../../utils/indiaLocation";
 import ragLogo from "../../assets/rag-partner-logo.png";
@@ -176,8 +176,8 @@ function CustomSelect({
           error
             ? "border-[#ef4444] bg-[#fef2f2]"
             : isOpen
-              ? "border-[#95442c] ring-3 ring-[#95442c]/20"
-              : "border-[#cbd5e1] hover:border-[#95442c]"
+              ? "border-primary ring-3 ring-primary/20"
+              : "border-border hover:border-primary"
         }`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -185,7 +185,7 @@ function CustomSelect({
         <span
           className={`truncate ${
             selectedOption && selectedOption.value !== ""
-              ? "text-[#0f172a] font-medium"
+              ? "text-text font-medium"
               : "text-[#94a3b8] font-normal"
           }`}
         >
@@ -194,14 +194,14 @@ function CustomSelect({
             : placeholder}
         </span>
         <ChevronDown
-          className={`w-4 h-4 text-[#64748b] transition-transform duration-200 flex-shrink-0 ml-2 ${
-            isOpen ? "rotate-180 text-[#95442c]" : ""
+          className={`w-4 h-4 text-[#70675f] transition-transform duration-200 flex-shrink-0 ml-2 ${
+            isOpen ? "rotate-180 text-primary" : ""
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border-[1.5px] border-[#cbd5e1] rounded-lg shadow-xl z-50 max-h-60 overflow-hidden flex flex-col animate-fadeIn">
+        <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border-[1.5px] border-border rounded-lg shadow-xl z-50 max-h-60 overflow-hidden flex flex-col animate-fadeIn">
           {searchable && (
             <div className="p-2 border-b border-[#f1f5f9] bg-white sticky top-0 z-10">
               <input
@@ -210,7 +210,7 @@ function CustomSelect({
                 placeholder="Type to search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-[36px] px-3 text-xs bg-white border border-[#cbd5e1] rounded-md outline-none focus:border-[#95442c] focus:ring-1 focus:ring-[#95442c] text-[#0f172a]"
+                className="w-full h-[36px] px-3 text-xs bg-white border border-border rounded-md outline-none focus:border-primary focus:ring-1 focus:ring-primary text-text"
                 onClick={(e) => e.stopPropagation()}
               />
             </div>
@@ -231,8 +231,8 @@ function CustomSelect({
                     onClick={() => handleSelect(opt.value)}
                     className={`w-full px-4 py-2.5 text-sm text-left flex items-center justify-between cursor-pointer transition ${
                       isSelected
-                        ? "bg-[#95442c] text-white font-semibold"
-                        : "text-[#334155] hover:bg-[#fdf5f2] hover:text-[#95442c]"
+                        ? "bg-primary text-white font-semibold"
+                        : "text-[#334155] hover:bg-[#fdf5f2] hover:text-primary"
                     }`}
                   >
                     <span className="truncate">{opt.label}</span>
@@ -278,7 +278,7 @@ function FilePreviewCard({ file, onRemove }) {
   };
 
   return (
-    <div className="flex items-center gap-3 p-2.5 bg-white border-[1.5px] border-[#e2e8f0] rounded-lg shadow-xs transition hover:border-[#cbd5e1]">
+    <div className="flex items-center gap-3 p-2.5 bg-white border-[1.5px] border-border rounded-lg shadow-xs transition hover:border-border">
       {/* Thumbnail */}
       {isImage && previewUrl ? (
         <a
@@ -291,15 +291,15 @@ function FilePreviewCard({ file, onRemove }) {
           <img
             src={previewUrl}
             alt={file?.name || "Preview"}
-            className="w-12 h-12 rounded-lg object-cover border border-[#e2e8f0]"
+            className="w-12 h-12 rounded-lg object-cover border border-border"
           />
           <div className="absolute inset-0 bg-black/30 rounded-lg opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white">
             <Eye className="w-3.5 h-3.5" />
           </div>
         </a>
       ) : (
-        <div className="w-12 h-12 rounded-lg bg-[#fdf5f2] border border-[#95442c]/20 flex flex-col items-center justify-center text-[#95442c] flex-shrink-0">
-          <FileText className="w-5 h-5 text-[#95442c]" />
+        <div className="w-12 h-12 rounded-lg bg-[#fdf5f2] border border-primary/20 flex flex-col items-center justify-center text-primary flex-shrink-0">
+          <FileText className="w-5 h-5 text-primary" />
           <span className="text-[10px] font-bold uppercase mt-0.5 font-mono">
             {isPdf ? "PDF" : "DOC"}
           </span>
@@ -309,13 +309,13 @@ function FilePreviewCard({ file, onRemove }) {
       {/* Info */}
       <div className="flex-1 min-w-0">
         <p
-          className="text-xs sm:text-sm font-semibold text-[#0f172a] truncate"
+          className="text-xs sm:text-sm font-semibold text-text truncate"
           title={file?.name}
         >
           {file?.name}
         </p>
         <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-[11px] text-[#64748b] font-mono">
+          <span className="text-[11px] text-[#70675f] font-mono">
             {formatFileSize(file?.size)}
           </span>
           <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
@@ -338,7 +338,7 @@ function FilePreviewCard({ file, onRemove }) {
 }
 
 export default function Inquiry() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submissionId, setSubmissionId] = useState("");
@@ -659,10 +659,6 @@ export default function Inquiry() {
     setErrors(newErrors);
     return { isValid: Object.keys(newErrors).length === 0, firstErrorField };
   };
-
-  const validateStep = () => validateAll().isValid;
-  const goToNextStep = () => {};
-  const goToPrevStep = () => {};
 
   // Send Email OTP
   const handleSendEmailOtp = async () => {
@@ -1039,8 +1035,8 @@ export default function Inquiry() {
         }
         .emp-clean-input {
           background-color: #ffffff !important;
-          border: 1.5px solid #cbd5e1 !important;
-          color: #0f172a !important;
+          border: 1.5px solid #ebdcd2 !important;
+          color: #1c1917 !important;
           font-size: 14px !important;
           font-weight: 500 !important;
           border-radius: 8px !important;
@@ -1070,7 +1066,7 @@ export default function Inquiry() {
           padding: 10px 14px !important;
         }
         .emp-clean-label {
-          color: #0f172a !important;
+          color: #1c1917 !important;
           font-size: 13px !important;
           font-weight: 700 !important;
           margin-bottom: 6px !important;
@@ -1078,7 +1074,7 @@ export default function Inquiry() {
         }
         .emp-card-box {
           background-color: #ffffff !important;
-          border: 1.5px solid #e2e8f0 !important;
+          border: 1.5px solid #ebdcd2 !important;
           border-radius: 14px !important;
           box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05), 0 2px 6px -1px rgba(0,0,0,0.02) !important;
           overflow: visible !important;
@@ -1086,7 +1082,7 @@ export default function Inquiry() {
         }
         .emp-upload-box {
           background-color: #ffffff !important;
-          border: 2px dashed #cbd5e1 !important;
+          border: 2px dashed #ebdcd2 !important;
           border-radius: 12px !important;
           padding: 20px !important;
           transition: all 0.2s ease !important;
@@ -1096,15 +1092,15 @@ export default function Inquiry() {
           background-color: rgba(149, 68, 44, 0.02) !important;
         }
         .inquiry-theme-scope {
-          background-color: #ffffff !important;
+          background-color: #fbf9f6 !important;
         }
       `}</style>
 
-      <div className="inquiry-theme-scope min-h-screen bg-white pt-8 sm:pt-12 pb-16 sm:pb-20 ">
+      <div className="inquiry-theme-scope site-form min-h-screen bg-light pt-8 sm:pt-12 pb-16 sm:pb-20 font-inter">
         {isSuccess && <Confetti numberOfPieces={250} recycle={false} />}
 
         {/* Brand Logo & Hero Header */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 text-center ">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 text-center font-inter">
           <div className="flex justify-center mb-4 sm:mb-5">
             <a
               href="/"
@@ -1118,17 +1114,17 @@ export default function Inquiry() {
               />
             </a>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0f172a] tracking-tight mb-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-text tracking-tight mb-2">
             RAG Pro Partner Program
           </h1>
-          <p className="text-[#64748b] text-sm sm:text-base md:text-lg max-w-4xl mx-auto leading-relaxed text-center whitespace-normal sm:whitespace-nowrap font-normal">
+          <p className="text-[#70675f] text-sm sm:text-base md:text-lg max-w-4xl mx-auto leading-relaxed text-center whitespace-normal sm:whitespace-normal font-normal">
             Empower your clients with lab-tested nutrition and unlock exclusive
             partner margins.
           </p>
         </section>
 
         {/* Main Application Container */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 ">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 font-inter">
           {isSuccess ? (
             /* SUCCESS CELEBRATION VIEW */
             <div className="emp-card-box p-6 sm:p-12 text-center animate-fadeIn">
@@ -1140,38 +1136,38 @@ export default function Inquiry() {
                 Application Received
               </span>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a] mb-3">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-text mb-3">
                 Welcome to the RAG Pro Partner Network!
               </h2>
 
-              <p className="text-[#64748b] text-sm sm:text-base max-w-lg mx-auto mb-6 leading-relaxed">
+              <p className="text-[#70675f] text-sm sm:text-base max-w-lg mx-auto mb-6 leading-relaxed">
                 Thank you,{" "}
-                <span className="font-bold text-[#0f172a]">
+                <span className="font-bold text-text">
                   {formData.fullName}
                 </span>
                 ! Your application has been received and logged in our partner
                 verification system.
               </p>
 
-              <div className="bg-white rounded-xl p-4 sm:p-6 max-w-md mx-auto mb-8 border border-[#e2e8f0] text-left shadow-2xs">
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pb-3 border-b border-[#e2e8f0]">
-                  <span className="text-xs text-[#64748b] uppercase tracking-wide font-medium">
+              <div className="bg-white rounded-xl p-4 sm:p-6 max-w-md mx-auto mb-8 border border-border text-left shadow-2xs">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pb-3 border-b border-border">
+                  <span className="text-xs text-[#70675f] uppercase tracking-wide font-medium">
                     Application Reference
                   </span>
-                  <span className="font-mono text-xs sm:text-sm font-bold text-[#95442c] break-all">
+                  <span className="font-mono text-xs sm:text-sm font-bold text-primary break-all">
                     {submissionId}
                   </span>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 py-3 border-b border-[#e2e8f0]">
-                  <span className="text-xs text-[#64748b] font-medium">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 py-3 border-b border-border">
+                  <span className="text-xs text-[#70675f] font-medium">
                     Registered Email
                   </span>
-                  <span className="text-xs sm:text-sm font-semibold text-[#0f172a] break-all">
+                  <span className="text-xs sm:text-sm font-semibold text-text break-all">
                     {formData.email}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 pt-3">
-                  <span className="text-xs text-[#64748b] font-medium">
+                  <span className="text-xs text-[#70675f] font-medium">
                     Next Action
                   </span>
                   <span className="text-xs sm:text-sm font-semibold text-emerald-600">
@@ -1183,7 +1179,7 @@ export default function Inquiry() {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <a
                   href="/gomzi-supplement"
-                  className="w-full sm:w-auto h-[44px] px-6 sm:px-8 bg-[#95442c] hover:bg-[#7d3824] text-white font-bold rounded-lg transition shadow-sm text-sm sm:text-base flex items-center justify-center"
+                  className="w-full sm:w-auto h-[44px] px-6 sm:px-8 bg-primary hover:bg-[#7d3824] text-white font-bold rounded-lg transition shadow-sm text-sm sm:text-base flex items-center justify-center"
                 >
                   Explore Supplements Catalog
                 </a>
@@ -1193,7 +1189,7 @@ export default function Inquiry() {
                     setIsSuccess(false);
                     scrollToFormTop();
                   }}
-                  className="w-full sm:w-auto h-[44px] px-6 sm:px-8 bg-white hover:bg-slate-50 text-[#334155] border-[1.5px] border-[#cbd5e1] font-semibold rounded-lg transition text-sm sm:text-base text-center cursor-pointer"
+                  className="w-full sm:w-auto h-[44px] px-6 sm:px-8 bg-white hover:bg-slate-50 text-[#334155] border-[1.5px] border-border font-semibold rounded-lg transition text-sm sm:text-base text-center cursor-pointer"
                 >
                   Submit Another Form
                 </button>
@@ -1210,7 +1206,7 @@ export default function Inquiry() {
                   }
                 }}
                 noValidate
-                style={{ accentColor: "#95442c" }}
+                style={{ accentColor: "var(--color-primary)" }}
               >
                 {/* ========================================================
                     SECTION 1: PERSONAL & BASIC DETAILS
@@ -1227,17 +1223,17 @@ export default function Inquiry() {
                         width: "42px",
                         height: "42px",
                         backgroundColor: "rgba(149, 68, 44, 0.1)",
-                        color: "#95442c",
+                        color: "var(--color-primary)",
                         border: "1.5px solid rgba(149, 68, 44, 0.2)",
                       }}
                     >
                       <User className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                      <h3 className="font-bold text-lg sm:text-xl text-text mb-0.5 leading-snug">
                         Personal & Basic Details
                       </h3>
-                      <span className="text-xs sm:text-sm text-[#64748b]">
+                      <span className="text-xs sm:text-sm text-[#70675f]">
                         Primary identity, contact coordinates, and residential
                         location
                       </span>
@@ -1328,9 +1324,9 @@ export default function Inquiry() {
                         </label>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="h-[44px] px-3 bg-white border-[1.5px] border-[#cbd5e1] rounded-lg flex items-center gap-1.5 text-sm font-semibold text-[#0f172a] flex-shrink-0 cursor-default select-none">
+                        <div className="h-[44px] px-3 bg-white border-[1.5px] border-border rounded-lg flex items-center gap-1.5 text-sm font-semibold text-text flex-shrink-0 cursor-default select-none">
                           <span>+91</span>
-                          <ChevronDown className="w-3.5 h-3.5 text-[#64748b]" />
+                          <ChevronDown className="w-3.5 h-3.5 text-[#70675f]" />
                         </div>
                         <input
                           type="tel"
@@ -1363,14 +1359,14 @@ export default function Inquiry() {
                           WhatsApp Number{" "}
                           <span className="text-[#ef4444]">*</span>
                         </label>
-                        <label className="inline-flex items-center gap-1.5 text-xs text-[#95442c] font-semibold cursor-pointer select-none">
+                        <label className="inline-flex items-center gap-1.5 text-xs text-primary font-semibold cursor-pointer select-none">
                           <input
                             type="checkbox"
                             checked={sameAsMobile}
                             onChange={(e) =>
                               handleSameAsMobileToggle(e.target.checked)
                             }
-                            className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                            className="rounded text-primary focus:ring-primary accent-primary cursor-pointer w-4 h-4"
                           />
                           Same as Mobile
                         </label>
@@ -1379,12 +1375,12 @@ export default function Inquiry() {
                         <div
                           className={`h-[44px] px-3 border-[1.5px] rounded-lg flex items-center gap-1.5 text-sm font-semibold flex-shrink-0 cursor-default select-none ${
                             sameAsMobile
-                              ? "bg-[#f8fafc] border-[#cbd5e1] text-[#94a3b8]"
-                              : "bg-white border-[#cbd5e1] text-[#0f172a]"
+                              ? "bg-[#f8fafc] border-border text-[#94a3b8]"
+                              : "bg-white border-border text-text"
                           }`}
                         >
                           <span>+91</span>
-                          <ChevronDown className="w-3.5 h-3.5 text-[#64748b]" />
+                          <ChevronDown className="w-3.5 h-3.5 text-[#70675f]" />
                         </div>
                         <input
                           type="tel"
@@ -1557,7 +1553,7 @@ export default function Inquiry() {
                         <label className="emp-clean-label !mb-1">
                           Passport-Size Photograph
                         </label>
-                        <p className="text-xs text-[#64748b] mb-3">
+                        <p className="text-xs text-[#70675f] mb-3">
                           JPG/PNG/WEBP, clear face photo (max 20MB)
                         </p>
                         {formData.photoFile ? (
@@ -1566,8 +1562,8 @@ export default function Inquiry() {
                             onRemove={() => removeFile("photoFile")}
                           />
                         ) : (
-                          <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-[#cbd5e1] rounded-lg cursor-pointer text-xs font-semibold text-[#0f172a] transition shadow-xs">
-                            <Upload className="w-4 h-4 text-[#95442c]" />
+                          <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-border rounded-lg cursor-pointer text-xs font-semibold text-text transition shadow-xs">
+                            <Upload className="w-4 h-4 text-primary" />
                             Upload Photograph
                             <input
                               type="file"
@@ -1584,7 +1580,7 @@ export default function Inquiry() {
                         <label className="emp-clean-label !mb-1">
                           Aadhaar Card / Government ID Proof
                         </label>
-                        <p className="text-xs text-[#64748b] mb-3">
+                        <p className="text-xs text-[#70675f] mb-3">
                           PDF or Image of front & back (max 20MB)
                         </p>
                         {formData.idProofFile ? (
@@ -1593,8 +1589,8 @@ export default function Inquiry() {
                             onRemove={() => removeFile("idProofFile")}
                           />
                         ) : (
-                          <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-[#cbd5e1] rounded-lg cursor-pointer text-xs font-semibold text-[#0f172a] transition shadow-xs">
-                            <Upload className="w-4 h-4 text-[#95442c]" />
+                          <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-border rounded-lg cursor-pointer text-xs font-semibold text-text transition shadow-xs">
+                            <Upload className="w-4 h-4 text-primary" />
                             Upload ID Proof
                             <input
                               type="file"
@@ -1626,17 +1622,17 @@ export default function Inquiry() {
                         width: "42px",
                         height: "42px",
                         backgroundColor: "rgba(149, 68, 44, 0.1)",
-                        color: "#95442c",
+                        color: "var(--color-primary)",
                         border: "1.5px solid rgba(149, 68, 44, 0.2)",
                       }}
                     >
                       <Award className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                      <h3 className="font-bold text-lg sm:text-xl text-text mb-0.5 leading-snug">
                         Fitness & Professional Certifications
                       </h3>
-                      <span className="text-xs sm:text-sm text-[#64748b]">
+                      <span className="text-xs sm:text-sm text-[#70675f]">
                         Showcase your certified credentials and educational
                         background
                       </span>
@@ -1649,7 +1645,7 @@ export default function Inquiry() {
                       <label className="emp-clean-label !mb-1">
                         Upload Fitness Certification Certificate
                       </label>
-                      <p className="text-xs text-[#64748b] mb-3">
+                      <p className="text-xs text-[#70675f] mb-3">
                         Upload (PDF/Image)
                       </p>
                       {formData.certFile ? (
@@ -1658,8 +1654,8 @@ export default function Inquiry() {
                           onRemove={() => removeFile("certFile")}
                         />
                       ) : (
-                        <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-[#cbd5e1] rounded-lg cursor-pointer text-xs font-semibold text-[#0f172a] transition shadow-xs">
-                          <Upload className="w-4 h-4 text-[#95442c]" />
+                        <label className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border-[1.5px] border-border rounded-lg cursor-pointer text-xs font-semibold text-text transition shadow-xs">
+                          <Upload className="w-4 h-4 text-primary" />
                           Upload Certificate File
                           <input
                             type="file"
@@ -1751,17 +1747,17 @@ export default function Inquiry() {
                         width: "42px",
                         height: "42px",
                         backgroundColor: "rgba(149, 68, 44, 0.1)",
-                        color: "#95442c",
+                        color: "var(--color-primary)",
                         border: "1.5px solid rgba(149, 68, 44, 0.2)",
                       }}
                     >
                       <Briefcase className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                      <h3 className="font-bold text-lg sm:text-xl text-text mb-0.5 leading-snug">
                         Professional Details
                       </h3>
-                      <span className="text-xs sm:text-sm text-[#64748b]">
+                      <span className="text-xs sm:text-sm text-[#70675f]">
                         Tell us about your client base and fitness consulting
                         experience
                       </span>
@@ -1781,8 +1777,8 @@ export default function Inquiry() {
                             key={idx}
                             className={`p-3 rounded-lg border-[1.5px] flex items-center gap-3 cursor-pointer transition ${
                               formData.employmentType === type
-                                ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-semibold shadow-xs"
-                                : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
+                                ? "border-primary bg-[#fdf5f2] text-text font-semibold shadow-xs"
+                                : "border-border hover:border-[#94a3b8] bg-white text-[#334155]"
                             }`}
                           >
                             <input
@@ -1796,7 +1792,7 @@ export default function Inquiry() {
                                   e.target.value,
                                 )
                               }
-                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                              className="text-primary focus:ring-primary accent-primary cursor-pointer"
                             />
                             <span className="text-xs sm:text-sm font-medium">
                               {type}
@@ -1883,7 +1879,7 @@ export default function Inquiry() {
                     {/* Recommend or Sell Supplements */}
                     <div
                       id="recommendSupplements"
-                      className="p-4 sm:p-5 bg-white rounded-xl border-[1.5px] border-[#e2e8f0]"
+                      className="p-4 sm:p-5 bg-white rounded-xl border-[1.5px] border-border"
                     >
                       <label className="emp-clean-label !mb-3">
                         Do You Currently Recommend or Sell Supplements to Your
@@ -1895,8 +1891,8 @@ export default function Inquiry() {
                             key={choice}
                             className={`px-5 py-2.5 rounded-lg border-[1.5px] flex items-center gap-2 cursor-pointer transition ${
                               formData.recommendSupplements === choice
-                                ? "border-[#95442c] bg-[#fdf5f2] text-[#95442c] font-bold shadow-xs"
-                                : "border-[#cbd5e1] bg-white text-[#334155] hover:border-[#94a3b8]"
+                                ? "border-primary bg-[#fdf5f2] text-primary font-bold shadow-xs"
+                                : "border-border bg-white text-[#334155] hover:border-[#94a3b8]"
                             }`}
                           >
                             <input
@@ -1910,7 +1906,7 @@ export default function Inquiry() {
                                   e.target.value,
                                 )
                               }
-                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                              className="text-primary focus:ring-primary accent-primary cursor-pointer"
                             />
                             <span className="text-sm font-semibold">
                               {choice}
@@ -1988,8 +1984,8 @@ export default function Inquiry() {
                             key={idx}
                             className={`p-3 rounded-lg border-[1.5px] flex items-center gap-2.5 cursor-pointer transition ${
                               formData.clientCategory === cat
-                                ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-semibold shadow-xs"
-                                : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
+                                ? "border-primary bg-[#fdf5f2] text-text font-semibold shadow-xs"
+                                : "border-border hover:border-[#94a3b8] bg-white text-[#334155]"
                             }`}
                           >
                             <input
@@ -2003,7 +1999,7 @@ export default function Inquiry() {
                                   e.target.value,
                                 )
                               }
-                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                              className="text-primary focus:ring-primary accent-primary cursor-pointer"
                             />
                             <span className="text-xs sm:text-sm font-medium">
                               {cat}
@@ -2049,17 +2045,17 @@ export default function Inquiry() {
                         width: "42px",
                         height: "42px",
                         backgroundColor: "rgba(149, 68, 44, 0.1)",
-                        color: "#95442c",
+                        color: "var(--color-primary)",
                         border: "1.5px solid rgba(149, 68, 44, 0.2)",
                       }}
                     >
                       <Share2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                      <h3 className="font-bold text-lg sm:text-xl text-text mb-0.5 leading-snug">
                         Social Media & Online Presence
                       </h3>
-                      <span className="text-xs sm:text-sm text-[#64748b]">
+                      <span className="text-xs sm:text-sm text-[#70675f]">
                         Connect your digital profiles and social presence
                       </span>
                     </div>
@@ -2069,7 +2065,7 @@ export default function Inquiry() {
                     {/* Platform Selector Dropdown */}
                     <div>
                       <label className="emp-clean-label flex items-center gap-2">
-                        <Share2 className="text-[#95442c] w-3.5 h-3.5" /> Select
+                        <Share2 className="text-primary w-3.5 h-3.5" /> Select
                         Social Media Platform
                       </label>
                       <CustomSelect
@@ -2104,7 +2100,7 @@ export default function Inquiry() {
                           "YouTube",
                           "LinkedIn",
                         ].includes(formData.socialPlatform) && (
-                          <Share2 className="text-[#95442c] w-3.5 h-3.5 flex-shrink-0" />
+                          <Share2 className="text-primary w-3.5 h-3.5 flex-shrink-0" />
                         )}
                         <span>
                           {formData.socialPlatform === "Instagram" &&
@@ -2217,7 +2213,7 @@ export default function Inquiry() {
                     </div>
 
                     {/* Post Regularly */}
-                    <div className="md:col-span-2 p-4 sm:p-5 bg-white rounded-xl border-[1.5px] border-[#e2e8f0]">
+                    <div className="md:col-span-2 p-4 sm:p-5 bg-white rounded-xl border-[1.5px] border-border">
                       <label className="emp-clean-label !mb-3">
                         Do You Regularly Post Fitness or Nutrition-Related
                         Content?
@@ -2228,8 +2224,8 @@ export default function Inquiry() {
                             key={choice}
                             className={`px-5 py-2.5 rounded-lg border-[1.5px] flex items-center gap-2 cursor-pointer transition ${
                               formData.regularPosts === choice
-                                ? "border-[#95442c] bg-[#fdf5f2] text-[#95442c] font-bold shadow-xs"
-                                : "border-[#cbd5e1] bg-white text-[#334155] hover:border-[#94a3b8]"
+                                ? "border-primary bg-[#fdf5f2] text-primary font-bold shadow-xs"
+                                : "border-border bg-white text-[#334155] hover:border-[#94a3b8]"
                             }`}
                           >
                             <input
@@ -2243,7 +2239,7 @@ export default function Inquiry() {
                                   e.target.value,
                                 )
                               }
-                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                              className="text-primary focus:ring-primary accent-primary cursor-pointer"
                             />
                             <span className="text-sm font-semibold">
                               {choice}
@@ -2270,17 +2266,17 @@ export default function Inquiry() {
                         width: "42px",
                         height: "42px",
                         backgroundColor: "rgba(149, 68, 44, 0.1)",
-                        color: "#95442c",
+                        color: "var(--color-primary)",
                         border: "1.5px solid rgba(149, 68, 44, 0.2)",
                       }}
                     >
                       <TrendingUp className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                      <h3 className="font-bold text-lg sm:text-xl text-text mb-0.5 leading-snug">
                         Business Potential & Supplement Sales
                       </h3>
-                      <span className="text-xs sm:text-sm text-[#64748b]">
+                      <span className="text-xs sm:text-sm text-[#70675f]">
                         Help us tailor your wholesale tier and partner support
                         team
                       </span>
@@ -2303,15 +2299,15 @@ export default function Inquiry() {
                               key={idx}
                               className={`p-3 rounded-lg border-[1.5px] flex items-center gap-2.5 cursor-pointer transition ${
                                 isChecked
-                                  ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-semibold shadow-xs"
-                                  : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
+                                  ? "border-primary bg-[#fdf5f2] text-text font-semibold shadow-xs"
+                                  : "border-border hover:border-[#94a3b8] bg-white text-[#334155]"
                               }`}
                             >
                               <input
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={() => handleAcquisitionToggle(ch)}
-                                className="rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                                className="rounded text-primary focus:ring-primary accent-primary cursor-pointer w-4 h-4"
                               />
                               <span className="text-xs sm:text-sm font-medium">
                                 {ch}
@@ -2416,8 +2412,8 @@ export default function Inquiry() {
                             key={idx}
                             className={`p-3 rounded-lg border-[1.5px] flex items-center gap-3 cursor-pointer transition ${
                               formData.salesPotential === opt
-                                ? "border-[#95442c] bg-[#fdf5f2] text-[#0f172a] font-bold shadow-xs ring-1 ring-[#95442c]"
-                                : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white text-[#334155]"
+                                ? "border-primary bg-[#fdf5f2] text-text font-bold shadow-xs ring-1 ring-primary"
+                                : "border-border hover:border-[#94a3b8] bg-white text-[#334155]"
                             }`}
                           >
                             <input
@@ -2431,7 +2427,7 @@ export default function Inquiry() {
                                   e.target.value,
                                 )
                               }
-                              className="text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer"
+                              className="text-primary focus:ring-primary accent-primary cursor-pointer"
                             />
                             <span className="text-xs sm:text-sm font-semibold">
                               {opt}
@@ -2463,17 +2459,17 @@ export default function Inquiry() {
                         width: "42px",
                         height: "42px",
                         backgroundColor: "rgba(149, 68, 44, 0.1)",
-                        color: "#95442c",
+                        color: "var(--color-primary)",
                         border: "1.5px solid rgba(149, 68, 44, 0.2)",
                       }}
                     >
                       <ShieldCheck className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg sm:text-xl text-[#0f172a] mb-0.5 leading-snug">
+                      <h3 className="font-bold text-lg sm:text-xl text-text mb-0.5 leading-snug">
                         Verification & Declaration
                       </h3>
-                      <span className="text-xs sm:text-sm text-[#64748b]">
+                      <span className="text-xs sm:text-sm text-[#70675f]">
                         Review your application details and sign the partner
                         agreement declarations
                       </span>
@@ -2481,16 +2477,16 @@ export default function Inquiry() {
                   </div>
 
                   {/* Summary Quick Card */}
-                  <div className="bg-white rounded-xl p-4 sm:p-5 border-[1.5px] border-[#e2e8f0] text-sm mb-6 shadow-2xs">
-                    <h4 className="font-bold text-[#0f172a] mb-3 flex items-center justify-between">
+                  <div className="bg-white rounded-xl p-4 sm:p-5 border-[1.5px] border-border text-sm mb-6 shadow-2xs">
+                    <h4 className="font-bold text-text mb-3 flex items-center justify-between">
                       <span>Application Summary Overview</span>
-                      <span className="text-xs text-[#95442c] font-semibold">
+                      <span className="text-xs text-primary font-semibold">
                         Ready for Submission
                       </span>
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2.5 gap-x-4 text-xs text-[#475569]">
                       <div>
-                        <strong className="text-[#0f172a] font-semibold">
+                        <strong className="text-text font-semibold">
                           Applicant:
                         </strong>{" "}
                         <span className="break-words">
@@ -2499,7 +2495,7 @@ export default function Inquiry() {
                         </span>
                       </div>
                       <div>
-                        <strong className="text-[#0f172a] font-semibold">
+                        <strong className="text-text font-semibold">
                           Contact:
                         </strong>{" "}
                         <span className="break-all">
@@ -2507,7 +2503,7 @@ export default function Inquiry() {
                         </span>
                       </div>
                       <div>
-                        <strong className="text-[#0f172a] font-semibold">
+                        <strong className="text-text font-semibold">
                           Location:
                         </strong>{" "}
                         <span className="break-words">
@@ -2516,7 +2512,7 @@ export default function Inquiry() {
                         </span>
                       </div>
                       <div>
-                        <strong className="text-[#0f172a] font-semibold">
+                        <strong className="text-text font-semibold">
                           Experience:
                         </strong>{" "}
                         <span>
@@ -2525,7 +2521,7 @@ export default function Inquiry() {
                         </span>
                       </div>
                       <div>
-                        <strong className="text-[#0f172a] font-semibold">
+                        <strong className="text-text font-semibold">
                           Profession:
                         </strong>{" "}
                         <span className="break-words">
@@ -2533,10 +2529,10 @@ export default function Inquiry() {
                         </span>
                       </div>
                       <div>
-                        <strong className="text-[#0f172a] font-semibold">
+                        <strong className="text-text font-semibold">
                           Est. Sales Potential:
                         </strong>{" "}
-                        <span className="font-semibold text-[#95442c]">
+                        <span className="font-semibold text-primary">
                           {formData.salesPotential}
                         </span>
                       </div>
@@ -2550,7 +2546,7 @@ export default function Inquiry() {
                       className={`p-3.5 sm:p-4 rounded-lg border-[1.5px] flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
                         formData.declarationAccurate
                           ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
-                          : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white"
+                          : "border-border hover:border-[#94a3b8] bg-white"
                       }`}
                     >
                       <input
@@ -2563,13 +2559,13 @@ export default function Inquiry() {
                             e.target.checked,
                           )
                         }
-                        className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                        className="mt-0.5 flex-shrink-0 rounded text-primary focus:ring-primary accent-primary cursor-pointer w-4 h-4"
                       />
                       <div className="flex-1 min-w-0">
-                        <span className="text-xs sm:text-sm font-semibold text-[#0f172a] block leading-snug mb-0.5">
+                        <span className="text-xs sm:text-sm font-semibold text-text block leading-snug mb-0.5">
                           I confirm that the information submitted is accurate.
                         </span>
-                        <span className="text-[11px] sm:text-xs text-[#64748b] block leading-relaxed">
+                        <span className="text-[11px] sm:text-xs text-[#70675f] block leading-relaxed">
                           All personal, professional, certification, and
                           business information provided is true to the best of
                           my knowledge.
@@ -2587,7 +2583,7 @@ export default function Inquiry() {
                       className={`p-3.5 sm:p-4 rounded-lg border-[1.5px] flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
                         formData.declarationVerify
                           ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
-                          : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white"
+                          : "border-border hover:border-[#94a3b8] bg-white"
                       }`}
                     >
                       <input
@@ -2600,14 +2596,14 @@ export default function Inquiry() {
                             e.target.checked,
                           )
                         }
-                        className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                        className="mt-0.5 flex-shrink-0 rounded text-primary focus:ring-primary accent-primary cursor-pointer w-4 h-4"
                       />
                       <div className="flex-1 min-w-0">
-                        <span className="text-xs sm:text-sm font-semibold text-[#0f172a] block leading-snug mb-0.5">
+                        <span className="text-xs sm:text-sm font-semibold text-text block leading-snug mb-0.5">
                           I authorize RAG Nutrition to verify my professional
                           certifications and submitted profile details.
                         </span>
-                        <span className="text-[11px] sm:text-xs text-[#64748b] block leading-relaxed">
+                        <span className="text-[11px] sm:text-xs text-[#70675f] block leading-relaxed">
                           RAG Nutrition and Gomzi Life Sciences may conduct
                           partner background and credential verifications.
                         </span>
@@ -2624,7 +2620,7 @@ export default function Inquiry() {
                       className={`p-3.5 sm:p-4 rounded-lg border-[1.5px] flex items-start gap-2.5 sm:gap-3 cursor-pointer transition ${
                         formData.declarationPrivacy
                           ? "border-emerald-500 bg-emerald-50/30 shadow-xs"
-                          : "border-[#cbd5e1] hover:border-[#94a3b8] bg-white"
+                          : "border-border hover:border-[#94a3b8] bg-white"
                       }`}
                     >
                       <input
@@ -2637,14 +2633,14 @@ export default function Inquiry() {
                             e.target.checked,
                           )
                         }
-                        className="mt-0.5 flex-shrink-0 rounded text-[#95442c] focus:ring-[#95442c] accent-[#95442c] cursor-pointer w-4 h-4"
+                        className="mt-0.5 flex-shrink-0 rounded text-primary focus:ring-primary accent-primary cursor-pointer w-4 h-4"
                       />
                       <div className="flex-1 min-w-0">
-                        <span className="text-xs sm:text-sm font-semibold text-[#0f172a] block leading-snug mb-0.5">
+                        <span className="text-xs sm:text-sm font-semibold text-text block leading-snug mb-0.5">
                           I consent to the handling of my information in
                           accordance with the program’s privacy policy.
                         </span>
-                        <span className="text-[11px] sm:text-xs text-[#64748b] block leading-relaxed">
+                        <span className="text-[11px] sm:text-xs text-[#70675f] block leading-relaxed">
                           Data collected is strictly used for partner
                           onboarding, commission disbursements, and account
                           operations.
@@ -2660,7 +2656,7 @@ export default function Inquiry() {
 
                   {/* Primary Submit Partner Application Action Button - ALWAYS VISIBLE, DISABLED UNTIL ALL 3 CHECKBOXES ARE CHECKED */}
                   <div className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t-[1.5px] border-[#f1f5f9] flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="text-xs text-[#64748b] text-center sm:text-left">
+                    <div className="text-xs text-[#70675f] text-center sm:text-left">
                       <span>
                         By submitting, an instant verification OTP will be
                         sent to your email.
@@ -2676,7 +2672,7 @@ export default function Inquiry() {
                         submitting ||
                         sendingOtp
                       }
-                      className="group relative overflow-hidden w-full sm:w-auto h-[48px] px-8 sm:px-10 btn-gradient border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2.5 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base cursor-pointer"
+                      className="w-full sm:w-auto h-[48px] px-8 sm:px-10 bg-primary hover:bg-[#7d3824] text-white font-bold rounded-lg transition flex items-center justify-center gap-2.5 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary text-sm sm:text-base cursor-pointer"
                     >
                       {submitting ? (
                         <>
@@ -2694,8 +2690,8 @@ export default function Inquiry() {
                         </>
                       ) : (
                         <>
-                          <span className="relative z-10">Submit Partner Application</span>
-                          <ArrowRight className="relative z-10 w-5 h-5 flex-shrink-0 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                          <span>Submit Partner Application</span>
+                          <ArrowRight className="w-5 h-5 flex-shrink-0" />
                         </>
                       )}
                     </button>
@@ -2722,31 +2718,31 @@ export default function Inquiry() {
             if (e.target === e.currentTarget) setShowOtpModal(false);
           }}
         >
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-[#e2e8f0] relative text-center">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-border relative text-center">
             {/* Close Button */}
             <button
               type="button"
               onClick={() => setShowOtpModal(false)}
-              className="absolute top-5 right-5 text-[#94a3b8] hover:text-[#0f172a] p-2 rounded-lg hover:bg-slate-100 transition cursor-pointer"
+              className="absolute top-5 right-5 text-[#94a3b8] hover:text-text p-2 rounded-lg hover:bg-slate-100 transition cursor-pointer"
               aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Email Icon Badge */}
-            <div className="w-14 h-14 bg-[#fdf5f2] text-[#95442c] rounded-xl flex items-center justify-center mx-auto mb-4 border border-[#95442c]/20 shadow-xs">
-              <Mail className="w-7 h-7 text-[#95442c]" />
+            <div className="w-14 h-14 bg-[#fdf5f2] text-primary rounded-xl flex items-center justify-center mx-auto mb-4 border border-primary/20 shadow-xs">
+              <Mail className="w-7 h-7 text-primary" />
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-bold text-[#0f172a] mb-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-text mb-2">
               Verify Your Email Address
             </h3>
 
-            <p className="text-sm text-[#64748b] mb-2">
+            <p className="text-sm text-[#70675f] mb-2">
               We've sent a 6-digit OTP code to:
             </p>
-            <div className="inline-flex items-center gap-2 bg-[#fdf5f2] text-[#95442c] font-bold px-3.5 py-1.5 rounded-full text-sm mb-3 border border-[#95442c]/20">
-              <Mail className="w-4 h-4 text-[#95442c]" />
+            <div className="inline-flex items-center gap-2 bg-[#fdf5f2] text-primary font-bold px-3.5 py-1.5 rounded-full text-sm mb-3 border border-primary/20">
+              <Mail className="w-4 h-4 text-primary" />
               {formData.email}
             </div>
 
@@ -2762,7 +2758,7 @@ export default function Inquiry() {
                   el?.scrollIntoView({ behavior: "smooth", block: "center" });
                   el?.focus?.();
                 }}
-                className="text-[#95442c] font-semibold underline hover:text-[#7d3824] cursor-pointer"
+                className="text-primary font-semibold underline hover:text-[#7d3824] cursor-pointer"
               >
                 Change in Section 1
               </button>
@@ -2784,7 +2780,7 @@ export default function Inquiry() {
                   }}
                   placeholder="Enter 6-digit OTP"
                   autoFocus
-                  className="w-full text-center text-xl sm:text-2xl font-mono tracking-[0.25em] sm:tracking-[0.4em] py-3 px-3 bg-white border-[1.5px] border-[#cbd5e1] focus:border-[#95442c] rounded-lg outline-none transition font-bold text-[#0f172a] placeholder:tracking-normal placeholder:font-sans placeholder:text-sm placeholder:text-[#94a3b8]"
+                  className="w-full text-center text-xl sm:text-2xl font-mono tracking-[0.25em] sm:tracking-[0.4em] py-3 px-3 bg-white border-[1.5px] border-border focus:border-primary rounded-lg outline-none transition font-bold text-text placeholder:tracking-normal placeholder:font-sans placeholder:text-sm placeholder:text-[#94a3b8]"
                 />
               </div>
 
@@ -2798,24 +2794,24 @@ export default function Inquiry() {
               <button
                 type="submit"
                 disabled={verifyingOtp || otpValue.length < 4}
-                className="group relative overflow-hidden w-full h-[46px] btn-gradient border border-amber-400/30 text-white font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 disabled:opacity-50 text-sm cursor-pointer"
+                className="w-full h-[44px] bg-primary hover:bg-[#7d3824] text-white font-bold rounded-lg transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 text-sm cursor-pointer"
               >
                 {verifyingOtp ? (
                   <>
-                    <div className="relative z-10 w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span className="relative z-10">Verifying OTP...</span>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Verifying OTP...
                   </>
                 ) : (
                   <>
-                    <span className="relative z-10">Verify & Submit Application</span>
-                    <ArrowRight className="relative z-10 w-4 h-4 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
+                    Verify & Submit Application{" "}
+                    <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
             </form>
 
             {/* Resend Action */}
-            <div className="mt-5 pt-4 border-t border-[#f1f5f9] text-xs text-[#64748b] flex items-center justify-center gap-2">
+            <div className="mt-5 pt-4 border-t border-[#f1f5f9] text-xs text-[#70675f] flex items-center justify-center gap-2">
               <span>Didn't receive code?</span>
               {resendCooldown > 0 ? (
                 <span className="font-semibold text-[#94a3b8]">
@@ -2826,7 +2822,7 @@ export default function Inquiry() {
                   type="button"
                   disabled={sendingOtp}
                   onClick={handleSendEmailOtp}
-                  className="font-bold text-[#95442c] hover:underline disabled:opacity-50 cursor-pointer"
+                  className="font-bold text-primary hover:underline disabled:opacity-50 cursor-pointer"
                 >
                   {sendingOtp ? "Sending..." : "Resend OTP"}
                 </button>

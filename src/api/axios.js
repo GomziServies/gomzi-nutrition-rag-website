@@ -2,6 +2,7 @@ import axios from "axios";
 import { getToken } from "../utils/storage";
 
 const api = axios.create({
+  timeout: 15000,
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3005",
   headers: {
     "Content-Type": "application/json",

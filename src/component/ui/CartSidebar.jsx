@@ -1,3 +1,4 @@
+import { getProductImageUrl } from "../../data/homeProducts";
 import useCart from "../../hooks/useCart";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -29,64 +30,70 @@ export default function CartSidebar({ open, onClose }) {
     if (open) {
       fetchCart();
     }
-  }, [open]);
+  }, [open, fetchCart]);
 
   return (
     <>
       {/* Overlay */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 bg-black/40 z-40 transition-opacity
+        className={`fixed inset-0 bg-black/40 z-[70] transition-opacity
           ${open ? "opacity-100" : "opacity-0 pointer-events-none"}
         `}
       />
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[420px]
-          bg-white z-50 shadow-2xl transition-transform duration-300
+        inert={!open}
+        aria-hidden={!open}
+        role="dialog"
+        aria-label="Shopping cart"
+        aria-modal={open ? true : undefined}
+        className={`fixed top-0 right-0 h-dvh flex flex-col w-full sm:w-[420px]
+          bg-white z-[80] shadow-2xl transition-transform duration-300
           ${open ? "translate-x-0" : "translate-x-full"}
         `}
       >
         {/* Header */}
-        <div className="p-5 border-b flex justify-between items-center">
+        <div className="p-5 border-b border-border shrink-0 flex justify-between items-center">
           <h2 className="font-bold text-xl">Cart ({items.length})</h2>
 
-          <button onClick={onClose}>
+          <button onClick={onClose} aria-label="Close cart">
             <X size={24} />
           </button>
         </div>
 
         {/* Items */}
-        <div className="flex-1 overflow-y-auto p-4 h-[calc(100vh-180px)]">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4">
           {items.map((item) => (
             <div
               key={`${item.name}-${item._id}`}
-              className="flex gap-4 py-4 border-b"
+              className="flex gap-3 py-4 border-b border-border"
             >
               <img
-                src={`https://files.fggroup.in/${item.image}`}
+                src={getProductImageUrl(item.image)}
                 alt={item.name}
-                className="w-20 h-20 rounded-lg object-contain bg-gray-100"
+                className="w-20 h-20 rounded-lg object-contain bg-bg-light"
               />
 
-              <div className="flex-1">
-                <h4 className="font-semibold">{item.name}</h4>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-semibold text-sm break-words">{item.name}</h4>
 
                 <p className="text-sm text-gray-500">{item.flavour}</p>
 
                 <p className="font-bold mt-1">₹{item.discountPrice}</p>
 
                 <div className="flex items-center gap-3 mt-2">
-                  <button onClick={() => changeQuantity(item, -1)}>−</button>
+                  <button aria-label={`Decrease quantity of ${item.name}`} className="h-9 w-9 rounded-lg border border-border text-primary" onClick={() => changeQuantity(item, -1)}>−</button>
 
                   <span>{item.quantity}</span>
 
-                  <button onClick={() => changeQuantity(item, 1)}>+</button>
+                  <button aria-label={`Increase quantity of ${item.name}`} className="h-9 w-9 rounded-lg border border-border text-primary" onClick={() => changeQuantity(item, 1)}>+</button>
                 </div>
               </div>
 
               <button
+                aria-label={`Remove ${item.name}`}
                 onClick={() => deleteItem(cartId, item._id)}
                 className="text-red-500"
               >
@@ -97,7 +104,7 @@ export default function CartSidebar({ open, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-5 border-t bg-white">
+        <div className="shrink-0 p-5 border-t border-border bg-bg-light">
           <div className="flex justify-between mb-4">
             <span>Subtotal</span>
             <span className="font-bold">₹{subtotal.toFixed(2)}</span>
@@ -105,17 +112,14 @@ export default function CartSidebar({ open, onClose }) {
 
           <button
             onClick={handleCheckout}
-            className="group relative overflow-hidden w-full btn-gradient border border-amber-400/30 text-white py-3.5 rounded-xl font-bold transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer"
+            className="w-full bg-primary hover:bg-hover text-white py-4 rounded-lg font-bold"
           >
-            <span className="relative z-10">Checkout</span>
+            Checkout
           </button>
 
           <button
-            onClick={() => {
-              onClose();
-              navigate("/cart");
-            }}
-            className="w-full mt-2.5 border border-[#dbdee9] hover:border-primary hover:text-primary py-3 rounded-xl font-semibold transition-colors cursor-pointer"
+            onClick={() => navigate("/cart")}
+            className="w-full mt-3 border py-3 rounded-lg"
           >
             View Cart
           </button>

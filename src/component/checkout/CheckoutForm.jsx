@@ -1,22 +1,10 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { FiShoppingBag } from "react-icons/fi";
+import { useEffect, useMemo, useState, useId } from "react";
 import useCheckout from "../../hooks/useCheckout";
 import SearchableSelect from "../SearchableSelect";
 import { states, getCities } from "../../utils/indiaLocation";
-import { clearCart } from "../../services/cartStorage.service";
-import {
-  Mail,
-  User,
-  MapPin,
-  Phone,
-  CreditCard,
-  Truck,
-  ShieldCheck,
-  CheckCircle2,
-  Lock,
-  ArrowRight,
-  Banknote,
-} from "lucide-react";
+import { Link } from "react-router-dom";
+import { errorToast, infoToast } from "../../utils/toast";
 
 const loadRazorpay = () => {
   return new Promise((resolve) => {
@@ -36,489 +24,549 @@ const loadRazorpay = () => {
   });
 };
 
-export default function CheckoutForm({ coupon, finalTotal = 0 }) {
+export default function CheckoutForm({ coupon }) {
   const [payMethod, setPayMethod] = useState("ONLINE");
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
-  const [cities, setCities] = useState([]);
-  const [saveInfo, setSaveInfo] = useState(true);
-
+  const cities = useMemo(() => selectedState ? getCities(selectedState.value) : [], [selectedState]);
   const { formData, updateField, placeOrder, loading, updatePaymentMode } =
     useCheckout(coupon);
-
   useEffect(() => {
     loadRazorpay();
   }, []);
 
-  // Sync state dropdown when formData.state changes
-  useEffect(() => {
-    if (formData.state && !selectedState) {
-      const matched = states.find(
-        (s) => s.label.toLowerCase() === formData.state.toLowerCase()
-      );
-      if (matched) {
-        setSelectedState(matched);
-      }
-    }
-  }, [formData.state, selectedState]);
-
-  // Load cities when state changes
-  useEffect(() => {
-    if (!selectedState) {
-      setCities([]);
-      return;
-    }
-    const cityList = getCities(selectedState.value);
-    setCities(cityList);
-
-    if (formData.city && !selectedCity) {
-      const matchedCity = cityList.find(
-        (c) => c.label.toLowerCase() === formData.city.toLowerCase()
-      );
-      if (matchedCity) {
-        setSelectedCity(matchedCity);
-      }
-    }
-  }, [selectedState, formData.city, selectedCity]);
-
-  // Handle Online Razorpay Submission
-  const handleOnlinePayment = async () => {
-    if (!formData.email?.trim() || !formData.first_name?.trim() || !formData.address_line_1?.trim() || !formData.mobile?.trim()) {
-      alert("Please fill in all required contact and shipping details.");
-      return;
-    }
-
-    const loaded = await loadRazorpay();
-    if (!loaded) {
-      alert("Failed to load Razorpay payment gateway. Please check your internet connection.");
-      return;
-    }
-
-    const result = await placeOrder();
-    if (!result?.success) return;
-
-    const options = {
-      ...result.data,
-      handler: async (response) => {
-        try {
-          await clearCart();
-        } catch (e) {
-          console.error("Cart clear error:", e);
-        }
-        window.location.href = "/thank-you?order_id=" + response.razorpay_order_id;
-      },
-      modal: {
-        ondismiss() {
-          console.log("Payment window dismissed");
-        },
-      },
-    };
-
-    const razorpay = new window.Razorpay(options);
-    razorpay.open();
-  };
-
-  // Handle Cash on Delivery Submission
-  const handleCodPayment = async () => {
-    if (!formData.email?.trim() || !formData.first_name?.trim() || !formData.address_line_1?.trim() || !formData.mobile?.trim()) {
-      alert("Please fill in all required contact and shipping details.");
-      return;
-    }
-
-    const result = await placeOrder();
-    if (result?.success) {
-      try {
-        await clearCart();
-      } catch (e) {
-        console.error("Cart clear error:", e);
-      }
-      window.location.href = "/thank-you?receipt_id=" + result.data.receipt_id;
-    }
-  };
 
   return (
-    <div className="flex flex-col gap-8">
-      {/* ── 1. CONTACT INFORMATION ── */}
-      <section className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
-            <Mail size={18} className="text-primary" />
-            <span>Contact Information</span>
-          </h2>
-          <Link
-            to="/login"
-            className="text-xs font-bold text-primary hover:underline"
-          >
-            Already have an account? Log in
-          </Link>
-        </div>
+    <div className="site-surface min-w-0 px-4 py-6 sm:p-6 order-2 lg:order-1">
+      <section className="mb-7">
+        <h2 className="text-[22px] font-bold text-gray-900 mb-3.5">Contact</h2>
 
-        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
-          <input
-            type="email"
-            required
-            value={formData.email}
-            onChange={(e) => updateField("email", e.target.value)}
-            placeholder="Email address (for order confirmation & tracking)"
-            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
-          />
-        </div>
+        <FloatingInput
+          label="Email"
+          type="email"
+          name="email"
+          autoComplete="email"
+          required
+          value={formData.email}
+          onChange={(value) => updateField("email", value)}
+        />
       </section>
 
-      {/* ── 2. DELIVERY DESTINATION ── */}
-      <section className="flex flex-col gap-3.5">
-        <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
-          <MapPin size={18} className="text-primary" />
-          <span>Shipping Address</span>
-        </h2>
-
-        {/* Name Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
-            <input
-              type="text"
-              required
-              value={formData.first_name}
-              onChange={(e) => updateField("first_name", e.target.value)}
-              placeholder="First name *"
-              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
-            />
-          </div>
-
-          <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
-            <input
-              type="text"
-              value={formData.last_name}
-              onChange={(e) => updateField("last_name", e.target.value)}
-              placeholder="Last name"
-              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
-            />
-          </div>
+      {/* Delivery */}
+      <section className="mb-7">
+        <h2 className="text-[22px] font-bold text-gray-900 mb-3.5">Delivery</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+          <FloatingInput
+            label="First name"
+            name="first_name"
+            autoComplete="given-name"
+            required
+            value={formData.first_name}
+            onChange={(value) => updateField("first_name", value)}
+          />
+          <FloatingInput
+            label="Last name"
+            name="last_name"
+            autoComplete="family-name"
+            required
+            value={formData.last_name}
+            onChange={(value) => updateField("last_name", value)}
+          />
         </div>
-
-        {/* Street Address Line 1 */}
-        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
-          <input
-            type="text"
+        {/* <div className="mb-3">
+          <FloatingInput label="Company (optional)" />
+        </div> */}
+        <div className="mb-3">
+          <FloatingInput
+            label="Address"
+            name="address_line_1"
+            autoComplete="address-line1"
             required
             value={formData.address_line_1}
-            onChange={(e) => updateField("address_line_1", e.target.value)}
-            placeholder="Address (House/Flat No., Building, Street) *"
-            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
+            onChange={(value) => updateField("address_line_1", value)}
           />
         </div>
-
-        {/* Address Line 2 */}
-        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
-          <input
-            type="text"
+        <div className="mb-3">
+          <FloatingInput
+            label="Apartment, suite, etc. (optional)"
+            name="address_line_2"
+            autoComplete="address-line2"
             value={formData.address_line_2}
-            onChange={(e) => updateField("address_line_2", e.target.value)}
-            placeholder="Apartment, suite, landmark (optional)"
-            className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
+            onChange={(value) => updateField("address_line_2", value)}
           />
         </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+          <SearchableSelect
+            label="State"
+            value={selectedState}
+            options={states}
+            onChange={(option) => {
+              setSelectedState(option);
 
-        {/* State & City Dropdowns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="[&>div>div]:!rounded-xl [&>div>div]:!border-primary-border [&>div>div]:focus-within:!border-primary">
-            <SearchableSelect
-              label="State *"
-              value={selectedState}
-              options={states}
-              onChange={(option) => {
-                setSelectedState(option);
-                updateField("state", option.label);
-                updateField("state_code", option.value);
-                setSelectedCity(null);
-                updateField("city", "");
-              }}
-            />
-          </div>
+              updateField("state", option.label);
+              updateField("state_code", option.value);
 
-          <div className="[&>div>div]:!rounded-xl [&>div>div]:!border-primary-border [&>div>div]:focus-within:!border-primary">
-            <SearchableSelect
-              label="City *"
-              value={selectedCity}
-              options={cities}
-              isDisabled={!selectedState}
-              onChange={(option) => {
-                setSelectedCity(option);
-                updateField("city", option.label);
-              }}
-            />
-          </div>
-        </div>
-
-        {/* PIN Code & Country */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
-            <input
-              type="text"
-              required
-              maxLength={6}
-              value={formData.pin_code}
-              onChange={(e) => updateField("pin_code", e.target.value)}
-              placeholder="6-Digit Postal PIN Code *"
-              className="w-full bg-transparent text-xs sm:text-sm px-4 py-3.5 outline-none text-text placeholder:text-gray-400"
-            />
-          </div>
-
-          <div className="relative flex items-center bg-gray-50 border border-primary-border rounded-xl px-4 py-3.5 select-none">
-            <span className="text-xs sm:text-sm text-gray-700 font-bold flex items-center gap-2">
-              <span>🇮🇳</span>
-              <span>India (Domestic Express)</span>
-            </span>
-          </div>
-        </div>
-
-        {/* Mobile Phone */}
-        <div className="relative flex items-center bg-white border border-primary-border focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15 rounded-xl transition-all">
-          <div className="pl-4 pr-1 text-xs font-bold text-gray-500 flex items-center gap-1 select-none">
-            <span>🇮🇳</span>
-            <span className="text-gray-700">+91</span>
-          </div>
-          <input
-            type="tel"
+              setSelectedCity(null);
+              updateField("city", "");
+            }}
+          />
+          <SearchableSelect
+            label="City"
+            value={selectedCity}
+            options={cities}
+            isDisabled={!selectedState}
+            onChange={(option) => {
+              setSelectedCity(option);
+              updateField("city", option.label);
+            }}
+          />
+          <FloatingInput
+            label="Postal code"
+            name="pin_code"
+            autoComplete="postal-code"
+            inputMode="numeric"
             required
-            maxLength={10}
+            value={formData.pin_code}
+            onChange={(value) => updateField("pin_code", value)}
+          />
+          <div className="relative w-full border border-border rounded-md bg-gray-50">
+            <label className="absolute left-3.5 top-1.5 text-[10px] text-gray-500 font-medium">
+              Country / Region
+            </label>
+
+            <div className="pt-6 pb-2 px-3.5 text-[14px] text-gray-800">
+              🇮🇳 India
+            </div>
+          </div>
+        </div>
+        <div className="mb-3">
+          <FloatingInput
+            label="Phone"
+            type="tel"
+            name="mobile"
+            autoComplete="tel"
+            inputMode="tel"
+            required
             value={formData.mobile}
-            onChange={(e) => updateField("mobile", e.target.value)}
-            placeholder="10-digit mobile number for delivery updates *"
-            className="w-full bg-transparent text-xs sm:text-sm px-2 py-3.5 outline-none text-text placeholder:text-gray-400"
+            onChange={(value) => updateField("mobile", value)}
+            icon={
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 7h.01M10.5 11c.3-.9 1.5-1 1.5-1s1.5.1 1.5 1.5c0 1.4-1.5 2-1.5 3v.5" />
+              </svg>
+            }
           />
         </div>
-
-        {/* Save Info Checkbox */}
-        <label
-          onClick={() => setSaveInfo(!saveInfo)}
-          className="flex items-start sm:items-center gap-2.5 mt-1 cursor-pointer select-none"
-        >
-          <div
-            className={`w-4.5 h-4.5 rounded border shrink-0 aspect-square flex items-center justify-center transition-all mt-0.5 sm:mt-0 ${
-              saveInfo ? "bg-primary border-primary" : "bg-white border-gray-300"
-            }`}
-          >
-            {saveInfo && <CheckCircle2 size={12} className="text-white shrink-0" />}
-          </div>
-          <span className="text-xs font-medium text-gray-600 leading-tight">
-            Save this address for fast 1-click checkout on future orders
-          </span>
-        </label>
+        <CustomCheckbox label="Save this information for next time" />
       </section>
 
-      {/* ── 3. SHIPPING METHOD ── */}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
-          <Truck size={18} className="text-primary" />
-          <span>Shipping Method</span>
+      {/* Shipping Method */}
+      {/* <section className="mb-7">
+        <h2 className="text-[18px] font-bold text-gray-900 mb-3">
+          Shipping method
         </h2>
-
-        <div className="p-3.5 sm:p-4 rounded-xl border border-primary-border bg-bg-cream flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="w-9 h-9 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700 shrink-0 aspect-square">
-              <Truck size={18} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-bold text-text leading-tight">
-                Priority Pan-India Express (Bluedart / Delhivery)
-              </p>
-              <p className="text-[11px] text-gray-500 mt-0.5 leading-normal">
-                Estimated Delivery: 2-4 business days with live SMS tracking
-              </p>
-            </div>
-          </div>
-
-          <span className="text-xs font-extrabold uppercase text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shrink-0">
-            FREE
-          </span>
+        <div className="p-4 bg-gray-50 border border-border rounded text-[14px] text-gray-400 text-center">
+          Enter your shipping address to view available shipping methods.
         </div>
+      </section> */}
+
+      {/* Payment */}
+      <section className="mb-7">
+        <h2 className="text-base font-bold text-gray-900 mb-1">Payment</h2>
+        <p className="text-xs text-gray-400 mb-3.5">
+          All transactions are secure and encrypted.
+        </p>
+
+        <PayRadio
+          active={payMethod === "ONLINE"}
+          onClick={() => {
+            setPayMethod("ONLINE");
+            updatePaymentMode("ONLINE");
+          }}
+          label="Online Payment"
+          right={<span className="font-bold text-[#3395ff]">Razorpay</span>}
+        >
+          <div className="bg-gray-50 border border-border rounded-md px-4 py-4 text-center text-[13px] text-gray-500">
+            You'll be redirected to razorpay to complete your purchase
+          </div>
+        </PayRadio>
+
+        <PayRadio
+          active={payMethod === "Cash On Delivery"}
+          onClick={() => {
+            setPayMethod("Cash On Delivery");
+            updatePaymentMode("Cash On Delivery");
+          }}
+          label="Cash on Delivery"
+          right={<CashIcon />}
+        >
+          <div className="bg-green-50 border border-green-200 rounded-md px-4 py-3 flex items-start gap-3">
+            <span className="text-green-600 mt-0.5">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </span>
+            <p className="text-[12px] text-green-700 leading-relaxed">
+              Pay in cash when your order is delivered to your door. No advance
+              payment required.
+            </p>
+          </div>
+        </PayRadio>
       </section>
 
-      {/* ── 4. PAYMENT METHOD ── */}
-      <section className="flex flex-col gap-3.5">
-        <div className="flex flex-col gap-0.5">
-          <h2 className="text-lg sm:text-xl font-black text-text tracking-tight flex items-center gap-2">
-            <CreditCard size={18} className="text-primary" />
-            <span>Payment Method</span>
+      {/* Billing Address - shown for PayPal & COD */}
+      {/* {(payMethod === "ONLINE" || payMethod === "Cash On Delivery") && (
+        <section className="mb-7">
+          <h2 className="text-base font-bold text-gray-900 mb-3">
+            Billing address
           </h2>
-          <p className="text-xs text-gray-500">
-            All transactions are 100% encrypted and secured by Razorpay.
-          </p>
-        </div>
+          <PaypalBillingAddress />
+        </section>
+      )} */}
 
-        <div className="flex flex-col gap-3">
-          {/* Option 1: Online Payment (Razorpay) */}
-          <div
-            onClick={() => {
-              setPayMethod("ONLINE");
-              updatePaymentMode("ONLINE");
-            }}
-            className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
-              payMethod === "ONLINE"
-                ? "border-primary bg-[#fdfaf9] ring-2 ring-primary/15 shadow-sm"
-                : "border-primary-border bg-white hover:border-gray-300"
-            }`}
+      {/* Submit Button */}
+      {payMethod === "ONLINE" ? (
+        <button
+          onClick={async () => {
+            const loaded = await loadRazorpay();
+
+            if (!loaded) {
+              errorToast("Secure payment could not load. Please check your connection and try again.");
+              return;
+            }
+
+            const result = await placeOrder();
+
+            if (!result?.success) return;
+
+            const options = {
+              ...result.data,
+
+              handler(response) {
+                window.location.href =
+                  "/thank-you?order_id=" + response.razorpay_order_id;
+              },
+
+              modal: {
+                ondismiss() {
+                  infoToast("Payment was cancelled. Your cart is still saved.");
+                },
+              },
+            };
+
+            const razorpay = new window.Razorpay(options);
+
+            razorpay.open();
+          }}
+          type="button"
+          disabled={loading}
+          className="w-full py-4 rounded-md text-white font-bold bg-[#3395ff]"
+        >
+          {loading ? "Processing..." : "Pay Now"}
+        </button>
+      ) : payMethod === "Cash On Delivery" ? (
+        <button
+          type="button"
+          disabled={loading}
+          className="w-full py-4 rounded-md text-white font-bold bg-[#3395ff]"
+          onClick={async () => {
+            const result = await placeOrder();
+            if (result?.success) {
+              window.location.href =
+                "/thank-you?receipt_id=" + result.data.receipt_id;
+            }
+          }}
+        >
+          {loading ? "Placing Order..." : "Place Order"} - Cash on Delivery
+        </button>
+      ) : (
+        <button className="w-full py-4 bg-primary text-white rounded-md text-[15px] font-bold tracking-wide hover:bg-hover transition-colors shadow-md">
+          Pay now
+        </button>
+      )}
+
+      {/* Footer Links */}
+      <div className="flex flex-wrap gap-3 mt-5 justify-center">
+        {[
+          ["Refund policy", "/refund-policy"],
+          ["Shipping", "/shipping-policy"],
+          ["Privacy policy", "/privacy-policy"],
+          ["Terms of service", "/terms-and-conditions"],
+          ["Contact support", "/contact-us"],
+        ].map(([label, to]) => (
+          <Link
+            key={to}
+            to={to}
+            className="text-xs text-gray-400 hover:text-gray-700 transition-colors no-underline"
           >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3 min-w-0 flex-1">
-                <div
-                  className={`w-4.5 h-4.5 rounded-full border-2 shrink-0 aspect-square flex items-center justify-center mt-0.5 transition-colors ${
-                    payMethod === "ONLINE" ? "border-primary" : "border-gray-300"
-                  }`}
-                >
-                  {payMethod === "ONLINE" && (
-                    <div className="w-2 h-2 rounded-full bg-primary shrink-0 aspect-square" />
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <span className="text-xs sm:text-sm font-bold text-text block leading-tight">
-                    Online Payment (Instant & Recommended)
-                  </span>
-                  <span className="text-[11px] text-gray-500 block mt-1 leading-normal">
-                    UPI (Google Pay, PhonePe, Paytm), Cards, NetBanking, Wallets
-                  </span>
-                </div>
-              </div>
-
-              <span className="text-[10px] font-bold text-[#3395ff] bg-blue-50 px-2 py-0.5 rounded border border-blue-200 uppercase tracking-wider shrink-0 mt-0.5">
-                Razorpay
-              </span>
-            </div>
-
-            {payMethod === "ONLINE" && (
-              <div className="mt-3 pt-3 border-t border-primary-border/80 flex items-center gap-2 text-[11px] text-gray-600">
-                <ShieldCheck size={14} className="text-emerald-600 shrink-0" />
-                <span>
-                  After clicking "Pay Securely", you will complete payment via 256-bit encrypted Razorpay modal.
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Option 2: Cash On Delivery */}
-          <div
-            onClick={() => {
-              setPayMethod("Cash On Delivery");
-              updatePaymentMode("Cash On Delivery");
-            }}
-            className={`p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
-              payMethod === "Cash On Delivery"
-                ? "border-primary bg-[#fdfaf9] ring-2 ring-primary/15 shadow-sm"
-                : "border-primary-border bg-white hover:border-gray-300"
-            }`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3 min-w-0 flex-1">
-                <div
-                  className={`w-4.5 h-4.5 rounded-full border-2 shrink-0 aspect-square flex items-center justify-center mt-0.5 transition-colors ${
-                    payMethod === "Cash On Delivery" ? "border-primary" : "border-gray-300"
-                  }`}
-                >
-                  {payMethod === "Cash On Delivery" && (
-                    <div className="w-2 h-2 rounded-full bg-primary shrink-0 aspect-square" />
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <span className="text-xs sm:text-sm font-bold text-text block leading-tight">
-                    Cash on Delivery (COD)
-                  </span>
-                  <span className="text-[11px] text-gray-500 block mt-1 leading-normal">
-                    Pay via cash or UPI QR code to the courier at your doorstep
-                  </span>
-                </div>
-              </div>
-
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 uppercase tracking-wider shrink-0 mt-0.5">
-                Doorstep
-              </span>
-            </div>
-
-            {payMethod === "Cash On Delivery" && (
-              <div className="mt-3 pt-3 border-t border-primary-border/80 flex items-center gap-2 text-[11px] text-emerald-700 bg-emerald-50/50 p-2.5 rounded-lg">
-                <CheckCircle2 size={14} className="shrink-0" />
-                <span>Zero advance deposit required. Please keep exact cash ready upon delivery.</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5. SUBMIT ORDER BUTTON ── */}
-      <div className="flex flex-col gap-3">
-        {payMethod === "ONLINE" ? (
-          <button
-            type="button"
-            disabled={loading}
-            onClick={handleOnlinePayment}
-            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 btn-gradient border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <>
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Processing Order...</span>
-              </>
-            ) : (
-              <>
-                <Lock size={15} className="relative z-10 text-amber-300" />
-                <span className="relative z-10">Pay Securely ₹{finalTotal.toLocaleString()}</span>
-                <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
-              </>
-            )}
-          </button>
-        ) : (
-          <button
-            type="button"
-            disabled={loading}
-            onClick={handleCodPayment}
-            className="group relative overflow-hidden w-full py-4 rounded-xl text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 btn-gradient border border-amber-400/30 hover:-translate-y-0.5 active:scale-[0.98] shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <>
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>Placing COD Order...</span>
-              </>
-            ) : (
-              <>
-                <Banknote size={16} className="relative z-10 text-amber-300" />
-                <span className="relative z-10">Place Order (Cash On Delivery) ₹{finalTotal.toLocaleString()}</span>
-                <ArrowRight size={16} className="relative z-10 text-amber-300 transition-transform duration-300 group-hover:translate-x-1" />
-              </>
-            )}
-          </button>
-        )}
-
-        {/* Micro Security Badges */}
-        <div className="flex items-center justify-center gap-4 text-[11px] text-gray-400 font-medium pt-1">
-          <span className="flex items-center gap-1">
-            <Lock size={12} className="text-emerald-600" /> 256-Bit SSL
-          </span>
-          <span>•</span>
-          <span className="flex items-center gap-1">
-            <ShieldCheck size={12} className="text-emerald-600" /> 100% Authentic Guarantee
-          </span>
-          <span>•</span>
-          <span className="flex items-center gap-1">
-            <Truck size={12} className="text-emerald-600" /> Free Shipping
-          </span>
-        </div>
-      </div>
-
-      {/* ── 6. POLICY LINKS FOOTER ── */}
-      <div className="pt-4 border-t border-gray-100 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">
-        <Link to="/refund-policy" className="hover:text-primary underline transition-colors">
-          Refund Policy
-        </Link>
-        <Link to="/shipping-policy" className="hover:text-primary underline transition-colors">
-          Shipping Policy
-        </Link>
-        <Link to="/privacy-policy" className="hover:text-primary underline transition-colors">
-          Privacy Policy
-        </Link>
-        <Link to="/terms-and-conditions" className="hover:text-primary underline transition-colors">
-          Terms of Service
-        </Link>
+            {label}
+          </Link>
+        ))}
       </div>
     </div>
+  );
+}
+
+function FloatingInput({ label, value = "", onChange = () => {}, type = "text", icon, name, autoComplete, inputMode, required = false }) {
+  const inputId = useId();
+  const [focused, setFocused] = useState(false);
+  const isFloated = focused || value?.length > 0;
+
+  return (
+    <div
+      className={`relative w-full border rounded-md transition-all duration-150 bg-white ${
+        focused ? "border-primary ring-1 ring-primary/20" : "border-border"
+      }`}
+    >
+      <label htmlFor={inputId}
+        className={`absolute left-3.5 transition-all duration-150 pointer-events-none select-none ${
+          isFloated
+            ? "top-1.5 text-[10px] text-gray-500 font-medium"
+            : "top-1/2 -translate-y-1/2 text-[14px] text-gray-400"
+        }`}
+      >
+        {label}
+      </label>
+
+      <input
+        id={inputId}
+        name={name}
+        type={type}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+        required={required}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        className={`w-full bg-transparent outline-none text-[14px] text-gray-800 px-3.5 ${
+          isFloated ? "pt-5 pb-1.5" : "pt-3.5 pb-3.5"
+        } ${icon ? "pr-10" : ""}`}
+      />
+
+      {icon && (
+        <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+          {icon}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function FloatingSelect({ topLabel, options }) {
+  const selectId = useId();
+  const [focused, setFocused] = useState(false);
+
+  return (
+    <div
+      className={`relative w-full border rounded-md bg-white transition-all duration-150 ${focused ? "border-primary ring-1 ring-primary/20" : "border-border"}`}
+    >
+      <label htmlFor={selectId} className="absolute left-3.5 top-1.5 text-[10px] text-gray-500 font-medium pointer-events-none select-none">
+        {topLabel}
+      </label>
+      <select id={selectId}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        className="w-full bg-transparent outline-none text-[14px] text-gray-800 px-3.5 pt-6 pb-2 appearance-none cursor-pointer pr-10"
+      >
+        {options.map((o) => (
+          <option key={o}>{o}</option>
+        ))}
+      </select>
+      <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+        <svg width="13" height="13" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M5 7.5l5 5 5-5"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+    </div>
+  );
+}
+
+function CustomCheckbox({ label, defaultChecked = false }) {
+  const [checked, setChecked] = useState(defaultChecked);
+
+  return (
+    <label className="flex items-center gap-2.5 cursor-pointer select-none">
+      <input type="checkbox" checked={checked} onChange={(event) => setChecked(event.target.checked)} className="sr-only" />
+      <div
+        className={`w-4 h-4 border rounded flex items-center justify-center shrink-0 transition-all ${checked ? "bg-primary border-gray-800" : "bg-white border-gray-400"}`}
+      >
+        {checked && (
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+            <path
+              d="M2 6l3 3 5-5"
+              stroke="white"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+      </div>
+      <span className="text-[13px] text-gray-700">{label}</span>
+    </label>
+  );
+}
+
+function PayPalLogo() {
+  return (
+    <span
+      style={{
+        fontFamily: "Arial, sans-serif",
+        fontSize: "15px",
+        fontWeight: 800,
+      }}
+    >
+      <span style={{ color: "#003087" }}>Pay</span>
+      <span style={{ color: "#009cde" }}>Pal</span>
+    </span>
+  );
+}
+
+function CashIcon() {
+  return (
+    <div className="flex items-center justify-center w-9 h-6 border border-border rounded bg-white">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#4B7A4A"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="2" y="6" width="20" height="12" rx="2" />
+        <circle cx="12" cy="12" r="2.5" />
+        <path d="M6 12h.01M18 12h.01" />
+      </svg>
+    </div>
+  );
+}
+
+function PaypalBillingAddress() {
+  const [billingOption, setBillingOption] = useState("same");
+
+  return (
+    <div className="border border-border rounded-md overflow-hidden">
+      <div
+        onClick={() => setBillingOption("same")}
+        className={`cursor-pointer px-4 py-3.5 flex items-center gap-2.5 transition-all ${billingOption === "same" ? "bg-gray-50 border-b border-border" : "bg-white border-b border-border"}`}
+      >
+        <div
+          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${billingOption === "same" ? "border-gray-800" : "border-border"}`}
+        >
+          {billingOption === "same" && (
+            <div className="w-2 h-2 rounded-full bg-primary" />
+          )}
+        </div>
+        <span className="text-[13px] font-medium text-gray-800">
+          Same as shipping address
+        </span>
+      </div>
+
+      <div
+        onClick={() => setBillingOption("different")}
+        className="cursor-pointer px-4 py-3.5 bg-white"
+      >
+        <div className="flex items-center gap-2.5">
+          <div
+            className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${billingOption === "different" ? "border-gray-800" : "border-border"}`}
+          >
+            {billingOption === "different" && (
+              <div className="w-2 h-2 rounded-full bg-primary" />
+            )}
+          </div>
+          <span className="text-[13px] font-medium text-gray-800">
+            Use a different billing address
+          </span>
+        </div>
+
+        {billingOption === "different" && (
+          <div className="mt-4 flex flex-col gap-2.5">
+            <FloatingSelect
+              topLabel="Country/Region"
+              options={[
+                "Lithuania",
+                "Latvia",
+                "Estonia",
+                "Germany",
+                "France",
+                "Poland",
+                "India",
+              ]}
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <FloatingInput label="First name" />
+              <FloatingInput label="Last name" />
+            </div>
+            <FloatingInput label="Company (optional)" />
+            <FloatingInput label="Address" />
+            <FloatingInput label="Apartment, suite, etc. (optional)" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <FloatingInput label="City" />
+              <FloatingInput label="Postal code" />
+            </div>
+            <FloatingInput
+              label="Phone (optional)"
+              type="tel"
+              icon={
+                <span className="text-gray-400 text-[9px] border border-border rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                  ?
+                </span>
+              }
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PayRadio({ active, onClick, label, right, children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`w-full text-left cursor-pointer px-4 py-3.5 border rounded-md mb-2 transition-all ${active ? "border-gray-700 bg-gray-50 shadow-sm" : "border-border bg-white"}`}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div
+            className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${active ? "border-gray-800" : "border-border"}`}
+          >
+            {active && <div className="w-2 h-2 rounded-full bg-primary" />}
+          </div>
+          <span className="text-[13px] font-medium text-gray-800">{label}</span>
+        </div>
+        {right && <div className="flex items-center gap-1.5">{right}</div>}
+      </div>
+      {active && children && <div className="mt-3.5">{children}</div>}
+    </button>
   );
 }

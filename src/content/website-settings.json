@@ -1,0 +1,18 @@
+{
+  "branding": {
+    "name": "Gomzi Nutrition",
+    "logo": "/images/rag-logo.webp",
+    "primaryColor": "#95442c",
+    "hoverColor": "#7a3522",
+    "backgroundColor": "#fbf9f6",
+    "textColor": "#1c1917",
+    "borderColor": "#ebdcd2"
+  },
+  "contact": {
+    "phone": "+91 98752 70200",
+    "email": "info@ragnutrition.in",
+    "address": "G-23-TIME SQUARE, Gaurav Path Road, TP 10 Main Rd, opp. Shree Bharti Residency, Surat, Gujarat 394510",
+    "instagramUrl": "https://www.instagram.com/gomzi.supplement__rag",
+    "facebookUrl": "https://www.facebook.com/people/Gomzi-Supplement/61590460356446/"
+  }
+}

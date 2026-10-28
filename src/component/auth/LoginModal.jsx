@@ -72,19 +72,13 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
       const result = await sendOTP(payload);
 
       if (!result.success) {
-        errorToast(result.message || "Failed to send OTP");
+        errorToast(result.data.message);
         return;
       }
 
-      const devOtp = result?.data?.data?.OTP;
       setOtpSent(true);
 
-      if (devOtp) {
-        setOtp(String(devOtp));
-        successToast(`OTP sent! (Dev Auto-fill: ${devOtp})`);
-      } else {
-        successToast(result.data?.message || "OTP has been sent");
-      }
+      successToast(result.data.message);
     } catch {
       errorToast("Failed to send OTP");
     } finally {
@@ -158,7 +152,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 mx-4 animate-in fade-in zoom-in duration-200">
+      <div className="site-surface site-form relative z-10 w-full max-w-md p-6 mx-4 animate-in fade-in zoom-in duration-200">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div>
@@ -169,7 +163,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
 
           <button
             onClick={closeModal}
-            className="p-2 rounded-lg hover:bg-gray-100"
+            aria-label="Close login" className="p-2 rounded-lg hover:bg-bg-light"
           >
             <X size={18} />
           </button>
@@ -218,7 +212,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
           </button>
 
           <div
-            className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-black transition-all duration-300 ${
+            className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-primary transition-all duration-300 ${
               loginType === "password" ? "left-1" : "left-[50%]"
             }`}
           />
@@ -229,7 +223,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
           <div className="space-y-4">
             <input
               type="email"
-              placeholder="Email address"
+              aria-label="Email address" placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
@@ -237,7 +231,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
 
             <input
               type="password"
-              placeholder="Password"
+              aria-label="Password" placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border rounded-xl px-4 py-3"
@@ -246,9 +240,9 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
             <button
               onClick={handleLogin}
               disabled={loading}
-              className="group relative overflow-hidden w-full btn-gradient border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer disabled:opacity-60"
+              className="w-full bg-primary text-white py-3 rounded-xl"
             >
-              <span className="relative z-10">{loading ? "Signing In..." : "Sign In"}</span>
+              {loading ? "Signing In..." : "Sign In"}
             </button>
           </div>
         ) : (
@@ -264,7 +258,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
             {otpSent && (
               <input
                 type="text"
-                placeholder="Enter OTP"
+                aria-label="One-time password" autoComplete="one-time-code" placeholder="Enter OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 className="w-full border rounded-xl px-4 py-3"
@@ -275,17 +269,17 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
               <button
                 onClick={handleSendOTP}
                 disabled={loading}
-                className="group relative overflow-hidden w-full btn-gradient border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer disabled:opacity-60"
+                className="w-full bg-primary text-white py-3 rounded-xl"
               >
-                <span className="relative z-10">Send OTP</span>
+                Send OTP
               </button>
             ) : (
               <button
                 onClick={handleVerifyOTP}
                 disabled={loading}
-                className="group relative overflow-hidden w-full btn-gradient border border-amber-400/30 text-white font-bold py-3.5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 cursor-pointer disabled:opacity-60"
+                className="w-full bg-primary text-white py-3 rounded-xl"
               >
-                <span className="relative z-10">Verify OTP</span>
+                Verify OTP
               </button>
             )}
           </div>

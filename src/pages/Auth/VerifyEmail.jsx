@@ -37,22 +37,22 @@ function VerifyEmail() {
   }, [searchParams]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 px-4">
+    <div className="min-h-[50vh] flex items-center justify-center bg-light px-4 py-12">
       <div className="w-full max-w-md">
         {loading ? (
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-10 text-center shadow-2xl border border-white/20 animate-pulse">
-            <div className="w-16 h-16 mx-auto border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          <div className="site-surface p-6 sm:p-10 text-center">
+            <div className="w-16 h-16 mx-auto border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
 
-            <h2 className="text-white text-2xl font-bold mt-6">Verifying...</h2>
+            <h2 className="text-text text-2xl font-bold mt-6">Verifying...</h2>
 
-            <p className="text-white/80 mt-2">
+            <p className="text-text-light mt-2">
               Please wait while we verify your email.
             </p>
           </div>
         ) : (
-          <div className="bg-white rounded-3xl p-10 text-center shadow-2xl animate-[fadeIn_0.5s_ease-in-out]">
+          <div className="site-surface p-6 sm:p-10 text-center">
             <div
-              className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center text-5xl animate-bounce ${
+              className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center text-3xl ${
                 success
                   ? "bg-green-100 text-green-600"
                   : "bg-red-100 text-red-600"
@@ -74,18 +74,18 @@ function VerifyEmail() {
             {success && (
               <button
                 onClick={() => navigate("/login")}
-                className="mt-8 px-6 py-3 relative overflow-hidden group btn-gradient text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+                className="site-button mt-8"
               >
-                <span className="relative z-10">Continue to Login →</span>
+                Continue to Login →
               </button>
             )}
 
             {!success && (
               <button
                 onClick={() => navigate("/")}
-                className="mt-8 px-6 py-3 relative overflow-hidden group btn-gradient text-white rounded-xl font-bold border border-amber-400/30 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+                className="site-button mt-8"
               >
-                <span className="relative z-10">Back to Home</span>
+                Back to Home
               </button>
             )}
           </div>

@@ -1,3 +1,4 @@
+import useContactDetails from "../content/useContactDetails";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -18,7 +19,7 @@ import {
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import SEO from "../component/SEO";
-import { sendContactInquiryApi } from "../api/contact.api";
+import { submitWholesaleInquiry } from "../services/wholesale.service";
 import { successToast, errorToast } from "../utils/toast";
 import CustomSelect from "../component/common/CustomSelect";
 
@@ -131,9 +132,11 @@ const WHOLESALE_FAQS = [
 ];
 
 export default function WholesaleB2B() {
+  const contact = useContactDetails();
   const [activeFaq, setActiveFaq] = useState(0);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
+  const [formError, setFormError] = useState("");
   const [formData, setFormData] = useState({
     businessName: "",
     contactName: "",
@@ -154,41 +157,17 @@ export default function WholesaleB2B() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    const cleanMobile = formData.mobile.replace(/\D/g, "");
-    if (!formData.businessName.trim()) {
-      errorToast("Please provide your Gym or Business name");
-      return;
-    }
-    if (!formData.contactName.trim()) {
-      errorToast("Please provide your contact name");
-      return;
-    }
-    if (cleanMobile.length < 10) {
-      errorToast("Please enter a valid 10-digit mobile number");
-      return;
-    }
-
+    if (formSubmitting) return;
     setFormSubmitting(true);
-
+    setFormError("");
     try {
-      const payload = {
-        name: formData.contactName.trim(),
-        email: formData.email.trim() || "wholesale@gomzinutrition.com",
-        mobile: cleanMobile,
-        message: `[B2B Wholesale Application] Business: ${formData.businessName} | Category: ${formData.businessType} | Volume: ${formData.estimatedVolume} | Location: ${formData.city}, ${formData.state} | Message: ${formData.message || "Requesting wholesale catalog & price matrix."}`,
-        subject: `B2B Wholesale Application - ${formData.businessName}`,
-        source: window.location.href,
-      };
-
-      await sendContactInquiryApi(payload);
-
-      successToast("Application submitted successfully! Our B2B manager will contact you within 2 hours.");
+      await submitWholesaleInquiry(formData, window.location.href);
+      successToast("Wholesale application submitted successfully.");
       setFormSuccess(true);
-    } catch (err) {
-      console.warn("B2B API Submission notice:", err.message);
-      // Still acknowledge user gracefully and route to WhatsApp
-      successToast("Application received! Connecting you to our Wholesale Representative.");
-      setFormSuccess(true);
+    } catch (error) {
+      const message = error?.response?.data?.message || error.message || "We couldn't submit your application. Please try again.";
+      setFormError(message);
+      errorToast(message);
     } finally {
       setFormSubmitting(false);
     }
@@ -202,7 +181,7 @@ export default function WholesaleB2B() {
   };
 
   return (
-    <div className="bg-bg-cream text-text overflow-x-hidden min-h-screen">
+    <div className="bg-light text-text overflow-x-hidden min-h-screen">
       <SEO
         title="B2B Wholesale & Gym Supply | Gomzi Nutrition by RAG"
         description="Equip your gym or retail store with certified Gomzi Nutrition sports supplements. Direct factory margins, pan-India bulk logistics, 100% certified stock, and flexible low MOQs."
@@ -212,15 +191,15 @@ export default function WholesaleB2B() {
 
       {/* ── 1. MAIN ENTERPRISE SHOWCASE SECTION ── */}
       <section className="w-full py-8 sm:py-12 md:py-16 bg-white border-b border-border">
-        <div className="max-w-[1170px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="site-container">
           {/* Main Card Enclosure */}
-          <div className="relative rounded-2xl sm:rounded-3xl bg-[#fdfbf9] border border-primary-border/90 p-5 sm:p-8 lg:p-12 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+          <div className="relative rounded-2xl sm:rounded-3xl bg-[#fdfbf9] border border-border/90 p-5 sm:p-8 lg:p-12 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
               {/* LEFT COLUMN: Content & Advantage Grid (7 cols) */}
               <div className="lg:col-span-7 flex flex-col items-start">
                 {/* Eyebrow Badge Pill */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-light border border-primary-border mb-3.5 shadow-2xs">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f5ede6] border border-border mb-3.5 shadow-2xs">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-primary">
                     B2B Wholesale & Gym Supply
@@ -251,7 +230,7 @@ export default function WholesaleB2B() {
                       </div>
 
                       <div className="relative z-10">
-                        <div className="w-9 h-9 rounded-lg bg-primary-light border border-primary-border/60 flex items-center justify-center mb-2.5 shadow-2xs">
+                        <div className="w-9 h-9 rounded-lg bg-[#f5ede6] border border-border/60 flex items-center justify-center mb-2.5 shadow-2xs">
                           {item.icon}
                         </div>
                         <h3 className="text-sm font-bold text-text leading-snug group-hover:text-primary transition-colors">
@@ -270,14 +249,14 @@ export default function WholesaleB2B() {
                   <button
                     type="button"
                     onClick={scrollToApply}
-                    className="h-12 px-7 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.98] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
+                    className="h-12 px-7 rounded-xl bg-primary hover:bg-hover active:scale-[0.98] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
                   >
                     <span>Apply for Wholesale Account</span>
                     <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
 
                   <a
-                    href="https://wa.me/919875270200?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20am%20interested%20in%20becoming%20a%20B2B%20Wholesale%20%2F%20Gym%20Supply%20Partner."
+                    href={`${contact.whatsappUrl}?text=Hi%20Gomzi%20Nutrition%20Team%2C%20I%20am%20interested%20in%20becoming%20a%20B2B%20Wholesale%20%2F%20Gym%20Supply%20Partner.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-12 px-6 rounded-xl border border-border hover:border-primary bg-white text-text hover:text-primary font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all text-center cursor-pointer shadow-2xs"
@@ -340,10 +319,10 @@ export default function WholesaleB2B() {
       </section>
 
       {/* ── 2. WHOLESALE TIERS MATRIX ── */}
-      <section className="py-10 sm:py-14 md:py-16 bg-bg-cream border-b border-border">
-        <div className="max-w-[1170px] mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-10 sm:py-14 md:py-16 bg-light border-b border-border">
+        <div className="site-container">
           <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-border text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary mb-2.5">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f5ede6] border border-border text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary mb-2.5">
               Wholesale Pricing Tiers
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-text tracking-tight">
@@ -396,11 +375,14 @@ export default function WholesaleB2B() {
                 <div className="mt-7 pt-4 border-t border-border">
                   <button
                     type="button"
-                    onClick={scrollToApply}
+                    onClick={() => {
+                      setFormData(previous => ({ ...previous, estimatedVolume: ESTIMATED_VOLUME_OPTIONS[idx].value }));
+                      scrollToApply();
+                    }}
                     className={`w-full py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
                       tier.recommended
-                        ? "bg-primary hover:bg-primary-hover text-white shadow-xs"
-                        : "bg-primary-light hover:bg-primary hover:text-white text-primary border border-primary-border"
+                        ? "bg-primary hover:bg-hover text-white shadow-xs"
+                        : "bg-[#f5ede6] hover:bg-primary hover:text-white text-primary border border-border"
                     }`}
                   >
                     Select {tier.name}
@@ -413,11 +395,11 @@ export default function WholesaleB2B() {
       </section>
 
       {/* ── 3. DIRECT APPLICATION FORM SECTION ── */}
-      <section id="apply-wholesale" className="py-10 sm:py-16 bg-white border-b border-border scroll-mt-12">
-        <div className="max-w-[1170px] mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="apply-wholesale" className="py-10 sm:py-16 bg-white border-b border-border scroll-mt-48">
+        <div className="site-container">
           <div className="max-w-3xl mx-auto rounded-2xl sm:rounded-3xl border border-border bg-[#fdfbf9] p-6 sm:p-10 shadow-sm">
             <div className="text-center mb-6 sm:mb-8">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-border text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary mb-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f5ede6] border border-border text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary mb-2">
                 Fast Approval Portal
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-text tracking-tight">
@@ -440,7 +422,7 @@ export default function WholesaleB2B() {
 
                 <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                   <a
-                    href={`https://wa.me/919875270200?text=Hi%20Gomzi%20Team%2C%20I%20just%20submitted%20a%20B2B%20Wholesale%20application%20for%20${encodeURIComponent(formData.businessName)}.%20Please%20share%20the%20catalog.`}
+                    href={`${contact.whatsappUrl}?text=Hi%20Gomzi%20Team%2C%20I%20just%20submitted%20a%20B2B%20Wholesale%20application%20for%20${encodeURIComponent(formData.businessName)}.%20Please%20share%20the%20catalog.`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs tracking-wide shadow-xs cursor-pointer"
@@ -472,13 +454,13 @@ export default function WholesaleB2B() {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleFormSubmit} className="space-y-4 sm:space-y-5">
+              <form onSubmit={handleFormSubmit} aria-busy={formSubmitting} className="space-y-4 sm:space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-text mb-1.5">
+                    <label htmlFor="wholesale-businessName" className="block text-xs font-bold text-text mb-1.5">
                       Gym / Business Name <span className="text-red-500">*</span>
                     </label>
-                    <input
+                    <input id="wholesale-businessName"
                       type="text"
                       name="businessName"
                       required
@@ -490,10 +472,10 @@ export default function WholesaleB2B() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-text mb-1.5">
+                    <label htmlFor="wholesale-contactName" className="block text-xs font-bold text-text mb-1.5">
                       Owner / Contact Person <span className="text-red-500">*</span>
                     </label>
-                    <input
+                    <input id="wholesale-contactName"
                       type="text"
                       name="contactName"
                       required
@@ -507,15 +489,18 @@ export default function WholesaleB2B() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-text mb-1.5">
+                    <label htmlFor="wholesale-mobile" className="block text-xs font-bold text-text mb-1.5">
                       Mobile / WhatsApp Number <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-500">
                         +91
                       </span>
-                      <input
+                      <input id="wholesale-mobile"
                         type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]{10}"
+                        autoComplete="tel-national"
                         name="mobile"
                         required
                         maxLength={10}
@@ -528,12 +513,14 @@ export default function WholesaleB2B() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-text mb-1.5">
-                      Email Address
+                    <label htmlFor="wholesale-email" className="block text-xs font-bold text-text mb-1.5">
+                      Email Address <span className="text-red-500">*</span>
                     </label>
-                    <input
+                    <input id="wholesale-email"
                       type="email"
                       name="email"
+                      required
+                      autoComplete="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="rahul@gym.com"
@@ -566,10 +553,10 @@ export default function WholesaleB2B() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-text mb-1.5">
+                    <label htmlFor="wholesale-city" className="block text-xs font-bold text-text mb-1.5">
                       City
                     </label>
-                    <input
+                    <input id="wholesale-city"
                       type="text"
                       name="city"
                       value={formData.city}
@@ -580,10 +567,10 @@ export default function WholesaleB2B() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-text mb-1.5">
+                    <label htmlFor="wholesale-state" className="block text-xs font-bold text-text mb-1.5">
                       State
                     </label>
-                    <input
+                    <input id="wholesale-state"
                       type="text"
                       name="state"
                       value={formData.state}
@@ -595,10 +582,10 @@ export default function WholesaleB2B() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-text mb-1.5">
+                  <label htmlFor="wholesale-message" className="block text-xs font-bold text-text mb-1.5">
                     Specific Requirements or Preferred Products
                   </label>
-                  <textarea
+                  <textarea id="wholesale-message"
                     name="message"
                     rows={3}
                     value={formData.message}
@@ -608,10 +595,11 @@ export default function WholesaleB2B() {
                   />
                 </div>
 
+                {formError && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-700">{formError}</p>}
                 <button
                   type="submit"
                   disabled={formSubmitting}
-                  className="w-full py-3.5 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.99] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer disabled:opacity-70"
+                  className="w-full py-3.5 rounded-xl bg-primary hover:bg-hover active:scale-[0.99] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer disabled:opacity-70"
                 >
                   {formSubmitting ? (
                     <span>Submitting Application...</span>
@@ -629,10 +617,10 @@ export default function WholesaleB2B() {
       </section>
 
       {/* ── 4. WHOLESALE FAQS ── */}
-      <section className="py-10 sm:py-16 bg-bg-cream border-b border-border">
+      <section className="py-10 sm:py-16 bg-light border-b border-border">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-border text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary mb-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#f5ede6] border border-border text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary mb-2">
               Wholesale FAQ
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-text tracking-tight">
@@ -655,6 +643,7 @@ export default function WholesaleB2B() {
                   <button
                     type="button"
                     onClick={() => setActiveFaq(open ? null : idx)}
+                    aria-expanded={open}
                     className="w-full flex justify-between items-center px-4 sm:px-6 py-4 text-left cursor-pointer gap-3"
                   >
                     <span className="font-semibold text-xs sm:text-base text-text leading-snug">
@@ -683,10 +672,10 @@ export default function WholesaleB2B() {
 
       {/* ── 5. BOTTOM CORPORATE DESK CTA ── */}
       <section className="py-10 sm:py-14 bg-white">
-        <div className="max-w-[1170px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-border bg-gradient-to-r from-primary-light/60 via-white to-primary-light/40 p-6 sm:p-10 shadow-2xs flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="site-container">
+          <div className="rounded-2xl border border-border bg-gradient-to-r from-[#f5ede6]/60 via-white to-[#f5ede6]/40 p-6 sm:p-10 shadow-2xs flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left max-w-xl">
-              <span className="inline-block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-primary bg-white px-2.5 py-0.5 rounded-full border border-primary-border shadow-2xs mb-2">
+              <span className="inline-block text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-primary bg-white px-2.5 py-0.5 rounded-full border border-border shadow-2xs mb-2">
                 Need Immediate Bulk Dispatch?
               </span>
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-text tracking-tight">
@@ -699,7 +688,7 @@ export default function WholesaleB2B() {
 
             <div className="flex flex-wrap items-center justify-center gap-3 w-full sm:w-auto shrink-0">
               <a
-                href="https://wa.me/919875270200?text=Hi%20Gomzi%20Team%2C%20I%20need%20urgent%20wholesale%20supply%20for%20my%20gym."
+                href={`${contact.whatsappUrl}?text=Hi%20Gomzi%20Team%2C%20I%20need%20urgent%20wholesale%20supply%20for%20my%20gym.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer"
@@ -709,11 +698,11 @@ export default function WholesaleB2B() {
               </a>
 
               <a
-                href="tel:+919875270200"
+                href={contact.telephoneUrl}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-border hover:border-primary bg-white text-text hover:text-primary font-bold text-xs uppercase tracking-wider transition-all shadow-2xs cursor-pointer"
               >
                 <FiPhoneCall size={14} />
-                <span>+91 98752 70200</span>
+                <span>{contact.phone}</span>
               </a>
             </div>
           </div>

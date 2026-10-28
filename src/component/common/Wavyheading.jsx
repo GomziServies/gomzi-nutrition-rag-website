@@ -1,24 +1,7 @@
-import React from "react";
-import WavyImageUnderline from "./WavyImageUnderline";
-
-const Wavyheading = ({ text1, text2, text3 }) => {
-  return (
-    <div className="text-center mb-5 md:mb-0">
-      <h2
-        className="text-text  inline-block relative"
-        style={{
-          fontSize: "clamp(28px, 4.5vw, 48px)",
-          fontWeight: "950",
-          letterSpacing: "3px",
-          lineHeight: "1.1",
-          isolation: "auto",
-        }}
-      >
-        {text1} <WavyImageUnderline>{text2}</WavyImageUnderline>
-        {text3}
-      </h2>
-    </div>
-  );
-};
-
-export default Wavyheading;
+export default function Wavyheading({ text1, text2, text3 }) {
+  return <div className="mb-6 sm:mb-8">
+    <h2 className="font-toma text-2xl sm:text-3xl text-text leading-tight tracking-tight">
+      {text1} <span className="text-primary">{text2}</span>{text3}
+    </h2>
+  </div>;
+}

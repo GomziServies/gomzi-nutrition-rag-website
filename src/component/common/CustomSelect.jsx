@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import { FiChevronDown, FiCheck } from "react-icons/fi";
 
 /**
@@ -18,6 +18,8 @@ export default function CustomSelect({
   className = "",
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const id = useId();
   const containerRef = useRef(null);
 
   // Normalize options into { value, label, icon, subtitle }
@@ -78,28 +80,53 @@ export default function CustomSelect({
 
   const handleKeyDown = (e) => {
     if (disabled) return;
-    if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       e.preventDefault();
-      setIsOpen((prev) => !prev);
+      if (!isOpen) {
+        setActiveIndex(Math.max(0, normalizedOptions.findIndex(option => option.value === value)));
+        setIsOpen(true);
+      } else {
+        setActiveIndex(index => (index + (e.key === "ArrowDown" ? 1 : -1) + normalizedOptions.length) % normalizedOptions.length);
+      }
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (isOpen && normalizedOptions[activeIndex]) handleSelect(normalizedOptions[activeIndex].value);
+      else {
+        setActiveIndex(Math.max(0, normalizedOptions.findIndex(option => option.value === value)));
+        setIsOpen(true);
+      }
+    } else if (isOpen && (e.key === "Home" || e.key === "End")) {
+      e.preventDefault();
+      setActiveIndex(e.key === "Home" ? 0 : normalizedOptions.length - 1);
+    } else if (e.key === "Escape" || e.key === "Tab") {
+      setIsOpen(false);
     }
   };
+
+  useEffect(() => {
+    if (isOpen) document.getElementById(`${id}-option-${activeIndex}`)?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex, id, isOpen]);
 
   return (
     <div className={`relative w-full ${className}`} ref={containerRef}>
       {label && (
-        <label className="block text-xs font-bold text-text mb-1.5 select-none">
+        <label htmlFor={id} className="block text-xs font-bold text-text mb-1.5 select-none">
           {label}
         </label>
       )}
 
       {/* Trigger Button */}
       <button
+        id={id}
+        role="combobox"
         type="button"
         disabled={disabled}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => { setActiveIndex(Math.max(0, normalizedOptions.findIndex(option => option.value === value))); setIsOpen(previous => !previous); }}
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        aria-controls={`${id}-listbox`}
+        aria-activedescendant={isOpen ? `${id}-option-${activeIndex}` : undefined}
         className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-white border text-left text-xs sm:text-sm transition-all duration-200 shadow-2xs focus:outline-none ${
           disabled ? "opacity-60 cursor-not-allowed bg-gray-50" : "cursor-pointer"
         } ${
@@ -131,26 +158,31 @@ export default function CustomSelect({
       {/* Floating Themed Menu */}
       {isOpen && (
         <ul
+          id={`${id}-listbox`}
           role="listbox"
+          aria-label={label || placeholder}
+          onMouseDown={event => event.preventDefault()}
           tabIndex={-1}
-          className="absolute left-0 right-0 top-full mt-1.5 z-50 max-h-64 overflow-y-auto rounded-xl bg-white border border-primary-border py-1.5 focus:outline-none custom-scroll"
+          className="absolute left-0 right-0 top-full mt-1.5 z-50 max-h-64 overflow-y-auto rounded-xl bg-white border border-border py-1.5 focus:outline-none custom-scroll"
           style={{
             boxShadow:
               "0 10px 25px -5px rgba(27, 54, 93, 0.12), 0 8px 10px -6px rgba(27, 54, 93, 0.08)",
           }}
         >
-          {normalizedOptions.map((opt) => {
+          {normalizedOptions.map((opt, index) => {
             const isSelected = opt.value === value;
             return (
               <li
                 key={opt.value}
+                id={`${id}-option-${index}`}
                 role="option"
                 aria-selected={isSelected}
+                onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => handleSelect(opt.value)}
                 className={`px-3.5 py-2.5 text-xs sm:text-sm cursor-pointer flex items-center justify-between transition-colors select-none ${
                   isSelected
-                    ? "bg-primary-light text-primary font-bold"
-                    : "text-text hover:bg-[#f6f8fb] hover:text-primary font-normal"
+                    ? "bg-[#f5ede6] text-primary font-bold"
+                    : `${activeIndex === index ? "bg-[#f5ede6] text-primary" : "text-text"} hover:bg-[#f6f8fb] hover:text-primary font-normal`
                 }`}
               >
                 <div className="flex items-center gap-2.5 truncate">

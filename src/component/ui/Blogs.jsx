@@ -5,29 +5,29 @@ import { blogs } from "../../data/blogs";
 const BlogSection = () => {
   return (
     <section className="bg-light py-12 sm:py-14 md:py-16">
-      <div className="max-w-[var(--container-width)] mx-auto px-4">
+      <div className="site-container">
         {/* Header */}
         <div className="mb-8 md:mb-10">
           <div className="flex items-center gap-3 mb-3">
             <span className="w-7 h-[2px] bg-primary" />
 
-            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+            <span className="font-modelica text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em] text-primary">
               The Gomzi Journal
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-none text-gray-900">
+              <h2 className="font-tomato text-2xl sm:text-3xl md:text-4xl font-bold leading-none text-gray-900">
                 Nutrition & Wellness
               </h2>
 
-              <p className="mt-3 max-w-xl text-sm text-gray-500 leading-6">
+              <p className="mt-3 max-w-xl font-modelica text-sm text-gray-500 leading-6">
                 Useful insights on nutrition, fitness and everyday wellness.
               </p>
             </div>
 
-            <span className="hidden sm:block text-xs text-gray-400">
+            <span className="hidden sm:block font-modelica text-xs text-gray-400">
               Latest articles
             </span>
           </div>
@@ -48,7 +48,7 @@ const BlogSection = () => {
                   rounded-2xl
                   bg-white
                   border
-                  border-gray-100
+                  border-border
                   shadow-[0_5px_25px_rgba(0,0,0,0.045)]
                   transition-all
                   duration-400
@@ -57,12 +57,12 @@ const BlogSection = () => {
                 "
               >
                 {/* Image */}
-                <div className="relative overflow-hidden bg-white">
+                <div className="relative aspect-[16/10] overflow-hidden bg-bg-light">
                   <img
                     src={blog.image}
                     alt={blog.title}
                     className="
-                      object-cover
+                      w-full h-full object-cover
                       transition-transform
                       duration-500
                       group-hover:scale-[1.03]
@@ -82,7 +82,7 @@ const BlogSection = () => {
                         bg-white/95
                         backdrop-blur-sm
                         text-primary
-                       
+                        font-modelica
                         text-[9px]
                         font-semibold
                         uppercase
@@ -102,7 +102,7 @@ const BlogSection = () => {
                   <div className="flex items-center gap-2 mb-3">
                     {blog.date && (
                       <>
-                        <span className="text-[10px] uppercase tracking-[0.1em] text-gray-400">
+                        <span className="font-modelica text-[10px] uppercase tracking-[0.1em] text-gray-400">
                           {blog.date}
                         </span>
 
@@ -110,7 +110,7 @@ const BlogSection = () => {
                       </>
                     )}
 
-                    <span className="text-[10px] uppercase tracking-[0.1em] text-gray-400">
+                    <span className="font-modelica text-[10px] uppercase tracking-[0.1em] text-gray-400">
                       {blog.category}
                     </span>
                   </div>
@@ -118,7 +118,7 @@ const BlogSection = () => {
                   {/* Title */}
                   <h3
                     className="
-                     
+                      font-tomato
                       text-xl
                       md:text-[22px]
                       font-bold
@@ -137,7 +137,7 @@ const BlogSection = () => {
                   <p
                     className="
                       mt-3
-                     
+                      font-modelica
                       text-sm
                       leading-6
                       text-gray-500
@@ -148,8 +148,8 @@ const BlogSection = () => {
                   </p>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-100">
-                    <span className="text-xs font-semibold text-gray-800">
+                  <div className="flex items-center justify-between mt-5 pt-4 border-t border-border">
+                    <span className="font-modelica text-xs font-semibold text-gray-800">
                       Read article
                     </span>
 

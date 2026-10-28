@@ -19,14 +19,13 @@ export const AuthProvider = ({ children }) => {
 
       const response = await getProfileApi();
 
-      setUser(response.data.data.user);
-
       try {
         await syncGuestCart();
       } catch (err) {
         console.error("Guest cart sync failed:", err);
       }
-    } catch (error) {
+      setUser(response.data.data.user);
+    } catch {
       localStorage.removeItem("authorization");
       setUser(null);
     } finally {

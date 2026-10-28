@@ -1,166 +1,116 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaInstagram, FaFacebookF, FaWhatsapp, FaYoutube } from "react-icons/fa";
-import { Mail, MapPin, Phone, Lock, CheckCircle2 } from "lucide-react";
-import { successToast, errorToast } from "../../utils/toast";
-
-const QUICK_LINKS = [
-  {
-    title: "Sports Nutrition",
-    links: [
-      "Whey protein",
-      "Whey protein isolate",
-      "Creatine supplement",
-      "Pre workout supplements",
-      "BCAA supplements",
-      "Mass gainer",
-      "Plant protein",
-    ],
-  },
-  {
-    title: "Vitamins & Wellness",
-    links: [
-      "Multivitamin tablets",
-      "Omega 3",
-      "Biotin tablets",
-      "Vitamin C tablets",
-      "Vitamin D3 & calcium",
-      "Collagen supplements",
-    ],
-  },
-  {
-    title: "Ayurveda & Herbs",
-    links: [
-      "Ashwagandha tablets",
-      "Ayurvedic Shilajit",
-      "Giloy Tulsi juice",
-      "Brahmi capsules",
-      "Amla juice",
-      "Milk thistle",
-    ],
-  },
-  {
-    title: "Personal Care",
-    links: ["Personal hygiene", "Hair nourish oil", "Hair mask", "Face serum"],
-  },
-  {
-    title: "Quick Links",
-    links: [
-      "FAQs & Help",
-      "Contact Us",
-      "B2B Wholesale & Gym Supply",
-      "My Account",
-      "Delivery Policies",
-      "Returns Policy",
-      "Privacy Policy",
-      "Track Your Order",
-      "Terms & Conditions",
-    ],
-  },
-  {
-    title: "About Gomzi",
-    links: [
-      "About Us",
-      "Refer & Earn",
-      "Loyalty Rewards",
-      "Authenticity Guaranteed",
-      "Locate Your Nearest Store",
-    ],
-  },
-];
-
-const SOCIALS = [
-  { href: "https://www.instagram.com/gomzi.supplement__rag", Icon: FaInstagram, label: "Instagram" },
-  { href: "https://www.facebook.com/profile.php?id=61590460356446", Icon: FaFacebookF, label: "Facebook" },
-  { href: "https://wa.me/919875270200", Icon: FaWhatsapp, label: "WhatsApp" },
-  { href: "https://www.youtube.com", Icon: FaYoutube, label: "YouTube" },
-];
+import { FaInstagram, FaTiktok, FaFacebookF } from "react-icons/fa";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [openAccordion, setOpenAccordion] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (!email || !email.includes("@")) {
-      errorToast("Please enter a valid email address");
-      return;
-    }
-    successToast("You're on the list. Your 10% code is on its way.");
-    setEmail("");
+  const toggleAccordion = (section) => {
+    setOpenAccordion(openAccordion === section ? null : section);
   };
 
+  // Navigation routes mapping
+  const shopLinks = [
+    { label: "All products", path: "/gomzi-supplement" },
+    { label: "whey Protein", path: "/gomzi-supplement/whey-protein" },
+    { label: "Pre-Workout", path: "/gomzi-supplement/pre-workout" },
+    { label: "Mass Gainer", path: "/gomzi-supplement/mass-gainer" },
+    { label: "Vitamins", path: "/gomzi-supplement/wellness-health" },
+    {
+      label: "Everyday Essentials",
+      path: "/gomzi-supplement/meal-replacement",
+    },
+  ];
+
+  const ourStoryLinks = [
+    { label: "About Us", path: "/about" },
+    // { label: "Blog", path: "/blog" },
+    { label: "Contact Us", path: "/contact-us" },
+  ];
+
+  const helpLinks = [
+    { label: "Shipping Information", path: "/shipping-policy" },
+    { label: "Returns", path: "/refund-policy" },
+    { label: "FAQ", path: "/faq" },
+    { label: "Privacy Policy", path: "/privacy-policy" },
+    { label: "Terms & Conditions", path: "/terms-and-conditions" },
+  ];
 
   return (
-    <footer className="w-full bg-white mt-10">
-      {/* ── TOP: BRAND + SUBSCRIBE ── */}
-      <div className="max-w-[1170px] mx-auto px-4 md:px-0 pt-16">
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="flex flex-col gap-8 max-w-[700px]">
-            <button
-              onClick={() => navigate("/")}
-              className="w-[160px] cursor-pointer"
-              aria-label="Gomzi Nutrition home"
-            >
+    <footer
+      className="relative w-full overflow-hidden rounded-t-3xl"
+      style={{ background: "#0a0a0a" }}
+    >
+      {/* Background decorative image */}
+      <img
+        src="/images/footer.webp"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10 xl:px-16 pt-12 md:pt-16 pb-8 md:pb-10">
+        {/* Links + Payment Row - Desktop & Tablet */}
+        <div className="hidden sm:block mb-14 md:mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-10">
+            {/* Shop */}
+            <div>
               <img
-                src="/images/gomzi-supplements-dark.webp"
+                src="/images/whitelogo.webp"
                 alt="Gomzi Supplement by RAG"
-                className="h-auto w-full object-contain"
+                className="h-12 mb-5"
               />
-            </button>
-            <p className="text-sm leading-5 text-[#2b2b2b]">
-              Our products are curated by our team of highly experienced experts
-              ensuring high quality, transparency, and efficacy. We test our
-              products at every step of the development process.
-            </p>
-          </div>
 
-          <div className="max-w-[430px]">
-            <p className="text-lg font-medium leading-6 text-text">
-              Be the first to know about new products, exclusive offers, and much
-              more.
-            </p>
-            <form onSubmit={handleSubscribe} className="mt-4 flex gap-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter Email"
-                maxLength={50}
-                className="h-11 flex-1 rounded-md border border-text bg-white px-3 text-sm text-text outline-none placeholder:text-text-muted focus:border-primary"
-              />
-              <button type="submit" className="btn btn-primary shrink-0">
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+              <p className="text-gray-400 leading-7 mb-6">
+                Premium Sports Nutrition Supplements manufactured with
+                international quality standards.
+              </p>
 
-      {/* ── QUICK LINKS ── */}
-      <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-16">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
-          {QUICK_LINKS.map((col) => (
-            <div key={col.title}>
-              <h4 className="pb-5 text-base font-semibold text-text">
-                {col.title}
+              <div className="space-y-4 text-white">
+                <div className="flex items-start gap-3">
+                  <Phone size={18} />
+                  <a
+                    href="tel:+919875270200"
+                    className="hover:underline"
+                    style={{ color: "#ffffff" }}
+                  >
+                    +91 98752 70200
+                  </a>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Mail size={18} />
+                  <a
+                    href="mailto:info@ragnutrition.com"
+                    className="hover:underline"
+                    style={{ color: "#ffffff" }}
+                  >
+                    info@ragnutrition.com
+                  </a>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <MapPin size={30} />
+                  <span>
+                    G-23-TIME SQUARE, Gaurav Path Road, TP 10 Main Rd, opp.
+                    Shree Bharti Residency, Surat, Gujarat 394510
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-toma font-black text-white text-2xl mb-4">
+                Shop
               </h4>
-              <ul className="flex flex-col gap-3">
-                {col.links.map((label) => (
-                  <li key={label}>
+              <ul className="space-y-3">
+                {shopLinks.map(({ label, path }) => (
+                  <li key={label} onClick={() => navigate(path)}>
                     <button
-                      onClick={() => {
-                        if (label === "B2B Wholesale & Gym Supply") navigate("/wholesale");
-                        else if (label === "Contact Us") navigate("/contact-us");
-                        else if (label === "FAQs & Help") navigate("/faq");
-                        else if (label === "About Us") navigate("/about");
-                        else if (label === "Privacy Policy") navigate("/privacy-policy");
-                        else if (label === "Terms & Conditions") navigate("/terms-and-conditions");
-                        else if (label === "Returns Policy") navigate("/refund-policy");
-                        else if (label === "Delivery Policies") navigate("/shipping-policy");
-                        else navigate("/gomzi-supplement");
-                      }}
-                      className="text-left text-sm leading-5 text-text-light transition-colors hover:text-primary cursor-pointer"
+                      className="font-modelica text-lg hover:text-white cursor-pointer transition-colors text-left"
+                      style={{ color: "#ffffff" }}
                     >
                       {label}
                     </button>
@@ -168,94 +118,315 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ── SOCIAL + CONTACT ── */}
-      <div className="max-w-[1170px] mx-auto px-4 md:px-0 pb-16 flex flex-col lg:flex-row gap-6">
-        <div>
-          <h4 className="mb-4 text-base font-semibold text-[#2b2b2b]">
-            Stay updated with us
-          </h4>
-          <div className="flex flex-wrap gap-4">
-            {SOCIALS.map((social) => {
-              const Icon = social.Icon;
-              return (
+            {/* Gomzi Supplement by RAG */}
+            <div>
+              <h4 className="font-toma font-black text-white text-2xl mb-4">
+                Our Story
+              </h4>
+              <ul className="space-y-3">
+                {ourStoryLinks.map(({ label, path }) => (
+                  <li key={label} onClick={() => navigate(path)}>
+                    <button
+                      className="font-modelica text-lg hover:text-white cursor-pointer transition-colors text-left"
+                      style={{ color: "#ffffff" }}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Help */}
+            <div>
+              <h4 className="font-toma font-black text-white text-2xl mb-4">
+                Help
+              </h4>
+              <ul className="space-y-3">
+                {helpLinks.map(({ label, path }) => (
+                  <li key={label} onClick={() => navigate(path)}>
+                    <button
+                      className="font-modelica text-lg hover:text-white cursor-pointer transition-colors text-left"
+                      style={{ color: "#ffffff" }}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Payment - Desktop only */}
+            <div className="hidden lg:block">
+              <h4 className="font-toma font-black text-white text-2xl mb-4">
+                Follow Us
+              </h4>
+              <div className="flex items-center gap-5 order-1 md:order-2">
                 <a
-                  key={social.label}
-                  href={social.href}
+                  href="https://www.instagram.com/gomzi.supplement__rag"
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={social.label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border-2 text-text-light transition-colors hover:border-primary hover:text-primary"
+                  className="transition-opacity cursor-pointer hover:opacity-70"
+                  style={{ color: "#ffffff" }}
                 >
-                  <Icon size={18} />
+                  <FaInstagram size={20} />
                 </a>
-              );
-            })}
+
+                <a
+                  href="https://www.facebook.com/profile.php?id=61590460356446"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-opacity cursor-pointer hover:opacity-70"
+                  style={{ color: "#ffffff" }}
+                >
+                  <FaFacebookF size={20} />
+                </a>
+              </div>
+
+              <h4 className="font-toma font-black text-white text-2xl mb-4 mt-10">
+                We Accept
+              </h4>
+              <img
+                src="/images/Payment_icons.avif"
+                alt="Accepted payment methods"
+                className="max-w-full h-auto object-contain"
+              />
+            </div>
           </div>
 
-          {/* Accepted payment methods */}
-          <div className="mt-6">
-            <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-text-light">
-              <Lock className="h-3.5 w-3.5 text-success" />
-              100% Secure Payments
+          {/* Payment - Tablet */}
+          <div className="md:block lg:hidden mt-8 md:mt-10">
+            <h4 className="font-toma font-black text-white text-2xl mb-4">
+              Follow Us
+            </h4>
+            <div className="flex items-center gap-5 order-1 md:order-2">
+              <a
+                href="https://www.instagram.com/gomzi.supplement__rag/"
+                target="_blank"
+                rel="noreferrer"
+                className="transition-opacity cursor-pointer hover:opacity-70"
+                style={{ color: "#ffffff" }}
+              >
+                <FaInstagram size={20} />
+              </a>
+              <a
+                href="https://www.facebook.com/profile.php?id=61590460356446"
+                target="_blank"
+                rel="noreferrer"
+                className="transition-opacity cursor-pointer hover:opacity-70"
+                style={{ color: "#ffffff" }}
+              >
+                <FaFacebookF size={20} />
+              </a>
             </div>
+
+            <h4 className="font-toma font-black text-white text-2xl mb-4 mt-4">
+              We Accept
+            </h4>
             <img
               src="/images/Payment_icons.avif"
-              alt="Accepted payment methods: UPI, Visa, Mastercard, NetBanking"
-              className="h-auto w-full max-w-[220px] object-contain"
+              alt="Accepted payment methods"
+              className="max-w-full h-auto object-contain"
             />
           </div>
         </div>
 
-        <div className="lg:ml-auto max-w-sm">
-          <h4 className="mb-4 text-base font-semibold text-[#2b2b2b]">
-            Get in touch
-          </h4>
-          <div className="space-y-2.5 text-sm text-text-light">
-            <p className="flex items-center gap-2">
-              <Phone className="h-4 w-4 text-primary" />
-              <a href="tel:+919875270200" className="hover:text-primary">
-                +91 98752 70200
-              </a>
+        {/* Mobile Accordion */}
+        <div className="sm:hidden mb-14 space-y-4">
+          <div>
+            <img
+              src="/images/whitelogo.webp"
+              alt="Gomzi Supplement by RAG"
+              className="h-12 mb-5"
+            />
+
+            <p className="text-gray-400 leading-7 mb-6">
+              Premium Sports Nutrition Supplements manufactured with
+              international quality standards.
             </p>
-            <p className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-primary" />
-              <a
-                href="mailto:info@ragnutrition.com"
-                className="hover:text-primary"
+
+            <div className="space-y-4 text-white">
+              <div className="flex items-start gap-3">
+                <Phone size={18} />
+                <a
+                  href="tel:+919875270200"
+                  className="hover:underline"
+                  style={{ color: "#ffffff" }}
+                >
+                  +91 98752 70200
+                </a>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Mail size={18} />
+                <a
+                  href="mailto:info@ragnutrition.com"
+                  className="hover:underline"
+                  style={{ color: "#ffffff" }}
+                >
+                  info@ragnutrition.com
+                </a>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <MapPin size={30} />
+                <span>
+                  G-23-TIME SQUARE, Gaurav Path Road, TP 10 Main Rd, opp. Shree
+                  Bharti Residency, Surat, Gujarat 394510
+                </span>
+              </div>
+            </div>
+          </div>
+          {/* Shop */}
+          <div className="border-b" style={{ borderColor: "#1f1f1f" }}>
+            <button
+              onClick={() => toggleAccordion("shop")}
+              className="w-full flex items-center justify-between cursor-pointer py-4"
+            >
+              <h4 className="font-toma font-black text-white text-xl">Shop</h4>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                className={`transition-transform duration-300 ${openAccordion === "shop" ? "rotate-180" : ""}`}
               >
-                info@ragnutrition.com
-              </a>
-            </p>
-            <p className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-              <span>
-                G-23 Time Square, Gaurav Path Road, Surat, Gujarat 394510
-              </span>
-            </p>
-            <p className="flex flex-wrap gap-2 pt-2">
-              {["FSSAI Certified", "ISO 22000:2018", "100% Dope-Free"].map(
-                (label) => (
-                  <span key={label} className="badge">
-                    <CheckCircle2 className="h-3 w-3 text-success" />
-                    {label}
-                  </span>
-                )
-              )}
-            </p>
+                <path
+                  d="M5 7.5L10 12.5L15 7.5"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${openAccordion === "shop" ? "max-h-96 pb-4" : "max-h-0"}`}
+            >
+              <ul className="space-y-3 cursor-pointer">
+                {shopLinks.map(({ label, path }) => (
+                  <li key={label} onClick={() => navigate(path)}>
+                    <button
+                      onClick={() => navigate(path)}
+                      className="font-modelica text-base hover:text-white cursor-pointer transition-colors text-left"
+                      style={{ color: "#ffffff" }}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Gomzi Supplement by RAG */}
+          <div className="border-b" style={{ borderColor: "#1f1f1f" }}>
+            <button
+              onClick={() => toggleAccordion("nara")}
+              className="w-full flex items-center cursor-pointer justify-between py-4"
+            >
+              <h4 className="font-toma font-black text-white text-xl">
+                Gomzi Supplement by RAG
+              </h4>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                className={`transition-transform duration-300 ${openAccordion === "nara" ? "rotate-180" : ""}`}
+              >
+                <path
+                  d="M5 7.5L10 12.5L15 7.5"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${openAccordion === "nara" ? "max-h-96 pb-4" : "max-h-0"}`}
+            >
+              <ul className="space-y-3 cursor-pointer">
+                {ourStoryLinks.map(({ label, path }) => (
+                  <li key={label} onClick={() => navigate(path)}>
+                    <button
+                      onClick={() => navigate(path)}
+                      className="font-modelica text-base cursor-pointer hover:text-white transition-colors text-left"
+                      style={{ color: "#ffffff" }}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Help */}
+          <div className="border-b" style={{ borderColor: "#1f1f1f" }}>
+            <button
+              onClick={() => toggleAccordion("help")}
+              className="w-full flex items-center cursor-pointer justify-between py-4"
+            >
+              <h4 className="font-toma font-black text-white text-xl">Help</h4>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                className={`transition-transform duration-300 ${openAccordion === "help" ? "rotate-180" : ""}`}
+              >
+                <path
+                  d="M5 7.5L10 12.5L15 7.5"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${openAccordion === "help" ? "max-h-96 pb-4" : "max-h-0"}`}
+            >
+              <ul className="space-y-3 cursor-pointer">
+                {helpLinks.map(({ label, path }) => (
+                  <li key={label} onClick={() => navigate(path)}>
+                    <button
+                      onClick={() => navigate(path)}
+                      className="font-modelica text-base hover:text-white cursor-pointer transition-colors text-left"
+                      style={{ color: "#ffffff" }}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Payment - Mobile */}
+          <div className="pt-4">
+            <img
+              src="/images/Payment_icons_mobile.png"
+              alt="Accepted payment methods"
+              className="max-w-full h-auto object-contain"
+            />
           </div>
         </div>
-      </div>
-
-      {/* ── BOTTOM BAR ── */}
-      <div className="bg-bg-footer-bar">
-        <div className="max-w-[1170px] mx-auto px-4 md:px-0 py-3 text-center">
-          <p className="text-sm text-[#212121]">
-            Copyright © 2026, gomzi-supplement.com
-          </p>
+        <div
+          className="flex items-center border-t justify-center pt-6"
+          style={{ borderColor: "#1f1f1f" }}
+        >
+          <div
+            className="flex flex-col items-center cursor-pointer"
+            onClick={() => navigate("/")}
+          >
+            <p className="text-white">
+              @2026 Gomzi Supplement by RAG. All Rights Reserved
+            </p>
+          </div>
         </div>
       </div>
     </footer>

@@ -80,7 +80,7 @@ export default function ScientificallyProvenproductdetail() {
             >
               {/* Heading */}
               <h2
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-black"
+                className="font-toma text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-black"
                 style={{ lineHeight: "1.15", letterSpacing: "0.3px" }}
               >
                 Scientifically proven Swiss made Resveratrol
@@ -88,7 +88,7 @@ export default function ScientificallyProvenproductdetail() {
 
               {/* Description */}
               <p
-                className="text-white/80 text-sm sm:text-base md:text-base lg:text-base"
+                className="font-modelica text-white/80 text-sm sm:text-base md:text-base lg:text-base"
                 style={{ lineHeight: "1.7" }}
               >
                 Contains Veri-te™ 125 mg of trans resveratrol made in
@@ -113,7 +113,7 @@ export default function ScientificallyProvenproductdetail() {
                       alt="molecule"
                       className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 object-contain flex-shrink-0"
                     />
-                    <span className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-medium">
+                    <span className="font-modelica text-white text-sm sm:text-base md:text-lg lg:text-xl font-medium">
                       {point}
                     </span>
                   </li>
@@ -127,11 +127,11 @@ export default function ScientificallyProvenproductdetail() {
                     w-full
                     px-10 py-4
                     rounded-xl
-                    font-semibold
+                    font-modelica font-semibold
                     text-[#0a0a0a] text-sm sm:text-base
                     transition-all duration-200 hover:opacity-90
                   "
-                  style={{ background: "#95442c" }}
+                  style={{ background: "var(--color-primary)" }}
                 >
                   Try now
                 </button>
@@ -140,7 +140,7 @@ export default function ScientificallyProvenproductdetail() {
               {/* Sources link */}
               <a
                 href="#"
-                className="text-white text-xs underline underline-offset-2 hover:text-white/60 transition-colors w-fit"
+                className="font-modelica text-white text-xs underline underline-offset-2 hover:text-white/60 transition-colors w-fit"
               >
                 Sources: scientific evidence
               </a>

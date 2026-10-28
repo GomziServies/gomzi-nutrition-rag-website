@@ -4,7 +4,6 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductCard from "../common/ProductCard";
-import { ProductCardSkeleton } from "../common/SkeletonLoaders";
 
 export default function ProductCarouselSection({
   title,
@@ -23,11 +22,11 @@ export default function ProductCarouselSection({
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-10">
       <div className="flex items-end justify-between mb-5">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-text">
+          <h2 className="font-toma text-xl sm:text-2xl font-bold text-text">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-sm text-text-light mt-1">
+            <p className="font-modelica text-sm text-text-light mt-1">
               {subtitle}
             </p>
           )}
@@ -70,6 +69,26 @@ export default function ProductCarouselSection({
               </SwiperSlide>
             ))}
       </Swiper>
+    </div>
+  );
+}
+
+function ProductCardSkeleton() {
+  return (
+    <div className="animate-pulse rounded-2xl border border-gray-200 overflow-hidden bg-white">
+      <div className="aspect-square bg-gray-200" />
+
+      <div className="p-4">
+        <div className="h-4 w-3/4 bg-gray-200 rounded mb-3" />
+
+        <div className="h-3 w-full bg-gray-200 rounded mb-2" />
+        <div className="h-3 w-2/3 bg-gray-200 rounded mb-4" />
+
+        <div className="flex justify-between items-center">
+          <div className="h-5 w-20 bg-gray-200 rounded" />
+          <div className="h-9 w-9 rounded-full bg-gray-200" />
+        </div>
+      </div>
     </div>
   );
 }

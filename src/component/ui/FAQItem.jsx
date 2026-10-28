@@ -1,92 +1,41 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Plus, Minus, CheckCircle2, ArrowRight } from "lucide-react";
+import { useId, useState } from "react";
 
 const faqs = [
   {
-    id: 1,
-    tag: "100% Lab Tested",
     question: "Is your protein powder third-party tested?",
     answer:
-      "Yes, absolutely. Every single batch undergoes stringent testing for purity, heavy metals, microbial safety, and protein content. We publish verified batch test reports transparently so you know exactly what is inside your tub.",
+      "Yes. Every batch undergoes quality testing to ensure safety and consistency.",
   },
   {
-    id: 2,
-    tag: "Zero Bloating",
     question: "Is your whey protein suitable for beginners?",
     answer:
-      "100% yes. Our whey formulas are ultra-filtered and fortified with DigeZyme® multi-enzyme complex, making them exceptionally easy on sensitive stomachs with zero bloating or heaviness, even if you are brand new to fitness supplements.",
+      "Yes. It is designed for both beginners and experienced fitness enthusiasts.",
   },
   {
-    id: 3,
-    tag: "Full Transparency",
-    question: "What makes Gomzi protein different from others?",
+    question: "What makes your protein different?",
     answer:
-      "We never use proprietary blends, amino-spiking, or artificial fillers. You get 100% label transparency, clinically backed raw ingredients, and full macro honesty manufactured in FSSAI-certified state-of-the-art facilities.",
+      "We focus on transparent labeling, premium ingredients, and science-backed formulations.",
   },
   {
-    id: 4,
-    tag: "Daily Vitality",
-    question: "Can I take protein every day, including rest days?",
+    question: "Can I take protein every day?",
     answer:
-      "Yes. Your muscles repair and rebuild during recovery, primarily on rest days. Consistent daily protein intake ensures your body maintains a positive nitrogen balance for continuous muscle recovery and daily metabolic wellness.",
+      "Yes. Daily protein intake can support muscle recovery and overall nutrition goals.",
   },
   {
-    id: 5,
-    tag: "Plant-Based & Vegan",
-    question: "Is your plant protein 100% vegan and dairy-free?",
+    question: "Is your plant protein vegan?",
     answer:
-      "Yes. Our plant protein is crafted from premium pea and brown rice isolates, providing a complete 9-essential-amino-acid profile that is 100% vegan, naturally dairy-free, hypoallergenic, and non-GMO with delicious natural flavoring.",
+      "Yes. Our plant-based protein formulations are suitable for vegan lifestyles.",
   },
 ];
 
-function FAQItemCard({ faq, isOpen, onToggle }) {
-  return (
-    <div
-      onClick={onToggle}
-      className={`group relative overflow-hidden rounded-2xl transition-all duration-300 cursor-pointer border ${
-        isOpen
-          ? "border-amber-400/40 bg-gradient-to-br from-[#fdfbf9] to-white shadow-md p-4 sm:p-5"
-          : "border-primary-border/80 bg-white hover:border-amber-400/40 hover:bg-primary-light/40 p-4 sm:p-4.5 shadow-2xs"
-      }`}
-    >
-      {/* Subtle moving sheen highlight across FAQ card on hover */}
-
-      <div className="relative z-10 w-full flex items-center justify-between gap-4 text-left">
-        <h3
-          className={`text-base sm:text-lg font-bold leading-snug transition-colors pr-2 ${
-            isOpen ? "text-primary" : "text-gray-900 group-hover:text-primary"
-          }`}
-        >
-          {faq.question}
-        </h3>
-
-        <span
-          className={`group/btn relative overflow-hidden flex-shrink-0 w-8.5 h-8.5 rounded-full flex items-center justify-center transition-all duration-300 ${
-            isOpen
-              ? "btn-gradient border border-amber-400/30 text-white rotate-180 shadow-md shadow-primary/25"
-              : "bg-primary-light group-hover:bg-gradient-to-r group-hover:from-primary group-hover:via-primary group-hover:to-primary-hover group-hover:border-amber-400/30 group-hover:text-white text-primary border border-primary-border"
-          }`}
-        >
-          <span className="relative z-10">
-            {isOpen ? <Minus size={15} className="text-amber-100" /> : <Plus size={15} />}
-          </span>
-        </span>
-      </div>
-
-      {isOpen && (
-        <div className="pt-3.5 mt-3.5 border-t border-primary-border/60">
-          <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
-            {faq.answer}
-          </p>
-          <div className="mt-3 flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
-            <CheckCircle2 size={13} className="text-emerald-600" />
-            <span>{faq.tag}</span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+function FAQItem({ question, answer, isOpen, onClick }) {
+  const id = useId();
+  return <div className="border-b border-border">
+    <h3><button id={`${id}-question`} aria-expanded={isOpen} aria-controls={`${id}-answer`} onClick={onClick} className="w-full flex items-center justify-between gap-4 py-4 text-left text-sm sm:text-base font-semibold">
+      {question}<span aria-hidden="true" className="text-xl text-primary shrink-0">{isOpen ? "−" : "+"}</span>
+    </button></h3>
+    <div hidden={!isOpen} id={`${id}-answer`} role="region" aria-labelledby={`${id}-question`} className="pb-5 text-sm text-text-light leading-7">{answer}</div>
+  </div>;
 }
 
 export default function FAQSection() {
@@ -97,102 +46,51 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="w-full bg-bg-cream py-14 sm:py-20 lg:py-24 border-t border-primary-border/60 overflow-hidden">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-start">
-          {/* ── LEFT: FAQ Accordion ── */}
-          <div className="w-full lg:col-span-7 flex flex-col">
-            {/* Top Eyebrow */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3.5 w-fit">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-black uppercase tracking-widest text-primary">
-                Frequently Asked Questions
-              </span>
-            </div>
-
-            {/* Heading */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-950 tracking-tight leading-tight">
-              Don't think twice, your{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-700">
-                body will thank you!
+    <section className="w-full bg-light py-10 md:py-14">
+      {/* Properly centered container */}
+      <div className="mx-auto w-full max-w-[var(--container-width)] px-5 sm:px-8 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-start">
+          {/* LEFT */}
+          <div className="w-full">
+            <h2
+              className="font-toma font-black text-text text-3xl sm:text-4xl lg:text-4xl xl:text-4xl mb-5 leading-tight"
+              style={{ letterSpacing: "0.3px" }}
+            >
+              Don't think twice, your
+              <br />
+              body will thank you
+              <span className="italic font-bold" style={{ color: "var(--color-primary)" }}>
+                !
               </span>
             </h2>
 
-            {/* Subtitle */}
-            <p className="mt-3.5 text-sm sm:text-base text-gray-600 leading-relaxed font-normal mb-8">
-              Got questions? We've got answers. Explore everything you need to
-              know about Gomzi Nutrition, our certified purity standards, and
-              how our science-backed formulas fuel your fitness journey.
+            <p className="font-modelica text-text-black text-sm sm:text-base leading-relaxed mb-6">
+              Got questions? We've got answers! Discover everything you need to
+              know About Us Health superfoods and how they can fuel your
+              wellness journey.
             </p>
 
-            {/* FAQ Cards */}
-            <div className="flex flex-col gap-3">
+            <div>
               {faqs.map((faq, i) => (
-                <FAQItemCard
-                  key={faq.id}
-                  faq={faq}
+                <FAQItem
+                  key={i}
+                  question={faq.question}
+                  answer={faq.answer}
                   isOpen={openIndex === i}
-                  onToggle={() => toggle(i)}
+                  onClick={() => toggle(i)}
                 />
               ))}
             </div>
-
-            {/* Micro Support CTA */}
-            <div className="mt-6 pt-5 border-t border-primary-border/60 flex items-center justify-between text-xs sm:text-sm text-gray-500 font-medium">
-              <span>Still have doubts or need formula advice?</span>
-              <Link
-                to="/contact-us"
-                className="text-primary font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
-              >
-                <span>Ask Our Experts</span>
-                <ArrowRight size={14} />
-              </Link>
-            </div>
           </div>
 
-          {/* ── RIGHT: Athlete Showcase Frame ── */}
-          <div className="w-full lg:col-span-5 lg:sticky lg:top-24 flex items-center justify-center">
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-primary-border group bg-gradient-to-b from-[#1c120c] to-[#120a06]">
-              {/* Main Photo */}
+          {/* RIGHT */}
+          <div className="w-full lg:sticky lg:top-48">
+            <div className="w-full overflow-hidden rounded-[16px]">
               <img
                 src="/images/about-us-photo.webp"
-                alt="Gomzi Supplement Athlete Community"
-                className="block w-full h-[420px] sm:h-[480px] lg:h-[540px] object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/images/product-placeholder.webp";
-                }}
+                alt="Gomzi Supplement by RAG products"
+                className="block w-full h-auto object-cover object-center"
               />
-
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15 pointer-events-none" />
-
-              {/* Top Floating Badge */}
-              <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-white/80 shadow-md text-xs font-black text-gray-950">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Certified Pure Nutrition</span>
-              </div>
-
-              {/* Bottom Social Proof Pill */}
-              <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 sm:p-4 border border-white/80 shadow-2xl flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="group/avatar relative overflow-hidden w-10 h-10 rounded-full btn-gradient border border-amber-400/30 text-amber-200 flex items-center justify-center font-black text-sm flex-shrink-0 shadow-md shadow-primary/25 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
-                    <span className="relative z-10">★</span>
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-xs sm:text-sm font-black text-gray-950 leading-tight truncate">
-                      Real Athletes. Real Results.
-                    </span>
-                    <span className="text-[11px] text-gray-500 font-medium truncate mt-0.5">
-                      Trusted by 50,000+ fitness enthusiasts across India
-                    </span>
-                  </div>
-                </div>
-
-                <span className="hidden sm:inline-flex items-center text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex-shrink-0">
-                  Verified
-                </span>
-              </div>
             </div>
           </div>
         </div>

@@ -3,7 +3,6 @@ import useAuth from "./useAuth";
 import useCart from "./useCart";
 import { createOrder } from "../services/order.service";
 import { successToast, errorToast } from "../utils/toast";
-import { clearCart } from "../services/cartStorage.service";
 
 const useCheckout = (coupon) => {
   const { user } = useAuth();
@@ -41,7 +40,7 @@ const useCheckout = (coupon) => {
       country: user.address?.country || "India",
       pin_code: user.address?.pin_code || "",
     }));
-  }, [user]);
+  }, [user, coupon?._id]);
 
   const updateField = (field, value) => {
     setFormData((prev) => ({
@@ -67,6 +66,26 @@ const useCheckout = (coupon) => {
         return;
       }
 
+      const requiredFields = [
+        ["email", "Email"],
+        ["first_name", "First name"],
+        ["last_name", "Last name"],
+        ["mobile", "Phone"],
+        ["address_line_1", "Address"],
+        ["city", "City"],
+        ["state", "State"],
+        ["pin_code", "Postal code"],
+      ];
+      const missing = requiredFields.find(([field]) => !String(formData[field] || "").trim());
+      if (missing) {
+        errorToast(`${missing[1]} is required`);
+        return { success: false };
+      }
+      if (!/^\d{6}$/.test(String(formData.pin_code).trim())) {
+        errorToast("Enter a valid 6-digit postal code");
+        return { success: false };
+      }
+
       const payload = {
         payment_mode: formData.payment_mode,
 
@@ -88,7 +107,12 @@ const useCheckout = (coupon) => {
           }),
         })),
       };
-      const coupon = JSON.parse(localStorage.getItem("checkout_coupon"));
+      let coupon = null;
+      try {
+        coupon = JSON.parse(localStorage.getItem("checkout_coupon"));
+      } catch {
+        localStorage.removeItem("checkout_coupon");
+      }
 
       payload.coupon_id = coupon?._id ? [coupon._id] : [];
       const result = await createOrder(payload);
@@ -99,17 +123,12 @@ const useCheckout = (coupon) => {
         };
       }
       localStorage.removeItem("checkout_coupon");
-      try {
-        await clearCart();
-      } catch (clearErr) {
-        console.warn("Cart clearing error:", clearErr);
-      }
       successToast(result.message);
       return {
         success: true,
         data: result.data,
       };
-    } catch (error) {
+    } catch {
       errorToast("Something went wrong");
 
       return {

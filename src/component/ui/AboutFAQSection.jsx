@@ -40,7 +40,7 @@ export default function AboutFAQSection() {
         {/* FAQ */}
 
         <div>
-          <span className="uppercase tracking-[5px] text-xs font-semibold text-primary">
+          <span className="uppercase tracking-[5px] text-xs font-semibold text-[#B66B1E]">
             Frequently Asked Questions
           </span>
 
@@ -48,9 +48,9 @@ export default function AboutFAQSection() {
             Quick answers
           </h2>
 
-          <div className="mt-10 border-t border-[#dbdee9]">
+          <div className="mt-10 border-t border-[#E7D9C8]">
             {faqs.map((item, index) => (
-              <div key={item.question} className="border-b border-[#dbdee9]">
+              <div key={item.question} className="border-b border-[#E7D9C8]">
                 <button
                   onClick={() => setOpen(open === index ? null : index)}
                   className="w-full flex justify-between items-center gap-5 py-6 text-left"
@@ -59,15 +59,7 @@ export default function AboutFAQSection() {
                     {item.question}
                   </h3>
 
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 relative overflow-hidden ${
-                      open === index
-                        ? "bg-gradient-to-r from-primary to-primary-hover text-white border border-amber-400/30 shadow-xs rotate-180"
-                        : "bg-gray-100 text-gray-500 hover:bg-primary-border hover:text-primary"
-                    }`}
-                  >
-                    {open === index ? <Minus size={18} /> : <Plus size={18} />}
-                  </div>
+                  {open === index ? <Minus size={20} /> : <Plus size={20} />}
                 </button>
 
                 <div
@@ -86,8 +78,8 @@ export default function AboutFAQSection() {
 
         {/* Bottom Content */}
 
-        <div className="mt-24 rounded-[30px] bg-[#F8F5F0] border border-[#dbdee9] p-8 md:p-10 lg:p-14">
-          <span className="uppercase tracking-[5px] text-xs font-semibold text-primary">
+        <div className="mt-24 rounded-[30px] bg-[#F8F5F0] border border-[#E7D9C8] p-8 md:p-10 lg:p-14">
+          <span className="uppercase tracking-[5px] text-xs font-semibold text-[#B66B1E]">
             About Gomzi Supplement
           </span>
 

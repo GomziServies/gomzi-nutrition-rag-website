@@ -11,7 +11,7 @@ const nutritionBenefits = [
 export default function StorySection() {
   return (
     <section className="w-full bg-bg py-10 sm:py-14 md:py-16 lg:py-20">
-      <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10 xl:px-16">
+      <div className="site-container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
           {/* ================= LEFT CONTENT ================= */}
           <div className="w-full max-w-[680px] mx-auto lg:mx-0">
@@ -24,14 +24,14 @@ export default function StorySection() {
             <div className="lg:text-left">
               <h2
                 className="
-                 
+                  font-toma
                   font-black
-                  text-text
-                  text-[30px]
-                  sm:text-[36px]
-                  md:text-[42px]
-                  lg:text-[44px]
-                  xl:text-[48px]
+                  text-text-black
+                  text-[24px]
+                  sm:text-[30px]
+                  md:text-[32px]
+                  lg:text-[36px]
+                  xl:text-[36px]
                   leading-[1.1]
                   tracking-tight
                 "
@@ -45,8 +45,8 @@ export default function StorySection() {
               className="
                 mt-5
                 sm:mt-6
-               
-                text-text
+                font-modelica
+                text-text-black
                 text-[15px]
                 sm:text-[16px]
                 md:text-[17px]
@@ -94,9 +94,9 @@ export default function StorySection() {
                   py-3
                   sm:py-4
                   rounded-[10px]
-                  bg-[#95442c]
+                  bg-primary
                   text-white
-                 
+                  font-toma
                   font-black
                   text-[14px]
                   sm:text-[15px]
@@ -157,7 +157,7 @@ function CheckListItem({ children }) {
         flex
         items-start
         gap-3
-       
+        font-modelica
         text-[15px]
         sm:text-[16px]
         md:text-[17px]
