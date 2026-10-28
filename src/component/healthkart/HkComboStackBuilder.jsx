@@ -137,13 +137,13 @@ export default function HkComboStackBuilder() {
   return (
     <section className="bg-light border-y border-border py-10 sm:py-14">
       <div className="max-w-[1280px] mx-auto px-4">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-7">
+        <div className="flex flex-col gap-4 mb-7">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-2">Better together</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-1.5">Better together</p>
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-text">Your routine. Your stack.</h2>
-            <p className="text-sm text-stone-500 mt-2">Pick the essentials that fit your training. Add them in one step.</p>
+            <p className="text-sm text-stone-500 mt-1">Pick the essentials that fit your training. Add them in one step.</p>
           </div>
-          <div role="group" aria-label="Choose your stack" className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-nowrap py-1">
+          <div role="group" aria-label="Choose your stack" className="flex items-center gap-2.5 overflow-x-hidden flex-nowrap py-1">
             {STACKS.map(stack => (
               <button
                 type="button"
@@ -151,7 +151,7 @@ export default function HkComboStackBuilder() {
                 disabled={adding}
                 aria-pressed={active === stack.id}
                 onClick={() => setActive(stack.id)}
-                className={`rounded-full px-3.5 sm:px-4 py-2 text-xs font-bold border transition-colors whitespace-nowrap shrink-0 ${active === stack.id ? "bg-primary text-white border-primary shadow-sm" : "bg-white border-border text-stone-600 hover:border-primary"}`}
+                className={`rounded-full px-4 py-2 text-xs font-bold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${active === stack.id ? "bg-primary text-white border-primary shadow-sm" : "bg-white border-border text-stone-600 hover:border-primary"}`}
               >
                 {stack.name}
               </button>
