@@ -2854,12 +2854,19 @@
       "type": "text",
       "default": "Add"
     },
-    "component.healthkart.HkProductCardActions.text.9c0e74e6c04b": {
+    "component.healthkart.HkProductCardActions.text.64e3cb0e4960": {
       "source": "src/component/healthkart/HkProductCardActions.jsx",
       "group": "Home / Product Card Actions",
-      "label": "Buy now",
+      "label": "Buy",
       "type": "text",
-      "default": "Buy now"
+      "default": "Buy"
+    },
+    "component.healthkart.HkProductCardActions.text.4ea6cf4a6d30": {
+      "source": "src/component/healthkart/HkProductCardActions.jsx",
+      "group": "Home / Product Card Actions",
+      "label": "now",
+      "type": "text",
+      "default": " now"
     },
     "component.healthkart.HkSeoAccordion.section.a42e815c58f3": {
       "source": "src/component/healthkart/HkSeoAccordion.jsx",

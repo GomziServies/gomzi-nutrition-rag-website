@@ -143,7 +143,7 @@ export default function HkComboStackBuilder() {
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-text">Your routine. Your stack.</h2>
             <p className="text-sm text-stone-500 mt-1">Pick the essentials that fit your training. Add them in one step.</p>
           </div>
-          <div role="group" aria-label="Choose your stack" className="flex items-center gap-2.5 overflow-x-hidden flex-nowrap py-1">
+          <div role="group" aria-label="Choose your stack" className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar scrollbar-hide scroll-smooth flex-nowrap py-1 -mx-4 px-4 sm:mx-0 sm:px-0">
             {STACKS.map(stack => (
               <button
                 type="button"
@@ -151,7 +151,7 @@ export default function HkComboStackBuilder() {
                 disabled={adding}
                 aria-pressed={active === stack.id}
                 onClick={() => setActive(stack.id)}
-                className={`rounded-full px-4 py-2 text-xs font-bold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${active === stack.id ? "bg-primary text-white border-primary shadow-sm" : "bg-white border-border text-stone-600 hover:border-primary"}`}
+                className={`rounded-full px-3.5 sm:px-4 py-2 text-xs font-bold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${active === stack.id ? "bg-primary text-white border-primary shadow-sm" : "bg-white border-border text-stone-600 hover:border-primary"}`}
               >
                 {stack.name}
               </button>
@@ -169,33 +169,58 @@ export default function HkComboStackBuilder() {
           </div>
         ) : (
           <div className="grid lg:grid-cols-[1fr_280px] gap-5">
-            <div className={`grid ${products.length <= 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"} gap-4`}>
+            <div
+              className={`grid ${products.length <= 2 ? "grid-cols-2" : "grid-cols-3"} gap-2 sm:gap-4`}
+            >
               {products.map((product, index) => (
-                <div key={product._id} className={`relative rounded-2xl border bg-white p-5 transition-colors ${selected.includes(product._id) ? "border-primary ring-1 ring-primary/20" : "border-border"}`}>
-                  <label className="flex items-center justify-between gap-2 text-xs text-stone-500 font-semibold cursor-pointer">
-                    <span>0{index + 1} / {product.displaySlotLabel || product.categories?.[0]}</span>
+                <div
+                  key={product._id}
+                  className={`relative rounded-xl sm:rounded-2xl border bg-white p-2 sm:p-5 transition-all flex flex-col justify-between ${
+                    selected.includes(product._id)
+                      ? "border-primary ring-1 ring-primary/20 shadow-xs"
+                      : "border-border bg-stone-50/50 opacity-60"
+                  }`}
+                >
+                  <label className="flex items-center justify-between gap-1 text-[9px] min-[360px]:text-[10px] sm:text-xs text-stone-500 font-semibold cursor-pointer">
+                    <span className="truncate font-bold">
+                      0{index + 1} / {product.displaySlotLabel || product.categories?.[0]}
+                    </span>
                     <input
                       type="checkbox"
                       disabled={adding}
                       checked={selected.includes(product._id)}
                       aria-label={`Include ${product.name}`}
-                      onChange={() => setSelected(previous => previous.includes(product._id) ? previous.filter(id => id !== product._id) : [...previous, product._id])}
-                      className="h-4 w-4 accent-primary rounded cursor-pointer"
+                      onChange={() =>
+                        setSelected(previous =>
+                          previous.includes(product._id)
+                            ? previous.filter(id => id !== product._id)
+                            : [...previous, product._id]
+                        )
+                      }
+                      className="h-3.5 w-3.5 sm:h-4 sm:w-4 accent-primary rounded cursor-pointer shrink-0"
                     />
                   </label>
-                  <Link to={`/product/${product.slug}`} className="block group">
-                    <img
-                      src={getProductImageUrl(product.displayImages)}
-                      alt={product.name}
-                      loading="lazy"
-                      className="h-36 w-full object-contain my-5 transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <h3 className="text-sm font-bold leading-relaxed line-clamp-2 min-h-10 text-text group-hover:text-primary transition-colors">
+                  <Link to={`/product/${product.slug}`} className="block group my-1 sm:my-3">
+                    <div className="w-full aspect-square sm:aspect-auto sm:h-36 bg-[#faf7f4] sm:bg-transparent rounded-lg sm:rounded-none p-1 sm:p-0 flex items-center justify-center overflow-hidden my-1 sm:my-3">
+                      <img
+                        src={getProductImageUrl(product.displayImages)}
+                        alt={product.name}
+                        loading="lazy"
+                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <h3 className="text-[10px] min-[360px]:text-[11px] sm:text-sm font-bold leading-tight sm:leading-relaxed line-clamp-2 min-h-[26px] sm:min-h-10 text-text group-hover:text-primary transition-colors">
                       {product.name}
                     </h3>
                   </Link>
-                  <p className="text-xs text-stone-500 truncate mt-2">{product.flavour || (product.company ? product.company : "")}</p>
-                  <p className="mt-3 text-lg font-black text-text">{money(product.discountPrice ?? product.price)}</p>
+                  <div className="mt-1 sm:mt-2">
+                    <p className="text-[9px] min-[360px]:text-[10px] sm:text-xs text-stone-400 sm:text-stone-500 truncate">
+                      {product.flavour || (product.company ? product.company : "")}
+                    </p>
+                    <p className="mt-1 sm:mt-3 text-xs min-[360px]:text-sm sm:text-lg font-black text-text">
+                      {money(product.discountPrice ?? product.price)}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>

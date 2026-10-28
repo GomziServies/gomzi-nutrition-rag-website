@@ -57,24 +57,29 @@ export default function HkProductCardActions({ product }) {
     event.preventDefault();
     await callback();
   };
-  const primary = "h-10 min-w-0 rounded-lg bg-primary px-1 text-white font-bold text-[10px] min-[400px]:text-[11px] sm:text-xs leading-none whitespace-nowrap flex items-center justify-center gap-1 disabled:opacity-50 transition-colors hover:bg-hover";
+  const baseBtn = "h-8 sm:h-9 min-w-0 rounded-full font-bold text-[10px] min-[380px]:text-[11px] sm:text-xs leading-none whitespace-nowrap flex items-center justify-center gap-1 tracking-tight disabled:opacity-50 transition-colors cursor-pointer";
+  const primary = `${baseBtn} bg-primary px-1.5 min-[380px]:px-2 text-white hover:bg-hover`;
+  const outline = `${baseBtn} border border-primary px-1.5 min-[380px]:px-2 text-primary hover:bg-[#fcf2ee]`;
+
   return (
-    <div className="mt-3 grid grid-cols-2 items-center gap-1.5 sm:gap-2" onClick={event => event.stopPropagation()} aria-busy={busy}>
+    <div className="mt-2.5 sm:mt-3 grid grid-cols-2 items-center gap-1 min-[380px]:gap-1.5 sm:gap-2" onClick={event => event.stopPropagation()} aria-busy={busy}>
       {quantity > 0 ? (
-        <div className={`${primary} justify-between`}>
-          <button type="button" disabled={busy} aria-label={`Remove one ${product.name}`} onClick={act(() => update(-1))} className="h-9 w-6 sm:w-8 shrink-0 flex items-center justify-center"><Minus size={12} /></button>
-          <span className="shrink-0" aria-live="polite">{busy ? <Loader2 size={12} className="animate-spin" /> : quantity}</span>
-          <button type="button" disabled={busy || unavailable} aria-label={`Add one ${product.name}`} onClick={act(() => update(1))} className="h-9 w-6 sm:w-8 shrink-0 flex items-center justify-center"><Plus size={12} /></button>
+        <div className={`${primary} justify-between px-1`}>
+          <button type="button" disabled={busy} aria-label={`Remove one ${product.name}`} onClick={act(() => update(-1))} className="h-full w-5 sm:w-6 shrink-0 flex items-center justify-center hover:opacity-80"><Minus size={11} /></button>
+          <span className="shrink-0 font-black text-xs" aria-live="polite">{busy ? <Loader2 size={11} className="animate-spin" /> : quantity}</span>
+          <button type="button" disabled={busy || unavailable} aria-label={`Add one ${product.name}`} onClick={act(() => update(1))} className="h-full w-5 sm:w-6 shrink-0 flex items-center justify-center hover:opacity-80"><Plus size={11} /></button>
         </div>
       ) : (
         <button type="button" disabled={busy || unavailable} onClick={act(() => update(1))} className={primary}>
-          {busy ? <Loader2 size={12} className="animate-spin shrink-0" /> : unavailable ? null : <ShoppingCart size={12} className="shrink-0" />}{unavailable ? unavailableLabel : "Add"}
+          {busy ? <Loader2 size={11} className="animate-spin shrink-0" /> : unavailable ? null : <ShoppingCart size={11} className="shrink-0" />}
+          <span>{unavailable ? unavailableLabel : "Add"}</span>
         </button>
       )}
       <button type="button" disabled={busy || unavailable} onClick={act(async () => {
         if (quantity > 0 || await update(1)) navigate("/cart");
-      })} className="h-10 min-w-0 rounded-lg border border-primary px-1 text-primary hover:bg-[#fcf2ee] text-[10px] min-[400px]:text-[11px] sm:text-xs leading-none whitespace-nowrap font-bold flex items-center justify-center gap-1 disabled:opacity-50">
-        <Zap size={12} className="shrink-0" /> <span>Buy now</span>
+      })} className={outline}>
+        <Zap size={11} className="shrink-0 text-primary" />
+        <span>Buy<span className="hidden min-[460px]:inline"> now</span></span>
       </button>
     </div>
   );
