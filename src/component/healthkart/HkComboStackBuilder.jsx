@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Loader2, Plus, ShoppingBag } from "lucide-react";
+import { ArrowRight, Check, Loader2, Plus, ShoppingBag, Sparkles } from "lucide-react";
 import { fetchProducts, addToCart } from "../../services/product.service";
 import { addGuestCartItem } from "../../services/cartStorage.service";
 import { fetchComboStacks, DEFAULT_STACKS } from "../../services/comboStack.service";
@@ -50,7 +50,7 @@ export default function HkComboStackBuilder() {
   const [adding, setAdding] = useState(false);
   const [retry, setRetry] = useState(0);
 
-  // Load dynamic combo stacks from API/Admin
+  // Load dynamic combo stacks with specific products and custom pricing
   useEffect(() => {
     let current = true;
     fetchComboStacks().then(remoteStacks => {
@@ -72,36 +72,54 @@ export default function HkComboStackBuilder() {
     setLoading(true);
     setError(false);
     const stack = stacks.find(item => item.id === active) || stacks[0];
-    if (!stack || !Array.isArray(stack.categories) || stack.categories.length === 0) {
+    if (!stack) {
       setLoading(false);
       setProducts([]);
       return;
     }
 
-    Promise.all(stack.categories.map(category => fetchCategoryProduct(category)))
-      .then(itemsRaw => {
-        if (!current) return;
-        const items = itemsRaw
-          .map((item, idx) => {
-            if (!item) return null;
-            return {
-              ...item,
-              displaySlotLabel: stack.labels?.[idx] || item.categories?.[0] || "Essential",
-            };
-          })
-          .filter(Boolean);
+    // 1. If stack defines SPECIFIC PRODUCTS, use them directly (no generic category lookup)
+    if (Array.isArray(stack.products) && stack.products.length > 0) {
+      const liveItems = stack.products.filter(p => p && p._id);
+      setProducts(liveItems);
+      setSelected(liveItems.map(item => item._id));
+      setError(liveItems.length === 0);
+      setLoading(false);
+      return () => {
+        current = false;
+      };
+    }
 
-        setProducts(items);
-        setSelected(items.map(item => item._id));
-        setError(items.length === 0);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (current) {
-          setError(true);
+    // 2. Fallback to category queries if specific products not yet configured
+    if (Array.isArray(stack.categories) && stack.categories.length > 0) {
+      Promise.all(stack.categories.map(category => fetchCategoryProduct(category)))
+        .then(itemsRaw => {
+          if (!current) return;
+          const items = itemsRaw
+            .map((item, idx) => {
+              if (!item) return null;
+              return {
+                ...item,
+                displaySlotLabel: stack.labels?.[idx] || item.categories?.[0] || "Essential",
+              };
+            })
+            .filter(Boolean);
+
+          setProducts(items);
+          setSelected(items.map(item => item._id));
+          setError(items.length === 0);
           setLoading(false);
-        }
-      });
+        })
+        .catch(() => {
+          if (current) {
+            setError(true);
+            setLoading(false);
+          }
+        });
+    } else {
+      setLoading(false);
+      setProducts([]);
+    }
 
     return () => {
       current = false;
@@ -112,8 +130,22 @@ export default function HkComboStackBuilder() {
 
   const currentStack = stacks.find(item => item.id === active) || stacks[0];
   const chosen = products.filter(product => selected.includes(product._id));
-  const total = chosen.reduce((sum, product) => sum + Number(product.discountPrice ?? product.price ?? 0), 0);
-  const mrp = chosen.reduce((sum, product) => sum + Number(product.price ?? 0), 0);
+  const isFullCombo = chosen.length === products.length && products.length > 0;
+
+  // Individual item totals
+  const individualSellingSum = chosen.reduce((sum, p) => sum + Number(p.discountPrice ?? p.price ?? 0), 0);
+  const individualMrpSum = chosen.reduce((sum, p) => sum + Number(p.price ?? 0), 0);
+
+  // Exact custom combo price set by Admin when full bundle is selected
+  const total = isFullCombo && currentStack?.comboPrice
+    ? Number(currentStack.comboPrice)
+    : individualSellingSum;
+
+  const mrp = isFullCombo && currentStack?.originalPrice
+    ? Number(currentStack.originalPrice)
+    : individualMrpSum;
+
+  const savings = mrp > total ? mrp - total : 0;
 
   const addStack = async () => {
     setAdding(true);
@@ -143,10 +175,17 @@ export default function HkComboStackBuilder() {
       <div className="max-w-[1280px] mx-auto px-4">
         <div className="flex flex-col gap-4 mb-7">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-1.5">Better together</p>
+            <div className="flex items-center gap-2 mb-1.5">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Better together</p>
+              {currentStack?.company && (
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-primary/10 text-primary">
+                  {currentStack.company}
+                </span>
+              )}
+            </div>
             <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-text">Your routine. Your stack.</h2>
             <p className="text-sm text-stone-500 mt-1">
-              {currentStack?.tagline || "Pick the essentials that fit your training. Add them in one step."}
+              {currentStack?.tagline || "Handpicked product essentials at special bundle pricing. Add them in one step."}
             </p>
           </div>
           <div
@@ -178,13 +217,13 @@ export default function HkComboStackBuilder() {
           </div>
         ) : error ? (
           <div className="p-10 rounded-2xl bg-white border border-border text-center">
-            <p className="text-stone-500 mb-4">We couldn't load a stack right now.</p>
+            <p className="text-stone-500 mb-4">We couldn't load this combo stack right now.</p>
             <button onClick={() => setRetry(value => value + 1)} className="text-primary underline">
               Try again
             </button>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-[1fr_280px] gap-5">
+          <div className="grid lg:grid-cols-[1fr_300px] gap-5">
             <div className={`grid ${products.length <= 2 ? "grid-cols-2" : "grid-cols-3"} gap-2 sm:gap-4`}>
               {products.map((product, index) => (
                 <div
@@ -197,7 +236,7 @@ export default function HkComboStackBuilder() {
                 >
                   <label className="flex items-center justify-between gap-1 text-[9px] min-[360px]:text-[10px] sm:text-xs text-stone-500 font-semibold cursor-pointer">
                     <span className="truncate font-bold">
-                      0{index + 1} / {product.displaySlotLabel || product.categories?.[0]}
+                      0{index + 1} / {product.displaySlotLabel || product.categories?.[0] || "Component"}
                     </span>
                     <input
                       type="checkbox"
@@ -239,26 +278,35 @@ export default function HkComboStackBuilder() {
               ))}
             </div>
             <div className="bg-[#f5ede6] rounded-2xl p-6 border border-border flex flex-col justify-center">
-              <ShoppingBag size={24} className="text-primary mb-4" />
-              <h3 className="font-bold text-lg text-text">Made for your routine</h3>
-              <p className="text-xs text-stone-500 mt-2 mb-6">
-                {chosen.length} {chosen.length === 1 ? "essential" : "essentials"} selected · one of each
+              <div className="flex items-center justify-between mb-4">
+                <ShoppingBag size={24} className="text-primary" />
+                {isFullCombo && currentStack?.comboPrice && (
+                  <span className="flex items-center gap-1 text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-primary text-white tracking-wider">
+                    <Sparkles size={11} /> Combo Deal
+                  </span>
+                )}
+              </div>
+              <h3 className="font-bold text-lg text-text">Special Bundle Offer</h3>
+              <p className="text-xs text-stone-500 mt-1 mb-5">
+                {chosen.length} {chosen.length === 1 ? "product" : "products"} selected · bundled together
               </p>
               <div className="flex items-baseline gap-2">
                 <span className="text-3xl font-black text-text">{money(total)}</span>
                 {mrp > total && <span className="line-through text-stone-400 text-sm">{money(mrp)}</span>}
               </div>
-              {mrp > total && (
-                <p className="mt-1 text-xs font-bold text-primary">Save {money(mrp - total)} on listed prices</p>
+              {savings > 0 && (
+                <p className="mt-1.5 text-xs font-bold text-primary">
+                  Save {money(savings)} with this combo offer!
+                </p>
               )}
               <button
                 type="button"
                 disabled={adding || chosen.length === 0}
                 onClick={addStack}
-                className="mt-6 w-full py-3 rounded-xl bg-primary text-white text-sm font-bold flex justify-center items-center gap-2 hover:bg-hover transition-colors disabled:opacity-50 cursor-pointer"
+                className="mt-6 w-full py-3 rounded-xl bg-primary text-white text-sm font-bold flex justify-center items-center gap-2 hover:bg-hover transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
               >
                 {adding ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-                Add selected to cart
+                Add Combo to Cart
               </button>
               <Link
                 to="/cart"
@@ -267,7 +315,7 @@ export default function HkComboStackBuilder() {
                 View your cart <ArrowRight size={14} />
               </Link>
               <p className="text-[11px] text-stone-500 mt-5 leading-relaxed">
-                Current catalog prices. Shipping and any eligible offers are confirmed at checkout.
+                Direct bundle pricing applied. Verified inventory guaranteed at checkout.
               </p>
             </div>
           </div>

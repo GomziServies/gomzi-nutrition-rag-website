@@ -5,53 +5,90 @@ export const DEFAULT_STACKS = [
     id: "muscle",
     name: "Muscle & recovery",
     tagline: "Post-workout repair & mass support",
+    company: "Gomzi Nutrition",
+    comboPrice: 4699,
+    originalPrice: 6099,
     categories: ["Whey Protein", "Creatine Monohydrate", "BCAA & Amino Acids"],
     labels: ["Whey Protein", "Creatine", "BCAA & Intra"],
+    products: [],
   },
   {
     id: "strength",
     name: "Workout essentials",
     tagline: "Pre-workout pump & intra hydration",
+    company: "Gomzi Nutrition",
+    comboPrice: 3899,
+    originalPrice: 5199,
     categories: ["Pre Workout", "Creatine Monohydrate", "BCAA & Amino Acids"],
     labels: ["Pre Workout", "Creatine", "BCAA & Intra"],
+    products: [],
   },
   {
     id: "shred",
     name: "Muscle & shred",
     tagline: "Lean definition with metabolic support",
+    company: "Gomzi Nutrition",
+    comboPrice: 6199,
+    originalPrice: 8500,
     categories: ["Whey Protein", "Wellness & Health", "BCAA & Amino Acids"],
     labels: ["Whey Protein", "Fat Burner", "BCAA & Intra"],
+    products: [],
   },
   {
     id: "bulk",
     name: "Build your bulk",
     tagline: "Maximum size & raw strength foundation",
+    company: "Gomzi Nutrition",
+    comboPrice: 4299,
+    originalPrice: 5699,
     categories: ["Whey Protein", "Creatine Monohydrate"],
     labels: ["Whey Protein", "Creatine"],
+    products: [],
   },
   {
     id: "endurance",
     name: "Fat burn & cardio",
     tagline: "Thermogenic energy & muscle preservation",
+    company: "Gomzi Nutrition",
+    comboPrice: 4199,
+    originalPrice: 5999,
     categories: ["Wellness & Health", "BCAA & Amino Acids"],
     labels: ["Fat Burner", "BCAA & Recovery"],
+    products: [],
   },
 ];
 
 export function normalizeComboStacks(data) {
   const list = Array.isArray(data?.comboStacks) ? data.comboStacks : [];
   const valid = list
-    .filter(stack => stack && stack.status !== false && typeof stack.name === "string" && stack.name.trim() && Array.isArray(stack.categories) && stack.categories.length > 0)
+    .filter(stack => stack && stack.status !== false && typeof stack.name === "string" && stack.name.trim())
     .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
     .map((stack, index) => {
-      const cleanCategories = stack.categories.map(c => String(c).trim()).filter(Boolean);
+      // Specific populated products
+      const specificProducts = Array.isArray(stack.products)
+        ? stack.products
+            .filter(item => item && item.product && typeof item.product === "object")
+            .map(item => ({
+              ...item.product,
+              displaySlotLabel: item.label || item.product.categories?.[0] || "Component",
+            }))
+        : [];
+
+      const cleanCategories = Array.isArray(stack.categories)
+        ? stack.categories.map(c => String(c).trim()).filter(Boolean)
+        : [];
       const cleanLabels = Array.isArray(stack.labels) && stack.labels.length === cleanCategories.length
         ? stack.labels.map(l => String(l).trim())
         : cleanCategories;
+
       return {
         id: stack._id || stack.id || `stack-${index}`,
         name: stack.name.trim(),
         tagline: stack.tagline || "",
+        company: stack.company || "Gomzi Nutrition",
+        comboPrice: Number(stack.comboPrice) > 0 ? Number(stack.comboPrice) : null,
+        originalPrice: Number(stack.originalPrice) > 0 ? Number(stack.originalPrice) : null,
+        products: specificProducts,
         categories: cleanCategories,
         labels: cleanLabels,
       };
@@ -69,4 +106,3 @@ export async function fetchComboStacks({ signal } = {}) {
     return DEFAULT_STACKS;
   }
 }
-
