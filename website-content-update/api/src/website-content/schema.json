@@ -1032,7 +1032,7 @@
       "type": "text",
       "default": "Save ₹"
     },
-    "component.healthkart.HkCategoryCircles.section.56f2f6918fec": {
+    "component.healthkart.HkCategoryCircles.section.7595dae9cde8": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
       "label": "Show section: Popular Categories",
@@ -1144,81 +1144,7 @@
       "type": "text",
       "default": "Save ₹"
     },
-    "component.healthkart.HkComboStackBuilder.data.STACKS": {
-      "source": "src/component/healthkart/HkComboStackBuilder.jsx",
-      "group": "Home / Combo Stack Builder",
-      "label": "STACKS",
-      "type": "collection",
-      "default": [
-        {
-          "id": "muscle",
-          "name": "Muscle & recovery",
-          "categories": [
-            "Whey Protein",
-            "Creatine Monohydrate",
-            "BCAA & Amino Acids"
-          ],
-          "labels": [
-            "Whey Protein",
-            "Creatine",
-            "BCAA & Intra"
-          ]
-        },
-        {
-          "id": "strength",
-          "name": "Workout essentials",
-          "categories": [
-            "Pre Workout",
-            "Creatine Monohydrate",
-            "BCAA & Amino Acids"
-          ],
-          "labels": [
-            "Pre Workout",
-            "Creatine",
-            "BCAA & Intra"
-          ]
-        },
-        {
-          "id": "shred",
-          "name": "Muscle & shred",
-          "categories": [
-            "Whey Protein",
-            "Wellness & Health",
-            "BCAA & Amino Acids"
-          ],
-          "labels": [
-            "Whey Protein",
-            "Fat Burner",
-            "BCAA & Intra"
-          ]
-        },
-        {
-          "id": "bulk",
-          "name": "Build your bulk",
-          "categories": [
-            "Whey Protein",
-            "Creatine Monohydrate"
-          ],
-          "labels": [
-            "Whey Protein",
-            "Creatine"
-          ]
-        },
-        {
-          "id": "endurance",
-          "name": "Fat burn & cardio",
-          "categories": [
-            "Wellness & Health",
-            "BCAA & Amino Acids"
-          ],
-          "labels": [
-            "Fat Burner",
-            "BCAA & Recovery"
-          ]
-        }
-      ]
-    },
-    "component.healthkart.HkComboStackBuilder.section.6cb88ea154fe": {
+    "component.healthkart.HkComboStackBuilder.section.ae35377f9c85": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
       "label": "Show section: Better together",
@@ -1239,12 +1165,12 @@
       "type": "text",
       "default": "Your routine. Your stack."
     },
-    "component.healthkart.HkComboStackBuilder.text.631ccb1ca9d8": {
+    "component.healthkart.HkComboStackBuilder.text.2dcd07149ead": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "Pick the essentials that fit your training. Add them in one step.",
+      "label": "Handpicked product essentials at special bundle pricing. Add them in one step.",
       "type": "text",
-      "default": "Pick the essentials that fit your training. Add them in one step."
+      "default": "Handpicked product essentials at special bundle pricing. Add them in one step."
     },
     "component.healthkart.HkComboStackBuilder.attribute-aria-label.a7529e49b8cb": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
@@ -1260,12 +1186,12 @@
       "type": "text",
       "default": "Finding your essentials…"
     },
-    "component.healthkart.HkComboStackBuilder.text.ddd6fa5583e1": {
+    "component.healthkart.HkComboStackBuilder.text.3404dddec3fc": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "We couldn't load a stack right now.",
+      "label": "We couldn't load this combo stack right now.",
       "type": "text",
-      "default": "We couldn't load a stack right now."
+      "default": "We couldn't load this combo stack right now."
     },
     "component.healthkart.HkComboStackBuilder.text.d8b8392e2c54": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
@@ -1281,33 +1207,47 @@
       "type": "text",
       "default": "0"
     },
-    "component.healthkart.HkComboStackBuilder.text.a2c55cbf91b6": {
+    "component.healthkart.HkComboStackBuilder.text.ce54f0e22dbb": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "Made for your routine",
+      "label": "Component",
       "type": "text",
-      "default": "Made for your routine"
+      "default": "Component"
     },
-    "component.healthkart.HkComboStackBuilder.text.a55751cecd11": {
+    "component.healthkart.HkComboStackBuilder.text.f9278035b36f": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "essential",
+      "label": "Combo Deal",
       "type": "text",
-      "default": "essential"
+      "default": " Combo Deal"
     },
-    "component.healthkart.HkComboStackBuilder.text.a153b9358c48": {
+    "component.healthkart.HkComboStackBuilder.text.d415a318107e": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "essentials",
+      "label": "Special Bundle Offer",
       "type": "text",
-      "default": "essentials"
+      "default": "Special Bundle Offer"
     },
-    "component.healthkart.HkComboStackBuilder.text.1f25f37393e9": {
+    "component.healthkart.HkComboStackBuilder.text.a8792157cb4f": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "selected · one of each",
+      "label": "product",
       "type": "text",
-      "default": " selected · one of each"
+      "default": "product"
+    },
+    "component.healthkart.HkComboStackBuilder.text.0a3e27b8ca81": {
+      "source": "src/component/healthkart/HkComboStackBuilder.jsx",
+      "group": "Home / Combo Stack Builder",
+      "label": "products",
+      "type": "text",
+      "default": "products"
+    },
+    "component.healthkart.HkComboStackBuilder.text.5c50f851404b": {
+      "source": "src/component/healthkart/HkComboStackBuilder.jsx",
+      "group": "Home / Combo Stack Builder",
+      "label": "selected · bundled together",
+      "type": "text",
+      "default": " selected · bundled together"
     },
     "component.healthkart.HkComboStackBuilder.text.f5f25c5769e6": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
@@ -1316,19 +1256,19 @@
       "type": "text",
       "default": "Save "
     },
-    "component.healthkart.HkComboStackBuilder.text.16a70ee2179c": {
+    "component.healthkart.HkComboStackBuilder.text.edfab678ecd3": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "on listed prices",
+      "label": "with this combo offer!",
       "type": "text",
-      "default": " on listed prices"
+      "default": " with this combo offer!"
     },
-    "component.healthkart.HkComboStackBuilder.text.460315a29f51": {
+    "component.healthkart.HkComboStackBuilder.text.ed2044e62d0d": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "Add selected to cart",
+      "label": "Add Combo to Cart",
       "type": "text",
-      "default": "Add selected to cart"
+      "default": "Add Combo to Cart"
     },
     "component.healthkart.HkComboStackBuilder.attribute-to.edf54f1e1e2f": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
@@ -1344,12 +1284,12 @@
       "type": "text",
       "default": "View your cart "
     },
-    "component.healthkart.HkComboStackBuilder.text.81075f378d99": {
+    "component.healthkart.HkComboStackBuilder.text.ddb4a2419cac": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "Current catalog prices. Shipping and any eligible offers are confirmed at checkout.",
+      "label": "Direct bundle pricing applied. Verified inventory guaranteed at checkout.",
       "type": "text",
-      "default": "Current catalog prices. Shipping and any eligible offers are confirmed at checkout."
+      "default": "Direct bundle pricing applied. Verified inventory guaranteed at checkout."
     },
     "component.healthkart.HkCustomerReviews.data.REVIEWS": {
       "source": "src/component/healthkart/HkCustomerReviews.jsx",
@@ -10233,13 +10173,6 @@
       "label": "Sign In",
       "type": "text",
       "default": "Sign In"
-    },
-    "pages.Auth.Login.text.4e1c522fa19c": {
-      "source": "src/pages/Auth/Login.jsx",
-      "group": "Account / Login",
-      "label": "Email address or phone number",
-      "type": "text",
-      "default": "Email address or phone number"
     },
     "pages.Auth.Login.attribute-aria-label.e380920438b2": {
       "source": "src/pages/Auth/Login.jsx",
