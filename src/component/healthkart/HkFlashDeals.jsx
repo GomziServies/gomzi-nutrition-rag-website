@@ -21,12 +21,14 @@ import {
   getProductBrand,
 } from "../../data/homeProducts";
 import HkProductCardActions from "./HkProductCardActions";
+import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 
 export default function HkFlashDeals() {
   const navigate = useNavigate();
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [deals, setDeals] = useState(FLASH_DEAL_PRODUCTS);
+  const [loading, setLoading] = useState(true);
 
   // Fetch live deals from backend with multi-brand diversification
   useEffect(() => {
@@ -44,6 +46,8 @@ export default function HkFlashDeals() {
         }
       } catch (err) {
         console.error("Error loading flash deals:", err);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
     loadDeals();
@@ -103,7 +107,7 @@ export default function HkFlashDeals() {
 
         {/* Products Swiper Slider (HealthKart card layout: 4 cards on desktop) */}
         <div className="mt-6 relative w-full">
-          <Swiper
+          {loading ? <ProductGridSkeleton label="Loading products" /> : <Swiper
             key={`deals-swiper-${deals.length}`}
             modules={[Navigation]}
             slidesPerView={4}
@@ -229,7 +233,7 @@ export default function HkFlashDeals() {
                 </SwiperSlide>
               );
             })}
-          </Swiper>
+          </Swiper>}
         </div>
       </div>
     </section>

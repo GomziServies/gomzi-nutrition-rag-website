@@ -4,7 +4,7 @@ import CheckoutForm from "../component/checkout/CheckoutForm";
 import useCart from "../hooks/useCart";
 import useCoupon from "../hooks/useCoupon";
 import useAuth from "../hooks/useAuth";
-import PageLoading from "../component/PageLoading";
+import { CheckoutSkeleton } from "../component/common/LoadingSkeletons";
 import { ShieldCheck, ArrowLeft } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 
@@ -15,7 +15,7 @@ export default function Checkouts() {
 
   const { coupon, saveCoupon, clearCoupon } = useCoupon();
 
-  if (loading || authLoading) return <PageLoading />;
+  if (loading || authLoading) return <CheckoutSkeleton />;
   if (!isAuthenticated) return <Navigate to="/login?redirect=/checkouts" replace />;
 
   if (!loading && items.length === 0) {

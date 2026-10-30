@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getProductImageUrl } from "../../data/homeProducts";
-import PageLoading from "../PageLoading";
+import { CartSkeleton } from "../common/LoadingSkeletons";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import LoginModal from "../auth/LoginModal";
@@ -51,7 +51,7 @@ export default function Cart() {
     navigate("/checkouts");
   };
   const saving = originalTotal - subtotal;
-  if (loading) return <PageLoading />;
+  if (loading) return <CartSkeleton />;
   if (error) return <section role="alert" className="max-w-xl mx-auto px-5 py-24 text-center"><h1 className="text-3xl font-bold mb-4">We couldn't load your cart</h1><p className="text-stone-500 mb-6">Your saved items are safe. Please try again.</p><button onClick={() => fetchCart()} className="rounded-xl bg-primary text-white px-6 py-3">Try again</button></section>;
   if (!items || items.length === 0) {
     return (

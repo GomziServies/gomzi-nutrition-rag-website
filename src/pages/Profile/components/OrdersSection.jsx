@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { getOrdersApi } from "../../../api/order.api";
 import { Link } from "react-router-dom";
+import { OrderListSkeleton } from "../../../component/common/LoadingSkeletons";
 
 function OrdersSection() {
   const [orders, setOrders] = useState([]);
@@ -35,7 +36,7 @@ function OrdersSection() {
 
       <div className="space-y-6">
         {loading ? (
-          <div role="status" className="site-surface p-10 text-center text-text-light">Loading your orders…</div>
+          <OrderListSkeleton />
         ) : error ? (
           <div role="alert" className="site-surface p-10 text-center">
             <p className="text-text-light">{error}</p>

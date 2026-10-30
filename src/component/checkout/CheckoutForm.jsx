@@ -1,6 +1,7 @@
 import { FiShoppingBag } from "react-icons/fi";
 import { useEffect, useMemo, useState, useId } from "react";
 import useCheckout from "../../hooks/useCheckout";
+import useCart from "../../hooks/useCart";
 import SearchableSelect from "../SearchableSelect";
 import { states, getCities } from "../../utils/indiaLocation";
 import { Link } from "react-router-dom";
@@ -25,9 +26,19 @@ const loadRazorpay = () => {
 };
 
 export default function CheckoutForm({ coupon }) {
+  const { clearCart } = useCart();
   const [payMethod, setPayMethod] = useState("ONLINE");
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
+  const finishCheckout = async (cartId, confirmationUrl) => {
+    try {
+      await clearCart(cartId);
+    } catch (error) {
+      console.error("Could not clear the completed checkout cart:", error);
+      errorToast("Your order succeeded, but we couldn't update the cart. Please refresh your cart.");
+    }
+    window.location.href = confirmationUrl;
+  };
   const cities = useMemo(() => selectedState ? getCities(selectedState.value) : [], [selectedState]);
   const { formData, updateField, placeOrder, loading, updatePaymentMode } =
     useCheckout(coupon);
@@ -260,9 +271,8 @@ export default function CheckoutForm({ coupon }) {
             const options = {
               ...result.data,
 
-              handler(response) {
-                window.location.href =
-                  "/thank-you?order_id=" + response.razorpay_order_id;
+              async handler(response) {
+                await finishCheckout(result.cartId, "/thank-you?order_id=" + response.razorpay_order_id);
               },
 
               modal: {
@@ -290,8 +300,7 @@ export default function CheckoutForm({ coupon }) {
           onClick={async () => {
             const result = await placeOrder();
             if (result?.success) {
-              window.location.href =
-                "/thank-you?receipt_id=" + result.data.receipt_id;
+              await finishCheckout(result.cartId, "/thank-you?receipt_id=" + result.data.receipt_id);
             }
           }}
         >

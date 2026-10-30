@@ -1032,7 +1032,7 @@
       "type": "text",
       "default": "Save ₹"
     },
-    "component.healthkart.HkCategoryCircles.section.7595dae9cde8": {
+    "component.healthkart.HkCategoryCircles.section.9a35532c7499": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
       "label": "Show section: Popular Categories",
@@ -3542,6 +3542,34 @@
       "label": "aria label: Close cart",
       "type": "text",
       "default": "Close cart"
+    },
+    "component.ui.CartSidebar.text.df0fe9e00d35": {
+      "source": "src/component/ui/CartSidebar.jsx",
+      "group": "Website sections / Cart Sidebar",
+      "label": "Try Again",
+      "type": "text",
+      "default": "Try Again"
+    },
+    "component.ui.CartSidebar.text.5bd2e4695d2d": {
+      "source": "src/component/ui/CartSidebar.jsx",
+      "group": "Website sections / Cart Sidebar",
+      "label": "Your cart is empty",
+      "type": "text",
+      "default": "Your cart is empty"
+    },
+    "component.ui.CartSidebar.text.1f1c4eb61b1b": {
+      "source": "src/component/ui/CartSidebar.jsx",
+      "group": "Website sections / Cart Sidebar",
+      "label": "Explore our clean, lab-tested supplements.",
+      "type": "text",
+      "default": "Explore our clean, lab-tested supplements."
+    },
+    "component.ui.CartSidebar.text.ba2feb5fdc67": {
+      "source": "src/component/ui/CartSidebar.jsx",
+      "group": "Website sections / Cart Sidebar",
+      "label": "Explore Supplements",
+      "type": "text",
+      "default": "Explore Supplements"
     },
     "component.ui.CartSidebar.text.8c0f2cb34079": {
       "source": "src/component/ui/CartSidebar.jsx",

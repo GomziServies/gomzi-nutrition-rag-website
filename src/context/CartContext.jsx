@@ -5,6 +5,7 @@ import {
   updateCartQuantity,
 } from "../services/product.service";
 import useAuth from "../hooks/useAuth";
+import { clearPurchasedCart } from "../services/checkoutCompletion.service";
 import {
   getGuestCart,
   removeGuestCartItem,
@@ -26,65 +27,73 @@ export const CartProvider = ({ children }) => {
     try {
       if (showLoading) setLoading(true);
       setError("");
+
       if (!isAuthenticated) {
         const guestItems = getGuestCart();
 
-        const normalizedGuestItems = guestItems.map((cartItem) => {
-          const variation = cartItem.item_details.variation;
+        const normalizedGuestItems = (guestItems || [])
+          .filter(Boolean)
+          .map((cartItem) => {
+            const details = cartItem.item_details || {};
+            const variation = details.variation;
 
-          return {
-            _id: cartItem._id,
-            item_id: cartItem.item_id,
-            variation_id: variation?._id || null,
-            quantity: cartItem.quantity,
-            name: cartItem.item_details.name,
-            variationName: variation?.name || null,
-            flavour:
-              variation?.flavour ?? cartItem.item_details.flavour ?? null,
-            price: variation?.price ?? cartItem.item_details.price,
-            discountPrice:
-              variation?.discountPrice ?? cartItem.item_details.discountPrice ?? cartItem.item_details.price ?? 0,
-            image:
-              variation?.displayImages?.[0] ??
-              cartItem.item_details.displayImages?.[0],
-          };
-        });
+            return {
+              _id: cartItem._id,
+              item_id: cartItem.item_id,
+              variation_id: variation?._id || cartItem.notes?.variation_id || null,
+              quantity: Number(cartItem.quantity) || 1,
+              name: details.name || "Product",
+              variationName: variation?.name || null,
+              flavour:
+                variation?.flavour ?? details.flavour ?? null,
+              price: Number(variation?.price ?? details.price ?? 0),
+              discountPrice:
+                Number(variation?.discountPrice ?? details.discountPrice ?? details.price ?? 0),
+              image:
+                variation?.displayImages?.[0] ??
+                details.displayImages?.[0] ??
+                (typeof details.displayImages === "string" ? details.displayImages : "/images/product-placeholder.webp"),
+            };
+          });
 
         setItems(normalizedGuestItems);
         setCartId(null);
         return;
       }
+
       const result = await getCart();
 
       if (request !== requestId.current) return;
       if (!result.success) throw new Error(result.message || "Could not load your cart.");
-      if (result.success && result.data?.length) {
+
+      if (result.success && Array.isArray(result.data) && result.data.length > 0) {
         const cart = result.data[0];
         const cart_id = cart._id;
+        const detailsList = Array.isArray(cart.items_details) ? cart.items_details.filter(Boolean) : [];
 
-        const normalizedItems = cart.items.map((cartItem) => {
+        const normalizedItems = (cart.items || []).map((cartItem) => {
           const variationId = cartItem.notes?.variation_id;
           const detail = variationId
-            ? cart.items_details.find((d) => d.variation?._id === variationId)
-            : cart.items_details.find((d) => d._id === cartItem.item_id);
+            ? detailsList.find((d) => String(d?.variation?._id) === String(variationId)) || detailsList.find((d) => String(d?._id) === String(cartItem.item_id))
+            : detailsList.find((d) => String(d?._id) === String(cartItem.item_id));
 
           const variation = detail?.variation;
           return {
             _id: cartItem._id,
             item_id: cartItem.item_id,
             variation_id: variationId || null,
-            quantity: cartItem.quantity,
+            quantity: Number(cartItem.quantity) || 1,
             // Product name always comes from parent
             name: detail?.name || "Product",
             // Variation information
             variationName: variation?.name || null,
             flavour: variation?.flavour ?? detail?.flavour ?? null,
             // Use variation values if variation exists
-            price: variation ? variation.price : detail?.price,
-            discountPrice: variation?.discountPrice ?? detail?.discountPrice ?? detail?.price ?? 0,
+            price: Number(variation?.price ?? detail?.price ?? 0),
+            discountPrice: Number(variation?.discountPrice ?? detail?.discountPrice ?? detail?.price ?? 0),
             image: variation
               ? variation.displayImages?.[0]
-              : detail?.displayImages?.[0],
+              : detail?.displayImages?.[0] ?? (typeof detail?.displayImages === "string" ? detail.displayImages : "/images/product-placeholder.webp"),
           };
         });
 
@@ -94,16 +103,30 @@ export const CartProvider = ({ children }) => {
         setItems([]);
       }
     } catch (error) {
-      if (request === requestId.current) setError(error.message || "Could not load your cart. Please try again.");
+      if (request === requestId.current) {
+        console.error("CartContext fetchCart error:", error);
+        setError(error.message || "Could not load your cart. Please try again.");
+      }
     } finally {
       if (request === requestId.current) setLoading(false);
     }
   }, [isAuthenticated]);
 
+  const clearCart = useCallback(async (purchasedCartId = cartId) => {
+    await clearPurchasedCart(purchasedCartId);
+    // An older cart request must not restore the purchased items.
+    requestId.current += 1;
+    setItems([]);
+    setCartId(null);
+    setError("");
+    setLoading(false);
+    window.dispatchEvent(new Event("cartUpdated"));
+  }, [cartId]);
+
   const deleteItem = async (cart_id, item_id) => {
     if (!isAuthenticated) {
       removeGuestCartItem(item_id);
-      fetchCart();
+      fetchCart(false);
       return true;
     }
     const result = await removeCartItem(cart_id, item_id);
@@ -116,7 +139,7 @@ export const CartProvider = ({ children }) => {
 
     if (!isAuthenticated) {
       updateGuestCartQuantity(item._id, newQuantity);
-      fetchCart();
+      fetchCart(false);
       return true;
     }
 
@@ -163,5 +186,6 @@ export const CartProvider = ({ children }) => {
     fetchCart,
     deleteItem,
     changeQuantity,
+    clearCart,
   }}>{children}</CartContext.Provider>;
 };

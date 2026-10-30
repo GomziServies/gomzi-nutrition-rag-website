@@ -142,18 +142,22 @@ export default function NARAProductPage() {
     try {
       setCartLoading(true);
 
+      const variationId =
+        selectedVariation && !selectedVariation.isBase && selectedVariation._id !== "base"
+          ? selectedVariation._id
+          : null;
+
       const payload = {
         item_id: product._id,
         item_type: "FG_MEAL_PRODUCT",
         quantity: 1,
-        notes: selectedVariation
+        notes: variationId
           ? {
-              variation_id: selectedVariation._id,
+              variation_id: variationId,
             }
           : {},
       };
-      // console.log("Payload for addToCart:", payload);
-      // console.log("Is user authenticated?", isAuthenticated);
+
       if (isAuthenticated) {
         const result = await addToCart(payload);
 
@@ -168,7 +172,7 @@ export default function NARAProductPage() {
         addGuestCartItem({
           product,
           quantity: 1,
-          selectedVariation,
+          selectedVariation: variationId ? selectedVariation : null,
         });
 
         successToast("Added to cart");

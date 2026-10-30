@@ -1,9 +1,10 @@
 import axios from "axios";
+import { getApiBaseUrl } from "../config/api-url";
 import { getToken } from "../utils/storage";
 
 const api = axios.create({
   timeout: 15000,
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3005",
+  baseURL: getApiBaseUrl(import.meta.env.VITE_API_URL),
   headers: {
     "Content-Type": "application/json",
   },

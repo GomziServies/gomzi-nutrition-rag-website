@@ -13,6 +13,7 @@ import {
   getProductBrand,
 } from "../../data/homeProducts";
 import HkProductCardActions from "./HkProductCardActions";
+import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 
 export default function HkCategoryShowcase({
   title = "Whey Protein & Muscle Builders",
@@ -113,7 +114,7 @@ export default function HkCategoryShowcase({
 
         {/* Carousel (HealthKart card layout: 4 cards on desktop) */}
         <div className="mt-6 relative w-full">
-          <Swiper
+          {loading ? <ProductGridSkeleton label="Loading products" /> : <Swiper
             key={`cat-showcase-${categorySlug}-${displayedList.length}`}
             modules={[Navigation]}
             slidesPerView={4}
@@ -239,7 +240,7 @@ export default function HkCategoryShowcase({
                 </SwiperSlide>
               );
             })}
-          </Swiper>
+          </Swiper>}
         </div>
       </div>
     </section>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Loader2, Plus, ShoppingBag, Sparkles } from "lucide-react";
 import { fetchProducts, addToCart } from "../../services/product.service";
@@ -212,9 +213,7 @@ export default function HkComboStackBuilder() {
           </div>
         </div>
         {loading ? (
-          <div role="status" className="rounded-2xl border border-border bg-white p-16 text-center text-stone-500">
-            <Loader2 className="mx-auto mb-3 animate-spin text-primary" />Finding your essentials…
-          </div>
+          <ProductGridSkeleton count={4} label="Loading combo essentials" />
         ) : error ? (
           <div className="p-10 rounded-2xl bg-white border border-border text-center">
             <p className="text-stone-500 mb-4">We couldn't load this combo stack right now.</p>

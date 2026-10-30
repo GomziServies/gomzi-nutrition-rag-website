@@ -1,4 +1,5 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { Suspense, useEffect, useLayoutEffect } from "react";
+import PageLoading from "../component/PageLoading";
 import { Outlet, useLocation } from "react-router-dom";
 import HkTopBar from "../component/healthkart/HkTopBar";
 import HkHeader from "../component/healthkart/HkHeader";
@@ -69,7 +70,7 @@ const Wrapper = () => {
       <HkTopBar />
       <HkHeader />
       <main id="main-content" tabIndex={-1}>
-        <Outlet />
+        <Suspense fallback={<PageLoading />}><Outlet /></Suspense>
       </main>
       <HkFooter />
     </div>

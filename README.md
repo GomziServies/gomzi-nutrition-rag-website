@@ -7,7 +7,9 @@ React 19 and Vite storefront using the existing Gomzi design and catalog API.
 1. Install dependencies with `npm install`.
 2. Copy `.env.example` to `.env.local` and set the API URL. The default backend is `http://localhost:3005`.
 3. Start the existing backend separately, then run `npm run dev`.
-4. Open the URL printed by Vite, normally `http://localhost:5173`.
+4. Open the URL printed by Vite, normally `http://localhost:5173`. Other laptops on the same network can open Vite's Network URL.
+
+When the configured API is localhost, the development and preview servers forward `/api` requests to it. This lets other laptops load the same live banners and catalog without calling their own localhost. Public API URLs are used directly; production hosting still requires the public HTTPS `VITE_API_URL`.
 
 The API backend is a separate project. Google sign-in requires a configured Google OAuth web client ID and authorized origin. Payments and order processing use the existing backend and Razorpay integration; frontend environment variables must never contain secret keys.
 

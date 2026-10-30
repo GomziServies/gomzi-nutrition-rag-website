@@ -1,6 +1,5 @@
 // src/component/healthkart/HkBannerAds.jsx
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { fetchAdBanners, fetchPromoBanners, fetchNutritionPromoBanners } from "../../services/banner.service";
 
 const BANNER_LOADERS = {
@@ -9,36 +8,28 @@ const BANNER_LOADERS = {
   nutrition: fetchNutritionPromoBanners,
 };
 
-function BannerLink({ href, children, ...props }) {
-  return href.startsWith("/")
-    ? <Link to={href} {...props}>{children}</Link>
-    : <a href={href} {...props}>{children}</a>;
-}
-
 /**
  * Full-Width Promotional Banner Ad (HealthKart style)
  * Renders the full 100% original graphic banner without any cropping or text overlay.
  */
 export function HkBannerAdWide({
   image = "/images/banners/banner-gains-season.png",
-  ctaLink = "/gomzi-supplement/whey-protein",
   alt = "Gomzi Nutrition Promotional Banner",
   onImageError,
 }) {
   return (
     <div className="w-full max-w-[1200px] mx-auto px-3 sm:px-4 my-5 sm:my-7 font-sans">
-      <BannerLink
-        href={ctaLink}
-        className="block group overflow-hidden rounded-2xl shadow-lg border border-border/30 bg-stone-950 transition-all duration-300 hover:shadow-2xl"
+      <div
+        className="block overflow-hidden rounded-2xl shadow-lg border border-border/30 bg-stone-950"
       >
         <img
           src={image}
           alt={alt}
-          className="w-full h-auto block object-contain transition-transform duration-300 group-hover:scale-[1.008]"
+          className="w-full h-auto block object-contain"
           loading="lazy"
           onError={onImageError}
         />
-      </BannerLink>
+      </div>
     </div>
   );
 }
@@ -51,7 +42,7 @@ export function ManagedBannerAd({ banner, loading = false, error = false, onRetr
         : <div role="alert" className="rounded-2xl border border-border bg-white px-5 py-8 text-center"><p className="text-sm text-stone-500">We couldn't load this promotion.</p><button type="button" onClick={onRetry} className="mt-3 text-sm font-bold text-primary underline underline-offset-4">Try again</button></div>}
     </div>
   );
-  return <HkBannerAdWide image={banner.image} ctaLink={banner.link} alt={banner.alt} onImageError={onImageError} />;
+  return <HkBannerAdWide image={banner.image} alt={banner.alt} onImageError={onImageError} />;
 }
 
 export function HkManagedBannerAd({ source = "static" }) {

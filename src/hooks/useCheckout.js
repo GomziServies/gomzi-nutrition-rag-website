@@ -6,7 +6,7 @@ import { successToast, errorToast } from "../utils/toast";
 
 const useCheckout = (coupon) => {
   const { user } = useAuth();
-  const { items } = useCart();
+  const { items, cartId } = useCart();
 
   const [loading, setLoading] = useState(false);
 
@@ -66,6 +66,11 @@ const useCheckout = (coupon) => {
         return;
       }
 
+      if (!cartId) {
+        errorToast("Your cart is still loading. Please try again.");
+        return { success: false };
+      }
+
       const requiredFields = [
         ["email", "Email"],
         ["first_name", "First name"],
@@ -122,11 +127,11 @@ const useCheckout = (coupon) => {
           success: false,
         };
       }
-      localStorage.removeItem("checkout_coupon");
       successToast(result.message);
       return {
         success: true,
         data: result.data,
+        cartId,
       };
     } catch {
       errorToast("Something went wrong");

@@ -1,7 +1,7 @@
 // src/component/healthkart/HkBestSellersTabbed.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Star, ShoppingCart, CheckCircle2, Flame, ArrowRight, Loader2 } from "lucide-react";
+import { Star, ShoppingCart, CheckCircle2, Flame, ArrowRight } from "lucide-react";
 import { fetchProducts } from "../../services/product.service";
 import {
   BEST_SELLER_PRODUCTS,
@@ -10,6 +10,7 @@ import {
   getProductBrand,
 } from "../../data/homeProducts";
 import HkProductCardActions from "./HkProductCardActions";
+import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 
 const TABS = [
   { id: "all", label: "🔥 All Products", category: "" },
@@ -119,10 +120,7 @@ export default function HkBestSellersTabbed() {
 
         {/* Product Cards Grid */}
         {loading ? (
-          <div className="py-16 flex flex-col items-center justify-center text-stone-400 gap-2">
-            <Loader2 size={32} className="animate-spin text-primary" />
-            <span className="text-xs font-semibold">Loading authentic supplements...</span>
-          </div>
+          <ProductGridSkeleton count={8} label="Loading supplements" className="mt-6" />
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mt-6">
             {products.map((product) => {

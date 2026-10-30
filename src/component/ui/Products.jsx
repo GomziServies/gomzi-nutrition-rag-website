@@ -130,7 +130,8 @@ const ProductsGrid = ({ pageData }) => {
 
   if (loading) {
     return (
-      <div className="w-full bg-light py-12 min-h-screen">
+      <div role="status" aria-label="Loading products" aria-busy="true" className="w-full bg-light py-12 min-h-screen">
+        <span className="sr-only">Loading products…</span>
         <div className="site-container">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
             {[...Array(12)].map((_, index) => (
