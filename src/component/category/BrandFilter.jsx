@@ -11,7 +11,7 @@ export function BrandFilterControl({ brands = [], counts = {}, total = null, val
         </h3>
         {value && <button type="button" onClick={() => onChange("")} className="text-[11px] font-bold text-primary hover:underline cursor-pointer">Reset</button>}
       </div>
-      {loading ? <div role="status" className="space-y-3"><span className="sr-only">Loading brands…</span>{[0,1,2,3,4].map(index => <div key={index} aria-hidden="true" className="skeleton-shimmer h-10 rounded-xl" />)}</div> : <>
+      {loading ? <div role="status" className="space-y-3"><span className="sr-only">Loading brands…</span>{[0, 1, 2, 3, 4].map(index => <div key={index} aria-hidden="true" className="skeleton-shimmer h-10 rounded-xl" />)}</div> : <>
         {error && <p role="status" className="text-xs text-text-light mb-3">{error} <button type="button" onClick={onRetry} className="text-primary underline">Retry</button></p>}
         <ul aria-label="Product brands" className="space-y-1">
           {rows.map(row => {
