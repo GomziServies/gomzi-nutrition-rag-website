@@ -1,6 +1,6 @@
 # Gomzi Nutrition storefront
 
-React 19 and Vite storefront using the existing gg Gomzi design and catalog API.
+React 19 and Vite storefront using the existing Gomzi design and catalog API.
 
 ## Local development
 
