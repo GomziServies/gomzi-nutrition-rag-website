@@ -80,6 +80,9 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
 
       const data = await checkCouponCode({
         coupon_code: discountCode.trim(),
+        products: items.map((i) => ({
+          product_id: i.product_id || i._id || i.id,
+        })),
       });
       const couponData = data.data.data;
 
@@ -101,10 +104,28 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
   let couponDiscount = 0;
 
   if (coupon) {
+    const isScoped =
+      coupon.scope === "SPECIFIC_PRODUCTS" &&
+      Array.isArray(coupon.applicable_products) &&
+      coupon.applicable_products.length > 0;
+
+    const applicableSet = isScoped
+      ? new Set(coupon.applicable_products.map((id) => String(id)))
+      : null;
+
+    // Line-item eligible base sum
+    const eligibleTotal = items.reduce((sum, item) => {
+      const pId = String(item.product_id || item._id || item.id);
+      if (!isScoped || applicableSet.has(pId)) {
+        return sum + Number(item.discountPrice || item.price || 0) * item.quantity;
+      }
+      return sum;
+    }, 0);
+
     if (coupon.discount_type === "percent") {
-      couponDiscount = (total * coupon.discount) / 100;
-    } else if (coupon.discount_type === "fixed") {
-      couponDiscount = coupon.discount;
+      couponDiscount = (eligibleTotal * Number(coupon.discount || 0)) / 100;
+    } else if (coupon.discount_type === "fixed" || coupon.discount_type === "rupees") {
+      couponDiscount = Math.min(Number(coupon.discount || 0), eligibleTotal);
     }
 
     couponDiscount = Math.min(couponDiscount, total);
