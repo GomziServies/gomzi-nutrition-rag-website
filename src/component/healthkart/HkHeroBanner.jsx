@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Autoplay, Keyboard } from "swiper/modules";
-import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FALLBACK_HERO_BANNERS, fetchHeroBanners } from "../../services/banner.service";
 import { observeHeroEnvironment, shouldPlayHero, syncHeroPlayback } from "./hero-playback";
 import "swiper/css";
@@ -9,10 +9,9 @@ import "swiper/css";
 export function HeroBannerCarousel({ banners }) {
   const [swiper, setSwiper] = useState(null);
   const [environment, setEnvironment] = useState({ reducedMotion: false, hidden: false });
-  const [choice, setChoice] = useState(null);
   const [focused, setFocused] = useState(false);
   const multiple = banners.length > 1;
-  const playing = shouldPlayHero({ count: banners.length, choice, focused, ...environment });
+  const playing = shouldPlayHero({ count: banners.length, focused, ...environment });
 
   useEffect(() => observeHeroEnvironment(setEnvironment), []);
   useEffect(() => { syncHeroPlayback(swiper, playing); }, [swiper, playing]);
@@ -30,9 +29,7 @@ export function HeroBannerCarousel({ banners }) {
       aria-label="Featured offers"
       aria-roledescription="carousel"
       className="w-full overflow-hidden"
-      onFocusCapture={event => {
-        if (!event.target.closest("[data-hero-playback]")) setFocused(true);
-      }}
+      onFocusCapture={() => setFocused(true)}
       onBlurCapture={event => {
         if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
       }}
@@ -100,16 +97,6 @@ export function HeroBannerCarousel({ banners }) {
         {multiple && <>
           <button type="button" onClick={() => swiper?.slidePrev()} aria-label="Previous hero banner" className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full shadow-md bg-white/95 hover:bg-primary text-stone-800 hover:text-white flex items-center justify-center transition-colors"><ChevronLeft size={22} /></button>
           <button type="button" onClick={() => swiper?.slideNext()} aria-label="Next hero banner" className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full shadow-md bg-white/95 hover:bg-primary text-stone-800 hover:text-white flex items-center justify-center transition-colors"><ChevronRight size={22} /></button>
-          <button
-            type="button"
-            data-hero-playback
-            aria-label={playing ? "Pause automatic slides" : "Play automatic slides"}
-            onClick={() => { setFocused(false); setChoice(!playing); }}
-            className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex items-center gap-2 rounded-full bg-white/95 px-3 py-2 text-xs font-semibold text-stone-800 shadow-md hover:bg-white"
-          >
-            {playing ? <Pause size={14} /> : <Play size={14} />}
-            {playing ? "Pause" : "Play"}
-          </button>
         </>}
       </div>
     </section>
