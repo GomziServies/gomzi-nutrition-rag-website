@@ -10,6 +10,7 @@ export default function useGymAccessOffer(items) {
   const payload = JSON.stringify({ products: items.filter(item => item.item_id).map(item => ({
     product_id: item.item_id,
     quantity: Number(item.quantity),
+    ...(item.combo_id && { combo_id: item.combo_id }),
     ...(item.variation_id && { variation_id: item.variation_id }),
   })) });
 

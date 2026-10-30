@@ -1,7 +1,6 @@
 // src/component/healthkart/HkStealDeals.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Flame } from "lucide-react";
 
 import { fetchDeals } from "../../services/deal.service";
 
@@ -38,9 +37,6 @@ export function DealsSection({ deals, loading = false, error = false, onRetry, s
         {/* Section Header */}
         <div className="flex items-center justify-between mb-3.5 sm:mb-4">
           <div className="flex items-center gap-2">
-            <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-rose-500/10 text-rose-600 flex items-center justify-center font-bold">
-              <Flame size={18} className="fill-rose-500 text-rose-500" />
-            </span>
             <div>
               <h2 className="text-base sm:text-xl font-black text-text tracking-tight font-toma flex items-center gap-2">
                 <span>Deals You Cannot Miss</span>

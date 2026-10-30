@@ -56,6 +56,28 @@ export const DEFAULT_STACKS = [
     labels: ["Fat Burner", "BCAA & Recovery"],
     products: [],
   },
+  {
+    id: "rapid-weight-loss-rtp1",
+    name: "Rapid Weight Loss Pack (RTP: 1)",
+    tagline: "2kg Whey + Fat Burner + 1 Month Gym Access + Free Weight Scale Machine",
+    company: "Gomzi Nutrition",
+    comboPrice: 8100,
+    originalPrice: 10500,
+    categories: ["Whey Protein", "Wellness & Health"],
+    labels: ["2kg Whey Protein", "Fat Burner"],
+    products: [],
+  },
+  {
+    id: "insane-performance-rtp5",
+    name: "Insane Performance Pack (RTP: 5)",
+    tagline: "2kg Whey + Pre-Workout + Creatine + Prep Coach + 1 Month Gym Access",
+    company: "Gomzi Nutrition",
+    comboPrice: 12000,
+    originalPrice: 16500,
+    categories: ["Whey Protein", "Pre Workout", "Creatine Monohydrate"],
+    labels: ["2kg Whey Protein", "Pre-Workout", "Creatine"],
+    products: [],
+  },
 ];
 
 export function normalizeComboStacks(data) {
@@ -86,7 +108,8 @@ export function normalizeComboStacks(data) {
         name: stack.name.trim(),
         tagline: stack.tagline || "",
         company: stack.company || "Gomzi Nutrition",
-        comboPrice: Number(stack.comboPrice) > 0 ? Number(stack.comboPrice) : null,
+        isSavedCombo: Boolean(stack._id && specificProducts.length === stack.products?.length && specificProducts.length > 0),
+        comboPrice: stack.comboPrice !== null && stack.comboPrice !== undefined && Number.isFinite(Number(stack.comboPrice)) && Number(stack.comboPrice) >= 0 ? Number(stack.comboPrice) : null,
         originalPrice: Number(stack.originalPrice) > 0 ? Number(stack.originalPrice) : null,
         products: specificProducts,
         categories: cleanCategories,

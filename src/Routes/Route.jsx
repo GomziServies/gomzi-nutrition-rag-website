@@ -27,6 +27,7 @@ const TermsConditions = lazy(() => import("../pages/About/LegalTerms"));
 const RefundPolicy = lazy(() => import("../pages/About/ReturnsPolicy"));
 const ShippingPolicy = lazy(() => import("../pages/About/DeliveryPolicy"));
 const CategoriesSection = lazy(() => import("../pages/Categories"));
+const GymOffers = lazy(() => import("../pages/GymOffers"));
 
 export const Route = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ export const Route = createBrowserRouter([
     children: [
       { path: "/wholesale", element: <WholesaleB2B /> },
       { path: "/deals", element: <Deals /> },
+      { path: "/gym-offers", element: <GymOffers /> },
       { path: "*", element: <NotFound /> },
       {
         path: "/",

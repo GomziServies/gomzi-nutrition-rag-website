@@ -5,6 +5,7 @@ import useCart from "../../hooks/useCart";
 import { useState, useEffect } from "react";
 import { checkCouponCode } from "../../api/product.api";
 import useBranding from "../../content/useBranding";
+import { getCartPricingLines } from "../../services/cartPricing.service";
 
 import CartGymAccessOffer from "../common/GymAccessOffer";
 
@@ -82,8 +83,8 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
 
       const data = await checkCouponCode({
         coupon_code: discountCode.trim(),
-        products: items.map((i) => ({
-          product_id: i.product_id || i._id || i.id,
+        products: getCartPricingLines(items).map((i) => ({
+          product_id: i.product_id,
         })),
       });
       const couponData = data.data.data;
@@ -116,10 +117,10 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
       : null;
 
     // Line-item eligible base sum
-    const eligibleTotal = items.reduce((sum, item) => {
-      const pId = String(item.product_id || item._id || item.id);
+    const eligibleTotal = getCartPricingLines(items).reduce((sum, item) => {
+      const pId = String(item.product_id);
       if (!isScoped || applicableSet.has(pId)) {
-        return sum + Number(item.discountPrice || item.price || 0) * item.quantity;
+        return sum + item.unit_price * item.quantity;
       }
       return sum;
     }, 0);

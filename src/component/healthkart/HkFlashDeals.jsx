@@ -10,7 +10,6 @@ import {
   ChevronRight,
   Star,
   ShoppingCart,
-  Zap,
   CheckCircle2,
 } from "lucide-react";
 import { fetchProducts } from "../../services/product.service";
@@ -63,9 +62,6 @@ export default function HkFlashDeals() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border gap-3">
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-primary text-white">
-                <Zap size={18} className="fill-current" />
-              </span>
               <h2 className="text-xl sm:text-2xl font-black text-text tracking-tight font-toma">
                 Flash Deals &amp; Just Launched
               </h2>

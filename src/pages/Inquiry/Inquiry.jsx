@@ -1031,7 +1031,7 @@ export default function Inquiry() {
         .inquiry-theme-scope h2,
         .inquiry-theme-scope h3,
         .inquiry-theme-scope h4 {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+          font-family: var(--font-sans) !important;
         }
         .emp-clean-input {
           background-color: #ffffff !important;

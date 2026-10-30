@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, Loader2, Plus, ShoppingBag, Sparkles } from "lucide-react";
 import { fetchProducts, addToCart } from "../../services/product.service";
 import { addGuestCartItem } from "../../services/cartStorage.service";
+import useCart from "../../hooks/useCart";
 import { fetchComboStacks, DEFAULT_STACKS } from "../../services/comboStack.service";
 import { getProductImageUrl } from "../../data/homeProducts";
 import { successToast, errorToast } from "../../utils/toast";
@@ -42,6 +43,7 @@ const money = value => `₹${Number(value).toLocaleString("en-IN")}`;
 export default function HkComboStackBuilder() {
   const content = useWebsiteContent();
   const { isAuthenticated } = useAuth();
+  const { items: cartItems } = useCart();
   const [stacks, setStacks] = useState(DEFAULT_STACKS);
   const [active, setActive] = useState(DEFAULT_STACKS[0]?.id || "");
   const [products, setProducts] = useState([]);
@@ -132,17 +134,18 @@ export default function HkComboStackBuilder() {
   const currentStack = stacks.find(item => item.id === active) || stacks[0];
   const chosen = products.filter(product => selected.includes(product._id));
   const isFullCombo = chosen.length === products.length && products.length > 0;
+  const hasComboPrice = isFullCombo && currentStack?.isSavedCombo && currentStack.comboPrice !== null;
 
   // Individual item totals
   const individualSellingSum = chosen.reduce((sum, p) => sum + Number(p.discountPrice ?? p.price ?? 0), 0);
   const individualMrpSum = chosen.reduce((sum, p) => sum + Number(p.price ?? 0), 0);
 
   // Exact custom combo price set by Admin when full bundle is selected
-  const total = isFullCombo && currentStack?.comboPrice
+  const total = hasComboPrice
     ? Number(currentStack.comboPrice)
     : individualSellingSum;
 
-  const mrp = isFullCombo && currentStack?.originalPrice
+  const mrp = hasComboPrice && currentStack?.originalPrice
     ? Number(currentStack.originalPrice)
     : individualMrpSum;
 
@@ -152,9 +155,31 @@ export default function HkComboStackBuilder() {
     setAdding(true);
     let added = 0;
     try {
+      if (hasComboPrice) {
+        const comboProduct = {
+          _id: currentStack.id,
+          name: currentStack.name,
+          company: currentStack.company,
+          price: Math.max(mrp, total),
+          discountPrice: total,
+          displayImages: chosen[0]?.displayImages || [],
+          flavour: chosen.map(product => product.name).join(" + "),
+        };
+        const notes = { combo_id: currentStack.id };
+        if (isAuthenticated) {
+          const quantity = Number(cartItems.find(item => item.combo_id === currentStack.id)?.quantity || 0) + 1;
+          const result = await addToCart({ item_id: currentStack.id, item_type: "FG_MEAL_PRODUCT", quantity, notes });
+          if (!result.success) throw new Error(result.message || "We couldn't add this combo. Please try again.");
+        } else {
+          addGuestCartItem({ product: comboProduct, quantity: 1, notes });
+        }
+        successToast(`Added ${currentStack.name} to your cart for ${money(total)}`);
+        return;
+      }
       for (const product of chosen) {
         if (isAuthenticated) {
-          const result = await addToCart({ item_id: product._id, item_type: "FG_MEAL_PRODUCT", quantity: 1 });
+          const quantity = Number(cartItems.find(item => item.item_id === product._id && !item.combo_id && !item.variation_id)?.quantity || 0) + 1;
+          const result = await addToCart({ item_id: product._id, item_type: "FG_MEAL_PRODUCT", quantity });
           if (!result.success) throw new Error(result.message || "We couldn't add the remaining items. Please try again.");
         } else {
           addGuestCartItem({ product, quantity: 1 });
@@ -172,27 +197,27 @@ export default function HkComboStackBuilder() {
   };
 
   return (
-    <section className="bg-light border-y border-border py-10 sm:py-14">
-      <div className="max-w-[1280px] mx-auto px-4">
-        <div className="flex flex-col gap-4 mb-7">
+    <section className="bg-light border-y border-border py-10 sm:py-14 lg:py-[70px]">
+      <div className="max-w-[1180px] mx-auto px-4">
+        <div className="flex flex-col gap-4 sm:gap-5 mb-7">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Better together</p>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-1.5">
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-primary">Better together</p>
               {currentStack?.company && (
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-primary/10 text-primary">
+                <span className="text-[10px] sm:text-xs leading-4 font-bold uppercase px-2.5 py-1 rounded-[4px] bg-primary/10 text-primary">
                   {currentStack.company}
                 </span>
               )}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-text">Your routine. Your stack.</h2>
-            <p className="text-sm text-stone-500 mt-1">
+            <h2 className="text-[28px] sm:text-[36px] lg:text-[38px] leading-[1.2] font-black tracking-[-0.035em] text-text">Your routine. Your stack.</h2>
+            <p className="text-sm sm:text-lg leading-6 sm:leading-7 text-stone-500 mt-1.5">
               {currentStack?.tagline || "Handpicked product essentials at special bundle pricing. Add them in one step."}
             </p>
           </div>
           <div
             role="group"
             aria-label="Choose your stack"
-            className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto no-scrollbar scrollbar-hide scroll-smooth flex-nowrap py-1 -mx-4 px-4 sm:mx-0 sm:px-0"
+            className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar scrollbar-hide scroll-smooth flex-nowrap py-1 -mx-4 px-4 sm:mx-0 sm:px-0"
           >
             {stacks.map(stack => (
               <button
@@ -201,10 +226,11 @@ export default function HkComboStackBuilder() {
                 disabled={adding}
                 aria-pressed={active === stack.id}
                 onClick={() => setActive(stack.id)}
-                className={`rounded-full px-3.5 sm:px-4 py-2 text-xs font-bold border transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                style={{ fontSize: "clamp(14px, 1.4vw, 20px)", fontWeight: active === stack.id ? 500 : 400, lineHeight: 1.3 }}
+                className={`rounded-full min-h-11 sm:min-h-[52px] px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-lg lg:text-xl leading-[1.3] border transition-colors whitespace-nowrap shrink-0 cursor-pointer disabled:cursor-wait ${
                   active === stack.id
-                    ? "bg-primary text-white border-primary shadow-sm"
-                    : "bg-white border-border text-stone-600 hover:border-primary"
+                    ? "bg-primary text-white border-primary font-medium shadow-sm"
+                    : "bg-white border-border text-stone-600 font-normal hover:border-primary hover:text-primary"
                 }`}
               >
                 {stack.name}
@@ -279,7 +305,7 @@ export default function HkComboStackBuilder() {
             <div className="bg-[#f5ede6] rounded-2xl p-6 border border-border flex flex-col justify-center">
               <div className="flex items-center justify-between mb-4">
                 <ShoppingBag size={24} className="text-primary" />
-                {isFullCombo && currentStack?.comboPrice && (
+                {hasComboPrice && (
                   <span className="flex items-center gap-1 text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-primary text-white tracking-wider">
                     <Sparkles size={11} /> Combo Deal
                   </span>

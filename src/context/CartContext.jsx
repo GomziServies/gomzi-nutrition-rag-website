@@ -43,6 +43,7 @@ export const CartProvider = ({ children }) => {
             return {
               _id: cartItem._id,
               item_id: cartItem.item_id,
+              combo_id: cartItem.notes?.combo_id || null,
               variation_id: variation?._id || cartItem.notes?.variation_id || null,
               quantity: Number(cartItem.quantity) || 1,
               name: details.name || "Product",
@@ -84,6 +85,8 @@ export const CartProvider = ({ children }) => {
           return {
             _id: cartItem._id,
             item_id: cartItem.item_id,
+            combo_id: cartItem.notes?.combo_id || null,
+            combo_components: detail?.combo_components || [],
             variation_id: variationId || null,
             quantity: Number(cartItem.quantity) || 1,
             // Product name always comes from parent
@@ -150,6 +153,7 @@ export const CartProvider = ({ children }) => {
       item_id: item.item_id,
       quantity: newQuantity,
       variation_id: item.variation_id,
+      combo_id: item.combo_id,
     });
 
     if (result.success) {

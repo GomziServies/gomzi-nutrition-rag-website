@@ -54,6 +54,7 @@ export const addGuestCartItem = ({
   product,
   quantity = 1,
   selectedVariation,
+  notes = {},
 }) => {
   const cart = getGuestCart();
 
@@ -62,6 +63,7 @@ export const addGuestCartItem = ({
   const existingItem = cart.find(
     (item) =>
       item.item_id === product._id &&
+      (item.notes?.combo_id || null) === (notes.combo_id || null) &&
       (item.notes?.variation_id || null) === variationId,
   );
 
@@ -82,15 +84,12 @@ export const addGuestCartItem = ({
 
     quantity,
 
-    notes: variationId
-      ? {
-          variation_id: variationId,
-        }
-      : {},
+    notes: { ...notes, ...(variationId && { variation_id: variationId }) },
 
     item_details: {
       _id: product._id,
       name: product.name,
+      company: product.company,
       price: product.price,
       discountPrice: product.discountPrice,
       flavour: product.flavour,

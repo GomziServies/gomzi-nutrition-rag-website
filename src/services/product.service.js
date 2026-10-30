@@ -102,17 +102,14 @@ export const updateCartQuantity = async ({
   item_id,
   quantity,
   variation_id,
+  combo_id,
 }) => {
   try {
     const response = await addToCartApi({
       item_id,
       item_type: "FG_MEAL_PRODUCT",
       quantity,
-      notes: variation_id
-        ? {
-            variation_id,
-          }
-        : {},
+      notes: { ...(variation_id && { variation_id }), ...(combo_id && { combo_id }) },
     });
 
     return {

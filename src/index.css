@@ -29,34 +29,20 @@
 }
 
 /* =========================
-   CUSTOM FONTS
-========================= */
-
-@font-face {
-  font-family: Modelica;
-  font-display: swap;
-  src: url("/font-family/Modelica/BwModelicaCyrillicDEMO-Regular.ttf");
-}
-
-@font-face {
-  font-family: TomaGrotesk;
-  font-display: swap;
-  src: url("/font-family/Tomato-Grotesk-Font-Family/TomatoGrotesk-Black.otf");
-
-  font-weight: 400;
-}
-
-/* =========================
    TAILWIND THEME
 ========================= */
 
 @theme {
   /* ===== Fonts ===== */
 
-  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-modelica: Modelica, sans-serif;
-  --font-toma: TomaGrotesk, sans-serif;
-  --font-tomato: TomaGrotesk, sans-serif;
+  /* All text uses the same family as the combo section, including legacy utilities. */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-inter: var(--font-sans);
+  --font-modelica: var(--font-sans);
+  --font-toma: var(--font-sans);
+  --font-tomato: var(--font-sans);
+  --font-mono: var(--font-sans);
+  --font-serif: var(--font-sans);
 
   /* ===== Main Colors ===== */
 
@@ -149,7 +135,7 @@ button, input, select, textarea { font: inherit; }
 
 
 /* Shared storefront accessibility and interaction styles. */
-:root { font-family: "Inter", "Modelica", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+:root { font-family: var(--font-sans); }
 button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 button:not(:disabled), a { cursor: pointer; }
 :focus-visible { outline: 2px solid #95442c; outline-offset: 4px; }
@@ -234,3 +220,25 @@ button:not(:disabled), a { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* The mobile catalog sheet lives in the browser top layer above the sticky header. */
+.catalog-mobile-dialog {
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-width: 36rem;
+  max-height: 88vh;
+  max-height: 88dvh;
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 1.5rem 1.5rem 0 0;
+  background: #fff;
+  color: var(--color-text);
+  overflow: hidden;
+  box-shadow: 0 -10px 40px rgb(0 0 0 / 15%);
+}
+.catalog-mobile-dialog[open] { display: flex; flex-direction: column; }
+.catalog-mobile-dialog::backdrop { background: rgb(0 0 0 / 45%); }
+.catalog-mobile-dialog-content { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+.catalog-mobile-dialog [aria-label="Product brands"] { max-height: none; overflow: visible; padding-right: 0; }

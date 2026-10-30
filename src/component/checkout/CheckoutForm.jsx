@@ -445,7 +445,7 @@ function PayPalLogo() {
   return (
     <span
       style={{
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "var(--font-sans)",
         fontSize: "15px",
         fontWeight: 800,
       }}

@@ -1,7 +1,7 @@
 // src/component/healthkart/HkBestSellersTabbed.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Star, ShoppingCart, CheckCircle2, Flame, ArrowRight } from "lucide-react";
+import { Star, ShoppingCart, CheckCircle2, ArrowRight } from "lucide-react";
 import { fetchProducts } from "../../services/product.service";
 import {
   BEST_SELLER_PRODUCTS,
@@ -71,14 +71,11 @@ export default function HkBestSellersTabbed() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-primary text-white">
-                <Flame size={18} className="fill-current" />
-              </span>
               <h2 className="text-xl sm:text-3xl font-black text-text tracking-tight font-toma">
                 Explore supplements by category
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-stone-500 mt-1 pl-4">
+            <p className="text-xs sm:text-sm text-stone-500 mt-1">
               Real supplements directly from our database with lab-tested certificates
             </p>
           </div>
