@@ -18,7 +18,7 @@ export default function HeroSectionWithIcons() {
     <section className="relative w-full overflow-hidden">
       <div className="relative w-full">
         {/* ================= Banner ================= */}
-        <picture className="block w-full">
+        <picture className="block w-full aspect-[1078/1460] md:aspect-[1600/533] overflow-hidden">
           <source
             srcSet="/images/banner-(gls)-mobile-view.webp"
             media="(max-width: 1023px)"

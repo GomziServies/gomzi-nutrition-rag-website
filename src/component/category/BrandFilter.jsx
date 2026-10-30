@@ -13,7 +13,7 @@ export function BrandFilterControl({ brands = [], counts = {}, total = null, val
       </div>
       {loading ? <div role="status" className="space-y-3"><span className="sr-only">Loading brands…</span>{[0,1,2,3,4].map(index => <div key={index} aria-hidden="true" className="skeleton-shimmer h-10 rounded-xl" />)}</div> : <>
         {error && <p role="status" className="text-xs text-text-light mb-3">{error} <button type="button" onClick={onRetry} className="text-primary underline">Retry</button></p>}
-        <ul aria-label="Product brands" className="space-y-1 max-h-[26rem] overflow-y-auto overscroll-contain custom-scrollbar pr-1">
+        <ul aria-label="Product brands" className="space-y-1">
           {rows.map(row => {
             const active = selected === row.value.toLowerCase();
             return <li key={row.value}><button type="button" onClick={() => onChange(row.value)} aria-pressed={active} className={`w-full min-w-0 min-h-11 text-left px-3 py-2.5 rounded-xl cursor-pointer transition-colors text-sm font-medium flex items-center justify-between gap-2 ${active ? "bg-primary text-white" : "text-stone-700 hover:bg-[#faf6f2] hover:text-primary"}`}>

@@ -19,7 +19,6 @@ export function HeroBannerCarousel({ banners }) {
   const updateImageLayout = () => {
     if (!swiper || swiper.destroyed) return;
     swiper.update();
-    swiper.updateAutoHeight(0);
   };
 
   if (!banners.length) return null;
@@ -34,7 +33,7 @@ export function HeroBannerCarousel({ banners }) {
         if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
       }}
     >
-      <div className="relative w-full bg-white overflow-hidden">
+      <div className="relative w-full bg-white overflow-hidden aspect-[1078/1460] md:aspect-[1600/533]">
         <Swiper
           key={banners.map(banner => banner.id || banner.desktopImage).join(",")}
           modules={[A11y, Autoplay, Keyboard]}
@@ -42,7 +41,6 @@ export function HeroBannerCarousel({ banners }) {
           slidesPerView={1}
           slidesPerGroup={1}
           loop={multiple}
-          autoHeight
           speed={environment.reducedMotion ? 0 : 600}
           autoplay={multiple ? {
             delay: 5000,
@@ -60,22 +58,29 @@ export function HeroBannerCarousel({ banners }) {
           observer
           observeParents
           lazyPreloadPrevNext={1}
-          className="hero-banner-carousel"
+          className="hero-banner-carousel w-full h-full"
         >
           {banners.map((banner, index) => (
             <SwiperSlide key={banner.id || banner.desktopImage}>
-              <div className="block bg-[#faf7f4] select-none">
-                <picture className="block">
-                  <source media="(max-width: 767px)" srcSet={banner.mobileImage} />
+              <div className="block bg-[#faf7f4] select-none w-full h-full aspect-[1078/1460] md:aspect-[1600/533] overflow-hidden">
+                <picture className="block w-full h-full">
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet={banner.mobileImage}
+                    width="1078"
+                    height="1460"
+                  />
                   <img
                     src={banner.desktopImage}
                     alt={banner.alt}
+                    width="1600"
+                    height="533"
                     loading={index === 0 ? "eager" : "lazy"}
                     fetchPriority={index === 0 ? "high" : "auto"}
                     draggable={false}
                     onDragStart={event => event.preventDefault()}
                     onLoad={updateImageLayout}
-                    className="block w-full h-auto object-cover select-none"
+                    className="block w-full h-full object-cover select-none"
                     onError={event => {
                       const img = event.currentTarget;
                       const source = img.parentElement?.querySelector("source");
@@ -118,7 +123,7 @@ export default function HkHeroBanner() {
 
   if (loading) return (
     <section aria-label="Loading featured offers" role="status" className="w-full">
-      <div className="w-full aspect-square md:aspect-[4/1] skeleton-shimmer"><span className="sr-only">Loading featured offers…</span></div>
+      <div className="w-full aspect-[1078/1460] md:aspect-[1600/533] skeleton-shimmer"><span className="sr-only">Loading featured offers…</span></div>
     </section>
   );
 

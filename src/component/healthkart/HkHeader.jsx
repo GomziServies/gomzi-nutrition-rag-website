@@ -391,17 +391,15 @@ export default function HkHeader() {
         <div className="order-3 md:order-none w-full md:w-auto md:flex-1 max-w-2xl md:mx-2 relative" ref={searchContainerRef}>
           <form onSubmit={handleSearchSubmit} className="relative w-full">
             <div
-              className={`flex items-center bg-light border rounded-xl h-11 px-3.5 transition-all shadow-inner ${
-                isSearchFocused
+              className={`flex items-center bg-light border rounded-xl h-11 px-3.5 transition-all shadow-inner ${isSearchFocused
                   ? "border-primary bg-white ring-2 ring-primary/20 shadow-md"
                   : "border-border hover:border-primary/60"
-              }`}
+                }`}
             >
               <Search
                 size={18}
-                className={`mr-2.5 flex-shrink-0 transition-colors ${
-                  isSearchFocused ? "text-primary" : "text-stone-400"
-                }`}
+                className={`mr-2.5 flex-shrink-0 transition-colors ${isSearchFocused ? "text-primary" : "text-stone-400"
+                  }`}
               />
               <input
                 type="search"
@@ -785,11 +783,10 @@ export default function HkHeader() {
                           navigate(`/gomzi-supplement/${cat.slug}`);
                           setIsCategoryMenuOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-all cursor-pointer ${
-                          isActive
+                        className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-all cursor-pointer ${isActive
                             ? "bg-white text-primary shadow-sm font-bold border border-border"
                             : "text-stone-700 hover:bg-white/60"
-                        }`}
+                          }`}
                       >
                         <span className="flex items-center gap-2">
                           <IconComp

@@ -318,10 +318,10 @@ const ProductsGrid = ({ pageData }) => {
         ================================================================ */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
           {/* ================================================================
-              DESKTOP SIDEBAR
+              DESKTOP SIDEBAR: CATEGORIES FIRST, THEN BRANDS
           ================================================================ */}
-          <aside className="hidden lg:block w-64 shrink-0 space-y-5" aria-label="Shop filters">
-            {brandPanel}
+          <aside className="shop-category-sidebar hidden lg:block w-64 shrink-0 space-y-5 " aria-label="Shop filters">
+            {/* 1. CATEGORIES FILTER */}
             <div className="shop-category-panel bg-white rounded-2xl border border-border p-5 shadow-2xs">
               <div className="flex shrink-0 items-center justify-between mb-4 pb-3 border-b border-border">
                 <h3 className="font-toma text-xs font-black text-text uppercase tracking-wider flex items-center gap-2">
@@ -370,6 +370,9 @@ const ProductsGrid = ({ pageData }) => {
                 })}
               </ul>
             </div>
+
+            {/* 2. BRANDS FILTER */}
+            {brandPanel}
           </aside>
 
           {/* ================================================================
