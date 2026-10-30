@@ -13,7 +13,7 @@ import HkProductCardActions from "./HkProductCardActions";
 import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 
 const TABS = [
-  { id: "all", label: "🔥 All Products", category: "" },
+  { id: "all", label: "All Products", category: "" },
   { id: "whey", label: "Whey Protein", category: "Whey Protein" },
   { id: "combos", label: "Combos & Stacks", category: "Combos & Stacks" },
   { id: "creatine", label: "Creatine", category: "Creatine" },

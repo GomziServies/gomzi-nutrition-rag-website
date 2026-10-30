@@ -11,6 +11,10 @@ import ComparisonSection from "../category/ComparisonSection";
 import FAQSection from "../category/FAQSection";
 import BottomContentSection from "../category/BottomContentSection";
 
+import BrandFilter from "../category/BrandFilter";
+import useCatalogBrands from "../../hooks/useCatalogBrands";
+import { CATALOG_SORT_VALUES, categoryUrlWithFilters, getCatalogSortLabel, updateCatalogFilters } from "../../utils/catalogFilters";
+
 const sortConfig = {
   "Bestseller": {
     sort: "rating",
@@ -37,7 +41,8 @@ const sortConfig = {
 const ProductsGrid = ({ pageData }) => {
   const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedBrand = (searchParams.get("brand") || searchParams.get("company") || "").trim();
 
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
@@ -46,8 +51,8 @@ const ProductsGrid = ({ pageData }) => {
 
   const [isCategoryDrawerOpen, setIsCategoryDrawerOpen] = useState(false);
   const sortParam = searchParams.get("sort") || "";
-  const initialSort = sortParam.toLowerCase() === "bestseller" ? "Bestseller" : "Featured";
-  const [sortBy, setSortBy] = useState(initialSort);
+  const sortBy = getCatalogSortLabel(sortParam);
+  const setSortBy = label => setSearchParams(updateCatalogFilters(searchParams, { sort: CATALOG_SORT_VALUES[label] }));
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
 
   /*
@@ -63,10 +68,12 @@ const ProductsGrid = ({ pageData }) => {
     limit: 2000,
     search,
     category: activeCategory,
+    company: selectedBrand,
     ...(sortConfig[sortBy] || {}),
   });
 
-  const hasProducts = Boolean(products && products.length > 0);
+  const brandFilters = useCatalogBrands();
+  const brandPanel = <BrandFilter {...brandFilters} value={selectedBrand} onChange={brand => setSearchParams(updateCatalogFilters(searchParams, { brand }))} />;
 
   const {
     categories: categoryData,
@@ -107,12 +114,12 @@ const ProductsGrid = ({ pageData }) => {
     });
 
     if (categoryName === "All Products") {
-      navigate("/gomzi-supplement");
+      navigate(categoryUrlWithFilters("/gomzi-supplement", searchParams));
       return;
     }
 
     const destination = categories.find(item => item.name === categoryName)?.url;
-    navigate(destination || `/gomzi-supplement?category=${encodeURIComponent(categoryName)}`);
+    navigate(categoryUrlWithFilters(destination || `/gomzi-supplement?category=${encodeURIComponent(categoryName)}`, searchParams));
   };
 
   const handleAddToCart = (product) => {
@@ -128,26 +135,15 @@ const ProductsGrid = ({ pageData }) => {
     "Price, high to low",
   ];
 
-  if (loading) {
-    return (
-      <div role="status" aria-label="Loading products" aria-busy="true" className="w-full bg-light py-12 min-h-screen">
-        <span className="sr-only">Loading products…</span>
-        <div className="site-container">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-            {[...Array(12)].map((_, index) => (
-              <ProductCardSkeleton key={index} />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full bg-light py-6 sm:py-10 md:py-12 min-h-screen font-sans">
       <div className="site-container">
         {/* Category Hero Section */}
         <CategoryHero pageData={pageData} />
+        <details className="lg:hidden mb-5 rounded-xl border border-border bg-white">
+          <summary className="px-4 py-3 text-sm font-bold text-text cursor-pointer">Brands: {selectedBrand || 'All Brands'}</summary>
+          <div className="p-2 pt-0">{brandPanel}</div>
+        </details>
 
 
 
@@ -157,7 +153,7 @@ const ProductsGrid = ({ pageData }) => {
         <div className="hidden lg:flex items-center justify-between border-b border-border pb-4 mb-6">
           <div className="flex items-center gap-2.5">
             <span className="px-3 py-1 rounded-full bg-white border border-border text-xs font-black text-primary font-mono shadow-2xs">
-              {products.length}
+              {loading ? '…' : products.length}
             </span>
             <span className="text-xs font-bold text-stone-600 uppercase tracking-wider">
               Verified Supplements
@@ -374,8 +370,8 @@ const ProductsGrid = ({ pageData }) => {
           {/* ================================================================
               DESKTOP SIDEBAR
           ================================================================ */}
-          {hasProducts && (
-            <aside className="shop-category-sidebar hidden lg:block w-64 shrink-0 z-30" aria-label="Shop categories">
+            <aside className="hidden lg:block w-64 shrink-0 space-y-5" aria-label="Shop filters">
+              {brandPanel}
               <div className="shop-category-panel bg-white rounded-2xl border border-border p-5 shadow-2xs">
                 <div className="flex shrink-0 items-center justify-between mb-4 pb-3 border-b border-border">
                   <h3 className="font-toma text-xs font-black text-text uppercase tracking-wider flex items-center gap-2">
@@ -425,7 +421,6 @@ const ProductsGrid = ({ pageData }) => {
                 </ul>
               </div>
             </aside>
-          )}
 
           {/* ================================================================
               PRODUCTS GRID
@@ -437,13 +432,13 @@ const ProductsGrid = ({ pageData }) => {
                 {selectedCategory}
               </h2>
               <span className="text-xs text-stone-500 font-mono">
-                {products.length} items
+                {loading ? '…' : products.length} items
               </span>
             </div>
 
             {/* Standardized 3-Col Product Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-5">
-              {products.map((product) => (
+            <div aria-busy={loading} aria-label="Product results" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-5">
+              {loading ? Array.from({ length: 12 }, (_, index) => <ProductCardSkeleton key={index} />) : products.map((product) => (
                 <ProductCard
                   key={product._id}
                   product={product}
@@ -453,7 +448,7 @@ const ProductsGrid = ({ pageData }) => {
             </div>
 
             {/* No Products Found */}
-            {products.length === 0 && (
+            {!loading && products.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-border p-8 text-center">
                 <img
                   src="/images/coming-soon.webp"
@@ -470,10 +465,10 @@ const ProductsGrid = ({ pageData }) => {
                   {error ? "Please check your connection and try again." : search ? `No matches for “${search}”. Try another search or explore the full range.` : "We currently don't have items in this category. Explore the full range to find more options."}
                 </p>
                 <button
-                  onClick={() => error ? retry() : handleCategorySelect("All Products")}
+                  onClick={() => error ? retry() : navigate(`/gomzi-supplement${sortParam ? `?sort=${encodeURIComponent(sortParam)}` : ""}`)}
                   className="mt-4 px-4 py-2 bg-primary text-white text-xs font-bold rounded-xl hover:bg-hover cursor-pointer"
                 >
-                  {error ? "Try again" : "View all products"}
+                  {error ? "Try again" : "Clear filters"}
                 </button>
               </div>
             )}

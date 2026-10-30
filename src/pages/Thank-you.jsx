@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import PageLoading from "../component/PageLoading";
+import { GymAccessOffer } from "../component/common/GymAccessOffer";
 import Confetti from "react-confetti";
 import { useEffect, useState } from "react";
 import { getOrdersApi, getRazorpayOrderApi } from "../api/order.api";
@@ -118,6 +119,8 @@ export default function ThankYou() {
             <span className="font-bold text-primary">#{order.id}</span>
           </div>
         </div>
+
+        {order.status === "SUCCESS" && <GymAccessOffer offer={order.notes?.gym_access_offer} confirmed />}
 
         {/* Summary */}
         <div className="mt-8 site-surface p-6">

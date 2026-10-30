@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import LoginModal from "../auth/LoginModal";
 import useAuth from "../../hooks/useAuth";
+import CartGymAccessOffer from "../common/GymAccessOffer";
 
 const ProductImg = ({ src, alt, bg, label, className }) => {
   const [err, setErr] = useState(false);
@@ -274,6 +275,8 @@ export default function Cart() {
                   </span>
                 </div>
               </div>
+
+              <CartGymAccessOffer />
 
               <div className="flex items-center gap-2 mb-5">
                 <Stars filled={5} />

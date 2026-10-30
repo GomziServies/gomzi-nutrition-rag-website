@@ -12,6 +12,8 @@ import {
   updateGuestCartQuantity,
 } from "../services/cartStorage.service";
 
+import useGymAccessOffer from "../hooks/useGymAccessOffer";
+
 export const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
@@ -21,6 +23,7 @@ export const CartProvider = ({ children }) => {
   const [error, setError] = useState("");
   const [cartId, setCartId] = useState("");
 
+  const gymAccess = useGymAccessOffer(items);
   const requestId = useRef(0);
   const fetchCart = useCallback(async (showLoading = true) => {
     const request = ++requestId.current;
@@ -187,5 +190,6 @@ export const CartProvider = ({ children }) => {
     deleteItem,
     changeQuantity,
     clearCart,
+    gymAccess,
   }}>{children}</CartContext.Provider>;
 };

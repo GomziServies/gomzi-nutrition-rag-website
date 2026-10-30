@@ -11,7 +11,6 @@ import {
   X,
   ChevronDown,
   Sparkles,
-  Flame,
   PhoneCall,
   FileCheck,
   ShieldCheck,
@@ -870,13 +869,13 @@ export default function HkHeader() {
 
           <nav aria-label="Shop navigation" className="hidden lg:flex items-center gap-4 xl:gap-6 py-2 whitespace-nowrap">
             <Link to="/gomzi-supplement?sort=bestseller" onClick={() => setIsCategoryMenuOpen(false)} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-[#fcf2ee] hover:bg-[#f6e4dc] px-3 py-1.5 text-primary font-bold transition-colors">
-              <Flame size={13} className="fill-current" /> Best Sellers
+              Shop Now
             </Link>
             {PRIMARY_LINKS.filter(link => !["/", "/gomzi-supplement", "/category"].includes(link.to)).map(link => (
               <NavigationLink key={link.to} link={link} onClick={() => setIsCategoryMenuOpen(false)} />
             ))}
-            <a href="/pdf/product-report.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-800 hover:text-emerald-950 font-bold transition-colors">
-              <FileCheck size={13} /> NABL Reports
+            <a href="/pdf/product-report.pdf" target="_blank" rel="noreferrer" className="text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors">
+              Batch Lab Reports
             </a>
           </nav>
           <div className="hidden md:flex lg:hidden xl:flex items-center gap-2 whitespace-nowrap">

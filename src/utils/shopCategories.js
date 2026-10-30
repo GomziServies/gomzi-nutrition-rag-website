@@ -23,5 +23,7 @@ export function shouldShowShopCategorySections(categorySlug, searchParams) {
     && !searchParams.get("category")
     && !searchParams.get("search")?.trim()
     && !searchParams.get("sort")
+    && !searchParams.get("brand")
+    && !searchParams.get("company")
     && searchParams.get("view") !== "all";
 }

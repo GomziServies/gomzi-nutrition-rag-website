@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { checkCouponCode } from "../../api/product.api";
 import useBranding from "../../content/useBranding";
 
+import CartGymAccessOffer from "../common/GymAccessOffer";
+
 function CartItem({ item }) {
   return (
     <div className="flex gap-3 items-start py-3.5 border-b border-gray-100 last:border-0">
@@ -151,6 +153,8 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
           <CartItem key={`${item._id || item.item_id}-${item.variation_id || "base"}`} item={item} />
         ))}
       </div>
+
+      <CartGymAccessOffer />
 
       <form className="flex flex-col sm:flex-row gap-3 mt-6" onSubmit={(event) => { event.preventDefault(); handleApplyCoupon(); }}>
         <input

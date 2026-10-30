@@ -4,6 +4,8 @@ import { getOrdersApi } from "../../../api/order.api";
 import { Link } from "react-router-dom";
 import { OrderListSkeleton } from "../../../component/common/LoadingSkeletons";
 
+import { GymAccessOffer } from "../../../component/common/GymAccessOffer";
+
 function OrdersSection() {
   const [orders, setOrders] = useState([]);
   const [openOrder, setOpenOrder] = useState(null);
@@ -72,6 +74,8 @@ function OrdersSection() {
                   key={index}
                   className="bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-md border border-border overflow-hidden transition-all duration-300"
                 >
+                  {order.status === "SUCCESS" && order.notes?.gym_access_offer && <div className="px-5"><GymAccessOffer offer={order.notes.gym_access_offer} confirmed /></div>}
+
                   {/* HEADER */}
                   <button
                     type="button"

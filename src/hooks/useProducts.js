@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { fetchProducts } from "../services/product.service";
 
-export default function useProducts({ page = 1, limit = 9, category = "", search = "", sort = "", sortOrder = "", slug = "" } = {}) {
+export default function useProducts({ page = 1, limit = 9, category = "", company = "", search = "", sort = "", sortOrder = "", slug = "" } = {}) {
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState(null);
   const [pagination, setPagination] = useState({});
@@ -16,7 +16,7 @@ export default function useProducts({ page = 1, limit = 9, category = "", search
     setProduct(null);
     const load = async () => {
       try {
-        const result = await fetchProducts({ page, limit, category, search, sort, sortOrder, slug });
+        const result = await fetchProducts({ page, limit, category, company, search, sort, sortOrder, slug });
         if (!active) return;
         if (!result.success) throw new Error(result.message);
         if (slug) setProduct(Array.isArray(result.data) ? result.data[0] || null : result.data || null);
@@ -35,6 +35,6 @@ export default function useProducts({ page = 1, limit = 9, category = "", search
     };
     load();
     return () => { active = false; };
-  }, [page, limit, category, search, sort, sortOrder, slug, attempt]);
+  }, [page, limit, category, company, search, sort, sortOrder, slug, attempt]);
   return { products, product, pagination, loading, error, retry, hasProducts: products.length > 0 };
 }

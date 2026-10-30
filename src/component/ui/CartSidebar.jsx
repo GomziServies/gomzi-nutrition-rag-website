@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import LoginModal from "../auth/LoginModal";
 
+import CartGymAccessOffer from "../common/GymAccessOffer";
+
 export default function CartSidebar({ open, onClose }) {
   const navigate = useNavigate();
   const { isAuthenticated, fetchProfile } = useAuth();
@@ -65,6 +67,8 @@ export default function CartSidebar({ open, onClose }) {
             <X size={24} />
           </button>
         </div>
+
+        {items.length > 0 && <div className="px-4 shrink-0 max-h-[35vh] overflow-y-auto"><CartGymAccessOffer /></div>}
 
         {/* Items */}
         <div className="flex-1 min-h-0 overflow-y-auto p-4">
