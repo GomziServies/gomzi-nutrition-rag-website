@@ -256,44 +256,70 @@ function OrdersSection() {
                         <div className="overflow-x-auto pb-3 scrollbar-hide">
                         <div className="flex min-w-[620px] items-center justify-between relative">
                           <div className="absolute top-5 left-0 w-full h-1 bg-gray-200"></div>
-
-                          {[
-                            "PLACED",
-                            "CONFIRMED",
-                            "SHIPPED",
-                            "OUT FOR DELIVERY",
-                            "DELIVERED",
-                          ].map((step, index) => {
-                            const completed =
-                              order.user_meal_product?.tracking?.some(
-                                (t) => t.shipment_status === step,
-                              );
+                          {(() => {
+                            const trackingSteps = [
+                              "PLACED",
+                              "CONFIRMED",
+                              "SHIPPED",
+                              "OUT FOR DELIVERY",
+                              "DELIVERED",
+                            ];
+                            const trackingList = order.user_meal_product?.tracking || [];
+                            const highestIndex = Math.max(
+                              -1,
+                              ...trackingList.map((t) => {
+                                const statusName = t.shipment_status === 'DISPATCHED' ? 'SHIPPED' : t.shipment_status;
+                                return trackingSteps.indexOf(statusName);
+                              })
+                            );
 
                             return (
-                              <div
-                                key={index}
-                                className="relative z-10 flex flex-col items-center flex-1"
-                              >
-                                <div
-                                  className={`w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 ${
-                                    completed
-                                      ? "bg-green-500 border-green-500 text-white"
-                                      : "bg-white border-gray-300 text-gray-400"
-                                  }`}
-                                >
-                                  ✓
-                                </div>
+                              <>
+                                {highestIndex >= 0 && (
+                                  <div
+                                    className="absolute top-5 left-0 h-1 bg-green-500 transition-all duration-300"
+                                    style={{
+                                      width: `${(highestIndex / (trackingSteps.length - 1)) * 100}%`,
+                                    }}
+                                  ></div>
+                                )}
+                                {trackingSteps.map((step, index) => {
+                                  const completed =
+                                    highestIndex >= index ||
+                                    trackingList.some(
+                                      (t) =>
+                                        t.shipment_status === step ||
+                                        (step === "SHIPPED" && t.shipment_status === "DISPATCHED")
+                                    );
 
-                                <p
-                                  className={`mt-3 text-sm text-center font-semibold ${
-                                    completed ? "text-black" : "text-gray-400"
-                                  }`}
-                                >
-                                  {step}
-                                </p>
-                              </div>
+                                  return (
+                                    <div
+                                      key={index}
+                                      className="relative z-10 flex flex-col items-center flex-1"
+                                    >
+                                      <div
+                                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 transition-all duration-200 ${
+                                          completed
+                                            ? "bg-green-500 border-green-500 text-white"
+                                            : "bg-white border-gray-300 text-gray-400"
+                                        }`}
+                                      >
+                                        ✓
+                                      </div>
+
+                                      <p
+                                        className={`mt-3 text-sm text-center font-semibold ${
+                                          completed ? "text-black" : "text-gray-400"
+                                        }`}
+                                      >
+                                        {step}
+                                      </p>
+                                    </div>
+                                  );
+                                })}
+                              </>
                             );
-                          })}
+                          })()}
                         </div>
                         </div>
                       </div>

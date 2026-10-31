@@ -134,7 +134,7 @@
       "type": "text",
       "default": "BUYING GUIDE"
     },
-    "component.category.BrandFilter.section.06de973bb455": {
+    "component.category.BrandFilter.section.1e5ee5e58c8f": {
       "source": "src/component/category/BrandFilter.jsx",
       "group": "Shop / Brand Filter",
       "label": "Show section: Brands",
@@ -2199,7 +2199,7 @@
       "type": "text",
       "default": "Ru"
     },
-    "component.healthkart.HkGymPacksOffer.section.e4dcce8e6a46": {
+    "component.healthkart.HkGymPacksOffer.section.b914d613c73f": {
       "source": "src/component/healthkart/HkGymPacksOffer.jsx",
       "group": "Home / Gym Packs Offer",
       "label": "Show section: Exclusive Gym Membership & Supplement Offers",
@@ -3087,7 +3087,7 @@
       "type": "text",
       "default": "Login / Register"
     },
-    "component.healthkart.HkHeroBanner.section.e18037f42fd0": {
+    "component.healthkart.HkHeroBanner.section.86cb35a82232": {
       "source": "src/component/healthkart/HkHeroBanner.jsx",
       "group": "Home / Hero Banner",
       "label": "Show section: Content section",
@@ -3115,7 +3115,7 @@
       "type": "text",
       "default": "Next hero banner"
     },
-    "component.healthkart.HkHeroBanner.section.65882b931b71": {
+    "component.healthkart.HkHeroBanner.section.7bffd6c03696": {
       "source": "src/component/healthkart/HkHeroBanner.jsx",
       "group": "Home / Hero Banner",
       "label": "Show section: Loading featured offers…",
@@ -12828,19 +12828,6 @@
       "label": "Order Tracking",
       "type": "text",
       "default": "Order Tracking"
-    },
-    "pages.Profile.components.OrdersSection.items.59b9a2614e38": {
-      "source": "src/pages/Profile/components/OrdersSection.jsx",
-      "group": "Account / Orders Section",
-      "label": "Repeated items",
-      "type": "collection",
-      "default": [
-        "PLACED",
-        "CONFIRMED",
-        "SHIPPED",
-        "OUT FOR DELIVERY",
-        "DELIVERED"
-      ]
     },
     "pages.Profile.components.ProfileSection.text.64ceb89543b7": {
       "source": "src/pages/Profile/components/ProfileSection.jsx",
