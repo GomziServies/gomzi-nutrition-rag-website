@@ -1248,26 +1248,54 @@
       "type": "text",
       "default": "Save ₹"
     },
-    "component.healthkart.HkCategoryCircles.section.4ec24a2d7f1d": {
+    "component.healthkart.HkCategoryCircles.section.a812c832adb8": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
-      "label": "Show section: Popular Categories",
+      "label": "Show section: Explore By Fitness Goal",
       "type": "toggle",
       "default": true
     },
-    "component.healthkart.HkCategoryCircles.text.9942bf5b8445": {
+    "component.healthkart.HkCategoryCircles.text.3d2cf30b7a98": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
-      "label": "Popular Categories",
+      "label": "Explore By Fitness Goal",
       "type": "text",
-      "default": "Popular Categories"
+      "default": "Explore By Fitness Goal"
     },
-    "component.healthkart.HkCategoryCircles.text.83320979f688": {
+    "component.healthkart.HkCategoryCircles.text.922bb4e5618a": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
-      "label": "Explore supplements curated for your exact fitness and physique goals",
+      "label": "Popular",
       "type": "text",
-      "default": "Explore supplements curated for your exact fitness and physique goals"
+      "default": "Popular "
+    },
+    "component.healthkart.HkCategoryCircles.text.b8b1d894c683": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "Categories",
+      "type": "text",
+      "default": "Categories"
+    },
+    "component.healthkart.HkCategoryCircles.text.764938bb57ca": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "Scientifically engineered sports nutrition and wellness essentials built for your physique and ",
+      "type": "text",
+      "default": "Scientifically engineered sports nutrition and wellness essentials built for your physique and athletic goals."
+    },
+    "component.healthkart.HkCategoryCircles.attribute-to.11fa57f76c7b": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "to: /category",
+      "type": "link",
+      "default": "/category"
+    },
+    "component.healthkart.HkCategoryCircles.text.a927af7dbd3d": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "View All (",
+      "type": "text",
+      "default": "View All ("
     },
     "component.healthkart.HkCategoryCircles.attribute-aria-label.863181688554": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
@@ -1283,20 +1311,6 @@
       "type": "text",
       "default": "Next categories"
     },
-    "component.healthkart.HkCategoryCircles.attribute-to.11fa57f76c7b": {
-      "source": "src/component/healthkart/HkCategoryCircles.jsx",
-      "group": "Home / Category Circles",
-      "label": "to: /category",
-      "type": "link",
-      "default": "/category"
-    },
-    "component.healthkart.HkCategoryCircles.text.25d605a3237d": {
-      "source": "src/component/healthkart/HkCategoryCircles.jsx",
-      "group": "Home / Category Circles",
-      "label": "View All Categories",
-      "type": "text",
-      "default": "View All Categories"
-    },
     "component.healthkart.HkCategoryCircles.attribute-aria-label.d2e6d628f0af": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
@@ -1304,12 +1318,12 @@
       "type": "text",
       "default": "Loading popular categories"
     },
-    "component.healthkart.HkCategoryCircles.text.add8394ecee2": {
+    "component.healthkart.HkCategoryCircles.text.55856027618d": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
-      "label": "We couldn't load the categories.",
+      "label": "We couldn't load the categories right now.",
       "type": "text",
-      "default": "We couldn't load the categories."
+      "default": "We couldn't load the categories right now."
     },
     "component.healthkart.HkCategoryCircles.text.d8b8392e2c54": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
@@ -1318,19 +1332,33 @@
       "type": "text",
       "default": "Try again"
     },
-    "component.healthkart.HkCategoryCircles.text.fb9ef894175c": {
+    "component.healthkart.HkCategoryCircles.text.e536e00e87b1": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
-      "label": "Product",
+      "label": "GOMZI",
       "type": "text",
-      "default": "Product"
+      "default": "GOMZI"
     },
-    "component.healthkart.HkCategoryCircles.text.4edc8bfafc6b": {
+    "component.healthkart.HkCategoryCircles.text.4a33eacd5fa6": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
-      "label": "Products",
+      "label": "item",
       "type": "text",
-      "default": "Products"
+      "default": "item"
+    },
+    "component.healthkart.HkCategoryCircles.text.5f3c4f8580d3": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "items",
+      "type": "text",
+      "default": "items"
+    },
+    "component.healthkart.HkCategoryCircles.text.dee9a2324123": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "Explore Range",
+      "type": "text",
+      "default": "Explore Range"
     },
     "component.healthkart.HkCategoryShowcase.section.aeec2fcd27fc": {
       "source": "src/component/healthkart/HkCategoryShowcase.jsx",
