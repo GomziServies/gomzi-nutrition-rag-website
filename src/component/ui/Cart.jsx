@@ -45,7 +45,7 @@ export default function Cart() {
 
   const handleCheckout = () => {
     if (!isAuthenticated) {
-      setShowLogin(true);
+      navigate("/login?redirect=/checkouts");
       return;
     }
 

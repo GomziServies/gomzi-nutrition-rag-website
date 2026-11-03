@@ -14,8 +14,9 @@ export default function CartSidebar({ open, onClose }) {
   const [showLogin, setShowLogin] = useState(false);
 
   const handleCheckout = () => {
+    if (typeof onClose === "function") onClose();
     if (!isAuthenticated) {
-      setShowLogin(true);
+      navigate("/login?redirect=/checkouts");
       return;
     }
 

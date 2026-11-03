@@ -1248,7 +1248,7 @@
       "type": "text",
       "default": "Save ₹"
     },
-    "component.healthkart.HkCategoryCircles.section.9a35532c7499": {
+    "component.healthkart.HkCategoryCircles.section.4ec24a2d7f1d": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
       "label": "Show section: Popular Categories",
@@ -1268,6 +1268,20 @@
       "label": "Explore supplements curated for your exact fitness and physique goals",
       "type": "text",
       "default": "Explore supplements curated for your exact fitness and physique goals"
+    },
+    "component.healthkart.HkCategoryCircles.attribute-aria-label.863181688554": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "aria label: Previous categories",
+      "type": "text",
+      "default": "Previous categories"
+    },
+    "component.healthkart.HkCategoryCircles.attribute-aria-label.d1479f6bd0f8": {
+      "source": "src/component/healthkart/HkCategoryCircles.jsx",
+      "group": "Home / Category Circles",
+      "label": "aria label: Next categories",
+      "type": "text",
+      "default": "Next categories"
     },
     "component.healthkart.HkCategoryCircles.attribute-to.11fa57f76c7b": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
@@ -3451,7 +3465,7 @@
       "type": "link",
       "default": "/blog"
     },
-    "component.ui.BlogDetail.section.17dc3303cd10": {
+    "component.ui.BlogDetail.section.06ceef971553": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Home",
@@ -3493,21 +3507,21 @@
       "type": "text",
       "default": "By "
     },
-    "component.ui.BlogDetail.section.190510626ea6": {
+    "component.ui.BlogDetail.section.15811bd57b46": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.49b3fd5d946e": {
+    "component.ui.BlogDetail.section.2f9081896ab7": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.d1ffa97212d4": {
+    "component.ui.BlogDetail.section.c6cb970822a6": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
@@ -3521,42 +3535,42 @@
       "type": "text",
       "default": "← Back to Blog"
     },
-    "component.ui.BlogDetail.section.05b541c3795a": {
+    "component.ui.BlogDetail.section.4975117a3464": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.ecbd0a80229c": {
+    "component.ui.BlogDetail.section.2b5b537ed340": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.5fec5b357ebe": {
+    "component.ui.BlogDetail.section.30ed98019646": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.bd2aca6e820a": {
+    "component.ui.BlogDetail.section.4f803c4f3466": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: !",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.9de1ed2d33b5": {
+    "component.ui.BlogDetail.section.d308a7d4aac4": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: “",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.8f91d2b65835": {
+    "component.ui.BlogDetail.section.c248cd2922f0": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Simple formula",
@@ -3570,14 +3584,14 @@
       "type": "text",
       "default": "Simple formula"
     },
-    "component.ui.BlogDetail.section.c3cf206e8d4e": {
+    "component.ui.BlogDetail.section.9364c0b7ec4a": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.eeb0719e21c5": {
+    "component.ui.BlogDetail.section.c4ccfb78e0e0": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Frequently Asked Questions",
@@ -3591,14 +3605,14 @@
       "type": "text",
       "default": "Frequently Asked Questions"
     },
-    "component.ui.BlogDetail.section.ff211bc873de": {
+    "component.ui.BlogDetail.section.b682600c92c6": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.3ca0b4dbd418": {
+    "component.ui.BlogDetail.section.786b91e6228e": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading & Sources",
@@ -3612,7 +3626,7 @@
       "type": "text",
       "default": "Further Reading & Sources"
     },
-    "component.ui.BlogDetail.section.7686df942235": {
+    "component.ui.BlogDetail.section.e5a31b273530": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Related Reading",
@@ -3626,7 +3640,7 @@
       "type": "text",
       "default": "Related Reading"
     },
-    "component.ui.BlogDetail.section.8183b1da786a": {
+    "component.ui.BlogDetail.section.963c1e35c62c": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading",
@@ -3640,7 +3654,7 @@
       "type": "text",
       "default": "Further Reading"
     },
-    "component.ui.Blogs.section.5e74cb2ad4e2": {
+    "component.ui.Blogs.section.219de1387a67": {
       "source": "src/component/ui/Blogs.jsx",
       "group": "Website sections / Blogs",
       "label": "Show section: The Gomzi Journal",
@@ -3752,7 +3766,7 @@
       "type": "text",
       "default": "Manufacturing Facility"
     },
-    "component.ui.Cart.section.6815fd0989fc": {
+    "component.ui.Cart.section.7880bd7fe5dc": {
       "source": "src/component/ui/Cart.jsx",
       "group": "Website sections / Cart",
       "label": "Show section: We couldn't load your cart",
