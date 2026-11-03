@@ -393,8 +393,8 @@ export default function HkHeader() {
           <form onSubmit={handleSearchSubmit} className="relative w-full">
             <div
               className={`flex items-center bg-light border rounded-xl h-11 px-3.5 transition-all shadow-inner ${isSearchFocused
-                  ? "border-primary bg-white ring-2 ring-primary/20 shadow-md"
-                  : "border-border hover:border-primary/60"
+                ? "border-primary bg-white ring-2 ring-primary/20 shadow-md"
+                : "border-border hover:border-primary/60"
                 }`}
             >
               <Search
@@ -785,8 +785,8 @@ export default function HkHeader() {
                           setIsCategoryMenuOpen(false);
                         }}
                         className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-all cursor-pointer ${isActive
-                            ? "bg-white text-primary shadow-sm font-bold border border-border"
-                            : "text-stone-700 hover:bg-white/60"
+                          ? "bg-white text-primary shadow-sm font-bold border border-border"
+                          : "text-stone-700 hover:bg-white/60"
                           }`}
                       >
                         <span className="flex items-center gap-2">
@@ -871,10 +871,9 @@ export default function HkHeader() {
               end
               onClick={() => setIsCategoryMenuOpen(false)}
               className={({ isActive }) =>
-                `inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 font-bold transition-all shadow-sm ${
-                  isActive
-                    ? "bg-primary text-white border-primary"
-                    : "bg-white hover:bg-[#fbf4f0] text-stone-700 hover:text-primary"
+                `inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 font-bold transition-all shadow-sm ${isActive
+                  ? "bg-primary text-white border-primary"
+                  : "bg-white hover:bg-[#fbf4f0] text-stone-700 hover:text-primary"
                 }`
               }
             >
