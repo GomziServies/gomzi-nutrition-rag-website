@@ -2933,6 +2933,13 @@
       "type": "text",
       "default": "Shop navigation"
     },
+    "component.healthkart.HkHeader.text.3a78695388b3": {
+      "source": "src/component/healthkart/HkHeader.jsx",
+      "group": "Global / Navigation and header",
+      "label": "Home",
+      "type": "text",
+      "default": "Home"
+    },
     "component.healthkart.HkHeader.attribute-to.d1d793861fd2": {
       "source": "src/component/healthkart/HkHeader.jsx",
       "group": "Global / Navigation and header",

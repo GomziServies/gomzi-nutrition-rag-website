@@ -24,6 +24,7 @@ import {
   Scale,
   HeartPulse,
   Utensils,
+  Home,
 } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
@@ -865,6 +866,21 @@ export default function HkHeader() {
           </div>
 
           <nav aria-label="Shop navigation" className="hidden lg:flex items-center gap-4 xl:gap-6 py-2 whitespace-nowrap">
+            <NavLink
+              to="/"
+              end
+              onClick={() => setIsCategoryMenuOpen(false)}
+              className={({ isActive }) =>
+                `inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 font-bold transition-all shadow-sm ${
+                  isActive
+                    ? "bg-primary text-white border-primary"
+                    : "bg-white hover:bg-[#fbf4f0] text-stone-700 hover:text-primary"
+                }`
+              }
+            >
+              <Home size={14} />
+              <span>Home</span>
+            </NavLink>
             <Link to="/gomzi-supplement?sort=bestseller" onClick={() => setIsCategoryMenuOpen(false)} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-[#fcf2ee] hover:bg-[#f6e4dc] px-3 py-1.5 text-primary font-bold transition-colors">
               Shop Now
             </Link>
