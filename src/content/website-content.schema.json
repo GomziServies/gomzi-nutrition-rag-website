@@ -462,7 +462,7 @@
       "type": "text",
       "default": "Jump to a product category"
     },
-    "component.checkout.CheckoutForm.section.871c39835ef0": {
+    "component.checkout.CheckoutForm.section.6903260f1db7": {
       "source": "src/component/checkout/CheckoutForm.jsx",
       "group": "Checkout / Checkout Form",
       "label": "Show section: Contact",
@@ -483,7 +483,7 @@
       "type": "text",
       "default": "Email"
     },
-    "component.checkout.CheckoutForm.section.aeec2fcd27fc": {
+    "component.checkout.CheckoutForm.section.803919e93cca": {
       "source": "src/component/checkout/CheckoutForm.jsx",
       "group": "Checkout / Checkout Form",
       "label": "Show section: Delivery",
@@ -567,14 +567,7 @@
       "type": "text",
       "default": "Phone"
     },
-    "component.checkout.CheckoutForm.attribute-label.90bbff0bf575": {
-      "source": "src/component/checkout/CheckoutForm.jsx",
-      "group": "Checkout / Checkout Form",
-      "label": "label: Save this information for next time",
-      "type": "text",
-      "default": "Save this information for next time"
-    },
-    "component.checkout.CheckoutForm.section.2ffb3371bade": {
+    "component.checkout.CheckoutForm.section.19febac2c341": {
       "source": "src/component/checkout/CheckoutForm.jsx",
       "group": "Checkout / Checkout Form",
       "label": "Show section: Payment",
@@ -629,6 +622,41 @@
       "label": "Pay in cash when your order is delivered to your door. No advance payment required.",
       "type": "text",
       "default": "Pay in cash when your order is delivered to your door. No advance payment required."
+    },
+    "component.checkout.CheckoutForm.text.9be1b0537945": {
+      "source": "src/component/checkout/CheckoutForm.jsx",
+      "group": "Checkout / Checkout Form",
+      "label": "Your payment needs confirmation. Check its status before paying again.",
+      "type": "text",
+      "default": "Your payment needs confirmation. Check its status before paying again."
+    },
+    "component.checkout.CheckoutForm.text.0285d6370b18": {
+      "source": "src/component/checkout/CheckoutForm.jsx",
+      "group": "Checkout / Checkout Form",
+      "label": "Confirming payment...",
+      "type": "text",
+      "default": "Confirming payment..."
+    },
+    "component.checkout.CheckoutForm.text.b7d849d6c926": {
+      "source": "src/component/checkout/CheckoutForm.jsx",
+      "group": "Checkout / Checkout Form",
+      "label": "Retry confirmation",
+      "type": "text",
+      "default": "Retry confirmation"
+    },
+    "component.checkout.CheckoutForm.attribute-to.55d685028857": {
+      "source": "src/component/checkout/CheckoutForm.jsx",
+      "group": "Checkout / Checkout Form",
+      "label": "to: /profile",
+      "type": "link",
+      "default": "/profile"
+    },
+    "component.checkout.CheckoutForm.text.00db793f2b8c": {
+      "source": "src/component/checkout/CheckoutForm.jsx",
+      "group": "Checkout / Checkout Form",
+      "label": "My Orders",
+      "type": "text",
+      "default": "My Orders"
     },
     "component.checkout.CheckoutForm.text.f40a853e58a1": {
       "source": "src/component/checkout/CheckoutForm.jsx",
@@ -1248,7 +1276,7 @@
       "type": "text",
       "default": "Save ₹"
     },
-    "component.healthkart.HkCategoryCircles.section.a812c832adb8": {
+    "component.healthkart.HkCategoryCircles.section.9cbfc3c153a2": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
       "label": "Show section: Explore By Fitness Goal",
@@ -2856,13 +2884,6 @@
       "type": "text",
       "default": "View all results for \""
     },
-    "component.healthkart.HkHeader.text.7e1b0d5641f2": {
-      "source": "src/component/healthkart/HkHeader.jsx",
-      "group": "Global / Navigation and header",
-      "label": "Account",
-      "type": "text",
-      "default": "Account"
-    },
     "component.healthkart.HkHeader.text.9d6322c1f4d9": {
       "source": "src/component/healthkart/HkHeader.jsx",
       "group": "Global / Navigation and header",
@@ -3682,7 +3703,7 @@
       "type": "text",
       "default": "Further Reading"
     },
-    "component.ui.Blogs.section.219de1387a67": {
+    "component.ui.Blogs.section.9dcbe7e30f0b": {
       "source": "src/component/ui/Blogs.jsx",
       "group": "Website sections / Blogs",
       "label": "Show section: The Gomzi Journal",
@@ -5013,7 +5034,7 @@
       "type": "text",
       "default": "Founder"
     },
-    "component.ui.ProductDetail.section.7fe5e0f74493": {
+    "component.ui.ProductDetail.section.4c5f863a2792": {
       "source": "src/component/ui/ProductDetail.jsx",
       "group": "Website sections / Product Detail",
       "label": "Show section: Try again",
@@ -11114,6 +11135,27 @@
       "type": "link",
       "default": "/login?redirect=/checkouts"
     },
+    "pages.Checkouts.section.b5a9ede9a935": {
+      "source": "src/pages/Checkouts.jsx",
+      "group": "Pages / Checkouts",
+      "label": "Show section: We couldn't load your cart. Your items are saved.",
+      "type": "toggle",
+      "default": true
+    },
+    "pages.Checkouts.text.d5c00413a888": {
+      "source": "src/pages/Checkouts.jsx",
+      "group": "Pages / Checkouts",
+      "label": "We couldn't load your cart. Your items are saved.",
+      "type": "text",
+      "default": "We couldn't load your cart. Your items are saved."
+    },
+    "pages.Checkouts.text.d8b8392e2c54": {
+      "source": "src/pages/Checkouts.jsx",
+      "group": "Pages / Checkouts",
+      "label": "Try again",
+      "type": "text",
+      "default": "Try again"
+    },
     "pages.Checkouts.attribute-to.e417935791c3": {
       "source": "src/pages/Checkouts.jsx",
       "group": "Pages / Checkouts",
@@ -12829,6 +12871,13 @@
       "type": "text",
       "default": "Total"
     },
+    "pages.Profile.components.OrdersSection.text.e0feeb8f09ee": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Placed · Pay on delivery",
+      "type": "text",
+      "default": "Placed · Pay on delivery"
+    },
     "pages.Profile.components.OrdersSection.text.4edc8bfafc6b": {
       "source": "src/pages/Profile/components/OrdersSection.jsx",
       "group": "Account / Orders Section",
@@ -12863,6 +12912,13 @@
       "label": "Order Status",
       "type": "text",
       "default": "Order Status"
+    },
+    "pages.Profile.components.OrdersSection.text.faf039df3343": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "PLACED",
+      "type": "text",
+      "default": "PLACED"
     },
     "pages.Profile.components.OrdersSection.text.6e24470fcecb": {
       "source": "src/pages/Profile/components/OrdersSection.jsx",
@@ -13060,7 +13116,7 @@
       "type": "text",
       "default": "Manage your details and keep track of your orders."
     },
-    "pages.Thank-you.section.1828526428f1": {
+    "pages.Thank-you.section.73a2af8864fc": {
       "source": "src/pages/Thank-you.jsx",
       "group": "Pages / Thank you",
       "label": "Show section: We couldn't find this order",
@@ -13116,12 +13172,33 @@
       "type": "text",
       "default": "Thank You!"
     },
-    "pages.Thank-you.text.6d4e99974ff4": {
+    "pages.Thank-you.text.11a74a428880": {
       "source": "src/pages/Thank-you.jsx",
       "group": "Pages / Thank you",
-      "label": "Your order has been placed successfully. We've sent a confirmation email and will start process",
+      "label": "Payment confirmation pending",
       "type": "text",
-      "default": "Your order has been placed successfully. We've sent a confirmation email and will start processing your order shortly."
+      "default": "Payment confirmation pending"
+    },
+    "pages.Thank-you.text.7191983ecbea": {
+      "source": "src/pages/Thank-you.jsx",
+      "group": "Pages / Thank you",
+      "label": "Your order has been placed successfully. You can follow its progress in My Orders.",
+      "type": "text",
+      "default": "Your order has been placed successfully. You can follow its progress in My Orders."
+    },
+    "pages.Thank-you.text.e03f4e7bdc83": {
+      "source": "src/pages/Thank-you.jsx",
+      "group": "Pages / Thank you",
+      "label": "We're waiting for payment confirmation. Please check this order before making another payment.",
+      "type": "text",
+      "default": "We're waiting for payment confirmation. Please check this order before making another payment."
+    },
+    "pages.Thank-you.text.96fa4db2a719": {
+      "source": "src/pages/Thank-you.jsx",
+      "group": "Pages / Thank you",
+      "label": "Check My Orders for the latest payment and delivery details.",
+      "type": "text",
+      "default": "Check My Orders for the latest payment and delivery details."
     },
     "pages.Thank-you.text.3f7d9a54aa0e": {
       "source": "src/pages/Thank-you.jsx",
@@ -13129,6 +13206,13 @@
       "label": "Order ID:",
       "type": "text",
       "default": "Order ID:"
+    },
+    "pages.Thank-you.text.ae1b6f51f5f5": {
+      "source": "src/pages/Thank-you.jsx",
+      "group": "Pages / Thank you",
+      "label": "Check payment status",
+      "type": "text",
+      "default": "Check payment status"
     },
     "pages.Thank-you.text.46bb669f4bac": {
       "source": "src/pages/Thank-you.jsx",
@@ -13151,12 +13235,26 @@
       "type": "text",
       "default": "Payment Method"
     },
+    "pages.Thank-you.text.9f3c80ced76f": {
+      "source": "src/pages/Thank-you.jsx",
+      "group": "Pages / Thank you",
+      "label": "Amount due on delivery",
+      "type": "text",
+      "default": "Amount due on delivery"
+    },
     "pages.Thank-you.text.2a073fa4df81": {
       "source": "src/pages/Thank-you.jsx",
       "group": "Pages / Thank you",
       "label": "Total Paid",
       "type": "text",
       "default": "Total Paid"
+    },
+    "pages.Thank-you.text.03cae7f5eab6": {
+      "source": "src/pages/Thank-you.jsx",
+      "group": "Pages / Thank you",
+      "label": "Order Total",
+      "type": "text",
+      "default": "Order Total"
     },
     "pages.Thank-you.text.3947c8d9d3bc": {
       "source": "src/pages/Thank-you.jsx",

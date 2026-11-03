@@ -1,4 +1,4 @@
-const generateUUID = () => {
+export const generateUUID = () => {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
     try {
       return crypto.randomUUID();

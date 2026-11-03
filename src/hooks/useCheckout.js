@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createOrder } from "../services/order.service";
+import { errorToast, successToast } from "../utils/toast";
 import useAuth from "./useAuth";
 import useCart from "./useCart";
-import { createOrder } from "../services/order.service";
-import { successToast, errorToast } from "../utils/toast";
 
 const useCheckout = (coupon) => {
   const { user } = useAuth();
-  const { items, cartId } = useCart();
+  const { items, cartId, cartIds } = useCart();
 
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
+  const dirtyFields = useRef(new Set());
 
   const [formData, setFormData] = useState({
     email: "",
@@ -26,23 +28,32 @@ const useCheckout = (coupon) => {
 
   useEffect(() => {
     if (!user) return;
-    setFormData((prev) => ({
-      ...prev,
-      email: user.email || "",
-      first_name: user.first_name || "",
-      last_name: user.last_name || "",
-      coupon_id: coupon?._id || null,
-      mobile: user.mobile || "",
-      address_line_1: user.address?.address_line_1 || "",
-      address_line_2: user.address?.address_line_2 || "",
-      city: user.address?.city || "",
-      state: user.address?.state || "",
-      country: user.address?.country || "India",
-      pin_code: user.address?.pin_code || "",
-    }));
+    setFormData((prev) => {
+      const defaults = {
+        ...prev,
+        email: user.email || "",
+        first_name: user.first_name || "",
+        last_name: user.last_name || "",
+        coupon_id: coupon?._id || null,
+        mobile: user.mobile || "",
+        address_line_1: user.address?.address_line_1 || "",
+        address_line_2: user.address?.address_line_2 || "",
+        city: user.address?.city || "",
+        state: user.address?.state || "",
+        country: user.address?.country || "India",
+        pin_code: user.address?.pin_code || "",
+      };
+      return Object.fromEntries(
+        Object.entries(defaults).map(([field, value]) => [
+          field,
+          dirtyFields.current.has(field) ? prev[field] : value,
+        ])
+      );
+    });
   }, [user, coupon?._id]);
 
   const updateField = (field, value) => {
+    dirtyFields.current.add(field);
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -50,14 +61,15 @@ const useCheckout = (coupon) => {
   };
 
   const updatePaymentMode = (method) => {
-    console.log(method);
     updateField(
       "payment_mode",
-      method === "ONLINE" ? "ONLINE" : "Cash On Delivery",
+      method === "ONLINE" ? "ONLINE" : "Cash On Delivery"
     );
   };
 
   const placeOrder = async () => {
+    if (submitting.current) return { success: false };
+    submitting.current = true;
     try {
       setLoading(true);
 
@@ -81,7 +93,9 @@ const useCheckout = (coupon) => {
         ["state", "State"],
         ["pin_code", "Postal code"],
       ];
-      const missing = requiredFields.find(([field]) => !String(formData[field] || "").trim());
+      const missing = requiredFields.find(
+        ([field]) => !String(formData[field] || "").trim()
+      );
       if (missing) {
         errorToast(`${missing[1]} is required`);
         return { success: false };
@@ -90,8 +104,22 @@ const useCheckout = (coupon) => {
         errorToast("Enter a valid 6-digit postal code");
         return { success: false };
       }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+        errorToast("Enter a valid email address");
+        return { success: false };
+      }
+      if (!/^[6-9]\d{9}$/.test(formData.mobile.trim())) {
+        errorToast("Enter a valid 10-digit Indian phone number");
+        return { success: false };
+      }
 
       const payload = {
+        cart_id: cartId,
+        ...(cartIds?.length && { cart_ids: cartIds }),
+        email: formData.email.trim().toLowerCase(),
+        first_name: formData.first_name.trim(),
+        last_name: formData.last_name.trim(),
+        mobile: formData.mobile.trim(),
         payment_mode: formData.payment_mode,
 
         item_type: "FG_MEAL_PRODUCT",
@@ -128,11 +156,11 @@ const useCheckout = (coupon) => {
           success: false,
         };
       }
-      successToast(result.message);
+      if (formData.payment_mode !== "ONLINE") successToast(result.message);
       return {
         success: true,
         data: result.data,
-        cartId,
+        cartId: cartIds?.length ? cartIds : cartId,
       };
     } catch {
       errorToast("Something went wrong");
@@ -141,6 +169,7 @@ const useCheckout = (coupon) => {
         success: false,
       };
     } finally {
+      submitting.current = false;
       setLoading(false);
     }
   };

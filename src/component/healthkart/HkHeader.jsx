@@ -229,6 +229,12 @@ export default function HkHeader() {
   const contact = useContactDetails();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const userDisplayName =
+    user?.displayName ||
+    user?.first_name ||
+    (user?.name ? user.name.split(" ")[0] : null) ||
+    (user?.email ? user.email.split("@")[0] : null) ||
+    "Account";
   const { items: authCartItems } = useCart();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -646,7 +652,7 @@ export default function HkHeader() {
           >
             <User size={16} />
             <span className="hidden sm:inline">
-              {isAuthenticated ? user?.name?.split(" ")[0] || "Account" : "Login"}
+              {isAuthenticated ? userDisplayName : "Login"}
             </span>
           </button>
 
@@ -1000,7 +1006,7 @@ export default function HkHeader() {
                 }}
                 className="w-full py-2.5 bg-primary text-white text-xs font-bold rounded-lg uppercase tracking-wider cursor-pointer"
               >
-                {isAuthenticated ? "My Account" : "Login / Register"}
+                {isAuthenticated ? (userDisplayName !== "Account" ? `Hi, ${userDisplayName}` : "My Account") : "Login / Register"}
               </button>
             </div>
           </div>

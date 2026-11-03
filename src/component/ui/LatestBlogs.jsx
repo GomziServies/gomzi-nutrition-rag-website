@@ -1,5 +1,7 @@
-import React from "react";
-import { blogs } from "../../data/blogs";
+import React, { useEffect, useState } from "react";
+import { blogs as staticBlogs } from "../../data/blogs";
+import { getBlogsApi } from "../../api/blog.api";
+import { resolveImageUrl } from "./BlogDetail";
 import Hookheading from "../common/Hookheading";
 
 export default function LatestBlogs() {

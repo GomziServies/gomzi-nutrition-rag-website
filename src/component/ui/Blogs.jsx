@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { blogs } from "../../data/blogs";
+import { blogs as staticBlogs } from "../../data/blogs";
+import { getBlogsApi } from "../../api/blog.api";
+import { resolveImageUrl } from "./BlogDetail";
 
 const BlogSection = () => {
   const [blogList, setBlogList] = useState(staticBlogs);

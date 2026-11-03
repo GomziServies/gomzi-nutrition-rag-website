@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -6,10 +6,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { FiHeart, FiShoppingCart, FiChevronRight } from "react-icons/fi";
 import { FaHeart, FaStar } from "react-icons/fa";
-import { successToast, errorToast } from "../../utils/toast";
+import { successToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
-import { normalizeProduct, filterProductsByCategory, isRealProduct } from "../../utils/productAdapter";
+import { normalizeProduct, isRealProduct } from "../../utils/productAdapter";
 import { ProductCardSkeleton } from "../common/SkeletonLoaders";
 import useAuth from "../../hooks/useAuth";
 

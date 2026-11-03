@@ -47,8 +47,6 @@ export default function NARAProductPage() {
   const { slug } = useParams();
   const { product, loading, error, retry } = useProducts({ slug });
 
-  useEffect(() => { setSelectedVariation(null); setActiveIndex(0); }, [slug]);
-
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedVariation, setSelectedVariation] = useState(null);
   const currentProduct = selectedVariation || product;
@@ -56,6 +54,7 @@ export default function NARAProductPage() {
   const { isAuthenticated } = useAuth();
   const [activeIndex, setActiveIndex] = useState(0);
   const desktopSwiperRef = useRef(null);
+  useEffect(() => { setSelectedVariation(null); setActiveIndex(0); }, [slug]);
 
   useEffect(() => {
     if (product?._id) trackRecentlyViewed(product);

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Check, Star } from "lucide-react";
 
 import { getProductsApi } from "../../api/product.api";
-import { getProductImageUrl, getFallbackProductImage } from "../../utils/productAdapter";
+import { getProductImageUrl } from "../../utils/productAdapter";
 import { successToast } from "../../utils/toast";
 import SectionHeader from "../common/SectionHeader";
 

@@ -13,7 +13,7 @@ import {
   FiChevronLeft,
 } from "react-icons/fi";
 import { FaHeart, FaStar } from "react-icons/fa";
-import { successToast, errorToast } from "../../utils/toast";
+import { successToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { getCompaniesApi } from "../../api/company.api";

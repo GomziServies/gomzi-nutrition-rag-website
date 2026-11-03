@@ -67,6 +67,7 @@ async function checkout({ mode = "ONLINE", result = { success: true, data: { rec
   let submitted;
   const { default: useCheckout } = await load("../src/hooks/useCheckout.js", {
     react: {
+      useRef: value => ({ current: value }),
       useEffect() {},
       useState: initial => [typeof initial === "object" ? {
         ...initial, email: "test@example.com", first_name: "Test", last_name: "User", mobile: "9999999999",
@@ -86,6 +87,9 @@ test("opening online payment keeps the cart and coupon until payment succeeds", 
   assert.equal(result.cartId, "original-cart");
   assert.equal(submitted.payment_mode, "ONLINE");
   assert.equal(submitted.products[0].variation_id, "variation");
+  assert.equal(submitted.email, "test@example.com");
+  assert.equal(submitted.first_name, "Test");
+  assert.equal(submitted.mobile, "9999999999");
   assert.equal(items.length, 1);
   assert.equal(localStorage.getItem("guest_cart"), "saved items");
   assert.equal(localStorage.getItem("checkout_coupon"), "null");

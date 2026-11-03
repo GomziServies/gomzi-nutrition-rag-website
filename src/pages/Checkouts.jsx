@@ -11,12 +11,13 @@ import { Link, Navigate } from "react-router-dom";
 export default function Checkouts() {
   const branding = useBranding();
   const { isAuthenticated, loading: authLoading } = useAuth();
-  const { items, loading } = useCart();
+  const { items, loading, error, fetchCart } = useCart();
 
   const { coupon, saveCoupon, clearCoupon } = useCoupon();
 
   if (loading || authLoading) return <CheckoutSkeleton />;
   if (!isAuthenticated) return <Navigate to="/login?redirect=/checkouts" replace />;
+  if (error) return <section role="alert" className="site-container py-16 text-center"><p>We couldn't load your cart. Your items are saved.</p><button type="button" className="site-button mt-4" onClick={() => fetchCart()}>Try again</button></section>;
 
   if (!loading && items.length === 0) {
     return <Navigate to="/gomzi-supplement" replace />;

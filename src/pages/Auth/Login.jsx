@@ -2,7 +2,8 @@ import AccountLayout from "../../component/common/AccountLayout";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loginUser, sendOTP, verifyOTP } from "../../services/auth.service";
-import { setToken } from "../../utils/storage";
+import { saveAuthSession } from "../../utils/storage";
+import useAuth from "../../hooks/useAuth";
 import { successToast, errorToast } from "../../utils/toast";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleLogin } from "../../api/auth.api";
@@ -10,6 +11,7 @@ import { Lock, MessageSquare } from "lucide-react";
 // import LoginModal from "../../component/auth/LoginModal";
 
 export default function LoginPage() {
+  const { login } = useAuth();
   // const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -53,11 +55,13 @@ export default function LoginPage() {
         errorToast("Please verify your email using the link in your inbox before signing in.");
         return;
       }
-      setToken(response.data.authorization);
+      const userPayload = response.data;
+      const token = userPayload?.authorization;
+      saveAuthSession(token, userPayload);
+      if (login) login(token, userPayload);
 
       successToast("Login successful");
-
-      window.location.replace(redirectTo);
+      navigate(redirectTo, { replace: true });
     } catch {
       errorToast("Something went wrong");
     } finally {
@@ -117,13 +121,13 @@ export default function LoginPage() {
       const result = await verifyOTP(payload);
 
       if (!result.success) { errorToast(result.message || "Invalid OTP"); return; }
-      const token = result.data.data.authorization;
-
-      setToken(token);
+      const userPayload = result.data.data;
+      const token = userPayload?.authorization;
+      saveAuthSession(token, userPayload);
+      if (login) login(token, userPayload);
 
       successToast("Login successful");
-
-      window.location.replace(redirectTo);
+      navigate(redirectTo, { replace: true });
     } catch {
       errorToast("Invalid OTP");
     } finally {
@@ -141,13 +145,13 @@ export default function LoginPage() {
 
 
 
-      const token = result.data.data.authorization;
-
-      setToken(token);
+      const userPayload = result.data.data;
+      const token = userPayload?.authorization;
+      saveAuthSession(token, userPayload);
+      if (login) login(token, userPayload);
 
       successToast("Login successful");
-
-      window.location.replace(redirectTo);
+      navigate(redirectTo, { replace: true });
     } catch (error) {
       console.error(error);
       errorToast("Google login failed");
@@ -182,7 +186,7 @@ export default function LoginPage() {
             Don't have an account?{" "}
             <button
               type="button"
-              onClick={() => navigate("/register")}
+              onClick={() => navigate(redirectTo === "/" ? "/register" : `/register?redirect=${encodeURIComponent(redirectTo)}`)}
               className="font-modelica font-semibold underline underline-offset-2 transition-colors bg-transparent border-none cursor-pointer"
               style={{ color: "#111111" }}
             >

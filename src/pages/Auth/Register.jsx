@@ -1,12 +1,18 @@
 import AccountLayout from "../../component/common/AccountLayout";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import { registerUser } from "../../services/auth.service";
 import { successToast, errorToast } from "../../utils/toast";
 
 export default function RegisterPage() {
+  const { login } = useAuth();
+  const [searchParams] = useSearchParams();
+  const requestedRedirect = searchParams.get("redirect");
+  const redirectTo = ["/checkouts", "/cart", "/profile"].includes(requestedRedirect) ? requestedRedirect : "/";
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -55,6 +61,8 @@ export default function RegisterPage() {
 
   const handleRegister = async (event) => {
     event?.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     try {
       setLoading(true);
       const payload = {
@@ -68,12 +76,14 @@ export default function RegisterPage() {
         return;
       }
 
-      successToast("Verification email sent");
-
-      navigate("/login");
+      const user = result.data?.data;
+      login(user?.authorization, user);
+      successToast("Account created successfully");
+      navigate(redirectTo, { replace: true });
     } catch (error) {
       errorToast("Something went wrong", error);
     } finally {
+      submitting.current = false;
       setLoading(false);
     }
   };
@@ -105,7 +115,7 @@ export default function RegisterPage() {
               Already have an account?{" "}
               <button
                 type="button"
-                onClick={() => navigate("/login")}
+                onClick={() => navigate(redirectTo === "/" ? "/login" : `/login?redirect=${encodeURIComponent(redirectTo)}`)}
                 className="font-modelica font-semibold underline underline-offset-2 transition-colors bg-transparent border-none cursor-pointer"
                 style={{ color: "#111111" }}
               >
@@ -118,7 +128,7 @@ export default function RegisterPage() {
           <div className="flex flex-col gap-3">
             <button
               type="button"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate(redirectTo === "/" ? "/login" : `/login?redirect=${encodeURIComponent(redirectTo)}`)}
               className="w-full flex items-center justify-center gap-3 py-3.5 rounded-[10px] border font-modelica text-sm font-semibold transition-all hover:bg-gray-50 active:scale-[0.98]"
               style={{
                 borderColor: "#e5e7eb",

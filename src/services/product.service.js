@@ -48,7 +48,7 @@ export const fetchProducts = async ({
 
 export const addToCart = async (data) => {
   try {
-    const response = await addToCartApi(data);
+    const response = await addToCartApi({ quantity_mode: "increment", ...data });
 
     return {
       success: true,
@@ -99,6 +99,7 @@ export const removeCartItem = async (cart_id, item_id) => {
 };
 
 export const updateCartQuantity = async ({
+  cart_id,
   item_id,
   quantity,
   variation_id,
@@ -106,6 +107,7 @@ export const updateCartQuantity = async ({
 }) => {
   try {
     const response = await addToCartApi({
+      ...(cart_id && { cart_id }),
       item_id,
       item_type: "FG_MEAL_PRODUCT",
       quantity,

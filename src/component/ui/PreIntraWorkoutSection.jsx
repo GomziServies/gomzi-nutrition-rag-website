@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProductsApi } from "../../api/product.api";
 import { getProductImageUrl } from "../../utils/productAdapter";
-import { addProductToCart } from "../../services/cartStorage.service";
-import { successToast } from "../../utils/toast";
 import SectionHeader from "../common/SectionHeader";
 import ProductCard from "../common/ProductCard";
 import { ProductCardSkeleton } from "../common/SkeletonLoaders";

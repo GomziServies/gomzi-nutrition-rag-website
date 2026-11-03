@@ -96,12 +96,12 @@ function OrdersSection() {
                         </p>
 
                         <div className="flex gap-3 mt-4 flex-wrap">
-                          {order.CART?.slice(0, 2).map((item) => (
+                          {order.CART?.slice(0, 2).map((item, itemIndex) => (
                             <div
-                              key={`${order._id}-${item._id}`}
+                              key={`${order._id}-${itemIndex}`}
                               className="bg-gray-100 px-3 py-1.5 rounded-full text-xs md:text-sm font-medium"
                             >
-                              {item.name}
+                              {order.multiple_items?.[itemIndex]?.notes?.product_name || item?.name || "Product"}
                             </div>
                           ))}
 
@@ -133,7 +133,7 @@ function OrdersSection() {
                                 : "bg-yellow-100 text-yellow-700"
                             }`}
                           >
-                            {order.status}
+                            {order.purchase_mode === "Cash On Delivery" && order.status === "SUCCESS" ? "Placed · Pay on delivery" : order.status}
                           </span>
                         </div>
 
@@ -165,13 +165,12 @@ function OrdersSection() {
 
                         <div className="space-y-4">
                           {order.CART?.map((item, index) => {
-                            const matchedItem = order.multiple_items?.find(
-                              (m) => m.item_id === item._id,
-                            );
+                            const matchedItem = order.multiple_items?.[index];
+                            const variation = item?.variations?.find((entry) => String(entry._id) === String(matchedItem?.notes?.variation_id));
 
                             return (
                               <div
-                                key={`${order._id}-${item._id}-${index}`}
+                                key={`${order._id}-${index}`}
                                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50 rounded-2xl p-4"
                               >
                                 <div className="flex items-center gap-4">
@@ -182,7 +181,7 @@ function OrdersSection() {
 
                                   <div>
                                     <h4 className="font-semibold text-sm md:text-base">
-                                      {item.name}
+                                      {matchedItem?.notes?.product_name || [item?.name || "Product", variation?.name].filter(Boolean).join(" - ")}
                                     </h4>
 
                                     <p className="text-xs md:text-sm text-gray-500">
@@ -192,7 +191,7 @@ function OrdersSection() {
                                 </div>
 
                                 <h3 className="text-lg md:text-xl font-bold">
-                                  ₹{item.price.toLocaleString()}
+                                  ₹{Number(matchedItem?.amount ?? item?.price ?? 0).toLocaleString()}
                                 </h3>
                               </div>
                             );
@@ -225,9 +224,7 @@ function OrdersSection() {
 
                           <h3 className="font-bold text-lg mt-2 text-primary">
                             {
-                              order.user_meal_product?.tracking?.[
-                                order.user_meal_product.tracking.length - 1
-                              ]?.shipment_status
+                              order.user_meal_product?.tracking?.filter((entry) => entry.status !== false).at(-1)?.shipment_status || (order.status === "SUCCESS" ? "PLACED" : order.status)
                             }
                           </h3>
                         </div>

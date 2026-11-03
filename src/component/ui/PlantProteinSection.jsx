@@ -7,7 +7,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { FiHeart, FiShoppingCart, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { FaHeart, FaStar } from "react-icons/fa";
-import { successToast, errorToast } from "../../utils/toast";
+import { successToast } from "../../utils/toast";
 import { addProductToCart } from "../../services/cartStorage.service";
 import { getProductsApi } from "../../api/product.api";
 import { normalizeProduct, isRealProduct } from "../../utils/productAdapter";
