@@ -3,9 +3,24 @@ import { blogs } from "../../data/blogs";
 import Hookheading from "../common/Hookheading";
 
 export default function LatestBlogs() {
+  const [blogList, setBlogList] = useState(staticBlogs);
+
+  useEffect(() => {
+    getBlogsApi()
+      .then((res) => {
+        const live = res?.data?.data?.blogs || res?.data?.blogs;
+        if (Array.isArray(live) && live.length > 0) {
+          setBlogList(live);
+        }
+      })
+      .catch((err) => {
+        console.warn("Could not fetch live blogs for homepage, falling back:", err);
+      });
+  }, []);
+
   // Sort by latest date and get top 3
-  const latestBlogs = [...blogs]
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
+  const latestBlogs = [...blogList]
+    .sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0))
     .slice(0, 3);
 
   return (
@@ -17,14 +32,14 @@ export default function LatestBlogs() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {latestBlogs.map((blog, index) => (
             <div
-              key={blog.id}
+              key={blog.id || blog._id || blog.slug}
               className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 ${
                 index === 2 ? "hidden lg:block" : ""
               }`}
             >
               <div className="relative overflow-hidden h-56 bg-gray-200">
                 <img
-                  src={blog.image}
+                  src={resolveImageUrl(blog.image)}
                   alt={blog.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -46,15 +61,15 @@ export default function LatestBlogs() {
                   {blog.desc}
                 </p>
                 <div className="mt-4">
-                  <a
-                    href="#"
+                  <Link
+                    to={`/blog/${blog.slug}`}
                     className="inline-flex items-center text-sm font-semibold transition"
                     style={{ color: "#003873" }}
                     onMouseEnter={(e) => (e.target.style.color = "#002a5c")}
                     onMouseLeave={(e) => (e.target.style.color = "#003873")}
                   >
                     Read More →
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

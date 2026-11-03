@@ -3,6 +3,20 @@ import { Link } from "react-router-dom";
 import { blogs } from "../../data/blogs";
 
 const BlogSection = () => {
+  const [blogList, setBlogList] = useState(staticBlogs);
+
+  useEffect(() => {
+    getBlogsApi()
+      .then((res) => {
+        const live = res?.data?.data?.blogs || res?.data?.blogs;
+        if (Array.isArray(live) && live.length > 0) {
+          setBlogList(live);
+        }
+      })
+      .catch((err) => {
+        console.warn("Could not fetch live blogs, falling back to static:", err);
+      });
+  }, []);
   return (
     <section className="bg-light py-12 sm:py-14 md:py-16">
       <div className="site-container">
@@ -35,9 +49,9 @@ const BlogSection = () => {
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {blogs.map((blog) => (
+          {blogList.map((blog) => (
             <Link
-              key={blog.id}
+              key={blog.id || blog._id || blog.slug}
               to={`/blog/${blog.slug}`}
               className="group block"
             >
@@ -59,7 +73,7 @@ const BlogSection = () => {
                 {/* Image */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-bg-light">
                   <img
-                    src={blog.image}
+                    src={resolveImageUrl(blog.image)}
                     alt={blog.title}
                     className="
                       w-full h-full object-cover

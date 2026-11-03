@@ -1,4 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getBlogBySlugApi } from "../../api/blog.api";
+
+export const resolveImageUrl = (url) => {
+  if (!url) return "/images/blog-1.webp";
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://") ||
+    url.startsWith("blob:") ||
+    url.startsWith("data:")
+  ) {
+    return url;
+  }
+  if (url.startsWith("/")) {
+    return url;
+  }
+  return `https://files.fggroup.in/${url}`;
+};
 import { Link, Navigate, useParams } from "react-router-dom";
 
 import SEO from "../../component/SEO";
@@ -6,11 +23,42 @@ import { blogs } from "../../data/blogs";
 
 const BlogDetail = () => {
   const { slug } = useParams();
+  const staticFallback = blogs.find((item) => item.slug === slug);
+  const [blog, setBlog] = useState(staticFallback || null);
+  const [loading, setLoading] = useState(!staticFallback);
 
-  const blog = blogs.find((item) => item.slug === slug);
+  useEffect(() => {
+    let isMounted = true;
+    if (slug) {
+      getBlogBySlugApi(slug)
+        .then((res) => {
+          const apiBlog = res?.data?.data?.blog || res?.data?.blog;
+          if (isMounted && apiBlog) {
+            setBlog(apiBlog);
+          }
+        })
+        .catch((err) => {
+          console.warn("Could not fetch live blog from API:", err);
+        })
+        .finally(() => {
+          if (isMounted) setLoading(false);
+        });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  if (!blog && !loading) {
+    return <Navigate to="/blog" replace />;
+  }
 
   if (!blog) {
-    return <Navigate to="/blog" replace />;
+    return (
+      <div className="min-h-screen bg-light flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -88,7 +136,7 @@ const BlogDetail = () => {
           <div className="site-container">
             <div className="overflow-hidden rounded-2xl md:rounded-3xl bg-white">
               <img
-                src={blog.image}
+                src={resolveImageUrl(blog.image)}
                 alt={blog.title}
                 className="w-full h-auto object-cover"
               />
@@ -114,43 +162,85 @@ const BlogDetail = () => {
             </div>
 
             {/* Standard Sections */}
-            {/* Standard Sections */}
-            {blog.content?.sections?.map((section, index) => (
-              <section key={index} className="mt-12">
-                <ArticleHeading>{section.heading}</ArticleHeading>
+            {blog.content?.sections?.map((section, index) => {
+              const renderSectionImage = () => {
+                if (!section.image) return null;
+                const rawUrl = typeof section.image === "string" ? section.image : section.image.url;
+                if (!rawUrl) return null;
+                const imageUrl = resolveImageUrl(rawUrl);
+                const imageAlt =
+                  (typeof section.image === "object" && section.image.alt) ||
+                  section.heading ||
+                  "Article illustration";
+                const imageCaption = typeof section.image === "object" ? section.image.caption : null;
 
-                {/* Paragraphs */}
-                {section.paragraphs?.map((paragraph, paragraphIndex) => (
-                  <p
-                    key={paragraphIndex}
-                    className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+                return (
+                  <figure className="my-8 overflow-hidden rounded-2xl md:rounded-3xl bg-white border border-border shadow-sm">
+                    <img
+                      src={imageUrl}
+                      alt={imageAlt}
+                      className="w-full h-auto object-cover max-h-[520px]"
+                      loading="lazy"
+                    />
+                    {imageCaption && (
+                      <figcaption className="px-5 py-3 text-xs md:text-sm text-stone-500 text-center bg-stone-50 border-t border-border font-modelica">
+                        {imageCaption}
+                      </figcaption>
+                    )}
+                  </figure>
+                );
+              };
 
-                {/* Bullet Points */}
-                {section.bullets?.length > 0 && (
-                  <ul className="mt-6 space-y-3">
-                    {section.bullets.map((bullet, bulletIndex) => (
-                      <li
-                        key={bulletIndex}
-                        className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700 font-modelica"
-                      >
-                        <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+              const placement =
+                typeof section.image === "object" && section.image.placement
+                  ? section.image.placement
+                  : "below_paragraphs";
 
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+              return (
+                <section key={index} className="mt-12">
+                  <ArticleHeading>{section.heading}</ArticleHeading>
 
-                {/* Closing Paragraph */}
-                {section.closingParagraph && (
-                  <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 font-modelica">
-                    {section.closingParagraph}
-                  </p>
-                )}
+                  {/* Top Placement Section Image */}
+                  {placement === "below_heading" && renderSectionImage()}
+
+                  {/* Paragraphs */}
+                  {section.paragraphs?.map((paragraph, paragraphIndex) => (
+                    <p
+                      key={paragraphIndex}
+                      className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+
+                  {/* Middle Placement Section Image */}
+                  {placement === "below_paragraphs" && renderSectionImage()}
+
+                  {/* Bullet Points */}
+                  {section.bullets?.length > 0 && (
+                    <ul className="mt-6 space-y-3">
+                      {section.bullets.map((bullet, bulletIndex) => (
+                        <li
+                          key={bulletIndex}
+                          className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700 font-modelica"
+                        >
+                          <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {/* Closing Paragraph */}
+                  {section.closingParagraph && (
+                    <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 font-modelica">
+                      {section.closingParagraph}
+                    </p>
+                  )}
+
+                  {/* Bottom Placement Section Image */}
+                  {placement === "below_bullets" && renderSectionImage()}
 
                 {/* Internal Links */}
                 {section.links?.length > 0 && (
@@ -185,7 +275,8 @@ const BlogDetail = () => {
                   </div>
                 )}
               </section>
-            ))}
+              );
+            })}
 
             {/* Protein Table */}
             {blog.content?.proteinTable && (
