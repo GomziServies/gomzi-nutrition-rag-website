@@ -1,3 +1,4 @@
+# pylint: disable=C,W
 from pathlib import Path
 import hashlib, json, difflib
 admin = Path('D:/FG Group/RAG/gomzi-nutrition-rag-admin')
