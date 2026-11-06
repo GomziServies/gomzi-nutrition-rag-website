@@ -190,7 +190,7 @@ export default function CustomerReviews() {
                         ${isExpanded ? "" : "line-clamp-4"}
                       `}
                     >
-                      "{review.review}"
+                      &ldquo;{review.review}&rdquo;
                     </p>
 
                     {/* Read More */}

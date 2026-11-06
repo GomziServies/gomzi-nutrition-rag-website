@@ -1,21 +1,6 @@
 import Wavyheading from "../common/Wavyheading";
 import WavyImageUnderline from "../common/WavyImageUnderline";
 
-// ─── Data ───────────────────────────────────────
-const rows = [
-  {
-    label: "Optimal calorie intake",
-    nara: true,
-    fastFood: false,
-    other: false,
-  },
-  { label: "Great taste", nara: true, fastFood: true, other: false },
-  { label: "Healthy and nutritious", nara: true, fastFood: false, other: true },
-  { label: "Weight management", nara: true, fastFood: false, other: true },
-  { label: "Plant-based protein", nara: true, fastFood: false, other: false },
-  { label: "Soy-free", nara: true, fastFood: true, other: false },
-];
-
 // ─── Icons ──────────────────────────────────────
 function CheckIcon() {
   return (
@@ -56,7 +41,7 @@ function Cell({ value, isNara = false }) {
   return (
     <td
       className={`py-4 md:py-5 text-center align-middle ${
-        isNara ? "bg-[#95442c]/30" : ""
+        isNara ? "bg-primary/30" : ""
       }`}
     >
       {value === true ? (

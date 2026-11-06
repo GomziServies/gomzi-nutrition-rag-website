@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { getProductImageUrl } from "../../data/homeProducts";
+import { CartSkeleton } from "../common/LoadingSkeletons";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import LoginModal from "../auth/LoginModal";
 import useAuth from "../../hooks/useAuth";
+import CartGymAccessOffer from "../common/GymAccessOffer";
 
 const ProductImg = ({ src, alt, bg, label, className }) => {
   const [err, setErr] = useState(false);
@@ -26,7 +29,7 @@ const ProductImg = ({ src, alt, bg, label, className }) => {
 
 export default function Cart() {
   const navigate = useNavigate();
-  const { items, deleteItem, cartId, changeQuantity } = useCart();
+  const { items, loading, error, fetchCart, deleteItem, cartId, changeQuantity } = useCart();
   const [showLogin, setShowLogin] = useState(false);
   const { isAuthenticated, fetchProfile } = useAuth();
   const totalQty = items.reduce((s, i) => s + i.quantity, 0);
@@ -42,16 +45,18 @@ export default function Cart() {
 
   const handleCheckout = () => {
     if (!isAuthenticated) {
-      setShowLogin(true);
+      navigate("/login?redirect=/checkouts");
       return;
     }
 
     navigate("/checkouts");
   };
   const saving = originalTotal - subtotal;
+  if (loading) return <CartSkeleton />;
+  if (error) return <section role="alert" className="max-w-xl mx-auto px-5 py-24 text-center"><h1 className="text-3xl font-bold mb-4">We couldn't load your cart</h1><p className="text-stone-500 mb-6">Your saved items are safe. Please try again.</p><button onClick={() => fetchCart()} className="rounded-xl bg-primary text-white px-6 py-3">Try again</button></section>;
   if (!items || items.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-bg">
+      <div className="min-h-[50vh] flex items-center justify-center px-4 py-12 bg-light">
         <div className="text-center max-w-md">
           <img
             src="/images/empty-cart.png" // optional image
@@ -79,7 +84,7 @@ export default function Cart() {
   }
   return (
     <>
-      <div className="min-h-screen max-w-[var(--container-width)] mx-auto px-4 sm:px-8 lg:px-16 bg-bg text-text font-modelica">
+      <div className="site-container min-h-[50vh] bg-light text-text">
         {/* ══ FREE SHIPPING BANNER ══ */}
         {/* <div className="py-4 bg-bg">
           <div className="bg-[#8cd7e1] rounded-md px-4 sm:px-8 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -106,13 +111,13 @@ export default function Cart() {
         {/* ══ MAIN CONTAINER ══ */}
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 py-6 sm:py-8">
           {/* ════ LEFT - Cart Items ════ */}
-          <div className="flex-1 min-w-0">
+          <div className="site-surface flex-1 min-w-0 p-4 sm:p-6">
             {/* Heading */}
             <div className="flex items-center gap-3 mb-4">
-              <h1 className="font-toma font-bold text-xl sm:text-2xl text-primary">
+              <h1 className="font-toma font-bold text-xl sm:text-2xl text-text">
                 Your cart
               </h1>
-              <span className="w-7 h-7 rounded-full bg-[#95442c] text-white text-xs font-bold flex items-center justify-center">
+              <span className="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center">
                 {totalQty}
               </span>
             </div>
@@ -120,7 +125,7 @@ export default function Cart() {
             {/* ── Item List ── */}
             <div className="divide-y divide-border">
               {items.map((item) => (
-                <div key={item.id} className="py-4 sm:py-5">
+                <div key={`${item._id || item.item_id}-${item.variation_id || "base"}`} className="py-4 sm:py-5">
                   {/* ── DESKTOP: all in one row | MOBILE: stacked ── */}
                   <div className="flex items-center gap-3 sm:gap-5">
                     {/* Product image */}
@@ -128,11 +133,7 @@ export default function Cart() {
                       className={`shrink-0 w-[90px] h-[90px] sm:w-[130px] sm:h-[130px] rounded-lg overflow-hidden ${item.imgBg}`}
                     >
                       <ProductImg
-                        src={
-                          item.image
-                            ? `https://files.fggroup.in/${item.image}`
-                            : null
-                        }
+                        src={getProductImageUrl(item.image)}
                         alt={item.name}
                         bg={item.imgBg}
                         label={item.imgLabel}
@@ -141,7 +142,7 @@ export default function Cart() {
                     </div>
 
                     {/* Name + flavour - grows to fill space */}
-                    <div className="flex-1 min-w-0">
+                    <div className="site-surface flex-1 min-w-0 p-4 sm:p-6">
                       <p className="font-toma font-normal text-[13px] sm:text-[17px] leading-snug">
                         {item.name}
                       </p>
@@ -161,7 +162,8 @@ export default function Cart() {
                         {!item.isFree ? (
                           <div className="flex items-center gap-2 border border-border rounded-md px-2 py-1">
                             <button
-                              onClick={() => changeQuantity(item, -1)}
+                              aria-label={`Decrease quantity of ${item.name}`}
+                            onClick={() => changeQuantity(item, -1)}
                               className="text-text hover:text-primary text-xl font-light transition-colors select-none leading-none"
                             >
                               −
@@ -170,7 +172,8 @@ export default function Cart() {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => changeQuantity(item, +1)}
+                              aria-label={`Increase quantity of ${item.name}`}
+                            onClick={() => changeQuantity(item, +1)}
                               className="text-text hover:text-primary text-xl font-light transition-colors select-none leading-none"
                             >
                               +
@@ -195,6 +198,7 @@ export default function Cart() {
                       {!item.isFree ? (
                         <div className="flex items-center gap-3 border border-border rounded-md px-3 py-1.5">
                           <button
+                            aria-label={`Decrease quantity of ${item.name}`}
                             onClick={() => changeQuantity(item, -1)}
                             className="text-text hover:text-primary text-2xl font-light transition-colors select-none leading-none"
                           >
@@ -204,6 +208,7 @@ export default function Cart() {
                             {item.quantity}
                           </span>
                           <button
+                            aria-label={`Increase quantity of ${item.name}`}
                             onClick={() => changeQuantity(item, +1)}
                             className="text-text hover:text-primary text-2xl font-light transition-colors select-none leading-none"
                           >
@@ -229,7 +234,7 @@ export default function Cart() {
                         <button
                           onClick={() => deleteItem(cartId, item._id)}
                           className="text-text-light hover:text-red-500 text-[13px] transition-colors"
-                          title="Remove"
+                          title="Remove" aria-label={`Remove ${item.name}`}
                         >
                           ✕
                         </button>
@@ -243,8 +248,8 @@ export default function Cart() {
 
           {/* ════ RIGHT - Order Summary ════ */}
           <div className="w-full lg:w-[380px] xl:w-[410px] shrink-0">
-            <div className="bg-bg-light border border-border rounded-lg shadow-md p-4 sm:p-6 lg:sticky lg:top-6">
-              <h2 className="font-toma font-extrabold text-xl text-primary mb-4">
+            <div className="site-surface p-4 sm:p-6 lg:sticky lg:top-48">
+              <h2 className="font-toma font-extrabold text-xl text-text mb-4">
                 Order summary
               </h2>
 
@@ -265,11 +270,13 @@ export default function Cart() {
                   <span className="text-text-light text-xs line-through">
                     {/* €{origTotal.toFixed(2)} */}
                   </span>
-                  <span className="font-toma font-extrabold text-xl text-primary">
+                  <span className="font-toma font-extrabold text-xl text-text">
                     ₹{subtotal.toFixed(2)}/-
                   </span>
                 </div>
               </div>
+
+              <CartGymAccessOffer />
 
               <div className="flex items-center gap-2 mb-5">
                 <Stars filled={5} />

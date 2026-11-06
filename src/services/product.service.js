@@ -14,6 +14,7 @@ export const fetchProducts = async ({
   limit = 20,
   search = "",
   category = "",
+  company = "",
   tag = "",
   sort = "",
   sortOrder = "",
@@ -25,6 +26,7 @@ export const fetchProducts = async ({
       limit,
       search,
       category,
+      company,
       tag,
       sort,
       sortOrder,
@@ -46,7 +48,7 @@ export const fetchProducts = async ({
 
 export const addToCart = async (data) => {
   try {
-    const response = await addToCartApi(data);
+    const response = await addToCartApi({ quantity_mode: "increment", ...data });
 
     return {
       success: true,
@@ -97,20 +99,19 @@ export const removeCartItem = async (cart_id, item_id) => {
 };
 
 export const updateCartQuantity = async ({
+  cart_id,
   item_id,
   quantity,
   variation_id,
+  combo_id,
 }) => {
   try {
     const response = await addToCartApi({
+      ...(cart_id && { cart_id }),
       item_id,
       item_type: "FG_MEAL_PRODUCT",
       quantity,
-      notes: variation_id
-        ? {
-            variation_id,
-          }
-        : {},
+      notes: { ...(variation_id && { variation_id }), ...(combo_id && { combo_id }) },
     });
 
     return {

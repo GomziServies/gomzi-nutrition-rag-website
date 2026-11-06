@@ -29,17 +29,17 @@ const timeline = [
 
 export default function BrandJourney() {
   return (
-    <section className="md:py-16 w-full overflow-hidden">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-18">
-        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-20">
+    <section className="py-10 md:py-14 w-full overflow-hidden">
+      <div className="site-container">
+        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-8 lg:gap-12">
           {/* LEFT */}
 
           <div>
-            <span className="uppercase tracking-[5px] text-xs font-semibold text-[#B66B1E]">
+            <span className="uppercase tracking-[5px] text-xs font-semibold text-primary">
               OUR JOURNEY
             </span>
 
-            <h2 className="mt-3 text-5xl font-black">How we got here</h2>
+            <h2 className="mt-3 font-toma text-2xl sm:text-3xl md:text-4xl">How we got here</h2>
 
             <p className="mt-4 text-lg text-gray-600">
               The short version of a longer story.
@@ -52,15 +52,15 @@ export default function BrandJourney() {
                 {timeline.map((item) => (
                   <div key={item.title} className="relative flex gap-6">
                     <div className="relative z-10 flex-shrink-0">
-                      <div className="w-7 h-7 rounded-full bg-[#B66B1E] border-[6px] border-white shadow-sm" />
+                      <div className="w-7 h-7 rounded-full bg-primary border-[6px] border-white shadow-sm" />
                     </div>
 
                     <div className="pb-2">
-                      <p className="uppercase tracking-[2px] text-xs font-semibold text-[#B66B1E]">
+                      <p className="uppercase tracking-[2px] text-xs font-semibold text-primary">
                         {item.tag}
                       </p>
 
-                      <h3 className="mt-2 text-2xl font-bold">{item.title}</h3>
+                      <h3 className="mt-2 text-lg sm:text-xl font-bold">{item.title}</h3>
 
                       <p className="mt-3 text-gray-600 leading-8">
                         {item.description}
@@ -74,7 +74,7 @@ export default function BrandJourney() {
 
           {/* RIGHT */}
 
-          <div className="lg:sticky lg:top-28 self-start">
+          <div className="lg:sticky lg:top-48 self-start">
             <div className="relative">
               <div className="absolute -top-5 -left-5 w-full h-full rounded-[36px] border border-[#E9D8C6]" />
 
@@ -82,7 +82,7 @@ export default function BrandJourney() {
                 <img
                   src="/images/about-manufacturing.jpg"
                   alt="Manufacturing Facility"
-                  className="w-full h-[620px] object-cover"
+                  className="w-full h-[320px] sm:h-[420px] lg:h-[540px] object-cover"
                 />
               </div>
             </div>

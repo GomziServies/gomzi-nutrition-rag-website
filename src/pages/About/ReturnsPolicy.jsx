@@ -35,7 +35,7 @@ const RefundPolicy = () => {
 
         {/* 1. ORDER CANCELLATION, RETURN, REFUND AND REPLACEMENT */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             1. ORDER CANCELLATION, RETURN, REFUND AND REPLACEMENT
           </h3>
 
@@ -100,7 +100,7 @@ const RefundPolicy = () => {
 
         {/* 2. PRODUCTS NOT ELIGIBLE FOR RETURN OR REFUND */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             2. PRODUCTS NOT ELIGIBLE FOR RETURN OR REFUND
           </h3>
 
@@ -172,7 +172,7 @@ const RefundPolicy = () => {
 
         {/* 3. RETURN, REFUND AND REPLACEMENT TIME LIMIT */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             3. RETURN, REFUND AND REPLACEMENT TIME LIMIT
           </h3>
 
@@ -231,7 +231,7 @@ const RefundPolicy = () => {
 
         {/* 4. INFORMATION REQUIRED */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             4. INFORMATION REQUIRED FOR A RETURN OR REFUND REQUEST
           </h3>
 
@@ -271,7 +271,7 @@ const RefundPolicy = () => {
 
         {/* 5. RETURN AND REPLACEMENT PROCESS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             5. RETURN AND REPLACEMENT PROCESS
           </h3>
 
@@ -313,7 +313,7 @@ const RefundPolicy = () => {
 
         {/* 6. RETURN SHIPPING */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">6. RETURN SHIPPING</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">6. RETURN SHIPPING</h3>
 
           <p>For approved return requests arising from:</p>
 
@@ -353,7 +353,7 @@ const RefundPolicy = () => {
 
         {/* 7. REFUND PROCESS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">7. REFUND PROCESS</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">7. REFUND PROCESS</h3>
 
           <p>
             Once a refund is approved, the refund will generally be processed
@@ -387,7 +387,7 @@ const RefundPolicy = () => {
 
         {/* 8. ORDER CANCELLATION */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">8. ORDER CANCELLATION</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">8. ORDER CANCELLATION</h3>
 
           <h4 className="font-semibold text-xl mb-2">
             A. Cancellation by Customer
@@ -460,7 +460,7 @@ const RefundPolicy = () => {
 
         {/* 9. DAMAGED OR TAMPERED SHIPMENT */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             9. DAMAGED OR TAMPERED SHIPMENT
           </h3>
 
@@ -503,7 +503,7 @@ const RefundPolicy = () => {
 
         {/* 10. PRODUCT-SPECIFIC CONDITIONS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             10. PRODUCT-SPECIFIC CONDITIONS
           </h3>
 
@@ -532,7 +532,7 @@ const RefundPolicy = () => {
 
         {/* 11. PROMOTIONAL OFFERS AND DISCOUNTS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             11. PROMOTIONAL OFFERS AND DISCOUNTS
           </h3>
 
@@ -557,7 +557,7 @@ const RefundPolicy = () => {
 
         {/* 12. FRAUDULENT OR MISUSE */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             12. FRAUDULENT OR MISUSE OF RETURN POLICY
           </h3>
 
@@ -596,7 +596,7 @@ const RefundPolicy = () => {
 
         {/* 13. CONTACT US */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">13. CONTACT US</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">13. CONTACT US</h3>
 
           <p>
             For cancellation, return, refund or replacement requests, please
@@ -648,7 +648,7 @@ const RefundPolicy = () => {
 
         {/* 14. POLICY MODIFICATION */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">14. POLICY MODIFICATION</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">14. POLICY MODIFICATION</h3>
 
           <p>
             The Company reserves the right to modify, update or amend this

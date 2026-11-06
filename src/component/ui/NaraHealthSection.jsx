@@ -3,12 +3,12 @@ import React from "react";
 const NaraHealthSection = () => {
   return (
     <section className="bg-section py-12 lg:py-16">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-18">
+      <div className="site-container">
         <div className="grid lg:grid-cols-[1.2fr_1.05fr] gap-10 lg:gap-16 items-start">
           {/* LEFT SIDE */}
           <div className="lg:sticky lg:top-28 self-start">
             <div className="">
-              <h2 className="font-toma text-3xl md:text-5xl font-bold leading-tight mb-4">
+              <h2 className="font-toma text-3xl md:text-4xl font-bold leading-tight mb-4">
                 Why Gomzi Supplement?
                 {/* <br />
               Science. Transparency. Results. */}
@@ -131,7 +131,7 @@ const NaraHealthSection = () => {
                   href="https://fggroup.in/fgiit/fitness-courses"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-black text-white font-modelica font-medium text-sm rounded-full hover:bg-gray-800 transition-colors duration-200 whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-modelica font-medium text-sm rounded-full hover:bg-hover transition-colors duration-200 whitespace-nowrap"
                 >
                   <svg
                     width="16"
@@ -155,7 +155,7 @@ const NaraHealthSection = () => {
                   href="https://www.instagram.com/chirag_pandey16/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-black text-black font-modelica font-medium text-sm rounded-full hover:bg-black hover:text-white transition-colors duration-200 whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary text-black font-modelica font-medium text-sm rounded-full hover:bg-primary hover:text-white transition-colors duration-200 whitespace-nowrap"
                 >
                   <svg
                     width="16"

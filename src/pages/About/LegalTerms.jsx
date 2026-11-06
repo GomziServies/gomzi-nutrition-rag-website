@@ -9,7 +9,7 @@ const TermsConditions = () => {
       <LegalSection title="Terms & Conditions">
         {/* 1. INTRODUCTION */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">1. INTRODUCTION</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">1. INTRODUCTION</h3>
 
           <p>
             <strong>A.</strong> Welcome to www.ragnutrition.in, an online
@@ -96,7 +96,7 @@ const TermsConditions = () => {
 
         {/* 2. LIMITED LICENCE */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">2. LIMITED LICENCE</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">2. LIMITED LICENCE</h3>
 
           <p>
             <strong>A.</strong> We hereby grant you a non-exclusive,
@@ -129,7 +129,7 @@ const TermsConditions = () => {
 
         {/* 3. ELIGIBILITY TO USE */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">3. ELIGIBILITY TO USE</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">3. ELIGIBILITY TO USE</h3>
 
           <p>
             <strong>A.</strong> In accordance with applicable Indian laws,
@@ -187,7 +187,7 @@ const TermsConditions = () => {
 
         {/* 4. AVAILABILITY */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             4. AVAILABILITY OF THE WEBSITE AND THE SERVICES
           </h3>
 
@@ -236,7 +236,7 @@ const TermsConditions = () => {
 
         {/* 5. PRODUCTS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">5. PRODUCTS</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">5. PRODUCTS</h3>
 
           <p>
             <strong>A.</strong> We sell certain products through the Website
@@ -261,7 +261,7 @@ const TermsConditions = () => {
 
         {/* 6. PURCHASE AND PAYMENT */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">6. PURCHASE AND PAYMENT</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">6. PURCHASE AND PAYMENT</h3>
 
           <p>
             <strong>A.</strong> Card payments are processed through third-party
@@ -293,7 +293,7 @@ const TermsConditions = () => {
 
         {/* 7. SHIPPING AND DELIVERY */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">7. SHIPPING AND DELIVERY</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">7. SHIPPING AND DELIVERY</h3>
 
           <p>
             <strong>A.</strong> All Products purchased from the Website shall be
@@ -402,7 +402,7 @@ const TermsConditions = () => {
 
         {/* 8. USER REGISTRATION */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">8. USER REGISTRATION</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">8. USER REGISTRATION</h3>
 
           <p>
             <strong>A.</strong> Access to, and use of, password-protected and/or
@@ -471,7 +471,7 @@ const TermsConditions = () => {
 
         {/* 9. ACCURACY */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             9. ACCURACY OF CONTENT AND INVITATION TO OFFER
           </h3>
 
@@ -527,7 +527,7 @@ const TermsConditions = () => {
 
         {/* 10. USAGE RESTRICTIONS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">10. USAGE RESTRICTIONS</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">10. USAGE RESTRICTIONS</h3>
 
           <p>
             <strong>A.</strong> The Company is not responsible for damages
@@ -721,7 +721,7 @@ const TermsConditions = () => {
 
         {/* 11. QUANTITY RESTRICTIONS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">11. QUANTITY RESTRICTIONS</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">11. QUANTITY RESTRICTIONS</h3>
 
           <p>
             <strong>A.</strong> We reserve the right, at our sole discretion, to
@@ -735,7 +735,7 @@ const TermsConditions = () => {
 
         {/* 12. PRICING INFORMATION */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">12. PRICING INFORMATION</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">12. PRICING INFORMATION</h3>
 
           <p>
             <strong>A.</strong> Prices and availability of Products, offers and
@@ -768,7 +768,7 @@ const TermsConditions = () => {
 
         {/* 13. INDEMNITY */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">13. INDEMNITY</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">13. INDEMNITY</h3>
 
           <p>
             <strong>A.</strong> You agree to release, defend, indemnify and hold
@@ -799,7 +799,7 @@ const TermsConditions = () => {
 
         {/* 14. PRIVACY */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">14. PRIVACY</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">14. PRIVACY</h3>
 
           <p>
             <strong>A.</strong> The Company is committed to protecting Users'
@@ -824,7 +824,7 @@ const TermsConditions = () => {
 
         {/* 15. FINANCIAL DETAILS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">15. FINANCIAL DETAILS</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">15. FINANCIAL DETAILS</h3>
 
           <p>
             <strong>A.</strong> You confirm that any credit/debit card or other
@@ -846,7 +846,7 @@ const TermsConditions = () => {
 
         {/* 16. COMMUNICATION */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">16. COMMUNICATION</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">16. COMMUNICATION</h3>
 
           <p>
             <strong>A.</strong> When you visit the Website or send us emails,
@@ -859,7 +859,7 @@ const TermsConditions = () => {
 
         {/* 17. FEEDBACK */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             17. WEBSITE FEEDBACK, USER COMMENTS AND USER-GENERATED CONTENT
           </h3>
 
@@ -900,7 +900,7 @@ const TermsConditions = () => {
 
         {/* 18. INTELLECTUAL PROPERTY */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             18. OWNERSHIP OF INTELLECTUAL PROPERTY; COPYRIGHT AND TRADEMARK
           </h3>
 
@@ -959,7 +959,7 @@ const TermsConditions = () => {
 
         {/* 19. TERMINATION */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">19. TERMINATION</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">19. TERMINATION</h3>
 
           <p>
             <strong>A.</strong> The User Agreement remains effective unless and
@@ -994,7 +994,7 @@ const TermsConditions = () => {
 
         {/* 20. LIABILITY */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             20. LIMITATION OF LIABILITY AND DISCLAIMERS
           </h3>
 
@@ -1050,7 +1050,7 @@ const TermsConditions = () => {
 
         {/* 21. CONTACT DETAILS */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">21. CONTACT DETAILS</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">21. CONTACT DETAILS</h3>
 
           <div className="space-y-3">
             <p>

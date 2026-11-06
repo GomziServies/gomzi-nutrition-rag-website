@@ -1,54 +1,140 @@
-import { FiShoppingBag } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { verifyPaymentApi } from "../../api/order.api";
+import useCart from "../../hooks/useCart";
 import useCheckout from "../../hooks/useCheckout";
+import { loadRazorpay } from "../../services/razorpayCheckout";
+import { getCities, states } from "../../utils/indiaLocation";
+import { errorToast, infoToast } from "../../utils/toast";
 import SearchableSelect from "../SearchableSelect";
-import { states, getCities } from "../../utils/indiaLocation";
-
-const loadRazorpay = () => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) {
-      resolve(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-
-    document.body.appendChild(script);
-  });
-};
 
 export default function CheckoutForm({ coupon }) {
+  const { clearCart } = useCart();
   const [payMethod, setPayMethod] = useState("ONLINE");
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
-  const [cities, setCities] = useState([]);
+  const busy = useRef(false);
+  const [processing, setProcessing] = useState(false);
+  const [paymentToVerify, setPaymentToVerify] = useState(null);
+  const release = () => {
+    busy.current = false;
+    setProcessing(false);
+  };
+  const finishCheckout = async (cartId, confirmationUrl) => {
+    try {
+      await clearCart(cartId);
+    } catch (error) {
+      console.error("Could not clear the completed checkout cart:", error);
+      errorToast(
+        "Your order succeeded, but we couldn't update the cart. Please refresh your cart."
+      );
+    }
+    window.location.href = confirmationUrl;
+  };
+  const cities = useMemo(
+    () => (selectedState ? getCities(selectedState.value) : []),
+    [selectedState]
+  );
   const { formData, updateField, placeOrder, loading, updatePaymentMode } =
     useCheckout(coupon);
   useEffect(() => {
     loadRazorpay();
   }, []);
-  useEffect(() => {
-    if (!selectedState) {
-      setCities([]);
-      return;
-    }
 
-    setCities(getCities(selectedState.value));
-  }, [selectedState]);
+  useEffect(() => {
+    if (!selectedState && formData.state) {
+      setSelectedState(
+        states.find((option) => option.label === formData.state) || null
+      );
+    }
+    if (!selectedCity && formData.city && selectedState) {
+      setSelectedCity(
+        cities.find((option) => option.label === formData.city) || null
+      );
+    }
+  }, [formData.state, formData.city, selectedState, selectedCity, cities]);
+
+  const confirmPayment = async (payment, cartId) => {
+    setPaymentToVerify({ payment, cartId });
+    try {
+      await verifyPaymentApi(payment);
+      await finishCheckout(
+        cartId,
+        "/thank-you?order_id=" + encodeURIComponent(payment.razorpay_order_id)
+      );
+    } catch (error) {
+      errorToast(
+        error.response?.data?.message ||
+          "Payment confirmation is pending. Check My Orders before paying again."
+      );
+      release();
+    }
+  };
+
+  const startCheckout = async () => {
+    if (busy.current || paymentToVerify) return;
+    busy.current = true;
+    setProcessing(true);
+    try {
+      if (payMethod === "ONLINE" && !(await loadRazorpay())) {
+        errorToast(
+          "Secure payment could not load. Please check your connection and try again."
+        );
+        release();
+        return;
+      }
+      const result = await placeOrder();
+      if (!result?.success) {
+        release();
+        return;
+      }
+      if (payMethod !== "ONLINE" || result.data.already_completed) {
+        await finishCheckout(
+          result.cartId,
+          "/thank-you?receipt_id=" + encodeURIComponent(result.data.receipt_id)
+        );
+        return;
+      }
+      let paymentReturned = false;
+      const razorpay = new window.Razorpay({
+        ...result.data,
+        handler: (payment) => {
+          paymentReturned = true;
+          return confirmPayment(payment, result.cartId);
+        },
+        modal: {
+          ondismiss() {
+            if (paymentReturned) return;
+            release();
+            infoToast("Payment was cancelled. Your cart is still saved.");
+          },
+        },
+      });
+      razorpay.on("payment.failed", () =>
+        errorToast(
+          "Payment failed. You can retry in the payment window or close it to return to your cart."
+        )
+      );
+      razorpay.open();
+    } catch {
+      errorToast(
+        "Unable to start checkout. Please check My Orders before trying again."
+      );
+      release();
+    }
+  };
 
   return (
-    <div className="px-5 py-8 md:px-10 lg:px-14 xl:px-16 border-b lg:border-b-0 lg:border-r border-gray-100 order-2 lg:order-1">
+    <div className="site-surface min-w-0 px-4 py-6 sm:p-6 order-2 lg:order-1">
       <section className="mb-7">
         <h2 className="text-[22px] font-bold text-gray-900 mb-3.5">Contact</h2>
 
         <FloatingInput
           label="Email"
           type="email"
+          name="email"
+          autoComplete="email"
+          required
           value={formData.email}
           onChange={(value) => updateField("email", value)}
         />
@@ -57,14 +143,20 @@ export default function CheckoutForm({ coupon }) {
       {/* Delivery */}
       <section className="mb-7">
         <h2 className="text-[22px] font-bold text-gray-900 mb-3.5">Delivery</h2>
-        <div className="grid grid-cols-2 gap-3 mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           <FloatingInput
             label="First name"
+            name="first_name"
+            autoComplete="given-name"
+            required
             value={formData.first_name}
             onChange={(value) => updateField("first_name", value)}
           />
           <FloatingInput
             label="Last name"
+            name="last_name"
+            autoComplete="family-name"
+            required
             value={formData.last_name}
             onChange={(value) => updateField("last_name", value)}
           />
@@ -75,6 +167,9 @@ export default function CheckoutForm({ coupon }) {
         <div className="mb-3">
           <FloatingInput
             label="Address"
+            name="address_line_1"
+            autoComplete="address-line1"
+            required
             value={formData.address_line_1}
             onChange={(value) => updateField("address_line_1", value)}
           />
@@ -82,11 +177,13 @@ export default function CheckoutForm({ coupon }) {
         <div className="mb-3">
           <FloatingInput
             label="Apartment, suite, etc. (optional)"
+            name="address_line_2"
+            autoComplete="address-line2"
             value={formData.address_line_2}
             onChange={(value) => updateField("address_line_2", value)}
           />
         </div>
-        <div className="grid grid-cols-2 gap-3 mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           <SearchableSelect
             label="State"
             value={selectedState}
@@ -94,8 +191,8 @@ export default function CheckoutForm({ coupon }) {
             onChange={(option) => {
               setSelectedState(option);
 
-              updateField("state", option.label);
-              updateField("state_code", option.value);
+              updateField("state", option?.label || "");
+              updateField("state_code", option?.value || "");
 
               setSelectedCity(null);
               updateField("city", "");
@@ -108,15 +205,19 @@ export default function CheckoutForm({ coupon }) {
             isDisabled={!selectedState}
             onChange={(option) => {
               setSelectedCity(option);
-              updateField("city", option.label);
+              updateField("city", option?.label || "");
             }}
           />
           <FloatingInput
             label="Postal code"
+            name="pin_code"
+            autoComplete="postal-code"
+            inputMode="numeric"
+            required
             value={formData.pin_code}
             onChange={(value) => updateField("pin_code", value)}
           />
-          <div className="relative w-full border border-gray-300 rounded-md bg-gray-50">
+          <div className="relative w-full border border-border rounded-md bg-gray-50">
             <label className="absolute left-3.5 top-1.5 text-[10px] text-gray-500 font-medium">
               Country / Region
             </label>
@@ -130,6 +231,10 @@ export default function CheckoutForm({ coupon }) {
           <FloatingInput
             label="Phone"
             type="tel"
+            name="mobile"
+            autoComplete="tel"
+            inputMode="tel"
+            required
             value={formData.mobile}
             onChange={(value) => updateField("mobile", value)}
             icon={
@@ -149,7 +254,6 @@ export default function CheckoutForm({ coupon }) {
             }
           />
         </div>
-        <CustomCheckbox label="Save this information for next time" />
       </section>
 
       {/* Shipping Method */}
@@ -157,7 +261,7 @@ export default function CheckoutForm({ coupon }) {
         <h2 className="text-[18px] font-bold text-gray-900 mb-3">
           Shipping method
         </h2>
-        <div className="p-4 bg-gray-50 border border-gray-200 rounded text-[14px] text-gray-400 text-center">
+        <div className="p-4 bg-gray-50 border border-border rounded text-[14px] text-gray-400 text-center">
           Enter your shipping address to view available shipping methods.
         </div>
       </section> */}
@@ -178,7 +282,7 @@ export default function CheckoutForm({ coupon }) {
           label="Online Payment"
           right={<span className="font-bold text-[#3395ff]">Razorpay</span>}
         >
-          <div className="bg-gray-50 border border-gray-200 rounded-md px-4 py-4 text-center text-[13px] text-gray-500">
+          <div className="bg-gray-50 border border-border rounded-md px-4 py-4 text-center text-[13px] text-gray-500">
             You'll be redirected to razorpay to complete your purchase
           </div>
         </PayRadio>
@@ -226,59 +330,53 @@ export default function CheckoutForm({ coupon }) {
       )} */}
 
       {/* Submit Button */}
-      {payMethod === "ONLINE" ? (
+      {paymentToVerify ? (
+        <div
+          role="alert"
+          className="rounded-md border border-amber-200 bg-amber-50 p-4"
+        >
+          <p>
+            Your payment needs confirmation. Check its status before paying
+            again.
+          </p>
+          <button
+            type="button"
+            className="site-button mt-3"
+            disabled={processing}
+            onClick={() => {
+              if (busy.current) return;
+              busy.current = true;
+              setProcessing(true);
+              confirmPayment(paymentToVerify.payment, paymentToVerify.cartId);
+            }}
+          >
+            {processing ? "Confirming payment..." : "Retry confirmation"}
+          </button>
+          <Link className="ml-4 underline" to="/profile">
+            My Orders
+          </Link>
+        </div>
+      ) : payMethod === "ONLINE" ? (
         <button
-          onClick={async () => {
-            const loaded = await loadRazorpay();
-
-            if (!loaded) {
-              alert("Failed to load Razorpay");
-              return;
-            }
-
-            const result = await placeOrder();
-
-            if (!result?.success) return;
-
-            const options = {
-              ...result.data,
-
-              handler(response) {
-                window.location.href =
-                  "/thank-you?order_id=" + response.razorpay_order_id;
-              },
-
-              modal: {
-                ondismiss() {
-                  console.log("Payment cancelled");
-                },
-              },
-            };
-
-            const razorpay = new window.Razorpay(options);
-
-            razorpay.open();
-          }}
+          onClick={startCheckout}
+          type="button"
+          disabled={loading || processing}
           className="w-full py-4 rounded-md text-white font-bold bg-[#3395ff]"
         >
-          {loading ? "Processing..." : "Pay Now"}
+          {loading || processing ? "Processing..." : "Pay Now"}
         </button>
       ) : payMethod === "Cash On Delivery" ? (
         <button
+          type="button"
+          disabled={loading || processing}
           className="w-full py-4 rounded-md text-white font-bold bg-[#3395ff]"
-          onClick={async () => {
-            const result = await placeOrder();
-            console.log(result);
-            if (result?.success) {
-              window.location.href =
-                "/thank-you?receipt_id=" + result.data.receipt_id;
-            }
-          }}
+          onClick={startCheckout}
         >
-          {loading ? "Placing Order..." : "Place Order"} - Cash on Delivery
+          {loading || processing ? "Placing Order..." : "Place Order"} - Cash on
+          Delivery
         </button>
       ) : (
-        <button className="w-full py-4 bg-gray-900 text-white rounded-md text-[15px] font-bold tracking-wide hover:bg-gray-700 transition-colors shadow-md">
+        <button className="w-full py-4 bg-primary text-white rounded-md text-[15px] font-bold tracking-wide hover:bg-hover transition-colors shadow-md">
           Pay now
         </button>
       )}
@@ -286,36 +384,48 @@ export default function CheckoutForm({ coupon }) {
       {/* Footer Links */}
       <div className="flex flex-wrap gap-3 mt-5 justify-center">
         {[
-          "Refund policy",
-          "Shipping",
-          "Privacy policy",
-          "Terms of service",
-          "Cancellations",
-        ].map((link) => (
-          <a
-            key={link}
-            href="#"
+          ["Refund policy", "/refund-policy"],
+          ["Shipping", "/shipping-policy"],
+          ["Privacy policy", "/privacy-policy"],
+          ["Terms of service", "/terms-and-conditions"],
+          ["Contact support", "/contact-us"],
+        ].map(([label, to]) => (
+          <Link
+            key={to}
+            to={to}
             className="text-xs text-gray-400 hover:text-gray-700 transition-colors no-underline"
           >
-            {link}
-          </a>
+            {label}
+          </Link>
         ))}
       </div>
     </div>
   );
 }
 
-function FloatingInput({ label, value, onChange, type = "text", icon }) {
+function FloatingInput({
+  label,
+  value = "",
+  onChange = () => {},
+  type = "text",
+  icon,
+  name,
+  autoComplete,
+  inputMode,
+  required = false,
+}) {
+  const inputId = useId();
   const [focused, setFocused] = useState(false);
   const isFloated = focused || value?.length > 0;
 
   return (
     <div
       className={`relative w-full border rounded-md transition-all duration-150 bg-white ${
-        focused ? "border-gray-600 ring-1 ring-gray-300" : "border-gray-300"
+        focused ? "border-primary ring-1 ring-primary/20" : "border-border"
       }`}
     >
       <label
+        htmlFor={inputId}
         className={`absolute left-3.5 transition-all duration-150 pointer-events-none select-none ${
           isFloated
             ? "top-1.5 text-[10px] text-gray-500 font-medium"
@@ -326,7 +436,12 @@ function FloatingInput({ label, value, onChange, type = "text", icon }) {
       </label>
 
       <input
+        id={inputId}
+        name={name}
         type={type}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+        required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
@@ -346,16 +461,23 @@ function FloatingInput({ label, value, onChange, type = "text", icon }) {
 }
 
 function FloatingSelect({ topLabel, options }) {
+  const selectId = useId();
   const [focused, setFocused] = useState(false);
 
   return (
     <div
-      className={`relative w-full border rounded-md bg-white transition-all duration-150 ${focused ? "border-gray-600 ring-1 ring-gray-300" : "border-gray-300"}`}
+      className={`relative w-full border rounded-md bg-white transition-all duration-150 ${
+        focused ? "border-primary ring-1 ring-primary/20" : "border-border"
+      }`}
     >
-      <label className="absolute left-3.5 top-1.5 text-[10px] text-gray-500 font-medium pointer-events-none select-none">
+      <label
+        htmlFor={selectId}
+        className="absolute left-3.5 top-1.5 text-[10px] text-gray-500 font-medium pointer-events-none select-none"
+      >
         {topLabel}
       </label>
       <select
+        id={selectId}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         className="w-full bg-transparent outline-none text-[14px] text-gray-800 px-3.5 pt-6 pb-2 appearance-none cursor-pointer pr-10"
@@ -383,12 +505,17 @@ function CustomCheckbox({ label, defaultChecked = false }) {
   const [checked, setChecked] = useState(defaultChecked);
 
   return (
-    <label
-      className="flex items-center gap-2.5 cursor-pointer select-none"
-      onClick={() => setChecked(!checked)}
-    >
+    <label className="flex items-center gap-2.5 cursor-pointer select-none">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => setChecked(event.target.checked)}
+        className="sr-only"
+      />
       <div
-        className={`w-4 h-4 border rounded flex items-center justify-center shrink-0 transition-all ${checked ? "bg-gray-800 border-gray-800" : "bg-white border-gray-400"}`}
+        className={`w-4 h-4 border rounded flex items-center justify-center shrink-0 transition-all ${
+          checked ? "bg-primary border-gray-800" : "bg-white border-gray-400"
+        }`}
       >
         {checked && (
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
@@ -411,7 +538,7 @@ function PayPalLogo() {
   return (
     <span
       style={{
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "var(--font-sans)",
         fontSize: "15px",
         fontWeight: 800,
       }}
@@ -424,7 +551,7 @@ function PayPalLogo() {
 
 function CashIcon() {
   return (
-    <div className="flex items-center justify-center w-9 h-6 border border-gray-200 rounded bg-white">
+    <div className="flex items-center justify-center w-9 h-6 border border-border rounded bg-white">
       <svg
         width="18"
         height="18"
@@ -447,16 +574,22 @@ function PaypalBillingAddress() {
   const [billingOption, setBillingOption] = useState("same");
 
   return (
-    <div className="border border-gray-200 rounded-md overflow-hidden">
+    <div className="border border-border rounded-md overflow-hidden">
       <div
         onClick={() => setBillingOption("same")}
-        className={`cursor-pointer px-4 py-3.5 flex items-center gap-2.5 transition-all ${billingOption === "same" ? "bg-gray-50 border-b border-gray-200" : "bg-white border-b border-gray-200"}`}
+        className={`cursor-pointer px-4 py-3.5 flex items-center gap-2.5 transition-all ${
+          billingOption === "same"
+            ? "bg-gray-50 border-b border-border"
+            : "bg-white border-b border-border"
+        }`}
       >
         <div
-          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${billingOption === "same" ? "border-gray-800" : "border-gray-300"}`}
+          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+            billingOption === "same" ? "border-gray-800" : "border-border"
+          }`}
         >
           {billingOption === "same" && (
-            <div className="w-2 h-2 rounded-full bg-gray-800" />
+            <div className="w-2 h-2 rounded-full bg-primary" />
           )}
         </div>
         <span className="text-[13px] font-medium text-gray-800">
@@ -470,10 +603,14 @@ function PaypalBillingAddress() {
       >
         <div className="flex items-center gap-2.5">
           <div
-            className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${billingOption === "different" ? "border-gray-800" : "border-gray-300"}`}
+            className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+              billingOption === "different"
+                ? "border-gray-800"
+                : "border-border"
+            }`}
           >
             {billingOption === "different" && (
-              <div className="w-2 h-2 rounded-full bg-gray-800" />
+              <div className="w-2 h-2 rounded-full bg-primary" />
             )}
           </div>
           <span className="text-[13px] font-medium text-gray-800">
@@ -510,7 +647,7 @@ function PaypalBillingAddress() {
               label="Phone (optional)"
               type="tel"
               icon={
-                <span className="text-gray-400 text-[9px] border border-gray-300 rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                <span className="text-gray-400 text-[9px] border border-border rounded-full w-4 h-4 flex items-center justify-center font-bold">
                   ?
                 </span>
               }
@@ -524,22 +661,30 @@ function PaypalBillingAddress() {
 
 function PayRadio({ active, onClick, label, right, children }) {
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
-      className={`cursor-pointer px-4 py-3.5 border rounded-md mb-2 transition-all ${active ? "border-gray-700 bg-gray-50 shadow-sm" : "border-gray-200 bg-white"}`}
+      aria-pressed={active}
+      className={`w-full text-left cursor-pointer px-4 py-3.5 border rounded-md mb-2 transition-all ${
+        active
+          ? "border-gray-700 bg-gray-50 shadow-sm"
+          : "border-border bg-white"
+      }`}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <div
-            className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${active ? "border-gray-800" : "border-gray-300"}`}
+            className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+              active ? "border-gray-800" : "border-border"
+            }`}
           >
-            {active && <div className="w-2 h-2 rounded-full bg-gray-800" />}
+            {active && <div className="w-2 h-2 rounded-full bg-primary" />}
           </div>
           <span className="text-[13px] font-medium text-gray-800">{label}</span>
         </div>
         {right && <div className="flex items-center gap-1.5">{right}</div>}
       </div>
       {active && children && <div className="mt-3.5">{children}</div>}
-    </div>
+    </button>
   );
 }

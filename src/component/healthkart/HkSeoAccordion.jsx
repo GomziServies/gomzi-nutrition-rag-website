@@ -13,12 +13,12 @@ export default function HkSeoAccordion() {
   };
 
   return (
-    <section className="w-full bg-[#fbf9f6] py-10 sm:py-14 border-b border-[#ebdcd2]/50 font-sans">
+    <section className="w-full bg-light py-10 sm:py-14 border-b border-border/50 font-sans">
       <div className="max-w-[1280px] mx-auto px-4">
         {/* Header */}
         <div className="flex items-center gap-2 mb-6">
-          <BookOpen size={20} className="text-[#95442c]" />
-          <h2 className="text-xl sm:text-2xl font-black text-[#1c1917] tracking-tight font-toma">
+          <BookOpen size={20} className="text-primary" />
+          <h2 className="text-xl sm:text-2xl font-black text-text tracking-tight font-toma">
             Supplement Knowledge & Buyer's Guide
           </h2>
         </div>
@@ -31,7 +31,7 @@ export default function HkSeoAccordion() {
             return (
               <div
                 key={item.id}
-                className="rounded-xl border border-[#ebdcd2] bg-white overflow-hidden shadow-sm transition-colors"
+                className="rounded-xl border border-border bg-white overflow-hidden shadow-sm transition-colors"
               >
                 {/* Header */}
                 <button
@@ -39,12 +39,12 @@ export default function HkSeoAccordion() {
                   onClick={() => toggleAccordion(item.id)}
                   className="w-full p-4 sm:p-5 flex items-center justify-between text-left hover:bg-[#faf6f2] transition-colors cursor-pointer"
                 >
-                  <span className="text-xs sm:text-sm font-bold text-[#1c1917] pr-4">
+                  <span className="text-xs sm:text-sm font-bold text-text pr-4">
                     {item.title}
                   </span>
                   <div
-                    className={`w-7 h-7 rounded-full bg-[#f5ede6] flex items-center justify-center text-[#95442c] flex-shrink-0 transition-transform duration-300 ${
-                      isOpen ? "rotate-180 bg-[#95442c] text-white" : ""
+                    className={`w-7 h-7 rounded-full bg-[#f5ede6] flex items-center justify-center text-primary flex-shrink-0 transition-transform duration-300 ${
+                      isOpen ? "rotate-180 bg-primary text-white" : ""
                     }`}
                   >
                     <ChevronDown size={16} />

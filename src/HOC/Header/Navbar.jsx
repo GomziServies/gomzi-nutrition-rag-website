@@ -84,10 +84,9 @@ export default function Navbar() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
   const [navTop, setNavTop] = useState(0);
   const [navHeight, setNavHeight] = useState(64);
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [productSuggestions, setProductSuggestions] = useState([]);
 
   // ── Track navbar top + height dynamically (scroll + resize) ──
@@ -132,7 +131,6 @@ export default function Navbar() {
     navigate(`/gomzi-supplement?search=${encodeURIComponent(value)}`);
 
     setSearchQuery("");
-    setSuggestions([]);
     setSearchOpen(false);
   };
 
@@ -141,16 +139,7 @@ export default function Navbar() {
     if (e.key === "Escape") {
       setSearchOpen(false);
       setSearchQuery("");
-      setSuggestions([]);
     }
-  };
-
-  const handleSuggestionClick = (value) => {
-    navigate(`/gomzi-supplement?search=${encodeURIComponent(value)}`);
-
-    setSearchQuery("");
-    setSuggestions([]);
-    setSearchOpen(false);
   };
 
   useEffect(() => {
@@ -233,7 +222,7 @@ export default function Navbar() {
                 className="hidden lg:flex flex-shrink-0 bg-transparent border-none cursor-pointer p-0"
               >
                 <img
-                  src="/images/rag-icon-logo.png"
+                  src="/images/rag-logo.webp"
                   alt="Gomzi Supplement by RAG"
                   className="h-12 w-auto object-contain"
                 />
@@ -287,7 +276,7 @@ export default function Navbar() {
               className="absolute left-1/2 -translate-x-1/2 lg:hidden bg-transparent border-none cursor-pointer p-0"
             >
               <img
-                src="/images/rag-icon-logo.png"
+                src="/images/rag-logo.webp"
                 alt="Gomzi Supplement by RAG"
                 className="h-12 w-auto object-contain"
               />
@@ -301,7 +290,6 @@ export default function Navbar() {
                   setSearchOpen((p) => !p);
                   setDrawerOpen(false);
                   setSearchQuery("");
-                  setSuggestions([]);
                 }}
               >
                 <svg
@@ -424,7 +412,6 @@ export default function Navbar() {
             onClick={() => {
               setSearchOpen(false);
               setSearchQuery("");
-              setSuggestions([]);
             }}
             className="ml-4 p-2 text-text-light hover:text-text transition-colors bg-transparent border-none cursor-pointer"
             aria-label="Close search"
@@ -452,7 +439,6 @@ export default function Navbar() {
           setDrawerOpen(false);
           setSearchOpen(false);
           setSearchQuery("");
-          setSuggestions([]);
         }}
         className="fixed left-0 right-0 bottom-0 bg-black/30 z-[100] transition-opacity duration-300 lg:hidden"
         style={{

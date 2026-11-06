@@ -14,17 +14,17 @@ function Sidebar({ activeTab, setActiveTab }) {
   const menuClass = (tab) =>
     `flex items-center gap-3 min-w-fit lg:w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
       activeTab === tab
-        ? "bg-black text-white shadow-md"
-        : "text-gray-700 hover:bg-gray-100"
+        ? "bg-primary text-white shadow-md"
+        : "text-gray-700 hover:bg-bg-light"
     }`;
 
   return (
-    <div className="w-full lg:w-72 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 h-fit">
+    <div className="w-full lg:w-72 bg-white rounded-2xl shadow-sm border border-border p-4 h-fit">
       <aside>
         {/* PROFILE */}
-        <div className="flex lg:flex-col items-center gap-4 lg:text-center border-b border-gray-100 pb-5">
+        <div className="flex lg:flex-col items-center gap-4 lg:text-center border-b border-border pb-5">
           <img
-            src={`https://ui-avatars.com/api/?background=000&color=fff&name=${user?.first_name}`}
+            src={`https://ui-avatars.com/api/?background=95442c&color=fff&name=${user?.first_name}`}
             alt="Profile"
             className="w-16 h-16 lg:w-20 lg:h-20 rounded-full object-cover"
           />

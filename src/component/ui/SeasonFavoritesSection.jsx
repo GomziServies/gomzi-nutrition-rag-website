@@ -205,12 +205,12 @@ function CategoryCard({ category }) {
         <a
           href={category.url}
           className="mt-3 w-full py-2.5 text-center px-4 rounded-xl text-white text-[13px] font-semibold tracking-wide uppercase active:scale-[0.98] transition-all duration-200"
-          style={{ backgroundColor: "#95442c" }}
+          style={{ backgroundColor: "var(--color-primary)" }}
           onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = "#95442c")
+            (e.currentTarget.style.backgroundColor = "var(--color-primary)")
           }
           onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = "#95442c")
+            (e.currentTarget.style.backgroundColor = "var(--color-primary)")
           }
         >
           {category.cta}

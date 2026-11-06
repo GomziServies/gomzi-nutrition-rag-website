@@ -1,11 +1,18 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import AccountLayout from "../../component/common/AccountLayout";
+import { useState, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import { registerUser } from "../../services/auth.service";
 import { successToast, errorToast } from "../../utils/toast";
 
 export default function RegisterPage() {
+  const { login } = useAuth();
+  const [searchParams] = useSearchParams();
+  const requestedRedirect = searchParams.get("redirect");
+  const redirectTo = ["/checkouts", "/cart", "/profile"].includes(requestedRedirect) ? requestedRedirect : "/";
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const submitting = useRef(false);
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -52,7 +59,10 @@ export default function RegisterPage() {
   const strengthLabel = ["", "Weak", "Fair", "Good", "Strong"];
   const strengthColor = ["", "#ef4444", "#f59e0b", "#3b82f6", "#22c55e"];
 
-  const handleRegister = async () => {
+  const handleRegister = async (event) => {
+    event?.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     try {
       setLoading(true);
       const payload = {
@@ -66,12 +76,14 @@ export default function RegisterPage() {
         return;
       }
 
-      successToast("Verification email sent");
-
-      navigate("/login");
+      const user = result.data?.data;
+      login(user?.authorization, user);
+      successToast("Account created successfully");
+      navigate(redirectTo, { replace: true });
     } catch (error) {
       errorToast("Something went wrong", error);
     } finally {
+      submitting.current = false;
       setLoading(false);
     }
   };
@@ -86,101 +98,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex font-modelica bg-bg">
-      {/* ── LEFT PANEL ── */}
-      <div
-        className="hidden lg:flex flex-col justify-between w-[45%] relative overflow-hidden p-12"
-        style={{ background: "#000000" }}
-      >
-        {/* Background gradient */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 60% 110%, #95442c 0%, transparent 65%)",
-            opacity: 0.18,
-          }}
-        />
-
-        {/* Teal accent line */}
-        <div
-          className="absolute left-0 top-8 bottom-8 w-[3px] rounded-full"
-          style={{
-            background:
-              "linear-gradient(to bottom, transparent 0%, #95442c 25%, #95442c 75%, transparent 100%)",
-            boxShadow: "0 0 12px 2px rgba(125,217,217,0.35)",
-          }}
-        />
-
-        {/* Logo */}
-        <div className="relative z-10">
-          <img
-            src="/images/whitelogo.webp"
-            alt="Gomzi Supplement by RAG"
-            className="h-11 object-contain object-left"
-          />
-        </div>
-
-        {/* Hero */}
-        <div className="relative z-10 flex flex-col gap-6">
-          <div className="flex items-center gap-2">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: "#95442c" }}
-            />
-            <span
-              className="text-xs tracking-widest uppercase font-modelica"
-              style={{ color: "#95442c" }}
-            >
-              Premium Nutrition
-            </span>
-          </div>
-
-          <h1
-            className="font-toma text-white leading-none"
-            style={{
-              fontSize: "clamp(2.8rem, 4.5vw, 4rem)",
-              letterSpacing: "-2px",
-            }}
-          >
-            Start Your
-            <br />
-            <span style={{ color: "#95442c" }}>Journey.</span>
-          </h1>
-
-          <p
-            className="font-modelica text-base leading-relaxed max-w-xs"
-            style={{ color: "#9ca3af" }}
-          >
-            Join thousands who've transformed their health with science-backed
-            nutrition.
-          </p>
-        </div>
-
-        {/* Bottom */}
-        <div className="relative z-10 flex flex-col gap-4">
-          <div className="h-px w-full" style={{ background: "#1f1f1f" }} />
-          <p className="font-modelica text-xs" style={{ color: "#4b5563" }}>
-            © 2025 Gomzi Supplement by RAG. All rights reserved.
-          </p>
-        </div>
-      </div>
-
-      {/* ── RIGHT PANEL ── */}
-      <div className="flex-1 flex flex-col justify-center items-center px-5 py-12 sm:px-10 bg-white relative overflow-y-auto">
-        {/* Mobile Logo */}
-        <div className="lg:hidden mb-10">
-          <img
-            src="/images/rag-icon-logo.png"
-            alt="Gomzi Supplement by RAG"
-            className="h-8 object-contain"
-          />
-        </div>
-
-        <div className="w-full max-w-[420px] flex flex-col gap-7">
+    <AccountLayout compact viewportLocked>
+      <form onSubmit={handleRegister} className="register-content w-full max-w-full flex flex-col gap-3">
           {/* Heading */}
           <div className="flex flex-col gap-2">
-            <h2
+            <h1
               className="font-toma text-text leading-tight"
               style={{
                 fontSize: "clamp(2rem, 5vw, 2.6rem)",
@@ -188,11 +110,12 @@ export default function RegisterPage() {
               }}
             >
               Create account.
-            </h2>
+            </h1>
             <p className="font-modelica text-sm" style={{ color: "#6b7280" }}>
               Already have an account?{" "}
               <button
-                onClick={() => navigate("/login")}
+                type="button"
+                onClick={() => navigate(redirectTo === "/" ? "/login" : `/login?redirect=${encodeURIComponent(redirectTo)}`)}
                 className="font-modelica font-semibold underline underline-offset-2 transition-colors bg-transparent border-none cursor-pointer"
                 style={{ color: "#111111" }}
               >
@@ -204,6 +127,8 @@ export default function RegisterPage() {
           {/* Social Signup */}
           <div className="flex flex-col gap-3">
             <button
+              type="button"
+              onClick={() => navigate(redirectTo === "/" ? "/login" : `/login?redirect=${encodeURIComponent(redirectTo)}`)}
               className="w-full flex items-center justify-center gap-3 py-3.5 rounded-[10px] border font-modelica text-sm font-semibold transition-all hover:bg-gray-50 active:scale-[0.98]"
               style={{
                 borderColor: "#e5e7eb",
@@ -238,7 +163,7 @@ export default function RegisterPage() {
             <div className="flex-1 h-px" style={{ background: "#e5e7eb" }} />
             <span
               className="font-modelica text-xs"
-              style={{ color: "#9ca3af" }}
+              style={{ color: "#70675f" }}
             >
               or register with email
             </span>
@@ -246,27 +171,27 @@ export default function RegisterPage() {
           </div>
 
           {/* Form Fields */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             {/* Text Fields */}
             {fields.map(({ key, label, type }) => (
               <div
                 key={key}
                 className="relative w-full rounded-[10px] border transition-all duration-150"
                 style={{
-                  borderColor: focused[key] ? "#111111" : "#e5e7eb",
+                  borderColor: focused[key] ? "var(--color-primary)" : "var(--color-border)",
                   boxShadow: focused[key]
-                    ? "0 0 0 3px rgba(17,17,17,0.06)"
+                    ? "0 0 0 3px rgba(149,68,44,0.08)"
                     : "none",
                   background: "#ffffff",
                 }}
               >
-                <label
+                <label htmlFor={`register-${key}`}
                   className="absolute left-4 transition-all duration-150 pointer-events-none font-modelica"
                   style={{
                     top: isFloated(key) ? "8px" : "50%",
                     transform: isFloated(key) ? "none" : "translateY(-50%)",
                     fontSize: isFloated(key) ? "10px" : "14px",
-                    color: "#9ca3af",
+                    color: "#70675f",
                     fontWeight: isFloated(key) ? 500 : 400,
                     zIndex: 1,
                   }}
@@ -275,6 +200,10 @@ export default function RegisterPage() {
                 </label>
                 <input
                   type={type}
+                  id={`register-${key}`} name={key}
+                  required
+                  inputMode={key === "mobile" ? "tel" : undefined}
+                  autoComplete={key === "first_name" ? "given-name" : key === "last_name" ? "family-name" : key === "mobile" ? "tel" : "email"}
                   value={form[key]}
                   onChange={(e) => handleChange(key, e.target.value)}
                   onFocus={() => handleFocus(key)}
@@ -293,20 +222,20 @@ export default function RegisterPage() {
             <div
               className="relative w-full rounded-[10px] border transition-all duration-150"
               style={{
-                borderColor: dobFocused ? "#111111" : "#e5e7eb",
+                borderColor: dobFocused ? "var(--color-primary)" : "var(--color-border)",
                 boxShadow: dobFocused
-                  ? "0 0 0 3px rgba(17,17,17,0.06)"
+                  ? "0 0 0 3px rgba(149,68,44,0.08)"
                   : "none",
                 background: "#ffffff",
               }}
             >
-              <label
+              <label htmlFor="register-birth-date"
                 className="absolute left-4 transition-all duration-150 pointer-events-none font-modelica"
                 style={{
                   top: isDobFloated ? "8px" : "50%",
                   transform: isDobFloated ? "none" : "translateY(-50%)",
                   fontSize: isDobFloated ? "10px" : "14px",
-                  color: "#9ca3af",
+                  color: "#70675f",
                   fontWeight: isDobFloated ? 500 : 400,
                   zIndex: 1,
                 }}
@@ -316,6 +245,8 @@ export default function RegisterPage() {
               <input
                 type="text"
                 placeholder={isDobFloated ? "DD / MM / YYYY" : ""}
+                id="register-birth-date" autoComplete="bday" inputMode="numeric"
+                required pattern="[0-9]{2} / [0-9]{2} / [0-9]{4}"
                 value={form.birth_date}
                 onChange={(e) => {
                   let v = e.target.value.replace(/[^0-9]/g, "");
@@ -346,14 +277,14 @@ export default function RegisterPage() {
               <div
                 className="relative w-full rounded-[10px] border transition-all duration-150"
                 style={{
-                  borderColor: focused.password ? "#111111" : "#e5e7eb",
+                  borderColor: focused.password ? "var(--color-primary)" : "var(--color-border)",
                   boxShadow: focused.password
-                    ? "0 0 0 3px rgba(17,17,17,0.06)"
+                    ? "0 0 0 3px rgba(149,68,44,0.08)"
                     : "none",
                   background: "#ffffff",
                 }}
               >
-                <label
+                <label htmlFor="register-password"
                   className="absolute left-4 transition-all duration-150 pointer-events-none font-modelica"
                   style={{
                     top: isFloated("password") ? "8px" : "50%",
@@ -361,7 +292,7 @@ export default function RegisterPage() {
                       ? "none"
                       : "translateY(-50%)",
                     fontSize: isFloated("password") ? "10px" : "14px",
-                    color: "#9ca3af",
+                    color: "#70675f",
                     fontWeight: isFloated("password") ? 500 : 400,
                   }}
                 >
@@ -369,6 +300,8 @@ export default function RegisterPage() {
                 </label>
                 <input
                   type={showPassword ? "text" : "password"}
+                  id="register-password" autoComplete="new-password"
+                  required minLength={8}
                   value={form.password}
                   onChange={(e) => {
                     handleChange("password", e.target.value);
@@ -383,9 +316,11 @@ export default function RegisterPage() {
                   }}
                 />
                 <button
+                  type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-60"
-                  style={{ color: "#9ca3af" }}
+                  style={{ color: "#70675f" }}
                 >
                   {showPassword ? (
                     <svg
@@ -448,9 +383,9 @@ export default function RegisterPage() {
 
             {/* Submit */}
             <button
-              className="w-full py-4 rounded-[10px] font-toma text-white text-base tracking-wide transition-all duration-150 hover:opacity-85 active:scale-[0.98] shadow-md mt-1"
-              style={{ background: "#000000", letterSpacing: "0.3px" }}
-              onClick={handleRegister}
+              type="submit"
+              className="w-full py-3.5 rounded-[10px] font-toma text-white text-base tracking-wide transition-all duration-150 hover:opacity-85 active:scale-[0.98] shadow-md mt-1"
+              style={{ background: "var(--color-primary)", letterSpacing: "0.3px" }}
               disabled={loading}
             >
               {loading ? "Creating Account..." : "Create Account"}
@@ -458,7 +393,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Trust badges */}
-          <div className="flex items-center justify-center gap-6 flex-wrap">
+          <div className="flex items-center justify-center gap-3 sm:gap-6 flex-wrap">
             {[
               {
                 icon: (
@@ -528,11 +463,11 @@ export default function RegisterPage() {
           {/* Bottom note */}
           <p
             className="font-modelica text-xs text-center leading-relaxed"
-            style={{ color: "#9ca3af" }}
+            style={{ color: "#70675f" }}
           >
             By creating an account, you agree to our{" "}
             <a
-              href="/terms"
+              href="/terms-and-conditions"
               className="underline underline-offset-1"
               style={{ color: "#6b7280" }}
             >
@@ -540,7 +475,7 @@ export default function RegisterPage() {
             </a>{" "}
             and{" "}
             <a
-              href="/privacy"
+              href="/privacy-policy"
               className="underline underline-offset-1"
               style={{ color: "#6b7280" }}
             >
@@ -548,8 +483,7 @@ export default function RegisterPage() {
             </a>
             .
           </p>
-        </div>
-      </div>
-    </div>
+        </form>
+    </AccountLayout>
   );
 }

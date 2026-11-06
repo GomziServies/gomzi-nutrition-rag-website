@@ -1,23 +1,32 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { getOrdersApi } from "../../../api/order.api";
+import { Link } from "react-router-dom";
+import { OrderListSkeleton } from "../../../component/common/LoadingSkeletons";
+
+import { GymAccessOffer } from "../../../component/common/GymAccessOffer";
 
 function OrdersSection() {
   const [orders, setOrders] = useState([]);
   const [openOrder, setOpenOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  async function loadOrders() {
+    try {
+      setError("");
+      const response = await getOrdersApi();
+      setOrders(response.data.data || []);
+    } catch {
+      setError("We couldn't load your orders. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     loadOrders();
   }, []);
-
-  const loadOrders = async () => {
-    try {
-      const response = await getOrdersApi();
-      setOrders(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const toggleOrder = (id) => {
     setOpenOrder(openOrder === id ? null : id);
@@ -25,11 +34,18 @@ function OrdersSection() {
 
   return (
     <div>
-      <h1 className="text-2xl md:text-3xl font-bold mb-6">My Orders</h1>
+      <h2 className="text-2xl md:text-xl sm:text-2xl font-bold mb-6">My Orders</h2>
 
       <div className="space-y-6">
-        {orders.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-gray-100 p-10 text-center">
+        {loading ? (
+          <OrderListSkeleton />
+        ) : error ? (
+          <div role="alert" className="site-surface p-10 text-center">
+            <p className="text-text-light">{error}</p>
+            <button type="button" onClick={() => { setLoading(true); loadOrders(); }} className="site-button mt-5">Try again</button>
+          </div>
+        ) : orders.length === 0 ? (
+          <div className="bg-white rounded-3xl border border-border p-10 text-center">
             <div className="text-6xl mb-4">🛍️</div>
 
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
@@ -41,12 +57,12 @@ function OrdersSection() {
               amazing products.
             </p>
 
-            <a
-              href="/gomzi-supplement"
-              className="bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition"
+            <Link
+              to="/gomzi-supplement"
+              className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-hover transition"
             >
               Start Shopping
-            </a>
+            </Link>
           </div>
         ) : (
           <>
@@ -56,12 +72,17 @@ function OrdersSection() {
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-md border border-gray-100 overflow-hidden transition-all duration-300"
+                  className="bg-white rounded-2xl md:rounded-3xl shadow-sm hover:shadow-md border border-border overflow-hidden transition-all duration-300"
                 >
+                  {order.status === "SUCCESS" && order.notes?.gym_access_offer && <div className="px-5"><GymAccessOffer offer={order.notes.gym_access_offer} confirmed /></div>}
+
                   {/* HEADER */}
-                  <div
+                  <button
+                    type="button"
                     onClick={() => toggleOrder(order._id)}
-                    className="cursor-pointer p-6 hover:bg-gray-50 transition"
+                    aria-expanded={isOpen}
+                    aria-controls={`order-${order._id}`}
+                    className="w-full cursor-pointer p-6 text-left hover:bg-gray-50 transition"
                   >
                     <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
                       {/* LEFT */}
@@ -75,17 +96,17 @@ function OrdersSection() {
                         </p>
 
                         <div className="flex gap-3 mt-4 flex-wrap">
-                          {order.CART?.slice(0, 2).map((item) => (
+                          {order.CART?.slice(0, 2).map((item, itemIndex) => (
                             <div
-                              key={`${order._id}-${item._id}`}
+                              key={`${order._id}-${itemIndex}`}
                               className="bg-gray-100 px-3 py-1.5 rounded-full text-xs md:text-sm font-medium"
                             >
-                              {item.name}
+                              {order.multiple_items?.[itemIndex]?.notes?.product_name || item?.name || "Product"}
                             </div>
                           ))}
 
                           {order.CART?.length > 2 && (
-                            <div className="bg-black text-white px-4 py-2 rounded-full text-sm">
+                            <div className="bg-primary text-white px-4 py-2 rounded-full text-sm">
                               +{order.CART.length - 2} more
                             </div>
                           )}
@@ -112,7 +133,7 @@ function OrdersSection() {
                                 : "bg-yellow-100 text-yellow-700"
                             }`}
                           >
-                            {order.status}
+                            {order.purchase_mode === "Cash On Delivery" && order.status === "SUCCESS" ? "Placed · Pay on delivery" : order.status}
                           </span>
                         </div>
 
@@ -126,30 +147,30 @@ function OrdersSection() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </button>
 
                   {/* EXPANDED CONTENT */}
                   <div
+                    id={`order-${order._id}`}
                     className={`transition-all duration-500 overflow-hidden ${
                       isOpen
                         ? "max-h-[2000px] opacity-100"
                         : "max-h-0 opacity-0"
                     }`}
                   >
-                    <div className="border-t border-gray-100 p-4 md:p-6">
+                    <div className="border-t border-border p-4 md:p-6">
                       {/* PRODUCTS */}
                       <div>
                         <h3 className="text-xl font-bold mb-5">Products</h3>
 
                         <div className="space-y-4">
                           {order.CART?.map((item, index) => {
-                            const matchedItem = order.multiple_items?.find(
-                              (m) => m.item_id === item._id,
-                            );
+                            const matchedItem = order.multiple_items?.[index];
+                            const variation = item?.variations?.find((entry) => String(entry._id) === String(matchedItem?.notes?.variation_id));
 
                             return (
                               <div
-                                key={`${order._id}-${item._id}-${index}`}
+                                key={`${order._id}-${index}`}
                                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gray-50 rounded-2xl p-4"
                               >
                                 <div className="flex items-center gap-4">
@@ -160,7 +181,7 @@ function OrdersSection() {
 
                                   <div>
                                     <h4 className="font-semibold text-sm md:text-base">
-                                      {item.name}
+                                      {matchedItem?.notes?.product_name || [item?.name || "Product", variation?.name].filter(Boolean).join(" - ")}
                                     </h4>
 
                                     <p className="text-xs md:text-sm text-gray-500">
@@ -170,7 +191,7 @@ function OrdersSection() {
                                 </div>
 
                                 <h3 className="text-lg md:text-xl font-bold">
-                                  ₹{item.price.toLocaleString()}
+                                  ₹{Number(matchedItem?.amount ?? item?.price ?? 0).toLocaleString()}
                                 </h3>
                               </div>
                             );
@@ -180,10 +201,10 @@ function OrdersSection() {
 
                       {/* ORDER DETAILS */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                        <div className="bg-black text-white rounded-2xl p-5">
+                        <div className="bg-primary text-white rounded-2xl p-5">
                           <p className="text-gray-400 text-sm">Total Amount</p>
 
-                          <h3 className="text-3xl font-bold mt-2">
+                          <h3 className="text-xl sm:text-2xl font-bold mt-2">
                             ₹{order.amount.toLocaleString()}
                           </h3>
                         </div>
@@ -201,11 +222,9 @@ function OrdersSection() {
                         <div className="bg-gray-50 rounded-2xl p-4">
                           <p className="text-gray-500 text-sm">Order Status</p>
 
-                          <h3 className="font-bold text-lg mt-2 text-blue-600">
+                          <h3 className="font-bold text-lg mt-2 text-primary">
                             {
-                              order.user_meal_product?.tracking?.[
-                                order.user_meal_product.tracking.length - 1
-                              ]?.shipment_status
+                              order.user_meal_product?.tracking?.filter((entry) => entry.status !== false).at(-1)?.shipment_status || (order.status === "SUCCESS" ? "PLACED" : order.status)
                             }
                           </h3>
                         </div>
@@ -231,46 +250,74 @@ function OrdersSection() {
                           Order Tracking
                         </h3>
 
-                        <div className="flex items-center justify-between relative">
+                        <div className="overflow-x-auto pb-3 scrollbar-hide">
+                        <div className="flex min-w-[620px] items-center justify-between relative">
                           <div className="absolute top-5 left-0 w-full h-1 bg-gray-200"></div>
-
-                          {[
-                            "PLACED",
-                            "CONFIRMED",
-                            "SHIPPED",
-                            "OUT FOR DELIVERY",
-                            "DELIVERED",
-                          ].map((step, index) => {
-                            const completed =
-                              order.user_meal_product?.tracking?.some(
-                                (t) => t.shipment_status === step,
-                              );
+                          {(() => {
+                            const trackingSteps = [
+                              "PLACED",
+                              "CONFIRMED",
+                              "SHIPPED",
+                              "OUT FOR DELIVERY",
+                              "DELIVERED",
+                            ];
+                            const trackingList = order.user_meal_product?.tracking || [];
+                            const highestIndex = Math.max(
+                              -1,
+                              ...trackingList.map((t) => {
+                                const statusName = t.shipment_status === 'DISPATCHED' ? 'SHIPPED' : t.shipment_status;
+                                return trackingSteps.indexOf(statusName);
+                              })
+                            );
 
                             return (
-                              <div
-                                key={index}
-                                className="relative z-10 flex flex-col items-center flex-1"
-                              >
-                                <div
-                                  className={`w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 ${
-                                    completed
-                                      ? "bg-green-500 border-green-500 text-white"
-                                      : "bg-white border-gray-300 text-gray-400"
-                                  }`}
-                                >
-                                  ✓
-                                </div>
+                              <>
+                                {highestIndex >= 0 && (
+                                  <div
+                                    className="absolute top-5 left-0 h-1 bg-green-500 transition-all duration-300"
+                                    style={{
+                                      width: `${(highestIndex / (trackingSteps.length - 1)) * 100}%`,
+                                    }}
+                                  ></div>
+                                )}
+                                {trackingSteps.map((step, index) => {
+                                  const completed =
+                                    highestIndex >= index ||
+                                    trackingList.some(
+                                      (t) =>
+                                        t.shipment_status === step ||
+                                        (step === "SHIPPED" && t.shipment_status === "DISPATCHED")
+                                    );
 
-                                <p
-                                  className={`mt-3 text-sm text-center font-semibold ${
-                                    completed ? "text-black" : "text-gray-400"
-                                  }`}
-                                >
-                                  {step}
-                                </p>
-                              </div>
+                                  return (
+                                    <div
+                                      key={index}
+                                      className="relative z-10 flex flex-col items-center flex-1"
+                                    >
+                                      <div
+                                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 transition-all duration-200 ${
+                                          completed
+                                            ? "bg-green-500 border-green-500 text-white"
+                                            : "bg-white border-gray-300 text-gray-400"
+                                        }`}
+                                      >
+                                        ✓
+                                      </div>
+
+                                      <p
+                                        className={`mt-3 text-sm text-center font-semibold ${
+                                          completed ? "text-black" : "text-gray-400"
+                                        }`}
+                                      >
+                                        {step}
+                                      </p>
+                                    </div>
+                                  );
+                                })}
+                              </>
                             );
-                          })}
+                          })()}
+                        </div>
                         </div>
                       </div>
                     </div>

@@ -3,13 +3,13 @@ import { X, Lock, MessageSquare } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
 import { loginUser, sendOTP, verifyOTP } from "../../services/auth.service";
 import { googleLogin } from "../../api/auth.api";
-import { setToken } from "../../utils/storage";
+import { saveAuthSession } from "../../utils/storage";
 import { successToast, errorToast } from "../../utils/toast";
 import useAuth from "../../hooks/useAuth";
 
 export default function LoginModal({ isOpen, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
-  const { fetchProfile } = useAuth();
+  const { login, fetchProfile } = useAuth();
   const [loginType, setLoginType] = useState("password");
 
   const [email, setEmail] = useState("");
@@ -39,16 +39,20 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
         return;
       }
 
-      const token = result.data.data.authorization;
+      const userData = result.data?.data;
+      const token = userData?.authorization;
 
-      setToken(token);
+      // Synchronously write to storage and update context
+      saveAuthSession(token, userData);
+      if (login) {
+        login(token, userData);
+      } else {
+        fetchProfile(true);
+      }
 
-      await fetchProfile();
       successToast("Login successful");
-
-      onSuccess?.(token);
-
       closeModal();
+      onSuccess?.(token);
     } catch {
       errorToast("Login failed");
     } finally {
@@ -72,13 +76,12 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
       const result = await sendOTP(payload);
 
       if (!result.success) {
-        errorToast(result.data.message);
+        errorToast(result.data?.message || result.message || "Failed to send OTP");
         return;
       }
 
       setOtpSent(true);
-
-      successToast(result.data.message);
+      successToast(result.data?.message || "OTP sent successfully");
     } catch {
       errorToast("Failed to send OTP");
     } finally {
@@ -105,15 +108,24 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
 
       const result = await verifyOTP(payload);
 
-      const token = result.data.data.authorization;
+      if (!result.success) {
+        errorToast(result.message || "Invalid OTP");
+        return;
+      }
 
-      setToken(token);
+      const userData = result.data?.data;
+      const token = userData?.authorization;
 
-      await fetchProfile();
+      saveAuthSession(token, userData);
+      if (login) {
+        login(token, userData);
+      } else {
+        fetchProfile(true);
+      }
+
       successToast("Login successful");
-
-      onSuccess?.(token);
       closeModal();
+      onSuccess?.(token);
     } catch {
       errorToast("Invalid OTP");
     } finally {
@@ -126,16 +138,19 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
       setLoading(true);
 
       const result = await googleLogin(response.credential);
+      const userData = result.data?.data;
+      const token = userData?.authorization;
 
-      const token = result.data.data.authorization;
+      saveAuthSession(token, userData);
+      if (login) {
+        login(token, userData);
+      } else {
+        fetchProfile(true);
+      }
 
-      setToken(token);
-
-      await fetchProfile();
       successToast("Login successful");
-
-      onSuccess?.(token);
       closeModal();
+      onSuccess?.(token);
     } catch {
       errorToast("Google Login Failed");
     } finally {
@@ -152,18 +167,18 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-2xl p-6 mx-4 animate-in fade-in zoom-in duration-200">
+      <div className="site-surface site-form relative z-10 w-full max-w-md p-6 mx-4 animate-in fade-in zoom-in duration-200">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div>
             <h2 className="text-3xl font-bold">Welcome back</h2>
-
             <p className="text-sm text-gray-500 mt-1">Login to continue</p>
           </div>
 
           <button
             onClick={closeModal}
-            className="p-2 rounded-lg hover:bg-gray-100"
+            aria-label="Close login"
+            className="p-2 rounded-lg hover:bg-bg-light"
           >
             <X size={18} />
           </button>
@@ -212,7 +227,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
           </button>
 
           <div
-            className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-black transition-all duration-300 ${
+            className={`absolute top-1 bottom-1 w-[calc(50%-4px)] rounded-lg bg-primary transition-all duration-300 ${
               loginType === "password" ? "left-1" : "left-[50%]"
             }`}
           />
@@ -223,6 +238,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
           <div className="space-y-4">
             <input
               type="email"
+              aria-label="Email address"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -231,6 +247,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
 
             <input
               type="password"
+              aria-label="Password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -240,7 +257,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
             <button
               onClick={handleLogin}
               disabled={loading}
-              className="w-full bg-black text-white py-3 rounded-xl"
+              className="w-full bg-primary text-white py-3 rounded-xl"
             >
               {loading ? "Signing In..." : "Sign In"}
             </button>
@@ -258,6 +275,8 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
             {otpSent && (
               <input
                 type="text"
+                aria-label="One-time password"
+                autoComplete="one-time-code"
                 placeholder="Enter OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
@@ -269,7 +288,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
               <button
                 onClick={handleSendOTP}
                 disabled={loading}
-                className="w-full bg-black text-white py-3 rounded-xl"
+                className="w-full bg-primary text-white py-3 rounded-xl"
               >
                 Send OTP
               </button>
@@ -277,7 +296,7 @@ export default function LoginModal({ isOpen, onClose, onSuccess }) {
               <button
                 onClick={handleVerifyOTP}
                 disabled={loading}
-                className="w-full bg-black text-white py-3 rounded-xl"
+                className="w-full bg-primary text-white py-3 rounded-xl"
               >
                 Verify OTP
               </button>

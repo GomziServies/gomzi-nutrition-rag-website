@@ -1,84 +1,131 @@
-// src/component/healthkart/HkHeroBanner.jsx
-import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import { A11y, Autoplay, Keyboard } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { HERO_BANNERS } from "../../data/homeProducts";
+import { FALLBACK_HERO_BANNERS, fetchHeroBanners } from "../../services/banner.service";
+import { observeHeroEnvironment, shouldPlayHero, syncHeroPlayback } from "./hero-playback";
+import "swiper/css";
 
-export default function HkHeroBanner() {
-  const navigate = useNavigate();
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+export function HeroBannerCarousel({ banners }) {
+  const [swiper, setSwiper] = useState(null);
+  const [environment, setEnvironment] = useState({ reducedMotion: false, hidden: false });
+  const [focused, setFocused] = useState(false);
+  const multiple = banners.length > 1;
+  const playing = shouldPlayHero({ count: banners.length, focused, ...environment });
+
+  useEffect(() => observeHeroEnvironment(setEnvironment), []);
+  useEffect(() => { syncHeroPlayback(swiper, playing); }, [swiper, playing]);
+
+  const updateImageLayout = () => {
+    if (!swiper || swiper.destroyed) return;
+    swiper.update();
+  };
+
+  if (!banners.length) return null;
 
   return (
-    <section className="relative w-full bg-[#f4f4f4] py-3 sm:py-5 font-sans">
-      <div className="max-w-[1280px] mx-auto px-3 sm:px-4 relative group">
-        {/* Custom Navigation Arrows (HealthKart circular floating buttons) */}
-        <button
-          ref={prevRef}
-          aria-label="Previous Slide"
-          className="absolute left-5 sm:left-7 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 hover:bg-[#95442c] text-stone-800 hover:text-white rounded-full shadow-xl border border-stone-200 flex items-center justify-center transition-all duration-200 cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 active:scale-95"
-        >
-          <ChevronLeft size={24} className="stroke-[2.5]" />
-        </button>
-
-        <button
-          ref={nextRef}
-          aria-label="Next Slide"
-          className="absolute right-5 sm:right-7 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 hover:bg-[#95442c] text-stone-800 hover:text-white rounded-full shadow-xl border border-stone-200 flex items-center justify-center transition-all duration-200 cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 active:scale-95"
-        >
-          <ChevronRight size={24} className="stroke-[2.5]" />
-        </button>
-
-        {/* Swiper Slider displaying the 3 Full Graphical Offer Banners */}
+    <section
+      aria-label="Featured offers"
+      aria-roledescription="carousel"
+      className="w-full overflow-hidden"
+      onFocusCapture={() => setFocused(true)}
+      onBlurCapture={event => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false);
+      }}
+    >
+      <div className="relative w-full bg-white overflow-hidden aspect-[1078/1460] md:aspect-[1600/533]">
         <Swiper
-          modules={[Autoplay, Navigation, Pagination]}
-          loop={true}
-          speed={650}
-          autoplay={{
-            delay: 4500,
+          key={banners.map(banner => banner.id || banner.desktopImage).join(",")}
+          modules={[A11y, Autoplay, Keyboard]}
+          onSwiper={setSwiper}
+          slidesPerView={1}
+          slidesPerGroup={1}
+          loop={multiple}
+          speed={environment.reducedMotion ? 0 : 600}
+          autoplay={multiple ? {
+            delay: 5000,
             disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }}
-          pagination={{
-            clickable: true,
-            bulletActiveClass: "!bg-[#af5438] !w-7 !rounded-full transition-all duration-300",
-            bulletClass: "inline-block w-2.5 h-2.5 bg-white/70 rounded-full mx-1 cursor-pointer transition-all shadow-sm",
-          }}
-          navigation={{
-            prevEl: prevRef.current,
-            nextEl: nextRef.current,
-          }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevRef.current;
-            swiper.params.navigation.nextEl = nextRef.current;
-          }}
-          className="w-full aspect-[16/9] max-h-[460px] sm:max-h-[500px] rounded-2xl overflow-hidden shadow-xl bg-stone-950 border border-[#ebdcd2]/30"
+            pauseOnMouseEnter: false,
+            // Continue even when a browser suppresses a CSS transition event.
+            waitForTransition: false,
+          } : false}
+          keyboard={{ enabled: multiple, onlyInViewport: true }}
+          a11y={{ containerMessage: "Gomzi Nutrition featured offers", itemRoleDescriptionMessage: "slide" }}
+          allowTouchMove={multiple}
+          simulateTouch
+          grabCursor={multiple}
+          resizeObserver
+          observer
+          observeParents
+          lazyPreloadPrevNext={1}
+          className="hero-banner-carousel w-full h-full"
         >
-          {HERO_BANNERS.map((banner) => (
-            <SwiperSlide key={banner.id} className="w-full h-full flex items-center justify-center">
-              <div
-                onClick={() => navigate(banner.ctaLink || "/gomzi-supplement")}
-                className="relative w-full h-full cursor-pointer overflow-hidden group select-none bg-stone-950 flex items-center justify-center"
-              >
-                <img
-                  src={banner.image}
-                  alt={banner.alt || banner.title}
-                  className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.01]"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = "/images/banner-web-view.webp";
-                  }}
-                />
+          {banners.map((banner, index) => (
+            <SwiperSlide key={banner.id || banner.desktopImage}>
+              <div className="block bg-[#faf7f4] select-none w-full h-full aspect-[1078/1460] md:aspect-[1600/533] overflow-hidden">
+                <picture className="block w-full h-full">
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet={banner.mobileImage}
+                    width="1078"
+                    height="1460"
+                  />
+                  <img
+                    src={banner.desktopImage}
+                    alt={banner.alt}
+                    width="1600"
+                    height="533"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    draggable={false}
+                    onDragStart={event => event.preventDefault()}
+                    onLoad={updateImageLayout}
+                    className="block w-full h-full object-cover select-none"
+                    onError={event => {
+                      const img = event.currentTarget;
+                      const source = img.parentElement?.querySelector("source");
+                      if (source) source.srcset = "";
+                      if (img.dataset.fallback !== "desktop") {
+                        img.dataset.fallback = "desktop";
+                        img.src = banner.desktopImage;
+                      } else if (img.dataset.localFallback !== "true") {
+                        img.dataset.localFallback = "true";
+                        img.src = FALLBACK_HERO_BANNERS[0].desktopImage;
+                      }
+                    }}
+                  />
+                </picture>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
+        {multiple && <>
+          <button type="button" onClick={() => swiper?.slidePrev()} aria-label="Previous hero banner" className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full shadow-md bg-white/95 hover:bg-primary text-stone-800 hover:text-white flex items-center justify-center transition-colors"><ChevronLeft size={22} /></button>
+          <button type="button" onClick={() => swiper?.slideNext()} aria-label="Next hero banner" className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-11 sm:h-11 rounded-full shadow-md bg-white/95 hover:bg-primary text-stone-800 hover:text-white flex items-center justify-center transition-colors"><ChevronRight size={22} /></button>
+        </>}
       </div>
     </section>
   );
+}
+
+export default function HkHeroBanner() {
+  const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchHeroBanners({ signal: controller.signal })
+      .then(result => { if (!controller.signal.aborted) setBanners(result); })
+      .catch(() => { if (!controller.signal.aborted) setBanners(FALLBACK_HERO_BANNERS); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, []);
+
+  if (loading) return (
+    <section aria-label="Loading featured offers" role="status" className="w-full">
+      <div className="w-full aspect-[1078/1460] md:aspect-[1600/533] skeleton-shimmer"><span className="sr-only">Loading featured offers…</span></div>
+    </section>
+  );
+
+  return <HeroBannerCarousel banners={banners} />;
 }

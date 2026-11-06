@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
         </p>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             1. Identity of the Data Fiduciary
           </h3>
 
@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             2. Personal Data We Collect
           </h3>
 
@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">3. Purpose of Processing</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">3. Purpose of Processing</h3>
 
           <p>We process your personal data for the following purposes:</p>
 
@@ -86,7 +86,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             4. How You Can Withdraw Consent
           </h3>
 
@@ -101,7 +101,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             5. Your Rights as a Data Principal
           </h3>
 
@@ -140,7 +140,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             6. Sharing of Personal Data
           </h3>
 
@@ -161,7 +161,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             7. Cross-Border Data Transfer & Hosting
           </h3>
 
@@ -176,7 +176,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             8. Cookies & Tracking Technologies
           </h3>
 
@@ -190,7 +190,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">9. Data Retention</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">9. Data Retention</h3>
 
           <p>
             We retain personal data only as long as necessary for the purposes
@@ -201,7 +201,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">10. Grievance Redressal</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">10. Grievance Redressal</h3>
 
           <p>
             If you have any concerns regarding your personal data, please
@@ -225,7 +225,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">11. Data Security</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">11. Data Security</h3>
 
           <p>
             We implement reasonable technical and organizational measures to
@@ -236,7 +236,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">12. Children's Data</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">12. Children's Data</h3>
 
           <p>
             Our website is not intended for individuals under the age of 18. We
@@ -246,7 +246,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             13. Changes to This Policy
           </h3>
 
@@ -259,7 +259,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <div>
-          <h3 className="font-bold text-2xl mb-3">14. Contact Us</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">14. Contact Us</h3>
 
           <p>Gomzi Supplement by RAG</p>
           <p>

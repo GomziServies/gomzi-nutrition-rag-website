@@ -23,23 +23,23 @@ const advantages = [
 
 export default function ManufacturingAdvantageSection() {
   return (
-    <section className="py-16 lg:py-24">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 md:px-8 lg:px-18">
-        <div className="rounded-[32px] bg-[#17120D] border border-[#2E241B] overflow-hidden">
+    <section className="py-10 md:py-14">
+      <div className="site-container">
+        <div className="site-surface overflow-hidden">
           <div className="px-6 md:px-10 lg:px-14 py-10 lg:py-14">
             {/* Heading */}
 
-            <span className="uppercase tracking-[5px] text-[11px] font-semibold text-[#C97A2B]">
+            <span className="uppercase tracking-wider text-[11px] font-semibold text-primary">
               What this manufacturing background actually changes
             </span>
 
-            <h2 className="mt-4 text-3xl md:text-5xl lg:text-5xl font-black leading-tight text-white max-w-4xl">
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-4xl font-black leading-tight text-text max-w-4xl">
               We know exactly what a formula could get away with.
               <br className="hidden lg:block" />
               So we don't let ours.
             </h2>
 
-            <p className="mt-8 max-w-4xl text-[16px] md:text-lg leading-8 text-[#D8D0C7]">
+            <p className="mt-8 max-w-4xl text-[16px] md:text-lg leading-8 text-text-light">
               Most supplement brands buy formulas from a manufacturer and market
               whatever the manufacturer hands back. We are the manufacturer -
               which means the corners other brands might not even know are being
@@ -58,27 +58,27 @@ export default function ManufacturingAdvantageSection() {
                     className="
                       rounded-2xl
                       border
-                      border-white/10
-                      bg-white/[0.03]
+                      border-border
+                      bg-bg-light
                       p-6
                       transition-all
                       duration-300
-                      hover:border-[#C97A2B]/40
-                      hover:bg-white/[0.05]
+                      hover:border-primary/40
+                      hover:bg-white
                       hover:-translate-y-1
                     "
                   >
                     <div className="flex items-center gap-3">
-                      <div className="h-11 w-11 rounded-xl bg-[#2A2118] flex items-center justify-center">
-                        <Icon size={20} className="text-[#C97A2B]" />
+                      <div className="h-11 w-11 rounded-xl bg-white flex items-center justify-center">
+                        <Icon size={20} className="text-primary" />
                       </div>
 
-                      <span className="uppercase tracking-[3px] text-[11px] font-semibold text-[#C97A2B]">
+                      <span className="uppercase tracking-[3px] text-[11px] font-semibold text-primary">
                         {item.title}
                       </span>
                     </div>
 
-                    <p className="mt-5 text-[15px] md:text-base leading-7 text-[#E7E1DA]">
+                    <p className="mt-5 text-[15px] md:text-base leading-7 text-text-light">
                       {item.description}
                     </p>
                   </div>

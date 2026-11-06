@@ -40,7 +40,7 @@ const REVIEWS = [
 
 export default function HkCustomerReviews() {
   return (
-    <section className="w-full bg-white py-10 sm:py-14 border-b border-[#ebdcd2]/50 font-sans">
+    <section className="w-full bg-white py-10 sm:py-14 border-b border-border/50 font-sans">
       <div className="max-w-[1280px] mx-auto px-4">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
@@ -48,7 +48,7 @@ export default function HkCustomerReviews() {
             <Star size={13} className="fill-amber-500 text-amber-500" />
             <span>4.9 / 5.0 Average Rating (12,000+ Verified Buyers)</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#1c1917] tracking-tight font-toma">
+          <h2 className="text-2xl sm:text-3xl font-black text-text tracking-tight font-toma">
             Loved By Serious Athletes Across India
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 mt-2">
@@ -61,7 +61,7 @@ export default function HkCustomerReviews() {
           {REVIEWS.map((review) => (
             <div
               key={review.id}
-              className="p-6 rounded-2xl bg-[#fbf9f6] border border-[#ebdcd2] hover:border-[#95442c] hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              className="p-6 rounded-2xl bg-light border border-border hover:border-primary hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 {/* Stars + Verified Badge */}
@@ -78,8 +78,8 @@ export default function HkCustomerReviews() {
                   )}
                 </div>
 
-                <h3 className="text-sm font-bold text-[#1c1917] leading-snug">
-                  "{review.title}"
+                <h3 className="text-sm font-bold text-text leading-snug">
+                  &ldquo;{review.title}&rdquo;
                 </h3>
 
                 <p className="text-xs text-stone-600 mt-2 leading-relaxed">
@@ -90,13 +90,13 @@ export default function HkCustomerReviews() {
               <div className="mt-6 pt-4 border-t border-stone-200/60">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-xs font-bold text-[#1c1917]">{review.name}</h4>
+                    <h4 className="text-xs font-bold text-text">{review.name}</h4>
                     <p className="text-[11px] text-stone-500">
                       {review.role} • {review.location}
                     </p>
                   </div>
                 </div>
-                <p className="text-[10px] font-semibold text-[#95442c] mt-2 truncate">
+                <p className="text-[10px] font-semibold text-primary mt-2 truncate">
                   Purchased: {review.product}
                 </p>
               </div>

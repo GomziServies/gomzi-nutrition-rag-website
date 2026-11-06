@@ -1,4 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getBlogBySlugApi } from "../../api/blog.api";
+
+export const resolveImageUrl = (url) => {
+  if (!url) return "/images/blog-1.webp";
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://") ||
+    url.startsWith("blob:") ||
+    url.startsWith("data:")
+  ) {
+    return url;
+  }
+  if (url.startsWith("/")) {
+    return url;
+  }
+  return `https://files.fggroup.in/${url}`;
+};
 import { Link, Navigate, useParams } from "react-router-dom";
 
 import SEO from "../../component/SEO";
@@ -6,11 +23,42 @@ import { blogs } from "../../data/blogs";
 
 const BlogDetail = () => {
   const { slug } = useParams();
+  const staticFallback = blogs.find((item) => item.slug === slug);
+  const [blog, setBlog] = useState(staticFallback || null);
+  const [loading, setLoading] = useState(!staticFallback);
 
-  const blog = blogs.find((item) => item.slug === slug);
+  useEffect(() => {
+    let isMounted = true;
+    if (slug) {
+      getBlogBySlugApi(slug)
+        .then((res) => {
+          const apiBlog = res?.data?.data?.blog || res?.data?.blog;
+          if (isMounted && apiBlog) {
+            setBlog(apiBlog);
+          }
+        })
+        .catch((err) => {
+          console.warn("Could not fetch live blog from API:", err);
+        })
+        .finally(() => {
+          if (isMounted) setLoading(false);
+        });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
+
+  if (!blog && !loading) {
+    return <Navigate to="/blog" replace />;
+  }
 
   if (!blog) {
-    return <Navigate to="/blog" replace />;
+    return (
+      <div className="min-h-screen bg-light flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -25,7 +73,7 @@ const BlogDetail = () => {
             HEADER
         ================================================== */}
         <section className="pt-10 md:pt-16 pb-8">
-          <div className="max-w-[var(--container-width)] mx-auto px-4">
+          <div className="site-container">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-xs sm:text-sm font-modelica text-gray-400 mb-7 overflow-hidden">
               <Link
@@ -59,7 +107,7 @@ const BlogDetail = () => {
             </div>
 
             {/* Title */}
-            <h1 className="max-w-5xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-tomato font-bold leading-[1.05] text-gray-900">
+            <h1 className="max-w-5xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-tomato font-bold leading-[1.05] text-gray-900">
               {blog.title}
             </h1>
 
@@ -85,10 +133,10 @@ const BlogDetail = () => {
             FEATURE IMAGE
         ================================================== */}
         <section className="pb-10 md:pb-14">
-          <div className="max-w-[var(--container-width)] mx-auto px-4">
+          <div className="site-container">
             <div className="overflow-hidden rounded-2xl md:rounded-3xl bg-white">
               <img
-                src={blog.image}
+                src={resolveImageUrl(blog.image)}
                 alt={blog.title}
                 className="w-full h-auto object-cover"
               />
@@ -114,43 +162,85 @@ const BlogDetail = () => {
             </div>
 
             {/* Standard Sections */}
-            {/* Standard Sections */}
-            {blog.content?.sections?.map((section, index) => (
-              <section key={index} className="mt-12">
-                <ArticleHeading>{section.heading}</ArticleHeading>
+            {blog.content?.sections?.map((section, index) => {
+              const renderSectionImage = () => {
+                if (!section.image) return null;
+                const rawUrl = typeof section.image === "string" ? section.image : section.image.url;
+                if (!rawUrl) return null;
+                const imageUrl = resolveImageUrl(rawUrl);
+                const imageAlt =
+                  (typeof section.image === "object" && section.image.alt) ||
+                  section.heading ||
+                  "Article illustration";
+                const imageCaption = typeof section.image === "object" ? section.image.caption : null;
 
-                {/* Paragraphs */}
-                {section.paragraphs?.map((paragraph, paragraphIndex) => (
-                  <p
-                    key={paragraphIndex}
-                    className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+                return (
+                  <figure className="my-8 overflow-hidden rounded-2xl md:rounded-3xl bg-white border border-border shadow-sm">
+                    <img
+                      src={imageUrl}
+                      alt={imageAlt}
+                      className="w-full h-auto object-cover max-h-[520px]"
+                      loading="lazy"
+                    />
+                    {imageCaption && (
+                      <figcaption className="px-5 py-3 text-xs md:text-sm text-stone-500 text-center bg-stone-50 border-t border-border font-modelica">
+                        {imageCaption}
+                      </figcaption>
+                    )}
+                  </figure>
+                );
+              };
 
-                {/* Bullet Points */}
-                {section.bullets?.length > 0 && (
-                  <ul className="mt-6 space-y-3">
-                    {section.bullets.map((bullet, bulletIndex) => (
-                      <li
-                        key={bulletIndex}
-                        className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700 font-modelica"
-                      >
-                        <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+              const placement =
+                typeof section.image === "object" && section.image.placement
+                  ? section.image.placement
+                  : "below_paragraphs";
 
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+              return (
+                <section key={index} className="mt-12">
+                  <ArticleHeading>{section.heading}</ArticleHeading>
 
-                {/* Closing Paragraph */}
-                {section.closingParagraph && (
-                  <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 font-modelica">
-                    {section.closingParagraph}
-                  </p>
-                )}
+                  {/* Top Placement Section Image */}
+                  {placement === "below_heading" && renderSectionImage()}
+
+                  {/* Paragraphs */}
+                  {section.paragraphs?.map((paragraph, paragraphIndex) => (
+                    <p
+                      key={paragraphIndex}
+                      className="mt-5 text-base md:text-lg leading-8 text-gray-700 font-modelica"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+
+                  {/* Middle Placement Section Image */}
+                  {placement === "below_paragraphs" && renderSectionImage()}
+
+                  {/* Bullet Points */}
+                  {section.bullets?.length > 0 && (
+                    <ul className="mt-6 space-y-3">
+                      {section.bullets.map((bullet, bulletIndex) => (
+                        <li
+                          key={bulletIndex}
+                          className="flex items-start gap-3 text-base md:text-lg leading-8 text-gray-700 font-modelica"
+                        >
+                          <span className="mt-3 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {/* Closing Paragraph */}
+                  {section.closingParagraph && (
+                    <p className="mt-6 text-base md:text-lg leading-8 text-gray-700 font-modelica">
+                      {section.closingParagraph}
+                    </p>
+                  )}
+
+                  {/* Bottom Placement Section Image */}
+                  {placement === "below_bullets" && renderSectionImage()}
 
                 {/* Internal Links */}
                 {section.links?.length > 0 && (
@@ -185,7 +275,8 @@ const BlogDetail = () => {
                   </div>
                 )}
               </section>
-            ))}
+              );
+            })}
 
             {/* Protein Table */}
             {blog.content?.proteinTable && (
@@ -296,7 +387,7 @@ const ProteinTable = ({ table }) => {
     <section className="mt-14">
       <ArticleHeading>{table.heading}</ArticleHeading>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-white">
         <table className="w-full min-w-[700px] border-collapse font-modelica">
           <thead>
             <tr className="bg-primary text-white">
@@ -315,7 +406,7 @@ const ProteinTable = ({ table }) => {
             {table.rows.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50"
+                className="border-b border-border last:border-b-0 hover:bg-gray-50"
               >
                 {row.map((cell, cellIndex) => (
                   <td
@@ -354,7 +445,7 @@ const ComparisonTable = ({ table }) => {
     <section className="mt-14">
       <ArticleHeading>{table.heading}</ArticleHeading>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-200 bg-white">
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-white">
         <table className="w-full min-w-[680px] border-collapse font-modelica">
           <thead>
             <tr className="bg-primary text-white">
@@ -373,7 +464,7 @@ const ComparisonTable = ({ table }) => {
             {table.rows.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-gray-200 last:border-b-0"
+                className="border-b border-border last:border-b-0"
               >
                 {row.map((cell, cellIndex) => (
                   <td
@@ -416,7 +507,7 @@ const ChoiceSection = ({ section }) => {
         {section.options.map((option, index) => (
           <div
             key={index}
-            className="rounded-2xl bg-white border border-gray-200 p-6"
+            className="rounded-2xl bg-white border border-border p-6"
           >
             <h3 className="font-tomato text-xl font-bold text-primary">
               {option.title}
@@ -487,16 +578,16 @@ const ExpertSection = ({ section }) => {
     <section className="mt-14">
       <ArticleHeading>{section.heading}</ArticleHeading>
 
-      <div className="relative mt-6 rounded-2xl bg-white border border-gray-200 p-6 md:p-8">
+      <div className="relative mt-6 rounded-2xl bg-white border border-border p-6 md:p-8">
         <div className="absolute top-5 left-6 text-6xl font-tomato text-primary/10">
           “
         </div>
 
         <blockquote className="relative pt-5 font-modelica text-lg md:text-xl leading-8 text-gray-700 italic">
-          "{section.quote}"
+          &ldquo;{section.quote}&rdquo;
         </blockquote>
 
-        <div className="mt-6 pt-5 border-t border-gray-100">
+        <div className="mt-6 pt-5 border-t border-border">
           <p className="font-modelica text-sm font-semibold text-gray-900">
             - {section.author}
           </p>
@@ -575,7 +666,7 @@ const FaqSection = ({ faqs }) => {
         {faqs.map((faq, index) => (
           <details
             key={index}
-            className="group rounded-2xl bg-white border border-gray-200 overflow-hidden"
+            className="group rounded-2xl bg-white border border-border overflow-hidden"
           >
             <summary className="list-none cursor-pointer px-5 md:px-6 py-5 flex items-center justify-between gap-5 font-modelica font-semibold text-gray-900">
               <span>{faq.question}</span>
@@ -606,7 +697,7 @@ const BottomLine = ({ section }) => {
     <section className="mt-14">
       <ArticleHeading>{section.heading}</ArticleHeading>
 
-      <div className="mt-6 rounded-2xl bg-white border border-gray-200 p-6 md:p-8">
+      <div className="mt-6 rounded-2xl bg-white border border-border p-6 md:p-8">
         {/* Paragraphs */}
         {section.paragraphs?.map((paragraph, index) => (
           <p
@@ -635,7 +726,7 @@ const BottomLine = ({ section }) => {
 
         {/* Closing */}
         {section.closing && (
-          <div className="mt-7 pt-6 border-t border-gray-100">
+          <div className="mt-7 pt-6 border-t border-border">
             <p className="font-tomato text-xl md:text-2xl font-bold text-primary">
               {section.closing}
             </p>
@@ -652,7 +743,7 @@ const BottomLine = ({ section }) => {
 
 const Sources = ({ sources }) => {
   return (
-    <section className="mt-14 pt-8 border-t border-gray-200">
+    <section className="mt-14 pt-8 border-t border-border">
       <ArticleHeading>Further Reading & Sources</ArticleHeading>
 
       <div className="mt-5 space-y-3">
@@ -694,7 +785,7 @@ const RelatedReading = ({ items }) => {
               <Link
                 key={index}
                 to={item.url}
-                className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition"
+                className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-border hover:border-primary/30 hover:shadow-sm transition"
               >
                 <span className="font-modelica text-sm md:text-base text-gray-700">
                   {item.title}
@@ -711,7 +802,7 @@ const RelatedReading = ({ items }) => {
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition"
+              className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white border border-border hover:border-primary/30 hover:shadow-sm transition"
             >
               <span className="font-modelica text-sm md:text-base text-gray-700">
                 {item.title}
@@ -732,7 +823,7 @@ const RelatedReading = ({ items }) => {
 
 const FurtherReading = ({ items }) => {
   return (
-    <section className="mt-14 pt-8 border-t border-gray-200">
+    <section className="mt-14 pt-8 border-t border-border">
       <ArticleHeading>Further Reading</ArticleHeading>
 
       <div className="mt-5 space-y-3">
@@ -753,7 +844,7 @@ const FurtherReading = ({ items }) => {
                   rounded-xl
                   bg-white
                   border
-                  border-gray-200
+                  border-border
                   hover:border-primary/30
                   hover:shadow-sm
                   transition
@@ -783,7 +874,7 @@ const FurtherReading = ({ items }) => {
                 rounded-xl
                 bg-white
                 border
-                border-gray-200
+                border-border
                 hover:border-primary/30
                 hover:shadow-sm
                 transition

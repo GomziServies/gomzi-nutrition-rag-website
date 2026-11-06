@@ -35,7 +35,7 @@ function VideoCard({ slide }) {
 export default function SocialProofSlider() {
   return (
     <section className="w-full bg-bg py-12 md:py-16 lg:py-20">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-16">
+      <div className="site-container sm:px-6 lg:px-16">
         {/* Heading */}
 
         <Wavyheading text1="Thousands choose GOMZI " text2="for a reason" />

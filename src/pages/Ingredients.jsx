@@ -5,7 +5,6 @@ import Ingredientsdetail from "../component/ui/Ingredients-detail";
 import IngredientsHealthBenefits from "../component/ui/Ingredients-Health-Benefits";
 import NaraHealthSection from "../component/ui/NaraHealthSection";
 import ComparisonTable from "../component/ui/ComparisonTable";
-import ProductsGrid from "../component/ui/ProductsGrid";
 import Hookheading from "../component/common/Hookheading";
 
 const Ingredients = () => {
@@ -18,7 +17,6 @@ const Ingredients = () => {
       <NaraHealthSection />
       {/* <ComparisonTable /> */}
       {/* <Hookheading text1="Don't forget to " text2="refill your energy" /> */}
-      {/* <ProductsGrid/> */}
     </div>
   );
 };

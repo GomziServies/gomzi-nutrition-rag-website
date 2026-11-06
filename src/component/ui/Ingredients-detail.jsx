@@ -100,7 +100,7 @@ function IngredientRow({ item }) {
     >
       {/* Text Block - on mobile always comes AFTER image (order-2), on md it follows flex direction */}
       <div className="w-full md:w-1/2 flex flex-col justify-center gap-4 order-2 md:order-none">
-        <h2 className="font-toma text-2xl sm:text-3xl lg:text-5xl text-[var(--color-text)] leading-tight">
+        <h2 className="font-toma text-2xl sm:text-3xl lg:text-4xl text-[var(--color-text)] leading-tight">
           {item.title}
         </h2>
         <p className="font-modelica text-[var(--color-text-light)] text-base sm:text-lg leading-relaxed">
@@ -137,7 +137,7 @@ function IngredientRow({ item }) {
 export default function IngredientsSection() {
   return (
     <section className="bg-[var(--color-bg)] py-12 sm:py-16 lg:py-20">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-16">
+      <div className="site-container sm:px-6 lg:px-16">
         <div className="flex flex-col gap-16 sm:gap-20 lg:gap-24">
           {ingredients.map((item) => (
             <IngredientRow key={item.id} item={item} />

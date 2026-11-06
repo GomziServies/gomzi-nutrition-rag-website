@@ -131,7 +131,7 @@ export default function ScientificallyProvenproductdetail() {
                     text-[#0a0a0a] text-sm sm:text-base
                     transition-all duration-200 hover:opacity-90
                   "
-                  style={{ background: "#95442c" }}
+                  style={{ background: "var(--color-primary)" }}
                 >
                   Try now
                 </button>

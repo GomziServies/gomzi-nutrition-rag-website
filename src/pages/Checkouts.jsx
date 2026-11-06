@@ -1,23 +1,38 @@
+import useBranding from "../content/useBranding";
 import CheckoutSummary from "../component/checkout/CheckoutSummary";
 import CheckoutForm from "../component/checkout/CheckoutForm";
 import useCart from "../hooks/useCart";
 import useCoupon from "../hooks/useCoupon";
-import { Navigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { CheckoutSkeleton } from "../component/common/LoadingSkeletons";
+import { ShieldCheck, ArrowLeft } from "lucide-react";
+import { Link, Navigate } from "react-router-dom";
 
 export default function Checkouts() {
-  const { items, loading } = useCart();
+  const branding = useBranding();
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { items, loading, error, fetchCart } = useCart();
 
   const { coupon, saveCoupon, clearCoupon } = useCoupon();
 
-  if (loading) return null;
+  if (loading || authLoading) return <CheckoutSkeleton />;
+  if (!isAuthenticated) return <Navigate to="/login?redirect=/checkouts" replace />;
+  if (error) return <section role="alert" className="site-container py-16 text-center"><p>We couldn't load your cart. Your items are saved.</p><button type="button" className="site-button mt-4" onClick={() => fetchCart()}>Try again</button></section>;
 
   if (!loading && items.length === 0) {
     return <Navigate to="/gomzi-supplement" replace />;
   }
 
   return (
-    <div className="font-sans bg-white min-h-screen text-gray-800">
-      <div className="max-w-[1140px] mx-auto grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+    <div className="site-form bg-light min-h-screen text-text">
+      <header className="border-b border-border bg-light">
+        <div className="site-container py-5 flex flex-wrap items-center justify-between gap-4">
+          <Link to="/" aria-label="Gomzi Nutrition home"><img src={branding.logo} alt="Gomzi Nutrition" className="h-10 w-auto object-contain" /></Link>
+          <h1 className="font-bold text-lg flex items-center gap-2"><ShieldCheck size={20} className="text-primary" /> Checkout</h1>
+          <Link to="/cart" className="text-sm text-primary flex items-center gap-2"><ArrowLeft size={16} /> Back to cart</Link>
+        </div>
+      </header>
+      <div className="site-container grid grid-cols-1 lg:grid-cols-2 items-start gap-6 py-6 md:py-10">
         <CheckoutForm coupon={coupon} />
         <CheckoutSummary
           coupon={coupon}
@@ -25,6 +40,9 @@ export default function Checkouts() {
           clearCoupon={clearCoupon}
         />
       </div>
+      <footer className="border-t border-border p-6 flex justify-center flex-wrap gap-6 text-xs text-stone-500">
+        <Link to="/shipping-policy">Shipping policy</Link><Link to="/refund-policy">Returns & refunds</Link><Link to="/privacy-policy">Privacy policy</Link><Link to="/contact-us">Need help?</Link>
+      </footer>
     </div>
   );
 }

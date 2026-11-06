@@ -13,10 +13,10 @@ export default function HkAppVipBanner() {
   };
 
   return (
-    <section className="w-full bg-[#f4f4f4] py-8 sm:py-12 border-b border-[#ebdcd2]/50 font-sans">
+    <section className="w-full bg-[#f4f4f4] py-8 sm:py-12 border-b border-border/50 font-sans">
       <div className="max-w-[1280px] mx-auto px-4">
         {/* HealthKart downloadApp container equivalent */}
-        <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-[#2a1711] via-[#43231a] to-[#1c110d] text-white shadow-xl border border-[#ebdcd2]/20 flex flex-col lg:flex-row items-center">
+        <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-[#2a1711] via-[#43231a] to-[#1c110d] text-white shadow-xl border border-border/20 flex flex-col lg:flex-row items-center">
           {/* Left: Product & Batch Mockup Visual (35%) */}
           <div className="w-full lg:w-5/12 p-8 lg:p-12 flex flex-col items-center justify-center relative overflow-hidden bg-black/20">
             <div className="relative z-10 w-full max-w-xs text-center">
@@ -72,7 +72,7 @@ export default function HkAppVipBanner() {
             <div className="mt-6 flex flex-wrap items-center gap-4">
               <button
                 onClick={handleDownloadReport}
-                className="px-6 py-3 bg-[#af5438] hover:bg-[#95442c] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg transition-all flex items-center gap-2 cursor-pointer border border-amber-300/30"
+                className="px-6 py-3 bg-[#af5438] hover:bg-primary text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg transition-all flex items-center gap-2 cursor-pointer border border-amber-300/30"
               >
                 <Download size={16} />
                 <span>Download Sample Batch Report (PDF)</span>

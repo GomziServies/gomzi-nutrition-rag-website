@@ -11,7 +11,7 @@ const ContactUs = () => {
         title="Contact Gomzi Supplement | Customer Support & Business Enquiries"
         description="Find answers about whey protein, peanut butter, multivitamins, shipping, returns, ingredients, usage and orders at Gomzi Supplement."
       />
-      {/* <PageHeading head={"Contact Us"} /> */}
+      <PageHeading head="Contact Us" description="Questions about an order, a product or working with Gomzi? Get in touch with our team." />
       <ContactSection />
     </>
   );

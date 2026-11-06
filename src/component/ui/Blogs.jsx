@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { blogs } from "../../data/blogs";
+import { blogs as staticBlogs } from "../../data/blogs";
+import { getBlogsApi } from "../../api/blog.api";
+import { resolveImageUrl } from "./BlogDetail";
 
 const BlogSection = () => {
+  const [blogList, setBlogList] = useState(staticBlogs);
+
+  useEffect(() => {
+    getBlogsApi()
+      .then((res) => {
+        const live = res?.data?.data?.blogs || res?.data?.blogs;
+        if (Array.isArray(live) && live.length > 0) {
+          setBlogList(live);
+        }
+      })
+      .catch((err) => {
+        console.warn("Could not fetch live blogs, falling back to static:", err);
+      });
+  }, []);
   return (
     <section className="bg-light py-12 sm:py-14 md:py-16">
-      <div className="max-w-[var(--container-width)] mx-auto px-4">
+      <div className="site-container">
         {/* Header */}
         <div className="mb-8 md:mb-10">
           <div className="flex items-center gap-3 mb-3">
@@ -18,7 +34,7 @@ const BlogSection = () => {
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div>
-              <h2 className="font-tomato text-3xl sm:text-4xl md:text-5xl font-bold leading-none text-gray-900">
+              <h2 className="font-tomato text-2xl sm:text-3xl md:text-4xl font-bold leading-none text-gray-900">
                 Nutrition & Wellness
               </h2>
 
@@ -35,9 +51,9 @@ const BlogSection = () => {
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-          {blogs.map((blog) => (
+          {blogList.map((blog) => (
             <Link
-              key={blog.id}
+              key={blog.id || blog._id || blog.slug}
               to={`/blog/${blog.slug}`}
               className="group block"
             >
@@ -48,7 +64,7 @@ const BlogSection = () => {
                   rounded-2xl
                   bg-white
                   border
-                  border-gray-100
+                  border-border
                   shadow-[0_5px_25px_rgba(0,0,0,0.045)]
                   transition-all
                   duration-400
@@ -57,12 +73,12 @@ const BlogSection = () => {
                 "
               >
                 {/* Image */}
-                <div className="relative overflow-hidden bg-white">
+                <div className="relative aspect-[16/10] overflow-hidden bg-bg-light">
                   <img
-                    src={blog.image}
+                    src={resolveImageUrl(blog.image)}
                     alt={blog.title}
                     className="
-                      object-cover
+                      w-full h-full object-cover
                       transition-transform
                       duration-500
                       group-hover:scale-[1.03]
@@ -148,7 +164,7 @@ const BlogSection = () => {
                   </p>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between mt-5 pt-4 border-t border-border">
                     <span className="font-modelica text-xs font-semibold text-gray-800">
                       Read article
                     </span>

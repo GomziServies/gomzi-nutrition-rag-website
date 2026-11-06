@@ -2,15 +2,15 @@ const BottomContentSection = ({ content }) => {
   if (!content) return null;
 
   return (
-    <section className="mt-10 md:mt-20 lg:mt-24 mb-0">
+    <section className="mt-8 sm:mt-16 md:mt-24 mb-0">
       <div
         className="
-          mx-3
-          rounded-[28px] md:rounded-[32px]
+          mx-3 sm:mx-6 md:mx-auto max-w-5xl
+          rounded-2xl sm:rounded-[32px]
           border border-[#ECE3D8]
           bg-[#FAF8F5]
-          px-5 py-8
-          sm:px-7 sm:py-10
+          px-4 py-6
+          sm:px-8 sm:py-10
           md:px-12 md:py-14
           lg:px-16 lg:py-16
         "
@@ -19,7 +19,7 @@ const BottomContentSection = ({ content }) => {
         <span
           className="
             block
-            text-[11px] sm:text-xs
+            text-[10px] sm:text-xs
             font-bold
             uppercase
             tracking-[3px] sm:tracking-[4px]
@@ -32,14 +32,14 @@ const BottomContentSection = ({ content }) => {
         {/* Title */}
         <h2
           className="
-            mt-5
-            text-[32px]
-            sm:text-[38px]
-            md:text-5xl
+            mt-3 sm:mt-5
+            text-2xl
+            sm:text-3xl
+            md:text-4xl
             lg:text-5xl
             font-black
-            leading-[1.08]
-            tracking-[-0.025em]
+            leading-tight
+            tracking-tight
             text-gray-950
           "
         >
@@ -49,22 +49,16 @@ const BottomContentSection = ({ content }) => {
         {/* Paragraphs */}
         <div
           className="
-            mt-7
-            md:mt-5
-            space-y-7
-            md:space-y-8
+            mt-4 sm:mt-6
+            space-y-4 sm:space-y-6
           "
         >
           {content.paragraphs.map((paragraph, index) => (
             <p
               key={index}
               className="
-                text-[17px]
-                sm:text-[18px]
-                md:text-lg
-                lg:text-xl
-                leading-[1.7]
-                md:leading-[1.8]
+                text-xs sm:text-base md:text-lg
+                leading-relaxed
                 text-[#374151]
               "
             >

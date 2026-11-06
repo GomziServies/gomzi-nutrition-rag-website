@@ -9,29 +9,27 @@ import { ChevronLeft, ChevronRight, Star, ShoppingCart, CheckCircle2 } from "luc
 import { fetchProducts } from "../../services/product.service";
 import {
   getProductImageUrl,
-  handleQuickAddToCart,
   diversifyProducts,
   getProductBrand,
 } from "../../data/homeProducts";
-import useAuth from "../../hooks/useAuth";
 import HkProductCardActions from "./HkProductCardActions";
+import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 
 export default function HkCategoryShowcase({
   title = "Whey Protein & Muscle Builders",
   category = "Whey Protein",
   categorySlug = "whey-protein",
   subtitle = "Direct from GMP certified lab. 100% Genuine with batch NABL reports.",
-  productCount = 86,
+
   fallbackProducts = [],
 }) {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
   const [products, setProducts] = useState(fallbackProducts);
   const [loading, setLoading] = useState(true);
-  const [addingId, setAddingId] = useState(null);
+  const [productCount, setProductCount] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -44,6 +42,7 @@ export default function HkCategoryShowcase({
         });
 
         if (isMounted && res.success && res.data && res.data.length > 0) {
+          setProductCount(res.pagination?.totalDocs ?? null);
           const mixed = diversifyProducts(res.data, 12);
           setProducts(mixed.length > 0 ? mixed : res.data.slice(0, 12));
         }
@@ -60,29 +59,22 @@ export default function HkCategoryShowcase({
     };
   }, [category]);
 
-  const handleAddToCartClick = async (e, product) => {
-    e.stopPropagation();
-    setAddingId(product._id);
-    await handleQuickAddToCart(product, isAuthenticated);
-    setTimeout(() => setAddingId(null), 800);
-  };
-
   const displayedList = products.length > 0 ? products : fallbackProducts;
   if (!loading && displayedList.length === 0) return null;
 
   return (
-    <section className="w-full bg-white py-8 sm:py-10 border-b border-[#ebdcd2]/50 font-sans">
+    <section className="w-full bg-white py-8 sm:py-10 border-b border-border/50 font-sans">
       <div className="max-w-[1280px] mx-auto px-4">
         {/* Header (HealthKart style) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#ebdcd2] gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-border gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-6 bg-[#95442c] rounded-full inline-block" />
-              <h2 className="text-xl sm:text-2xl font-black text-[#1c1917] tracking-tight font-toma">
+              <span className="w-2.5 h-6 bg-primary rounded-full inline-block" />
+              <h2 className="text-xl sm:text-2xl font-black text-text tracking-tight font-toma">
                 {title}
               </h2>
               {productCount > 0 && (
-                <span className="text-xs font-bold text-[#95442c] bg-[#fcf4f0] px-2.5 py-0.5 rounded-full border border-[#ebdcd2]">
+                <span className="text-xs font-bold text-primary bg-[#fcf4f0] px-2.5 py-0.5 rounded-full border border-border">
                   {productCount} Products
                 </span>
               )}
@@ -95,7 +87,7 @@ export default function HkCategoryShowcase({
           <div className="flex items-center gap-3">
             <Link
               to={`/gomzi-supplement?category=${encodeURIComponent(category)}`}
-              className="text-xs sm:text-sm font-bold text-[#95442c] hover:underline"
+              className="text-xs sm:text-sm font-bold text-primary hover:underline"
             >
               View All {category} &rarr;
             </Link>
@@ -105,14 +97,14 @@ export default function HkCategoryShowcase({
               <button
                 ref={prevRef}
                 aria-label={`Previous ${category}`}
-                className="w-8 h-8 rounded-full bg-white border border-[#ebdcd2] hover:bg-[#95442c] hover:text-white text-stone-700 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-white border border-border hover:bg-primary hover:text-white text-stone-700 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 ref={nextRef}
                 aria-label={`Next ${category}`}
-                className="w-8 h-8 rounded-full bg-white border border-[#ebdcd2] hover:bg-[#95442c] hover:text-white text-stone-700 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full bg-white border border-border hover:bg-primary hover:text-white text-stone-700 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
               >
                 <ChevronRight size={18} />
               </button>
@@ -122,17 +114,14 @@ export default function HkCategoryShowcase({
 
         {/* Carousel (HealthKart card layout: 4 cards on desktop) */}
         <div className="mt-6 relative w-full">
-          <Swiper
+          {loading ? <ProductGridSkeleton label="Loading products" /> : <Swiper
             key={`cat-showcase-${categorySlug}-${displayedList.length}`}
             modules={[Navigation]}
             slidesPerView={4}
             spaceBetween={20}
             observer={true}
             observeParents={true}
-            navigation={{
-              prevEl: prevRef.current,
-              nextEl: nextRef.current,
-            }}
+            navigation
             onBeforeInit={(swiper) => {
               swiper.params.navigation.prevEl = prevRef.current;
               swiper.params.navigation.nextEl = nextRef.current;
@@ -146,8 +135,8 @@ export default function HkCategoryShowcase({
             className="w-full overflow-hidden py-2"
           >
             {displayedList.map((product) => {
-              const price = product.price || product.discountPrice || 1999;
-              const discountPrice = product.discountPrice || product.price || 1499;
+              const price = Number(product.price ?? product.discountPrice ?? 0);
+              const discountPrice = Number(product.discountPrice ?? product.price ?? 0);
               const discountPct =
                 price > discountPrice
                   ? Math.round(((price - discountPrice) / price) * 100)
@@ -158,12 +147,21 @@ export default function HkCategoryShowcase({
                 <SwiperSlide key={product._id} className="!h-auto flex">
                   <div
                     onClick={() => navigate(`/product/${product.slug}`)}
-                    className="group bg-white rounded-xl border border-[#ebdcd2] hover:border-[#95442c] hover:shadow-[0_8px_20px_rgba(149,68,44,0.12)] transition-all duration-300 flex flex-col w-full overflow-hidden cursor-pointer relative"
+                    onKeyDown={(event) => {
+                      if (event.target === event.currentTarget && (event.key === "Enter" || event.key === " ")) {
+                        event.preventDefault();
+                        navigate(`/product/${product.slug}`);
+                      }
+                    }}
+                    role="link"
+                    tabIndex={0}
+                    aria-label={`View ${product.name}`}
+                    className="group bg-white rounded-xl border border-border hover:border-primary hover:shadow-[0_8px_20px_rgba(149,68,44,0.12)] transition-all duration-300 flex flex-col w-full overflow-hidden cursor-pointer relative"
                   >
                     {/* Badge top-left (Discount only) */}
                     {discountPct > 0 && (
                       <div className="absolute top-2.5 left-2.5 z-10">
-                        <span className="bg-[#95442c] text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-md shadow-xs">
+                        <span className="bg-primary text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-md shadow-xs">
                           -{discountPct}% OFF
                         </span>
                       </div>
@@ -174,6 +172,8 @@ export default function HkCategoryShowcase({
                       <img
                         src={imgUrl}
                         alt={product.name}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.06)]"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
@@ -188,16 +188,16 @@ export default function HkCategoryShowcase({
                         {/* Rating Pill - Fixed Height */}
                         <div className="h-5 flex items-center gap-1.5 mb-1.5">
                           <span className="inline-flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold px-1.5 py-0.5 rounded">
-                            <span>{product.rating?.average || 4.8}</span>
+                            <span>{product.rating?.average ?? 0}</span>
                             <Star size={11} className="fill-amber-500 text-amber-500" />
                           </span>
                           <span className="text-[11px] text-stone-400 font-medium">
-                            ({product.rating?.totalReviews || 120})
+                            ({product.rating?.totalReviews ?? 0})
                           </span>
                         </div>
 
                         {/* Title - Fixed 2-Line Box */}
-                        <h3 className="h-10 sm:h-11 text-xs sm:text-sm font-bold text-[#1c1917] group-hover:text-[#95442c] transition-colors line-clamp-2 leading-tight">
+                        <h3 className="h-10 sm:h-11 text-xs sm:text-sm font-bold text-text group-hover:text-primary transition-colors line-clamp-2 leading-tight">
                           {product.name}
                         </h3>
 
@@ -211,7 +211,7 @@ export default function HkCategoryShowcase({
                       {/* Pricing & Add to Cart Section */}
                       <div className="mt-3 pt-2.5 border-t border-stone-100 flex flex-col justify-end">
                         <div className="h-6 flex items-baseline gap-2">
-                          <span className="text-base sm:text-lg font-black text-[#1c1917]">
+                          <span className="text-base sm:text-lg font-black text-text">
                             ₹{discountPrice.toLocaleString("en-IN")}
                           </span>
                           {price > discountPrice && (
@@ -224,7 +224,7 @@ export default function HkCategoryShowcase({
                         {/* Reserved Height for Savings */}
                         <div className="h-4 flex items-center">
                           {price > discountPrice ? (
-                            <p className="text-[11px] font-bold text-[#95442c]">
+                            <p className="text-[11px] font-bold text-primary">
                               Save ₹{(price - discountPrice).toLocaleString("en-IN")}
                             </p>
                           ) : (
@@ -240,7 +240,7 @@ export default function HkCategoryShowcase({
                 </SwiperSlide>
               );
             })}
-          </Swiper>
+          </Swiper>}
         </div>
       </div>
     </section>

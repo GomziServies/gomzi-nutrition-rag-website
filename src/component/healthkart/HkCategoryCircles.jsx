@@ -1,170 +1,262 @@
 // src/component/healthkart/HkCategoryCircles.jsx
-import React from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { HOME_CATEGORIES } from "../../data/homeProducts";
+import { ArrowRight, ChevronLeft, ChevronRight, Zap } from "lucide-react";
+import useCategories from "../../hooks/useCategories";
+import ScallopedCrestFrame from "../common/ScallopedCrestFrame";
 
-/**
- * Custom Cusped Ornamental Frame matching the reference design in Gomzi brand colors
- */
-function ScallopedCrestFrame() {
+export { ScallopedCrestFrame };
+
+// Curated badge mapping so tags are punchy, vibrant, and never overflow
+const TAG_BADGES = {
+  "MOST POPULAR": { label: "POPULAR", icon: "🔥", color: "text-amber-800 bg-amber-50 border-amber-200" },
+  "BULK SEASON": { label: "MASS GAIN", icon: "💪", color: "text-emerald-800 bg-emerald-50 border-emerald-200" },
+  "EXPLOSIVE ENERGY": { label: "ENERGY", icon: "⚡", color: "text-rose-800 bg-rose-50 border-rose-200" },
+  "RAPID RECOVERY": { label: "RECOVERY", icon: "🔄", color: "text-blue-800 bg-blue-50 border-blue-200" },
+  "RAW STRENGTH": { label: "STRENGTH", icon: "🏋️", color: "text-stone-800 bg-stone-100 border-stone-200" },
+  "DAILY HEALTH": { label: "WELLNESS", icon: "🌿", color: "text-teal-800 bg-teal-50 border-teal-200" },
+  "100% VEGAN": { label: "VEGAN", icon: "🌱", color: "text-emerald-800 bg-emerald-50 border-emerald-200" },
+  "POWER STACKS & VALUE BUNDLES": { label: "BUNDLES", icon: "📦", color: "text-amber-800 bg-amber-50 border-amber-200" },
+};
+
+function getBadge(tag) {
+  if (!tag) return null;
+  const upper = tag.trim().toUpperCase();
+  if (TAG_BADGES[upper]) return TAG_BADGES[upper];
+  if (upper.includes("BUNDLE") || upper.includes("STACK")) {
+    return { label: "BUNDLES", icon: "📦", color: "text-amber-800 bg-amber-50 border-amber-200" };
+  }
+  if (upper.includes("VEGAN") || upper.includes("PLANT")) {
+    return { label: "VEGAN", icon: "🌱", color: "text-emerald-800 bg-emerald-50 border-emerald-200" };
+  }
+  if (upper.includes("HEALTH") || upper.includes("WELLNESS")) {
+    return { label: "WELLNESS", icon: "🌿", color: "text-teal-800 bg-teal-50 border-teal-200" };
+  }
+  const shortLabel = upper.length > 10 ? upper.slice(0, 10).trim() : upper;
+  return { label: shortLabel, icon: "✦", color: "text-primary bg-primary/10 border-primary/20" };
+}
+
+export function PopularCategories({ categories, loading = false, error = "", onRetry }) {
+  const swiperRef = useRef(null);
+
+  if (!loading && !error && !categories.length) return null;
+  const visibleSlides = (maximum) => Math.max(1, Math.min(categories.length, maximum));
+
   return (
-    <svg
-      viewBox="0 0 160 176"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.03]"
-    >
-      <defs>
-        {/* Soft Gomzi warm cream/peach background gradient */}
-        <linearGradient id="scallopGrad" x1="80" y1="6" x2="80" y2="170" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#fdf7f4" />
-          <stop offset="100%" stopColor="#f6e5dc" />
-        </linearGradient>
-      </defs>
+    <section className="w-full py-6 sm:py-9 md:py-12 border-b border-stone-200/70 bg-gradient-to-b from-[#FAF7F3] via-[#FFFFFF] to-[#FAF6F2] font-sans relative overflow-hidden">
+      <div className="max-w-[1280px] mx-auto px-3 sm:px-5 md:px-6 relative z-10">
+        
+        {/* ── Modern Responsive Header ── */}
+        <div className="flex flex-row items-end justify-between gap-3 mb-5 sm:mb-7 md:mb-9">
+          <div className="max-w-[70%] sm:max-w-xl">
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] sm:text-[10px] md:text-[11px] font-black uppercase tracking-wider mb-1 sm:mb-2 shadow-2xs">
+              <Zap size={11} className="text-primary fill-primary/30 sm:w-3 sm:h-3" />
+              <span>Explore By Fitness Goal</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight font-tomato leading-tight">
+              <span className="text-[#1c1917]">Popular </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-[#b35337] to-[#e06d48]">
+                Categories
+              </span>
+            </h2>
+            <p className="hidden sm:block text-xs sm:text-sm mt-1 font-medium font-modelica text-stone-500 line-clamp-1 sm:line-clamp-none">
+              Scientifically engineered sports nutrition and wellness essentials built for your physique and athletic goals.
+            </p>
+          </div>
 
-      {/* Outer Contoured Stepped Arch (Mughal / Moroccan Cusped Arch) */}
-      <path
-        d="M 80,6
-           C 88,12 98,16 108,16
-           C 116,16 120,20 120,28
-           C 120,34 124,38 132,38
-           C 144,38 152,48 152,60
-           L 152,116
-           C 152,128 144,138 132,138
-           C 124,138 120,142 120,148
-           C 120,156 116,160 108,160
-           C 98,160 88,164 80,170
-           C 72,164 62,160 52,160
-           C 44,160 40,156 40,148
-           C 40,142 36,138 28,138
-           C 16,138 8,128 8,116
-           L 8,60
-           C 8,48 16,38 28,38
-           C 36,38 40,34 40,28
-           C 40,20 44,16 52,16
-           C 62,16 72,12 80,6 Z"
-        fill="url(#scallopGrad)"
-        stroke="#95442c"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-      />
+          {/* Action Row: View All + Desktop Navigation */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <Link
+              to="/category"
+              className="inline-flex items-center gap-1 text-[11px] sm:text-xs md:text-sm font-bold text-primary hover:text-[#7a3420] transition-colors underline-offset-4 hover:underline font-tomato whitespace-nowrap"
+            >
+              <span>View All ({categories.length || 12})</span>
+              <ArrowRight size={13} className="sm:w-3.5 sm:h-3.5" />
+            </Link>
 
-      {/* Inner Accent Line Contour (Adds high-end depth matching reference) */}
-      <path
-        d="M 80,12
-           C 87,17 96,20 106,20
-           C 112,20 115,23 115,29
-           C 115,34 119,38 126,38
-           C 138,38 145,47 145,58
-           L 145,118
-           C 145,129 138,138 126,138
-           C 119,138 115,142 115,147
-           C 115,153 112,156 106,156
-           C 96,156 87,159 80,164
-           C 73,159 64,156 54,156
-           C 48,156 45,153 45,147
-           C 45,142 41,138 34,138
-           C 22,138 15,129 15,118
-           L 15,58
-           C 15,47 22,38 34,38
-           C 41,38 45,34 45,29
-           C 45,23 48,20 54,20
-           C 64,20 73,17 80,12 Z"
-        fill="none"
-        stroke="#dfb5a6"
-        strokeWidth="1"
-        strokeDasharray="3 2"
-        opacity="0.8"
-      />
-    </svg>
+            <div className="hidden sm:flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => swiperRef.current?.slidePrev()}
+                className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-stone-200 bg-white text-stone-700 shadow-2xs flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-90 hover:bg-primary hover:text-white hover:border-primary"
+                aria-label="Previous categories"
+              >
+                <ChevronLeft size={16} className="md:w-4.5 md:h-4.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => swiperRef.current?.slideNext()}
+                className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-stone-200 bg-white text-stone-700 shadow-2xs flex items-center justify-center transition-all duration-200 cursor-pointer active:scale-90 hover:bg-primary hover:text-white hover:border-primary"
+                aria-label="Next categories"
+              >
+                <ChevronRight size={16} className="md:w-4.5 md:h-4.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Category Carousel ── */}
+        {loading ? (
+          <div
+            role="status"
+            aria-label="Loading popular categories"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"
+          >
+            {[0, 1, 2, 3, 4, 5].map((index) => (
+              <div key={index} className="h-[265px] sm:h-[295px] md:h-[315px] lg:h-[320px] rounded-[20px] sm:rounded-[24px] bg-stone-100/50 p-3 sm:p-4 animate-pulse" />
+            ))}
+          </div>
+        ) : error ? (
+          <div role="alert" className="rounded-2xl border border-stone-200 bg-white p-6 sm:p-8 text-center max-w-md mx-auto shadow-xs">
+            <p className="text-xs sm:text-sm text-stone-600 font-medium">We couldn't load the categories right now.</p>
+            <button
+              type="button"
+              onClick={onRetry}
+              className="mt-2 text-xs sm:text-sm font-bold text-primary underline underline-offset-4 cursor-pointer"
+            >
+              Try again
+            </button>
+          </div>
+        ) : (
+          <div className="relative overflow-hidden">
+            <Swiper
+              modules={[Autoplay]}
+              onBeforeInit={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+              autoplay={{
+                delay: 2800,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
+              loop={categories.length > 5}
+              speed={700}
+              spaceBetween={10}
+              slidesPerView={visibleSlides(2.15)}
+              grabCursor={true}
+              breakpoints={{
+                360: { slidesPerView: visibleSlides(2.2), spaceBetween: 10 },
+                480: { slidesPerView: visibleSlides(2.6), spaceBetween: 12 },
+                640: { slidesPerView: visibleSlides(3.4), spaceBetween: 14 },
+                768: { slidesPerView: visibleSlides(4.2), spaceBetween: 16 },
+                1024: { slidesPerView: visibleSlides(5), spaceBetween: 16 },
+                1280: { slidesPerView: visibleSlides(5.8), spaceBetween: 18 },
+              }}
+              className="py-2.5 sm:py-3"
+            >
+              {categories.map((cat) => {
+                const badge = getBadge(cat.tag);
+                // Subtitle fallback guarantees consistent 2-tier baseline alignment
+                const subtitle = cat.spec || (cat.productCount ? `${cat.productCount} Products Available` : "Featured Range");
+
+                return (
+                  <SwiperSlide key={cat.id} className="!h-auto flex">
+                    <CategoryLink
+                      href={cat.url}
+                      className="group relative flex flex-col justify-between w-full h-[265px] sm:h-[295px] md:h-[315px] lg:h-[320px] min-h-[265px] sm:min-h-[295px] md:min-h-[315px] lg:min-h-[320px] max-h-[265px] sm:max-h-[295px] md:max-h-[315px] lg:max-h-[320px] rounded-[18px] sm:rounded-[22px] md:rounded-[24px] p-2.5 sm:p-3.5 md:p-4 bg-white hover:bg-gradient-to-b hover:from-white hover:via-[#FFFDFB] hover:to-[#FAF4EE] border border-stone-200/90 hover:border-primary/50 shadow-[0_3px_14px_rgba(42,23,17,0.04)] hover:shadow-[0_14px_28px_rgba(149,68,44,0.14)] transition-all duration-300 cursor-pointer overflow-hidden box-border select-none"
+                    >
+                      {/* Ambient Accent Glow on Hover */}
+                      <div
+                        className="absolute -top-10 -right-10 w-24 h-24 rounded-full opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 pointer-events-none"
+                        style={{ backgroundColor: cat.accent || "#95442c" }}
+                      />
+
+                      {/* ── Fixed Header Slot (Badge + Count) ── */}
+                      <div className="h-[22px] sm:h-[24px] md:h-[26px] flex items-center justify-between gap-1.5 w-full shrink-0">
+                        {badge ? (
+                          <span className={`inline-flex items-center gap-0.5 sm:gap-1 text-[8px] sm:text-[9px] md:text-[9.5px] font-black uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full border shadow-2xs shrink-0 max-w-[62%] truncate ${badge.color}`}>
+                            <span>{badge.icon}</span>
+                            <span className="truncate">{badge.label}</span>
+                          </span>
+                        ) : (
+                          <span className="inline-block text-[8px] sm:text-[9px] md:text-[10px] font-bold text-stone-400 uppercase tracking-wider">
+                            GOMZI
+                          </span>
+                        )}
+
+                        {cat.productCount !== null && (
+                          <span className="inline-block text-[8.5px] sm:text-[9.5px] md:text-[10px] font-bold text-stone-500 bg-stone-100 group-hover:bg-primary/10 group-hover:text-primary px-1.5 sm:px-2 py-0.5 rounded-full transition-colors font-modelica shrink-0 whitespace-nowrap ml-auto">
+                            {cat.productCount} {cat.productCount === 1 ? "item" : "items"}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* ── Fixed Circular Cameo Stage Slot (100% Clipped & Normalized) ── */}
+                      <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-[136px] lg:h-[136px] mx-auto flex items-center justify-center my-auto shrink-0">
+                        {/* Ambient Radial Spotlight */}
+                        <div
+                          className="absolute -inset-1 rounded-full opacity-40 group-hover:opacity-90 blur-md transition-all duration-500 pointer-events-none"
+                          style={{
+                            background: `radial-gradient(circle, ${cat.accent ? cat.accent + "33" : "rgba(149,68,44,0.18)"} 0%, rgba(255,255,255,0) 70%)`,
+                          }}
+                        />
+
+                        {/* Circular Masked Stage: Clips ANY square or lifestyle background cleanly */}
+                        <div className="relative w-full h-full rounded-full overflow-hidden border border-stone-200/80 group-hover:border-primary/40 transition-all duration-300 shadow-[inset_0_2px_8px_rgba(42,23,17,0.06)] bg-gradient-to-b from-[#FBF8F5] via-[#F6EFE9] to-[#EFE4DA] group-hover:from-[#FFF6F0] group-hover:via-[#FDEEE4] group-hover:to-[#F9DEC8] flex items-center justify-center p-2">
+                          <img
+                            src={cat.image}
+                            alt={cat.title}
+                            loading="lazy"
+                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-out pointer-events-none drop-shadow-[0_6px_12px_rgba(42,23,17,0.18)]"
+                            onError={(e) => {
+                              if (!e.currentTarget.dataset.fallback) {
+                                e.currentTarget.dataset.fallback = "true";
+                                e.currentTarget.src = "/images/product-placeholder.webp";
+                              }
+                            }}
+                          />
+                        </div>
+
+                        {/* Ground Contact Shadow */}
+                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 sm:w-14 md:w-16 h-1 sm:h-1.5 rounded-full bg-stone-900/15 blur-[2px] group-hover:w-18 transition-all duration-300" />
+                      </div>
+
+                      {/* ── Fixed 2-Tier Title & Subtitle Slot (Consistent Baseline) ── */}
+                      <div className="h-[30px] sm:h-[34px] md:h-[38px] flex flex-col items-center justify-center w-full px-1 text-center shrink-0">
+                        <h3 className="text-[11px] sm:text-xs md:text-sm font-black text-[#1c1917] group-hover:text-primary transition-colors truncate w-full font-tomato tracking-tight leading-tight">
+                          {cat.title}
+                        </h3>
+                        <span className="text-[8.5px] sm:text-[9.5px] md:text-[10px] text-stone-500 font-medium truncate w-full font-modelica">
+                          {subtitle}
+                        </span>
+                      </div>
+
+                      {/* ── Fixed Action Button Slot ── */}
+                      <div className="h-[28px] sm:h-[32px] md:h-[34px] w-full shrink-0 mt-0.5 sm:mt-1">
+                        <div className="w-full h-full rounded-full bg-[#FAF5F0] group-hover:bg-primary text-stone-700 group-hover:text-white text-[10px] sm:text-[11px] md:text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1 sm:gap-1.5 shadow-2xs group-hover:shadow-md group-hover:shadow-primary/25 font-modelica">
+                          <span>Explore Range</span>
+                          <ArrowRight size={11} className="sm:w-3 sm:h-3 group-hover:translate-x-0.5 sm:group-hover:translate-x-1 transition-transform duration-300" />
+                        </div>
+                      </div>
+                    </CategoryLink>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </div>
+        )}
+
+      </div>
+    </section>
+  );
+}
+
+function CategoryLink({ href, children, ...props }) {
+  return href && href.startsWith("/") ? (
+    <Link to={href} {...props}>
+      {children}
+    </Link>
+  ) : (
+    <a href={href || "#"} {...props}>
+      {children}
+    </a>
   );
 }
 
 export default function HkCategoryCircles() {
-  return (
-    <section className="w-full bg-white py-8 sm:py-10 border-b border-[#ebdcd2]/50 font-sans">
-      <div className="max-w-[1280px] mx-auto px-4">
-        {/* Section Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-6 bg-[#95442c] rounded-full inline-block" />
-              <h2 className="text-xl sm:text-2xl font-black text-[#1c1917] tracking-tight font-toma">
-                Popular Categories
-              </h2>
-            </div>
-            <p className="text-xs text-stone-500 mt-1 pl-4.5">
-              Explore supplements curated for your exact fitness and physique goals
-            </p>
-          </div>
-
-          <Link
-            to="/gomzi-supplement"
-            className="text-xs sm:text-sm font-bold text-[#95442c] hover:underline flex items-center gap-1"
-          >
-            <span>View All Categories</span>
-            <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        {/* ── Scalloped Crest Category Swiper (Exact Match to Reference in Gomzi Brand Colors) ── */}
-        <div className="relative group">
-          <Swiper
-            spaceBetween={14}
-            slidesPerView={2.5}
-            grabCursor={true}
-            breakpoints={{
-              480: { slidesPerView: 3, spaceBetween: 14 },
-              640: { slidesPerView: 4, spaceBetween: 16 },
-              768: { slidesPerView: 5, spaceBetween: 16 },
-              1024: { slidesPerView: 6, spaceBetween: 18 },
-              1280: { slidesPerView: 8, spaceBetween: 16 },
-            }}
-            className="overflow-hidden py-2"
-          >
-            {HOME_CATEGORIES.map((cat) => (
-              <SwiperSlide key={cat.id}>
-                <Link
-                  to={`/gomzi-supplement/${cat.slug}`}
-                  className="group flex flex-col items-center text-center cursor-pointer transition-transform duration-300 hover:-translate-y-1"
-                >
-                  {/* Cusped Ornamental Frame Container */}
-                  <div className="relative w-[128px] h-[144px] sm:w-[140px] sm:h-[156px] mx-auto flex items-center justify-center">
-                    {/* SVG Scalloped Arch Frame */}
-                    <ScallopedCrestFrame />
-
-                    {/* 3D Product Render Centered Inside Frame with Elegant Proportional Fit */}
-                    <div className="absolute inset-0 flex items-center justify-center p-3 sm:p-4">
-                      <img
-                        src={cat.image}
-                        alt={cat.name}
-                        className="max-h-[56%] max-w-[58%] object-contain drop-shadow-[0_6px_8px_rgba(42,23,17,0.20)] group-hover:scale-108 transition-transform duration-300 pointer-events-none"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = cat.fallbackImage || "/images/product-placeholder.webp";
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Centered Category Title */}
-                  <span className="mt-2.5 text-xs sm:text-sm font-extrabold text-[#1c1917] group-hover:text-[#95442c] transition-colors leading-snug line-clamp-1 w-full px-1">
-                    {cat.name}
-                  </span>
-
-                  {/* Category Count */}
-                  <span className="text-[10px] text-stone-500 font-medium mt-0.5">
-                    {cat.badge}
-                  </span>
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </div>
-    </section>
-  );
+  const { categories, loading, error, retry } = useCategories();
+  return <PopularCategories categories={categories} loading={loading} error={error} onRetry={retry} />;
 }

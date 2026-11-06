@@ -1,4 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import PageLoading from "../component/PageLoading";
+import { GymAccessOffer } from "../component/common/GymAccessOffer";
 import Confetti from "react-confetti";
 import { useEffect, useState } from "react";
 import { getOrdersApi, getRazorpayOrderApi } from "../api/order.api";
@@ -14,6 +16,7 @@ export default function ThankYou() {
   const [showConfetti, setShowConfetti] = useState(true);
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -24,61 +27,53 @@ export default function ThankYou() {
   }, []);
 
   useEffect(() => {
-    if (receipt_id) {
-      fetchOrder(receipt_id);
-    } else if (gateway_order_id) {
-      fetchRazorpayOrder(gateway_order_id);
-    } else {
-      setLoading(false);
-    }
-  }, [receipt_id, gateway_order_id]);
-
-  const fetchOrder = async () => {
-    try {
-      setLoading(true);
-
-      const res = await getOrdersApi(receipt_id);
-
-      console.log("Order Response:", res.data);
-
-      if (res?.data?.response === "OK") {
-        setOrder(res.data.data[0]);
+    let cancelled = false;
+    let timer;
+    let attempts = 0;
+    const loadOrder = async () => {
+      if (!receipt_id && !gateway_order_id) {
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const fetchRazorpayOrder = async (gateway_order_id) => {
-    try {
-      setLoading(true);
-      const res = await getRazorpayOrderApi(gateway_order_id);
-      console.log("Order Response:", res.data);
-      if (res?.data?.response === "OK") {
-        setOrder(res.data.data[0]);
+      try {
+        const res = receipt_id
+          ? await getOrdersApi(receipt_id)
+          : await getRazorpayOrderApi(gateway_order_id);
+        if (!cancelled && res?.data?.response === "OK") {
+          const currentOrder = res.data.data?.[0];
+          setOrder(currentOrder || null);
+          if (currentOrder?.status === "PENDING" && attempts++ < 10) {
+            timer = setTimeout(loadOrder, 2000);
+          }
+        }
+      } catch {
+        if (!cancelled) setOrder(null);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    loadOrder();
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [receipt_id, gateway_order_id, refresh]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        Loading order...
-      </div>
-    );
+    return <PageLoading />;
   }
 
   if (!order) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        Order not found
-      </div>
+      <section className="site-container py-12 md:py-16">
+        <div className="site-surface max-w-lg mx-auto p-6 sm:p-10 text-center">
+          <h1 className="font-toma text-2xl">We couldn't find this order</h1>
+          <p className="text-sm text-text-light leading-7 mt-3">Check your order history for the latest details, or contact our team for help.</p>
+          <div className="flex flex-wrap justify-center gap-3 mt-6">
+            <Link to="/profile" className="site-button">My account</Link>
+            <Link to="/contact-us" className="site-button site-button-outline">Contact us</Link>
+          </div>
+        </div>
+      </section>
     );
   }
 
@@ -92,12 +87,12 @@ export default function ThankYou() {
   });
 
   return (
-    <div className="min-h-screen bg-bg px-4 py-10">
+    <div className="min-h-screen bg-light px-4 py-10">
       <div className="max-w-4xl mx-auto">
-        {showConfetti && <Confetti recycle={false} numberOfPieces={350} />}
+        {showConfetti && order.status === "SUCCESS" && <Confetti recycle={false} numberOfPieces={350} />}
         {/* Success Card */}
-        <div className="bg-bg-light border border-border rounded-xl shadow-md p-8 text-center">
-          <div className="relative flex justify-center mb-8">
+        <div className="site-surface p-8 text-center">
+          {order.status === "SUCCESS" && <div className="relative flex justify-center mb-8">
             {/* Pulsing circles */}
             <div className="absolute w-28 h-28 rounded-full bg-green-200 animate-ping opacity-20" />
 
@@ -116,23 +111,25 @@ export default function ThankYou() {
                 />
               </svg>
             </div>
-          </div>
+          </div>}
 
-          <h1 className="font-toma text-4xl text-primary mb-3">Thank You!</h1>
+          <h1 className="font-toma text-4xl text-primary mb-3">{order.status === "SUCCESS" ? "Thank You!" : order.status === "PENDING" ? "Payment confirmation pending" : `Order ${order.status.toLowerCase()}`}</h1>
 
           <p className="text-text-light max-w-lg mx-auto mb-6">
-            Your order has been placed successfully. We've sent a confirmation
-            email and will start processing your order shortly.
+            {order.status === "SUCCESS" ? "Your order has been placed successfully. You can follow its progress in My Orders." : order.status === "PENDING" ? "We're waiting for payment confirmation. Please check this order before making another payment." : "Check My Orders for the latest payment and delivery details."}
           </p>
 
-          <div className="inline-flex items-center gap-2 bg-[#8cd7e1]/20 px-5 py-3 rounded-lg">
+          <div className="inline-flex items-center gap-2 bg-bg-light px-5 py-3 rounded-lg">
             <span className="font-semibold text-primary">Order ID:</span>
-            <span className="font-bold text-primary">#{order.id}</span>
+            <span className="font-bold text-primary">#{order.receipt_id || order.id || order._id}</span>
           </div>
+          {order.status === "PENDING" && <button type="button" className="site-button mt-4" onClick={() => setRefresh((value) => value + 1)}>Check payment status</button>}
         </div>
 
+        {order.status === "SUCCESS" && <GymAccessOffer offer={order.notes?.gym_access_offer} confirmed />}
+
         {/* Summary */}
-        <div className="mt-8 bg-bg-light border border-border rounded-xl shadow-md p-6">
+        <div className="mt-8 site-surface p-6">
           <h2 className="font-toma text-2xl text-primary mb-5">
             Order Summary
           </h2>
@@ -149,14 +146,14 @@ export default function ThankYou() {
             </div>
 
             <div className="border-t border-border pt-4 flex justify-between">
-              <span className="font-bold text-lg">Total Paid</span>
+              <span className="font-bold text-lg">{order.purchase_mode === "Cash On Delivery" ? "Amount due on delivery" : order.status === "SUCCESS" ? "Total Paid" : "Order Total"}</span>
               <span className="font-toma font-bold text-xl text-primary">
                 ₹{order.amount}
               </span>
             </div>
           </div>
         </div>
-        <div className="bg-[#8cd7e1]/20 rounded-xl p-4 border shadow-md mt-8 border-[#8cd7e1]/40">
+        {order.status === "SUCCESS" && <div className="bg-bg-light rounded-xl p-4 border shadow-md mt-8 border-border">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🚚</span>
 
@@ -166,7 +163,7 @@ export default function ThankYou() {
               <p className="text-text-light text-sm">{estimatedDelivery}</p>
             </div>
           </div>
-        </div>
+        </div>}
 
         {/* <div className="bg-bg-light border border-border rounded-xl p-4 mt-8 shadow-md">
           <div className="flex gap-3">
@@ -183,7 +180,7 @@ export default function ThankYou() {
             </div>
           </div>
         </div> */}
-        <div className="mt-8 bg-bg-light border border-border rounded-xl shadow-md p-6">
+        <div className="mt-8 site-surface p-6">
           <h2 className="font-toma text-2xl text-primary mb-5">
             Delivery Address
           </h2>
@@ -205,12 +202,13 @@ export default function ThankYou() {
               {order.notes?.country} - {order.notes?.pin_code}
             </p>
 
-            <p>{order.user_id?.mobile}</p>
+            <p>{[order.notes?.first_name, order.notes?.last_name].filter(Boolean).join(" ")}</p>
+            <p>{order.notes?.mobile || order.user_id?.mobile}</p>
           </div>
         </div>
 
         {/* Order Timeline */}
-        <div className="mt-8 bg-bg-light border border-border rounded-xl shadow-md p-6">
+        {order.status === "SUCCESS" && <div className="mt-8 site-surface p-6">
           <h2 className="font-toma text-2xl text-primary mb-5">What's Next?</h2>
           <div className="space-y-5">
             <div className="flex items-center gap-4">
@@ -259,7 +257,7 @@ export default function ThankYou() {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
 
         {/* Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4">

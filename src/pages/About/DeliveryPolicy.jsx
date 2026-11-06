@@ -22,7 +22,7 @@ const ShippingPolicy = () => {
 
         {/* Order Processing Time */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">Order Processing Time</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">Order Processing Time</h3>
 
           <ul className="list-disc pl-6 space-y-2">
             <li>
@@ -44,7 +44,7 @@ const ShippingPolicy = () => {
 
         {/* Shipping Timelines */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">Shipping Timelines</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">Shipping Timelines</h3>
 
           <ul className="list-disc pl-6 space-y-2">
             <li>
@@ -69,7 +69,7 @@ const ShippingPolicy = () => {
 
         {/* Shipping Charges */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">Shipping Charges</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">Shipping Charges</h3>
 
           <ul className="list-disc pl-6 space-y-2">
             <li>We offer free shipping on orders above ₹999.</li>
@@ -88,7 +88,7 @@ const ShippingPolicy = () => {
 
         {/* Order Tracking */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">Order Tracking</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">Order Tracking</h3>
 
           <p>
             Once your order is shipped, you will receive a tracking number via
@@ -99,7 +99,7 @@ const ShippingPolicy = () => {
 
         {/* Shipping Partners */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">Shipping Partners</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">Shipping Partners</h3>
 
           <p>
             We work with trusted courier and logistics partners to ensure safe
@@ -109,7 +109,7 @@ const ShippingPolicy = () => {
 
         {/* Delayed or Lost Shipments */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">Delayed or Lost Shipments</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">Delayed or Lost Shipments</h3>
 
           <p>
             If your order has not arrived within the expected delivery window,
@@ -120,7 +120,7 @@ const ShippingPolicy = () => {
 
         {/* Incorrect Address / Failed Delivery */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             Incorrect Address / Failed Delivery
           </h3>
 
@@ -135,7 +135,7 @@ const ShippingPolicy = () => {
 
         {/* Damaged or Tampered Packages */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">
+          <h3 className="font-bold text-lg sm:text-xl mb-3">
             Damaged or Tampered Packages
           </h3>
 
@@ -158,7 +158,7 @@ const ShippingPolicy = () => {
 
         {/* International Shipping */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">International Shipping</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">International Shipping</h3>
 
           <p>
             Currently, we only ship within India. We do not offer international
@@ -168,7 +168,7 @@ const ShippingPolicy = () => {
 
         {/* Contact Us */}
         <div>
-          <h3 className="font-bold text-2xl mb-3">Contact Us</h3>
+          <h3 className="font-bold text-lg sm:text-xl mb-3">Contact Us</h3>
 
           <p>
             For any questions or concerns regarding your shipment, please reach

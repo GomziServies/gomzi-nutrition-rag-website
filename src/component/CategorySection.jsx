@@ -99,7 +99,7 @@ const CategorySection = ({ category }) => {
 
             {/* <Link
               to={`/gomzi-supplement?category=${encodeURIComponent(category)}`}
-              className="inline-flex items-center gap-2 mt-5 text-[#95442c] font-semibold hover:gap-3 transition-all"
+              className="inline-flex items-center gap-2 mt-5 text-primary font-semibold hover:gap-3 transition-all"
             >
               View all products
               <ChevronRight size={18} />

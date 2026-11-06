@@ -1,130 +1,86 @@
-// src/component/healthkart/HkProductCardActions.jsx
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingCart, Zap, Plus, Minus, Check } from "lucide-react";
-import {
-  getCartQuantityByProductId,
-  changeCartProductQuantity,
-} from "../../services/cartStorage.service";
-import { successToast, infoToast } from "../../utils/toast";
+import { ShoppingCart, Zap, Plus, Minus, Loader2 } from "lucide-react";
+import useAuth from "../../hooks/useAuth";
+import useCart from "../../hooks/useCart";
+import { addToCart } from "../../services/product.service";
+import { changeCartProductQuantity } from "../../services/cartStorage.service";
+import { successToast, errorToast } from "../../utils/toast";
 
-export default function HkProductCardActions({ product, compact = false }) {
+export default function HkProductCardActions({ product, mobileStacked = false }) {
   const navigate = useNavigate();
-  const productId = product?._id || product?.id;
-  const [qty, setQty] = useState(() => getCartQuantityByProductId(productId));
-  const [animating, setAnimating] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const { items, changeQuantity, deleteItem, cartId } = useCart();
+  const [busy, setBusy] = useState(false);
+  const productId = product?._id;
+  const item = items.find(entry => entry.item_id === productId && !entry.variation_id);
+  const quantity = item?.quantity || 0;
+  const hasPrice = Number(product?.discountPrice ?? product?.price ?? 0) > 0;
+  const unavailable = !hasPrice || product?.isAvailable === false || product?.stock === 0;
+  const unavailableLabel = hasPrice ? "Sold out" : "Unavailable";
 
-  // Sync with global cart events
-  useEffect(() => {
-    const handleCartSync = () => {
-      setQty(getCartQuantityByProductId(productId));
-    };
-
-    window.addEventListener("cartUpdated", handleCartSync);
-    window.addEventListener("storage", handleCartSync);
-
-    return () => {
-      window.removeEventListener("cartUpdated", handleCartSync);
-      window.removeEventListener("storage", handleCartSync);
-    };
-  }, [productId]);
-
-  const handleAddToCart = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setAnimating(true);
-    const newQty = changeCartProductQuantity(product, 1);
-    setQty(newQty);
-    successToast(`${(product?.name || "Product").slice(0, 24)}... added to cart!`);
-    setTimeout(() => setAnimating(false), 300);
-  };
-
-  const handleIncrement = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setAnimating(true);
-    const newQty = changeCartProductQuantity(product, 1);
-    setQty(newQty);
-    setTimeout(() => setAnimating(false), 200);
-  };
-
-  const handleDecrement = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setAnimating(true);
-    const newQty = changeCartProductQuantity(product, -1);
-    setQty(newQty);
-    if (newQty === 0) {
-      infoToast("Removed from cart");
+  const update = async (delta) => {
+    if (busy || (delta > 0 && unavailable)) return false;
+    // Curated preview cards cannot be submitted as real catalog items.
+    if (!/^[a-f0-9]{24}$/i.test(productId || "")) {
+      errorToast("This preview isn't available to purchase. Please browse the live catalog.");
+      return false;
     }
-    setTimeout(() => setAnimating(false), 200);
+    if (delta > 0 && product.stock != null && quantity >= Number(product.stock)) {
+      errorToast("You've reached the available stock for this product.");
+      return false;
+    }
+    setBusy(true);
+    try {
+      if (!isAuthenticated) {
+        changeCartProductQuantity(product, delta);
+      } else if (item) {
+        if (quantity + delta <= 0) { if (!await deleteItem(cartId, item._id)) throw new Error("Couldn’t remove this item. Please try again."); }
+        else if (!await changeQuantity(item, delta)) throw new Error("Couldn't update your cart. Please try again.");
+      } else if (delta > 0) {
+        const result = await addToCart({ item_id: productId, item_type: "FG_MEAL_PRODUCT", quantity: 1 });
+        if (!result.success) throw new Error(result.message || "Couldn't add this product.");
+        window.dispatchEvent(new Event("cartUpdated"));
+      }
+      if (delta > 0 && quantity === 0) successToast("Added to your cart");
+      return true;
+    } catch (error) {
+      errorToast(error.message || "Couldn't update your cart. Please try again.");
+      return false;
+    } finally {
+      setBusy(false);
+    }
   };
 
-  const handleBuyNow = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (qty === 0) {
-      changeCartProductQuantity(product, 1);
-    }
-    navigate("/checkouts");
+  const act = (callback) => async (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    await callback();
   };
+  const baseBtn = "h-8 sm:h-9 min-w-0 rounded-full font-bold text-[10px] min-[380px]:text-[11px] sm:text-xs leading-none whitespace-nowrap flex items-center justify-center gap-1 tracking-tight disabled:opacity-50 transition-colors cursor-pointer";
+  const actionSize = mobileStacked ? "h-9 sm:h-9 min-w-0 rounded-full font-bold text-xs leading-none whitespace-nowrap flex items-center justify-center gap-1 tracking-tight disabled:opacity-50 transition-colors cursor-pointer" : baseBtn;
+  const primary = `${actionSize} bg-primary px-1.5 min-[380px]:px-2 text-white hover:bg-hover`;
+  const outline = `${actionSize} border border-primary px-1.5 min-[380px]:px-2 text-primary hover:bg-[#fcf2ee]`;
 
   return (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-      className="mt-2.5 pt-2 border-t border-stone-100 flex items-center gap-1.5 sm:gap-2 select-none"
-    >
-      {/* ── Cart Action: Either "Add to Cart" or "[- Qty +] Stepper" ── */}
-      {qty > 0 ? (
-        <div
-          className={`flex-1 h-9 sm:h-10 bg-[#95442c] text-white rounded-lg px-1.5 sm:px-2 flex items-center justify-between shadow-xs transition-transform duration-200 ${
-            animating ? "scale-98" : "scale-100"
-          }`}
-        >
-          <button
-            type="button"
-            onClick={handleDecrement}
-            title="Decrease quantity"
-            className="w-6 h-6 sm:w-7 sm:h-7 rounded hover:bg-black/20 flex items-center justify-center transition-colors cursor-pointer active:scale-90 text-white"
-          >
-            <Minus size={13} className="stroke-[3]" />
-          </button>
-
-          <span className="text-xs sm:text-sm font-black font-mono text-white px-1">
-            {qty}
-          </span>
-
-          <button
-            type="button"
-            onClick={handleIncrement}
-            title="Increase quantity"
-            className="w-6 h-6 sm:w-7 sm:h-7 rounded hover:bg-black/20 flex items-center justify-center transition-colors cursor-pointer active:scale-90 text-white"
-          >
-            <Plus size={13} className="stroke-[3]" />
-          </button>
+    <div className={`mt-2.5 sm:mt-3 grid items-center ${mobileStacked ? "grid-cols-1 sm:grid-cols-2 gap-2" : "grid-cols-2 gap-1 min-[380px]:gap-1.5 sm:gap-2"}`} onClick={event => event.stopPropagation()} aria-busy={busy}>
+      {quantity > 0 ? (
+        <div className={`${primary} justify-between px-1`}>
+          <button type="button" disabled={busy} aria-label={`Remove one ${product.name}`} onClick={act(() => update(-1))} className={`${mobileStacked ? "flex-1 min-w-0 sm:flex-none sm:w-6" : "w-5 sm:w-6"} h-full shrink-0 flex items-center justify-center hover:opacity-80`}><Minus size={11} /></button>
+          <span className="shrink-0 font-black text-xs" aria-live="polite">{busy ? <Loader2 size={11} className="animate-spin" /> : quantity}</span>
+          <button type="button" disabled={busy || unavailable} aria-label={`Add one ${product.name}`} onClick={act(() => update(1))} className={`${mobileStacked ? "flex-1 min-w-0 sm:flex-none sm:w-6" : "w-5 sm:w-6"} h-full shrink-0 flex items-center justify-center hover:opacity-80`}><Plus size={11} /></button>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          className="flex-1 h-9 sm:h-10 bg-[#95442c] hover:bg-[#7a3522] text-white text-[11px] sm:text-xs font-bold rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 shadow-xs active:scale-98 cursor-pointer whitespace-nowrap"
-        >
-          <ShoppingCart size={13} />
-          <span>Add</span>
+        <button type="button" disabled={busy || unavailable} onClick={act(() => update(1))} className={primary}>
+          {busy ? <Loader2 size={11} className="animate-spin shrink-0" /> : unavailable ? null : <ShoppingCart size={11} className="shrink-0" />}
+          <span className={mobileStacked ? "text-xs" : undefined}>{unavailable ? unavailableLabel : mobileStacked ? "Add to cart" : "Add"}</span>
         </button>
       )}
-
-      {/* ── Buy Now Button with Brown Border, No Color Fill ── */}
-      <button
-        type="button"
-        onClick={handleBuyNow}
-        className="flex-1 h-9 sm:h-10 bg-transparent hover:bg-[#95442c] text-[#95442c] hover:text-white border border-[#95442c] sm:border-[1.5px] text-[11px] sm:text-xs font-bold rounded-lg transition-all duration-200 flex items-center justify-center gap-1 shadow-xs active:scale-98 cursor-pointer whitespace-nowrap group"
-      >
-        <Zap size={13} className="stroke-[2.5] text-[#95442c] group-hover:text-white transition-colors" />
-        <span>Buy Now</span>
+      <button type="button" disabled={busy || unavailable} onClick={act(async () => {
+        if (quantity > 0 || await update(1)) navigate("/cart");
+      })} className={outline}>
+        <Zap size={11} className="shrink-0 text-primary" />
+        <span className={mobileStacked ? "text-xs" : undefined}>Buy<span className={mobileStacked ? "" : "hidden min-[460px]:inline"}> now</span></span>
       </button>
     </div>
   );

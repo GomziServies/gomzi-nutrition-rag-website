@@ -1,36 +1,33 @@
 // src/component/healthkart/HkBestSellersTabbed.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Star, ShoppingCart, CheckCircle2, Flame, ArrowRight, Loader2 } from "lucide-react";
+import { Star, ShoppingCart, CheckCircle2, ArrowRight } from "lucide-react";
 import { fetchProducts } from "../../services/product.service";
 import {
   BEST_SELLER_PRODUCTS,
   getProductImageUrl,
-  handleQuickAddToCart,
   diversifyProducts,
   getProductBrand,
 } from "../../data/homeProducts";
-import useAuth from "../../hooks/useAuth";
 import HkProductCardActions from "./HkProductCardActions";
+import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 
 const TABS = [
-  { id: "all", label: "🔥 All Products (419)", category: "" },
-  { id: "whey", label: "Whey Protein (86)", category: "Whey Protein" },
-  { id: "combos", label: "Combos & Stacks (96)", category: "Combos & Stacks" },
-  { id: "creatine", label: "Creatine (53)", category: "Creatine" },
-  { id: "preworkout", label: "Pre-Workout (36)", category: "Pre Workout" },
-  { id: "gainer", label: "Mass Gainer (23)", category: "Mass Gainer" },
-  { id: "snacks", label: "Protein Snacks (20)", category: "Protein Bars & Snacks" },
-  { id: "plant", label: "Plant Protein (17)", category: "Plant Protein" },
+  { id: "all", label: "All Products", category: "" },
+  { id: "whey", label: "Whey Protein", category: "Whey Protein" },
+  { id: "combos", label: "Combos & Stacks", category: "Combos & Stacks" },
+  { id: "creatine", label: "Creatine", category: "Creatine" },
+  { id: "preworkout", label: "Pre-Workout", category: "Pre Workout" },
+  { id: "gainer", label: "Mass Gainer", category: "Mass Gainer" },
+  { id: "snacks", label: "Protein Snacks", category: "Protein Bars & Snacks" },
+  { id: "plant", label: "Plant Protein", category: "Plant Protein" },
 ];
 
 export default function HkBestSellersTabbed() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState("all");
-  const [products, setProducts] = useState(BEST_SELLER_PRODUCTS);
-  const [loading, setLoading] = useState(false);
-  const [addingId, setAddingId] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Load products dynamically based on active tab with brand diversification
   useEffect(() => {
@@ -49,8 +46,8 @@ export default function HkBestSellersTabbed() {
         if (isMounted && res.success && res.data && res.data.length > 0) {
           const mixed = diversifyProducts(res.data, 12);
           setProducts(mixed.length > 0 ? mixed : res.data.slice(0, 12));
-        } else if (isMounted && !catParam) {
-          setProducts(diversifyProducts(BEST_SELLER_PRODUCTS, 12));
+        } else if (isMounted) {
+          setProducts([]);
         }
       } catch (err) {
         console.error("Error loading tab products:", err);
@@ -65,30 +62,20 @@ export default function HkBestSellersTabbed() {
     };
   }, [activeTab]);
 
-  const handleAddToCartClick = async (e, product) => {
-    e.stopPropagation();
-    setAddingId(product._id);
-    await handleQuickAddToCart(product, isAuthenticated);
-    setTimeout(() => setAddingId(null), 800);
-  };
-
   const currentTabObj = TABS.find((t) => t.id === activeTab);
 
   return (
-    <section className="w-full bg-[#fbf9f6] py-10 sm:py-14 border-b border-[#ebdcd2]/50 font-sans">
+    <section className="w-full bg-light py-10 sm:py-14 border-b border-border/50 font-sans">
       <div className="max-w-[1280px] mx-auto px-4">
         {/* Title */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-[#95442c] text-white">
-                <Flame size={18} className="fill-current" />
-              </span>
-              <h2 className="text-xl sm:text-3xl font-black text-[#1c1917] tracking-tight font-toma">
-                Explore Our 419+ Supplements by Category
+              <h2 className="text-xl sm:text-3xl font-black text-text tracking-tight font-toma">
+                Explore supplements by category
               </h2>
             </div>
-            <p className="text-xs sm:text-sm text-stone-500 mt-1 pl-4">
+            <p className="text-xs sm:text-sm text-stone-500 mt-1">
               Real supplements directly from our database with lab-tested certificates
             </p>
           </div>
@@ -99,10 +86,10 @@ export default function HkBestSellersTabbed() {
                 ? `/gomzi-supplement?category=${encodeURIComponent(currentTabObj.category)}`
                 : "/gomzi-supplement"
             }
-            className="text-xs sm:text-sm font-bold text-[#95442c] hover:underline flex items-center gap-1"
+            className="text-xs sm:text-sm font-bold text-primary hover:underline flex items-center gap-1"
           >
             <span>
-              View All {currentTabObj?.category ? `${currentTabObj.category} Products` : "419+ Products"}
+              View All {currentTabObj?.category ? `${currentTabObj.category} Products` : "Products"}
             </span>
             &rarr;
           </Link>
@@ -118,8 +105,8 @@ export default function HkBestSellersTabbed() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? "bg-[#95442c] text-white shadow-md border border-[#95442c]"
-                    : "bg-white text-stone-700 hover:bg-[#fbf4f0] hover:text-[#95442c] border border-[#ebdcd2]"
+                    ? "bg-primary text-white shadow-md border border-primary"
+                    : "bg-white text-stone-700 hover:bg-[#fbf4f0] hover:text-primary border border-border"
                 }`}
               >
                 {tab.label}
@@ -130,15 +117,12 @@ export default function HkBestSellersTabbed() {
 
         {/* Product Cards Grid */}
         {loading ? (
-          <div className="py-16 flex flex-col items-center justify-center text-stone-400 gap-2">
-            <Loader2 size={32} className="animate-spin text-[#95442c]" />
-            <span className="text-xs font-semibold">Loading authentic supplements...</span>
-          </div>
+          <ProductGridSkeleton count={8} label="Loading supplements" className="mt-6" />
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mt-6">
             {products.map((product) => {
-              const price = product.price || product.discountPrice || 1999;
-              const discountPrice = product.discountPrice || product.price || 1499;
+              const price = Number(product.price ?? product.discountPrice ?? 0);
+              const discountPrice = Number(product.discountPrice ?? product.price ?? 0);
               const discountPct =
                 price > discountPrice
                   ? Math.round(((price - discountPrice) / price) * 100)
@@ -149,12 +133,21 @@ export default function HkBestSellersTabbed() {
                 <div
                   key={product._id}
                   onClick={() => navigate(`/product/${product.slug}`)}
-                  className="group bg-white rounded-xl border border-[#ebdcd2] hover:border-[#95442c] hover:shadow-[0_8px_20px_rgba(149,68,44,0.12)] transition-all duration-300 flex flex-col w-full overflow-hidden cursor-pointer relative"
+                  onKeyDown={(event) => {
+                    if (event.target === event.currentTarget && (event.key === "Enter" || event.key === " ")) {
+                      event.preventDefault();
+                      navigate(`/product/${product.slug}`);
+                    }
+                  }}
+                  role="link"
+                  tabIndex={0}
+                  aria-label={`View ${product.name}`}
+                  className="group bg-white rounded-xl border border-border hover:border-primary hover:shadow-[0_8px_20px_rgba(149,68,44,0.12)] transition-all duration-300 flex flex-col w-full overflow-hidden cursor-pointer relative"
                 >
                   {/* Badge top-left (Discount only) */}
                   {discountPct > 0 && (
                     <div className="absolute top-2.5 left-2.5 z-10">
-                      <span className="bg-[#95442c] text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-md shadow-xs">
+                      <span className="bg-primary text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-md shadow-xs">
                         -{discountPct}% OFF
                       </span>
                     </div>
@@ -165,6 +158,8 @@ export default function HkBestSellersTabbed() {
                     <img
                       src={imgUrl}
                       alt={product.name}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.06)]"
                       onError={(e) => {
                         e.currentTarget.onerror = null;
@@ -179,16 +174,16 @@ export default function HkBestSellersTabbed() {
                       {/* Rating Pill - Fixed Height */}
                       <div className="h-5 flex items-center gap-1.5 mb-1.5">
                         <span className="inline-flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold px-1.5 py-0.5 rounded">
-                          <span>{product.rating?.average || 4.8}</span>
+                          <span>{product.rating?.average ?? 0}</span>
                           <Star size={11} className="fill-amber-500 text-amber-500" />
                         </span>
                         <span className="text-[11px] text-stone-400 font-medium">
-                          ({product.rating?.totalReviews || 120})
+                          ({product.rating?.totalReviews ?? 0})
                         </span>
                       </div>
 
                       {/* Title - Fixed 2-Line Box */}
-                      <h3 className="h-10 sm:h-11 text-xs sm:text-sm font-bold text-[#1c1917] group-hover:text-[#95442c] transition-colors line-clamp-2 leading-tight">
+                      <h3 className="h-10 sm:h-11 text-xs sm:text-sm font-bold text-text group-hover:text-primary transition-colors line-clamp-2 leading-tight">
                         {product.name}
                       </h3>
 
@@ -202,7 +197,7 @@ export default function HkBestSellersTabbed() {
                     {/* Pricing & Add to Cart Section */}
                     <div className="mt-3 pt-2.5 border-t border-stone-100 flex flex-col justify-end">
                       <div className="h-6 flex items-baseline gap-2">
-                        <span className="text-base sm:text-lg font-black text-[#1c1917]">
+                        <span className="text-base sm:text-lg font-black text-text">
                           ₹{discountPrice.toLocaleString("en-IN")}
                         </span>
                         {price > discountPrice && (
@@ -215,7 +210,7 @@ export default function HkBestSellersTabbed() {
                       {/* Reserved Height for Savings */}
                       <div className="h-4 flex items-center">
                         {price > discountPrice ? (
-                          <p className="text-[11px] font-bold text-[#95442c]">
+                          <p className="text-[11px] font-bold text-primary">
                             Save ₹{(price - discountPrice).toLocaleString("en-IN")}
                           </p>
                         ) : (

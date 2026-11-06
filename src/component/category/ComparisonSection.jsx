@@ -91,15 +91,15 @@ const ComparisonSection = ({ data }) => {
             Comparison Table
         =========================== */}
 
-      <div className="mt-8 overflow-hidden rounded-3xl border border-[#ebdcd2] bg-white shadow-2xs">
-        <div className="px-5 sm:px-6 py-5 border-b border-[#ebdcd2]">
-          <h3 className="font-bold text-lg text-[#1c1917]">{data.table.title}</h3>
+      <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-white shadow-2xs">
+        <div className="px-5 sm:px-6 py-5 border-b border-border">
+          <h3 className="font-bold text-lg text-text">{data.table.title}</h3>
         </div>
 
         <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full">
             <thead>
-              <tr className="bg-[#95442c] text-white uppercase tracking-widest text-xs">
+              <tr className="bg-primary text-white uppercase tracking-widest text-xs">
                 {data.table.headers.map((header, index) => (
                   <th
                     key={index}
@@ -138,10 +138,10 @@ const ComparisonSection = ({ data }) => {
           {data.table.rows.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className="rounded-2xl border border-[#ebdcd2] bg-white overflow-hidden shadow-2xs"
+              className="rounded-2xl border border-border bg-white overflow-hidden shadow-2xs"
             >
               {/* Feature / first column */}
-              <div className="bg-[#95442c] text-white px-4 py-3">
+              <div className="bg-primary text-white px-4 py-3">
                 <p className="text-xs uppercase tracking-widest opacity-80">
                   {data.table.headers[0]}
                 </p>
@@ -150,10 +150,10 @@ const ComparisonSection = ({ data }) => {
               </div>
 
               {/* Remaining columns */}
-              <div className="divide-y divide-[#ebdcd2]">
+              <div className="divide-y divide-border">
                 {row.slice(1).map((cell, cellIndex) => (
                   <div key={cellIndex} className="px-4 py-4">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-[#95442c]">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-primary">
                       {data.table.headers[cellIndex + 1]}
                     </p>
 

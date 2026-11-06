@@ -1,15 +1,17 @@
 import React, { useState, useRef } from "react";
-import ProductsGrid from "../component/ui/ProductsGrid";
-import Wavyheading from "../component/common/Wavyheading";
+import PageHeading from "../HOC/Header/PageHeading";
 import SEO from "../component/SEO";
 
 // FAQ Item Component
-function FAQItem({ question, answer, isOpen, onToggle }) {
+function FAQItem({ id, question, answer, isOpen, onToggle }) {
   return (
-    <div className="border-b border-gray-200 last:border-b-0">
+    <div className="border-b border-border last:border-b-0">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-4 sm:py-5 text-left hover:bg-gray-50 transition-colors duration-200 px-2 sm:px-0"
+        aria-expanded={Boolean(isOpen)}
+        aria-controls={`${id}-answer`}
+        id={`${id}-question`}
+        className="w-full flex items-center justify-between py-4 sm:py-5 text-left hover:bg-bg-light transition-colors duration-200 px-2 sm:px-0"
       >
         <span className="text-sm sm:text-base md:text-lg font-medium text-text font-modelica pr-4">
           {question}
@@ -31,20 +33,18 @@ function FAQItem({ question, answer, isOpen, onToggle }) {
         </svg>
       </button>
 
-      {isOpen && (
-        <div className="pb-4 sm:pb-5 px-2 sm:px-0 animate-fadeIn">
+        <div hidden={!isOpen} id={`${id}-answer`} role="region" aria-labelledby={`${id}-question`} className="pb-5 px-2 sm:px-0">
           <p className="text-xs sm:text-sm md:text-base text-gray-700 font-modelica leading-relaxed">
             {answer}
           </p>
         </div>
-      )}
     </div>
   );
 }
 
 // Main FAQ Component
 export default function FAQ() {
-  const [activeTab, setActiveTab] = useState("About");
+  const [activeTab, setActiveTab] = useState("FAQs");
   const [openItems, setOpenItems] = useState({});
 
   // Refs for each section
@@ -243,133 +243,25 @@ export default function FAQ() {
 
   return (
     <>
-      <SEO
-        title="FAQs | Protein, Supplements & Orders | Gomzi Supplement"
-        description="Find answers about whey protein, peanut butter, multivitamins, shipping, returns, ingredients, usage and orders at Gomzi Supplement."
-      />
-      <div className="w-full bg-white">
-        {/* Header Section */}
-        <div className="relative w-full overflow-hidden bg-[#5c3024f0]">
-          {/* Left Side Image - Hidden on mobile */}
-          <img
-            src="/images/pageheadingleft.png"
-            alt=""
-            className="opacity-20 absolute left-0 top-0 h-full w-auto object-contain z-0 hidden md:block"
-          />
-
-          {/* Right Side Image */}
-          <img
-            src="/images/pageheadingright.png"
-            alt=""
-            className="opacity-20 absolute right-0 top-0 h-full w-auto object-contain z-0"
-          />
-
-          {/* Content Container */}
-          <div className="relative z-10 py-12 sm:py-16 md:py-20 lg:py-14">
-            <h1 className="font-toma text-center text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-6xl font-black text-white mb-6 sm:mb-8">
-              Frequently Asked Questions
-            </h1>
-
-            {/* Buttons Container */}
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => handleTabClick(tab)}
-                  className={`px-6 sm:px-8 md:px-10 py-2.5 sm:py-3 rounded-full font-modelica font-bold text-sm sm:text-base md:text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 ${
-                    activeTab === tab
-                      ? "bg-text text-white"
-                      : "bg-white text-text hover:bg-gray-100"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-          </div>
+      <SEO title="FAQs | Protein, Supplements & Orders | Gomzi Supplement" description="Find answers about products, shipping, returns and orders at Gomzi Supplement." />
+      <PageHeading head="Frequently Asked Questions" description="Find help with products, orders and delivery. Our team is here if you need anything else.">
+        <nav aria-label="FAQ sections" className="mt-5 flex flex-wrap gap-2">
+          {tabs.map(tab => <button key={tab} onClick={() => handleTabClick(tab)} aria-pressed={activeTab === tab} className={`site-button ${activeTab === tab ? "" : "site-button-outline"}`}>{tab}</button>)}
+        </nav>
+      </PageHeading>
+      <div className="site-container py-8 md:py-12">
+        <div className="mx-auto max-w-4xl space-y-6">
+          {[
+            { key: "FAQs", title: "About Gomzi", ref: aboutRef },
+            { key: "Products", title: "Our products", ref: productsRef },
+            { key: "Ordering", title: "Shipping & returns", ref: orderingRef },
+          ].map(section => (
+            <section key={section.key} ref={section.ref} className="site-surface p-4 sm:p-6 scroll-mt-48" aria-labelledby={`faq-${section.key}`}>
+              <h2 id={`faq-${section.key}`} className="font-toma text-xl sm:text-2xl mb-3">{section.title}</h2>
+              {allFAQData[section.key].map(item => <FAQItem key={item.id} {...item} isOpen={openItems[item.id]} onToggle={() => toggleItem(item.id)} />)}
+            </section>
+          ))}
         </div>
-
-        {/* FAQ Content Section */}
-        <div className="container w-[90%] max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-16 py-8 sm:py-10 md:py-12 lg:py-16">
-          {/* FAQ Content - Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
-            {/* Left Column - ALL FAQ Lists */}
-            <div className="space-y-8 sm:space-y-10 md:space-y-12">
-              {/* About Section */}
-              <div ref={aboutRef} className="space-y-0 scroll-mt-24">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-text font-modelica mb-4 sm:mb-6">
-                  FAQs
-                </h2>
-                <div className="bg-white rounded-lg">
-                  {allFAQData.FAQs.map((item) => (
-                    <FAQItem
-                      key={item.id}
-                      question={item.question}
-                      answer={item.answer}
-                      isOpen={openItems[item.id]}
-                      onToggle={() => toggleItem(item.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Products Section */}
-              <div ref={productsRef} className="space-y-0 scroll-mt-24">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-text font-modelica mb-4 sm:mb-6">
-                  Our products
-                </h2>
-                <div className="bg-white rounded-lg">
-                  {allFAQData.Products.map((item) => (
-                    <FAQItem
-                      key={item.id}
-                      question={item.question}
-                      answer={item.answer}
-                      isOpen={openItems[item.id]}
-                      onToggle={() => toggleItem(item.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Ordering Section */}
-              <div ref={orderingRef} className="space-y-0 scroll-mt-24">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-text font-modelica mb-4 sm:mb-6">
-                  Shipping & return
-                </h2>
-                <div className="bg-white rounded-lg">
-                  {allFAQData.Ordering.map((item) => (
-                    <FAQItem
-                      key={item.id}
-                      question={item.question}
-                      answer={item.answer}
-                      isOpen={openItems[item.id]}
-                      onToggle={() => toggleItem(item.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <style jsx>{`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(-10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-          .animate-fadeIn {
-            animation: fadeIn 0.3s ease-out;
-          }
-        `}</style>
-
-        {/* <Wavyheading text1="It's time to jump " text2="back on track" /> */}
-        {/* <ProductsGrid /> */}
       </div>
     </>
   );

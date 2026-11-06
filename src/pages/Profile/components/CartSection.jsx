@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-
 function CartSection() {
-  const [cart, setCart] = useState([]);
+  const cart = [];
 
   // useEffect(() => {
   //   loadCart();

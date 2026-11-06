@@ -1,3 +1,4 @@
+import useContactDetails from "../../content/useContactDetails";
 import React, { useState } from "react";
 import { sendContactInquiryApi } from "../../api/contact.api";
 import { errorToast, successToast } from "../../utils/toast";
@@ -54,6 +55,7 @@ const allFAQData = {
   ],
 };
 const ContactSection = () => {
+  const contact = useContactDetails();
   const [openItems, setOpenItems] = useState({});
   const [formData, setFormData] = useState({
     name: "",
@@ -111,19 +113,19 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="bg-bg py-12 md:py-20 w-full overflow-hidden">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+    <section className="bg-light py-8 md:py-12 w-full overflow-hidden">
+      <div className="site-container">
         {/* ================= CONTACT INFO ================= */}
-        <section className="mb-16">
-          <div className="text-center mb-12">
+        <section className="mb-8">
+          <div className="text-center mb-6">
             <span
-              style={{ background: "#95442c" }}
+              style={{ background: "var(--color-primary)" }}
               className="inline-block px-4 py-1 text-white rounded-full text-lightblue-700 text-xs font-bold uppercase tracking-widest"
             >
               Reach Us
             </span>
 
-            <h2 className="mt-5 text-4xl md:text-5xl font-toma font-bold text-text">
+            <h2 className="mt-5 text-2xl sm:text-3xl font-toma font-bold text-text">
               We'd Love to Hear From You
             </h2>
 
@@ -137,11 +139,11 @@ const ContactSection = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
             {/* WhatsApp */}
             <a
-              href="https://wa.me/919875270200"
-              className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-[#95442c] hover:shadow-xl transition-all"
+              href={contact.whatsappUrl}
+              className="group bg-white border border-border rounded-2xl p-6 hover:border-primary hover:shadow-md transition-all"
             >
               <div className="flex items-start gap-4 sm:gap-5">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#95442c] flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
                   <FaWhatsapp className="text-3xl text-white" />
                 </div>
 
@@ -151,7 +153,7 @@ const ContactSection = () => {
                   </p>
 
                   <h4 className="text-lg sm:text-xl font-bold break-all text-text mt-1">
-                    +91 98752 70200
+                    {contact.phone}
                   </h4>
 
                   <p className="text-sm text-text-light mt-2">
@@ -163,11 +165,11 @@ const ContactSection = () => {
 
             {/* Email */}
             <a
-              href="mailto:support@ragnutrition.in"
-              className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-[#95442c] hover:shadow-xl transition-all"
+              href={contact.emailUrl}
+              className="group bg-white border border-border rounded-2xl p-6 hover:border-primary hover:shadow-md transition-all"
             >
               <div className="flex items-start gap-4 sm:gap-5">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#95442c] flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
                   <FaEnvelope className="text-2xl text-white" />
                 </div>
 
@@ -177,7 +179,7 @@ const ContactSection = () => {
                   </p>
 
                   <h4 className="text-lg sm:text-xl font-bold break-all text-text mt-1">
-                    info@ragnutrition.in
+                    {contact.email}
                   </h4>
 
                   <p className="text-sm text-text-light mt-2">
@@ -189,11 +191,11 @@ const ContactSection = () => {
 
             {/* Phone */}
             <a
-              href="tel:+91XXXXXXXXXX"
-              className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-[#95442c] hover:shadow-xl transition-all"
+              href={contact.telephoneUrl}
+              className="group bg-white border border-border rounded-2xl p-6 hover:border-primary hover:shadow-md transition-all"
             >
               <div className="flex items-start gap-4 sm:gap-5">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#95442c] flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
                   <FaPhoneAlt className="text-2xl text-white" />
                 </div>
 
@@ -203,7 +205,7 @@ const ContactSection = () => {
                   </p>
 
                   <h4 className="text-lg sm:text-xl font-bold break-all text-text mt-1">
-                    +91 98752 70200
+                    {contact.phone}
                   </h4>
 
                   <p className="text-sm text-text-light mt-2">
@@ -214,9 +216,9 @@ const ContactSection = () => {
             </a>
 
             {/* Address */}
-            <div className="bg-white border border-gray-200 hover:border-[#95442c] rounded-2xl p-6 hover:shadow-xl transition">
+            <div className="bg-white border border-border hover:border-primary rounded-2xl p-6 hover:shadow-md transition">
               <div className="flex items-start gap-4 sm:gap-5">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#95442c] flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
                   <FaMapMarkerAlt className="text-2xl text-white" />
                 </div>
 
@@ -226,8 +228,7 @@ const ContactSection = () => {
                   </p>
 
                   <h4 className="text-lg sm:text-xl font-bold break-all text-text mt-1">
-                    G-23-TIME SQUARE, Gaurav Path Road, TP 10 Main Rd, opp.
-                    Shree Bharti Residency, Surat, Gujarat 394510
+                    {contact.address}
                   </h4>
                 </div>
               </div>
@@ -237,7 +238,7 @@ const ContactSection = () => {
           {/* Bottom Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6 mt-10">
             {/* Support Hours */}
-            <div className="bg-gray-50 rounded-2xl border p-6">
+            <div className="site-surface p-6">
               <h3 className="font-bold text-lg mb-5">Support Hours</h3>
 
               <div className="space-y-3 text-sm">
@@ -254,19 +255,19 @@ const ContactSection = () => {
             </div>
 
             {/* Social */}
-            <div className="bg-gray-50 rounded-2xl border p-6">
+            <div className="site-surface p-6">
               <h3 className="font-bold text-lg mb-5">Follow Us</h3>
 
               <div className="flex gap-3 mb-4">
                 <a
-                  href="https://www.instagram.com/gomzi.supplement__rag"
+                  href={contact.instagramUrl}
                   className="w-11 h-11 rounded-full border flex items-center justify-center hover:bg-pink-500 hover:text-white transition"
                 >
                   <FaInstagram size={20} />
                 </a>
 
                 <a
-                  href="https://www.facebook.com/people/Gomzi-Supplement/61590460356446/"
+                  href={contact.facebookUrl}
                   className="w-11 h-11 rounded-full border flex items-center justify-center hover:bg-blue-600 hover:text-white transition"
                 >
                   <FaLinkedinIn size={20} />
@@ -279,7 +280,7 @@ const ContactSection = () => {
             </div>
 
             {/* FSSAI */}
-            {/* <div className="bg-[#bcffff] rounded-2xl border border-[#95442c] p-6">
+            {/* <div className="bg-[#bcffff] rounded-2xl border border-primary p-6">
               <div className="text-xs uppercase font-semibold tracking-wider text-[#0b8383]">
                 FSSAI Licensed
               </div>
@@ -294,7 +295,7 @@ const ContactSection = () => {
           </div>
         </section>
         <div className="">
-          <div className="w-full lg:w-8/12 xl:w-7/12 mx-auto border-2 border-[#95442c] rounded-2xl p-5 sm:p-8 lg:p-10">
+          <div className="site-surface w-full max-w-3xl mx-auto p-5 sm:p-8">
             {/* Heading */}
             <h2 className="font-toma text-3xl md:text-2xl lg:text-3xl font-bold text-text mb-3">
               Send a message
@@ -307,70 +308,70 @@ const ContactSection = () => {
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="site-form space-y-5">
               {/* Name + Email Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Your Name */}
                 <div className="flex-1 flex flex-col gap-1.5">
-                  <label className="font-modelica text-sm text-text">
+                  <label htmlFor="contact-name" className="font-modelica text-sm text-text">
                     Your name <span className="text-text-light">*</span>
                   </label>
                   <input
                     type="text"
-                    name="name"
+                    id="contact-name" name="name"
                     placeholder="Enter your Name"
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-[#95442c] transition"
+                    className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-primary transition"
                   />
                 </div>
 
                 {/* Email */}
                 <div className="flex-1 flex flex-col gap-1.5">
-                  <label className="font-modelica text-sm text-text">
+                  <label htmlFor="contact-email" className="font-modelica text-sm text-text">
                     Email address <span className="text-text-light">*</span>
                   </label>
                   <input
                     type="email"
                     placeholder="Enter Your Valid Email"
-                    name="email"
+                    id="contact-email" name="email"
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-[#95442c] transition"
+                    className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-primary transition"
                   />
                 </div>
               </div>
 
               <div className="flex-1 flex flex-col gap-1.5">
-                <label className="font-modelica text-sm text-text">
+                <label htmlFor="contact-mobile" className="font-modelica text-sm text-text">
                   Mobile Number <span className="text-text-light">*</span>
                 </label>
                 <input
-                  type="number"
-                  name="mobile"
+                  type="tel" inputMode="tel"
+                  id="contact-mobile" name="mobile"
                   placeholder="Enter Your Valid Mobile Number"
                   value={formData.mobile}
                   onChange={handleChange}
                   required
-                  className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-[#95442c] transition"
+                  className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-primary transition"
                 />
               </div>
 
               {/* What interests you */}
               <div className="flex flex-col gap-1.5">
-                <label className="font-modelica text-sm text-text">
+                <label htmlFor="contact-interest" className="font-modelica text-sm text-text">
                   What interests you? <span className="text-text-light">*</span>
                 </label>
                 <textarea
-                  name="interest"
+                  id="contact-interest" name="interest"
                   placeholder="Enter Your query or interest here."
                   value={formData.interest}
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-[#95442c] transition resize-none"
+                  className="w-full border border-border rounded-[var(--radius-md)] px-4 py-3 font-modelica text-text text-sm bg-bg focus:outline-none focus:ring-2 focus:ring-primary transition resize-none"
                 />
               </div>
               {/* Submit Button */}
@@ -378,13 +379,13 @@ const ContactSection = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:flex-1 bg-[#95442c] hover:bg-[#d26a4a] text-white font-toma font-bold py-3 sm:py-4 rounded-lg transition disabled:opacity-50"
+                  className="w-full sm:flex-1 bg-primary hover:bg-hover text-white font-toma font-bold py-3 sm:py-4 rounded-lg transition disabled:opacity-50"
                 >
                   {loading ? "Contacting..." : "Contact Support "}
                 </button>
                 <a
                   href="/gomzi-supplement"
-                  className="w-full sm:flex-1 text-center bg-black hover:bg-[#d26a4a] text-white font-toma font-bold py-3 sm:py-4 rounded-lg transition"
+                  className="w-full sm:flex-1 text-center bg-primary hover:bg-hover text-white font-toma font-bold py-3 sm:py-4 rounded-lg transition"
                 >
                   Shop Products
                 </a>
@@ -420,7 +421,7 @@ export default ContactSection;
 // FAQ Item Component
 function FAQItem({ question, answer, isOpen, onToggle }) {
   return (
-    <div className="border-b border-gray-200 last:border-b-0">
+    <div className="border-b border-border last:border-b-0">
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between py-4 sm:py-5 text-left hover:bg-gray-50 transition-colors duration-200 px-2 sm:px-0"

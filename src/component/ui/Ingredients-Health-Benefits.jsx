@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const benefits = [
   {
@@ -31,12 +31,15 @@ const benefits = [
 ];
 
 function AccordionItem({ item, isOpen, onToggle }) {
-  const contentRef = useRef(null);
+  const panelId = `benefit-${item.id}`;
 
   return (
     <div className="border-b border-white/15">
       <button
+        type="button"
         onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
         className="w-full flex items-center justify-between py-2 sm:py-3 text-left group cursor-pointer"
       >
         <span className="font-modelica text-lg text-white font-medium leading-snug pr-4">
@@ -66,20 +69,14 @@ function AccordionItem({ item, isOpen, onToggle }) {
 
       {/* Smooth slide-down */}
       <div
-        ref={contentRef}
-        className="overflow-hidden transition-all duration-400 ease-in-out"
-        style={{
-          maxHeight: isOpen
-            ? `${contentRef.current?.scrollHeight ?? 500}px`
-            : "0px",
-          opacity: isOpen ? 1 : 0,
-          transition:
-            "max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease",
-        }}
+        id={panelId}
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
       >
-        <p className="font-modelica text-white/70 text-sm sm:text-base leading-relaxed pb-5">
-          {item.content}
-        </p>
+        <div className="min-h-0 overflow-hidden">
+          <p className="font-modelica text-white/70 text-sm sm:text-base leading-relaxed pb-5">
+            {item.content}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -92,7 +89,7 @@ export default function IngredientsHealthBenefits() {
 
   return (
     <section className="w-full bg-[var(--color-bg)] py-10">
-      <div className="max-w-[var(--container-width)] mx-auto px-4 sm:px-6 lg:px-16">
+      <div className="site-container sm:px-6 lg:px-16">
         {/* Dark Card */}
         <div
           className="relative w-full rounded-3xl overflow-hidden"
@@ -136,7 +133,7 @@ export default function IngredientsHealthBenefits() {
               <a
                 href="/gomzi-supplement"
                 className="text-center mt-6 w-full py-4 rounded-xl text-white font-modelica font-bold text-[var(--color-text)] text-sm sm:text-base transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
-                style={{ background: "#95442c" }}
+                style={{ background: "var(--color-primary)" }}
               >
                 Shop Longevity products
               </a>

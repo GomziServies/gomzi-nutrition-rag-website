@@ -63,7 +63,7 @@ function ProfileSection() {
       fetchProfile();
 
       successToast("Profile updated successfully");
-    } catch (error) {
+    } catch {
       errorToast("Something went wrong");
     } finally {
       setLoading(false);
@@ -73,12 +73,12 @@ function ProfileSection() {
   if (!editing) {
     return (
       <>
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Profile Information</h1>
+        <div className="flex justify-between items-start sm:items-center flex-wrap gap-4 mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold">Profile Information</h2>
 
           <button
             onClick={() => setEditing(true)}
-            className="bg-black text-white px-5 py-3 rounded-xl"
+            className="bg-primary text-white px-5 py-3 rounded-xl"
           >
             Update Profile
           </button>
@@ -118,8 +118,8 @@ function ProfileSection() {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Update Profile</h1>
+      <div className="flex justify-between items-start sm:items-center flex-wrap gap-4 mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold">Update Profile</h2>
       </div>
 
       <div className="grid md:grid-cols-2 gap-5">
@@ -191,7 +191,7 @@ function ProfileSection() {
         <button
           onClick={handleUpdate}
           disabled={loading}
-          className="bg-black text-white px-6 py-3 rounded-xl"
+          className="bg-primary text-white px-6 py-3 rounded-xl"
         >
           {loading ? "Updating..." : "Save Changes"}
         </button>

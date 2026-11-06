@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Food pouch">
+  
+  <ellipse cx="200" cy="352" rx="96" ry="13" fill="#1c1c28" opacity="0.08"/>
+  <path d="M136 44 h128 l-10 24 v246 c0 10 -8 16 -18 16 h-72 c-10 0 -18 -6 -18 -16 v-246 z" fill="#ffffff" stroke="#d8d8dc" stroke-width="2"/>
+  <path d="M136 44 h128 l-10 24 h-108 z" fill="#ececef"/>
+  <rect x="126" y="40" width="148" height="12" rx="5" fill="#1b365d"/>
+  <path d="M128 116 h144 v34 c0 8 -72 20 -72 20 s-72 -12 -72 -20 z" fill="#ececef"/>
+  
+  <rect x="118" y="186" width="164" height="26" fill="#1b365d"/>
+  <text x="200" y="204" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#ffffff" text-anchor="middle">GOMZI</text>
+  <circle cx="200" cy="248" r="26" fill="#ffffff" stroke="#c8912b" stroke-width="3"/>
+  <path d="M192 248 l6 6 l12 -13" fill="none" stroke="#c8912b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <text x="200" y="300" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#1c1c28" text-anchor="middle">OATS &amp; SEEDS</text>
+  <text x="200" y="319" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="500" fill="#6b6b73" text-anchor="middle">500 g</text>
+</svg>

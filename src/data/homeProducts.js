@@ -2,7 +2,7 @@
 // Curated authentic Gomzi Nutrition catalog, categories, banners, and trust assets.
 // Provides resilient fallbacks and instant rendering even under offline API scenarios.
 
-import { addGuestCartItem, getGuestCart } from "../services/cartStorage.service";
+import { addGuestCartItem } from "../services/cartStorage.service";
 import { addToCart } from "../services/product.service";
 import { successToast, errorToast } from "../utils/toast";
 
@@ -138,116 +138,6 @@ export const diversifyProducts = (products = [], maxCount = 12) => {
   return result;
 };
 
-export const HOME_CATEGORIES = [
-  {
-    id: "whey-protein",
-    name: "Whey Protein",
-    slug: "whey-protein",
-    dbCategory: "Whey Protein",
-    image: "/images/protein-removebg.png",
-    fallbackImage: "/images/product-category/whey-protein.webp",
-    badge: "86 Products",
-    count: "86 Products",
-    tagline: "Build Lean Muscle",
-    discount: "Up to 35% OFF",
-  },
-  {
-    id: "combos-stacks",
-    name: "Combos & Stacks",
-    slug: "combos-stacks",
-    dbCategory: "Combos & Stacks",
-    image: "/images/combos-transparent.png",
-    fallbackImage: "/images/product-category/pre-workout-bcaa-creatine.webp",
-    badge: "96 Combos",
-    count: "96 Combos",
-    tagline: "Max Value Bundles",
-    discount: "Extra 20% OFF",
-  },
-  {
-    id: "creatine",
-    name: "Creatine",
-    slug: "creatine",
-    dbCategory: "Creatine",
-    image: "/images/creatine-transparent.png",
-    fallbackImage: "/images/product-category/creatine.webp",
-    badge: "53 Products",
-    count: "53 Products",
-    tagline: "Strength & Power",
-    discount: "Creapure Grade",
-  },
-  {
-    id: "pre-workout",
-    name: "Pre-Workout",
-    slug: "pre-workout",
-    dbCategory: "Pre Workout",
-    image: "/images/pre-workout-transparent.png",
-    fallbackImage: "/images/product-category/pre-workout.webp",
-    badge: "36 Products",
-    count: "36 Products",
-    tagline: "Explosive Energy",
-    discount: "High Stim Pumps",
-  },
-  {
-    id: "mass-gainer",
-    name: "Mass Gainer",
-    slug: "mass-gainer",
-    dbCategory: "Mass Gainer",
-    image: "/images/mass-gainer-removebg.png",
-    fallbackImage: "/images/product-category/mass-gainer.webp",
-    badge: "23 Products",
-    count: "23 Products",
-    tagline: "Heavyweight Bulking",
-    discount: "1,250 Clean Cals",
-  },
-  {
-    id: "protein-bars-snacks",
-    name: "Protein Snacks",
-    slug: "protein-bars-snacks",
-    dbCategory: "Protein Bars & Snacks",
-    image: "/images/peanut-butter-transparent.png",
-    fallbackImage: "/images/product-category/peanut-butter.webp",
-    badge: "20 Products",
-    count: "20 Products",
-    tagline: "Peanut Butter & Bars",
-    discount: "Zero Palm Oil",
-  },
-  {
-    id: "plant-protein",
-    name: "Plant Protein",
-    slug: "plant-protein",
-    dbCategory: "Plant Protein",
-    image: "/images/plant-protein-transparent.png",
-    fallbackImage: "/images/product-category/plant-protein.webp",
-    badge: "17 Products",
-    count: "17 Products",
-    tagline: "100% Vegan Blend",
-    discount: "Dairy-Free Pure",
-  },
-  {
-    id: "bcaa",
-    name: "BCAA & Amino",
-    slug: "bcaa",
-    dbCategory: "BCAA",
-    image: "/images/bcaa-transparent.png",
-    fallbackImage: "/images/product-category/Bcaa-tangy-orange.webp",
-    badge: "5 Products",
-    count: "5 Products",
-    tagline: "Intra-Workout Recovery",
-    discount: "Electrolytes Added",
-  },
-  {
-    id: "wellness-health",
-    name: "Daily Wellness",
-    slug: "wellness-health",
-    dbCategory: "Wellness & Health",
-    image: "/images/multivitamins-transparent.png",
-    fallbackImage: "/images/product-category/Multivitamins.webp",
-    badge: "3 Products",
-    count: "3 Products",
-    tagline: "Multivitamins & Health",
-    discount: "35 Nutrients",
-  },
-];
 
 export const FITNESS_GOALS = [
   {
@@ -594,73 +484,20 @@ export const SEO_ACCORDION_ITEMS = [
  * and online (authenticated API), updating local state and toast notifications.
  */
 export const handleQuickAddToCart = async (product, isAuthenticated = false) => {
+  if (!/^[a-f0-9]{24}$/i.test(product?._id || "")) {
+    errorToast("This preview isn't available to purchase. Please browse the live catalog.");
+    return false;
+  }
   try {
-    const productId = product._id;
-    const name = product.name || "Supplement";
-    const price = product.price || product.discountPrice || 1999;
-    const discountPrice = product.discountPrice || product.price || 1499;
-    const flavour = product.flavour || "Standard";
-    const displayImages = product.displayImages || [];
-
-    if (!isAuthenticated) {
-      addGuestCartItem({
-        product: {
-          _id: productId,
-          name,
-          price,
-          discountPrice,
-          flavour,
-          displayImages,
-        },
-        quantity: 1,
-      });
-
-      window.dispatchEvent(new Event("cartUpdated"));
-      successToast(`${name.slice(0, 26)}... added to cart!`);
-      return true;
-    }
-
-    const res = await addToCart({
-      item_id: productId,
-      item_type: "FG_MEAL_PRODUCT",
-      quantity: 1,
-    });
-
-    if (res.success) {
-      window.dispatchEvent(new Event("cartUpdated"));
-      successToast(`${name.slice(0, 26)}... added to cart!`);
-      return true;
-    } else {
-      addGuestCartItem({
-        product: {
-          _id: productId,
-          name,
-          price,
-          discountPrice,
-          flavour,
-          displayImages,
-        },
-        quantity: 1,
-      });
-      window.dispatchEvent(new Event("cartUpdated"));
-      successToast(`${name.slice(0, 26)}... added to cart!`);
-      return true;
-    }
-  } catch (err) {
-    console.error("Cart error, falling back to guest cart:", err);
-    addGuestCartItem({
-      product: {
-        _id: product._id,
-        name: product.name,
-        price: product.price,
-        discountPrice: product.discountPrice,
-        flavour: product.flavour,
-        displayImages: product.displayImages,
-      },
-      quantity: 1,
-    });
+    if (isAuthenticated) {
+      const result = await addToCart({ item_id: product._id, item_type: "FG_MEAL_PRODUCT", quantity: 1 });
+      if (!result.success) throw new Error(result.message || "Couldn't add this item.");
+    } else addGuestCartItem({ product, quantity: 1 });
     window.dispatchEvent(new Event("cartUpdated"));
-    successToast(`Added to cart!`);
+    successToast("Added to your cart");
     return true;
+  } catch (error) {
+    errorToast(error.message || "Couldn't add this item. Please try again.");
+    return false;
   }
 };
