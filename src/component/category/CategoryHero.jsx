@@ -1,81 +1,104 @@
+// src/component/category/CategoryHero.jsx
 import React from "react";
+import { ShieldCheck, Award, Zap, Sparkles, CheckCircle2 } from "lucide-react";
 
 const CategoryHero = ({ pageData }) => {
   if (!pageData) return null;
 
+  const tag = pageData.tag || pageData.subHeading || "Official Store";
+  const heading = pageData.heading || "SHOP GOMZI";
+  const description =
+    pageData.description ||
+    "Lab-tested protein powders, creatine, pre-workouts, mass gainers, and athlete wellness supplements.";
+
   return (
-    <>
-      {/* Desktop */}
-      <div className="hidden lg:block mb-12">
-        <div className="mb-10">
-          <span className="text-xs font-semibold uppercase tracking-[4px] text-[#9d5a48]">
-            {pageData.tag || pageData.subHeading}
-          </span>
+    <div className="relative mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#faf6f2] via-[#f7efe6] to-[#fdfbf9] border border-[#ebdcd2] p-6 sm:p-8 md:p-10 shadow-xs">
+      {/* Decorative ambient background accents */}
+      <div className="pointer-events-none absolute -right-24 -top-24 w-80 h-80 rounded-full bg-[#95442c]/5 blur-3xl" />
+      <div className="pointer-events-none absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-amber-500/5 blur-2xl" />
 
-          <h1 className="mt-3 text-6xl xl:text-7xl font-black leading-none text-gray-900">
-            {pageData.heading}
-          </h1>
-
-          <p className="mt-5 text-lg leading-8 text-gray-600 max-w-3xl">
-            {pageData.description}
-          </p>
-        </div>
-
-        {/* {pageData.sections?.comparisonSection?.badges?.length > 0 && (
-          <div className="flex flex-wrap gap-3 mt-8">
-            {pageData.sections.comparisonSection.badges.map((badge) => (
-              <div
-                key={badge.label}
-                className="px-5 py-3 rounded-xl border-2 border-[#9d5a48] bg-white"
-              >
-                <span className="font-semibold text-[#9d5a48]">
-                  {badge.value}
-                </span>
-
-                <span className="text-xs uppercase text-gray-600 ml-2">
-                  {badge.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        )} */}
+      {/* ── Live Authenticity / Trust Bar ── */}
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-[#ebdcd2] text-[11px] font-bold text-[#95442c] shadow-2xs mb-4">
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+        </span>
+        <Sparkles size={12} className="text-[#95442c]" />
+        <span>NABL Lab Certified • 100% Authentic Nutrition • Direct from Lab</span>
       </div>
 
-      {/* Mobile */}
-      <div className="lg:hidden mb-8">
-        <div className="mb-6">
-          <span
-            className="text-[11px] font-semibold tracking-[3px] uppercase"
-            style={{ color: pageData.accent }}
-          >
-            {pageData.tag || pageData.subHeading}
-          </span>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        {/* Left Column: Headings & Subtitle */}
+        <div className="lg:col-span-8">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2.5 h-6 bg-[#95442c] rounded-full inline-block" />
+            <span className="text-xs font-black uppercase tracking-[3px] text-[#95442c]">
+              {tag}
+            </span>
+          </div>
 
-          <h1 className="mt-2 text-4xl font-black leading-none">
-            {pageData.heading}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#1c1917] tracking-tight font-toma leading-tight">
+            {heading}
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-gray-600">
-            {pageData.description}
+          <p className="mt-3 text-sm sm:text-base text-stone-600 max-w-2xl leading-relaxed">
+            {description}
           </p>
+
+          {/* Trust Value Prop Badges */}
+          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#ebdcd2] shadow-2xs text-xs font-bold text-stone-700">
+              <ShieldCheck size={14} className="text-emerald-600" />
+              <span>NABL Lab Tested</span>
+            </div>
+
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#ebdcd2] shadow-2xs text-xs font-bold text-stone-700">
+              <Zap size={14} className="text-amber-600" />
+              <span>Fast 24-48h Shipping</span>
+            </div>
+
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#ebdcd2] shadow-2xs text-xs font-bold text-stone-700">
+              <Award size={14} className="text-[#95442c]" />
+              <span>Zero Spiked Nitrogen</span>
+            </div>
+
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#ebdcd2] shadow-2xs text-xs font-bold text-stone-700">
+              <CheckCircle2 size={14} className="text-emerald-600" />
+              <span>FSSAI Certified</span>
+            </div>
+          </div>
         </div>
 
-        {/* {pageData.sections?.comparisonSection?.badges?.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {pageData.sections.comparisonSection.badges.map((badge) => (
-              <div
-                key={badge.label}
-                className="px-3 py-2 rounded-lg border bg-white text-xs"
-              >
-                <span className="font-semibold">{badge.value}</span>
+        {/* Right Column: Quick Athlete Stat Card */}
+        <div className="lg:col-span-4 hidden lg:flex flex-col gap-3">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-[#ebdcd2] shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+              <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
+                Community Trust
+              </span>
+              <span className="text-xs font-black text-[#95442c] bg-[#95442c]/10 px-2 py-0.5 rounded-full">
+                Verified
+              </span>
+            </div>
 
-                <span className="text-gray-500 ml-1">{badge.label}</span>
+            <div className="grid grid-cols-2 gap-4 mt-3">
+              <div>
+                <p className="text-2xl font-black text-[#1c1917]">45,000+</p>
+                <p className="text-[11px] text-stone-500 font-medium">Athletes Fueled</p>
               </div>
-            ))}
+              <div>
+                <p className="text-2xl font-black text-amber-600">4.8 ★</p>
+                <p className="text-[11px] text-stone-500 font-medium">Customer Rating</p>
+              </div>
+            </div>
+
+            <p className="mt-3 text-[11px] text-stone-500 pt-3 border-t border-stone-100">
+              Scan on-pack QR code to view your batch's certified purity report before consuming.
+            </p>
           </div>
-        )} */}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

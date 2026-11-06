@@ -12,6 +12,12 @@ export const loadingToast = (message) => {
   return toast.loading(message);
 };
 
+export const infoToast = (message) => {
+  toast(message, {
+    icon: "ℹ️",
+  });
+};
+
 export const dismissToast = (id) => {
   toast.dismiss(id);
 };

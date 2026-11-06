@@ -294,9 +294,9 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
 
   if (loading) {
     return (
-      <div className="w-full bg-bg py-12">
-        <div className="max-w-[1440px] mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+      <div className="w-full bg-[#fbf9f6] py-12 min-h-screen">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
             {[...Array(12)].map((_, index) => (
               <ProductCardSkeleton key={index} />
             ))}
@@ -307,35 +307,74 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
   }
 
   return (
-    <div className="w-full bg-bg py-12 sm:py-16 md:py-20 lg:py-15">
+    <div className="w-full bg-[#fbf9f6] py-6 sm:py-10 md:py-12 min-h-screen font-sans">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+        {/* Category Hero Section */}
         <CategoryHero pageData={pageData} />
+
+        {/* ================================================================
+            QUICK CATEGORY HORIZONTAL FILTER BAR (Home Page Style)
+        ================================================================ */}
+        <div className="mb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none no-scrollbar">
+            {categories.map((cat) => {
+              const isSelected = selectedCategory === cat.name;
+              return (
+                <button
+                  key={cat.name}
+                  onClick={() => handleCategorySelect(cat.name)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0 ${
+                    isSelected
+                      ? "bg-[#95442c] text-white shadow-xs ring-2 ring-[#95442c]/20"
+                      : "bg-white hover:bg-stone-50 text-stone-700 border border-[#ebdcd2] hover:border-[#95442c]/50 shadow-2xs"
+                  }`}
+                >
+                  <span>{cat.name}</span>
+                  {typeof cat.count === "number" && cat.count > 0 && (
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ${
+                        isSelected
+                          ? "bg-white/20 text-white"
+                          : "bg-stone-100 text-stone-500"
+                      }`}
+                    >
+                      {cat.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         {/* ================================================================
             DESKTOP TOOLBAR
         ================================================================ */}
-
-        <div className="hidden lg:flex items-center justify-between border-b border-gray-200 pb-5">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">
+        <div className="hidden lg:flex items-center justify-between border-b border-[#ebdcd2] pb-4 mb-6">
+          <div className="flex items-center gap-2.5">
+            <span className="px-3 py-1 rounded-full bg-white border border-[#ebdcd2] text-xs font-black text-[#95442c] font-mono shadow-2xs">
               {pagination.totalDocs ?? products.length}
             </span>
-
-            <span className="text-sm text-gray-500">products</span>
+            <span className="text-xs font-bold text-stone-600 uppercase tracking-wider">
+              Verified Supplements
+            </span>
+            {selectedCategory !== "All Products" && (
+              <span className="text-xs text-stone-400">
+                • Filtered by <strong className="text-[#95442c]">{selectedCategory}</strong>
+              </span>
+            )}
           </div>
 
           <div className="relative">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className="h-11 px-5 border border-gray-300 rounded-xl bg-white flex items-center gap-3 hover:border-gray-400 transition-all"
+              className="h-10 px-4 border border-[#ebdcd2] rounded-xl bg-white flex items-center gap-2.5 hover:border-[#95442c] transition-all cursor-pointer shadow-2xs text-xs font-bold text-stone-700"
             >
-              <span className="text-sm text-gray-500">Sort</span>
-
-              <span className="font-medium">{sortBy}</span>
-
+              <span className="text-stone-400 font-normal">Sort:</span>
+              <span className="text-[#1c1917]">{sortBy}</span>
               <svg
-                className={`w-4 h-4 transition-transform ${
-                  isSortDropdownOpen ? "rotate-180" : ""
+                className={`w-4 h-4 text-stone-400 transition-transform ${
+                  isSortDropdownOpen ? "rotate-180 text-[#95442c]" : ""
                 }`}
                 fill="none"
                 stroke="currentColor"
@@ -351,7 +390,7 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
             </button>
 
             {isSortDropdownOpen && (
-              <div className="absolute right-0 mt-3 w-60 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden z-50">
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl border border-[#ebdcd2] shadow-xl overflow-hidden z-50 p-1.5">
                 {sortOptions.map((option) => (
                   <button
                     key={option}
@@ -360,13 +399,14 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                       setSortBy(option);
                       setIsSortDropdownOpen(false);
                     }}
-                    className={`w-full text-left px-5 py-3 text-sm transition-colors ${
+                    className={`w-full text-left px-3.5 py-2.5 text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center justify-between ${
                       sortBy === option
-                        ? "bg-[#5c3024] text-white"
-                        : "hover:bg-gray-50"
+                        ? "bg-[#95442c] text-white"
+                        : "text-stone-700 hover:bg-stone-50"
                     }`}
                   >
-                    {option}
+                    <span>{option}</span>
+                    {sortBy === option && <span>✓</span>}
                   </button>
                 ))}
               </div>
@@ -375,361 +415,229 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
         </div>
 
         {/* ================================================================
-    MOBILE TOOLBAR
-================================================================ */}
-
-        <div className="lg:hidden mb-8">
-          {/* Category Selector */}
+            MOBILE TOOLBAR
+        ================================================================ */}
+        <div className="lg:hidden mb-6 flex gap-2">
+          {/* Category Selector Button */}
           <button
             onClick={() => setIsCategoryDrawerOpen(true)}
-            className="group w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white
-               shadow-sm flex items-center justify-between
+            className="flex-1 h-11 px-3.5 rounded-xl border border-[#ebdcd2] bg-white
+               shadow-2xs flex items-center justify-between
                transition-all duration-200 active:scale-[0.99]
-               hover:border-[#5c3024]/30 hover:shadow-md"
+               hover:border-[#95442c]/50 text-xs font-bold text-stone-700 cursor-pointer"
           >
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-[#5c3024]/10 flex items-center justify-center shrink-0">
-                <svg
-                  className="w-5 h-5 text-[#5c3024]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.8}
-                    d="M4 6h16M4 12h16M4 18h10"
-                  />
-                </svg>
-              </div>
-
-              <div className="text-left min-w-0">
-                <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
-                  Category
-                </p>
-                <p className="font-semibold text-gray-900 truncate">
-                  {selectedCategory}
-                </p>
-              </div>
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-stone-400 font-normal">Category:</span>
+              <span className="truncate text-[#1c1917]">{selectedCategory}</span>
             </div>
-
             <svg
-              className="w-5 h-5 text-gray-400 group-hover:text-[#5c3024] transition-colors"
+              className="w-4 h-4 text-stone-400 shrink-0 ml-1"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="m7 10 5 5 5-5"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m7 10 5 5 5-5" />
             </svg>
           </button>
 
-          {/* Sort */}
-          <div className="relative mt-3">
+          {/* Sort Button */}
+          <div className="relative">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-              className={`w-full h-14 px-4 rounded-2xl border bg-white
-                  flex items-center justify-between shadow-sm
-                  transition-all duration-200
-                  ${
-                    isSortDropdownOpen
-                      ? "border-[#5c3024]/40 ring-4 ring-[#5c3024]/10"
-                      : "border-gray-200 hover:border-[#5c3024]/30 hover:shadow-md"
-                  }`}
+              className="h-11 px-3.5 rounded-xl border border-[#ebdcd2] bg-white
+                shadow-2xs flex items-center gap-2
+                transition-all duration-200 text-xs font-bold text-stone-700 cursor-pointer"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.8}
-                      d="M8 6h13M8 12h9M8 18h6M3 6h.01M3 12h.01M3 18h.01"
-                    />
-                  </svg>
-                </div>
-
-                <div className="text-left">
-                  <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
-                    Sort by
-                  </p>
-                  <p className="font-semibold text-gray-900">{sortBy}</p>
-                </div>
-              </div>
-
+              <span className="text-stone-400 font-normal">Sort</span>
               <svg
-                className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                  isSortDropdownOpen ? "rotate-180 text-[#5c3024]" : ""
+                className={`w-4 h-4 text-stone-400 transition-transform ${
+                  isSortDropdownOpen ? "rotate-180 text-[#95442c]" : ""
                 }`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="m6 9 6 6 6-6"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m7 10 5 5 5-5" />
               </svg>
             </button>
 
-            {/* Sort Dropdown */}
             {isSortDropdownOpen && (
-              <div className="absolute left-0 right-0 mt-2 p-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
-                {sortOptions.map((option) => {
-                  const isSelected = sortBy === option;
-
-                  return (
-                    <button
-                      key={option}
-                      onClick={() => {
-                        setSortBy(option);
-                        setCurrentPage(1);
-                        setIsSortDropdownOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-4 py-3.5
-                          rounded-xl text-left transition-colors
-                          ${
-                            isSelected
-                              ? "bg-[#5c3024] text-white"
-                              : "text-gray-700 hover:bg-gray-50"
-                          }`}
-                    >
-                      <span className="font-medium">{option}</span>
-
-                      {isSelected && (
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="m5 12 4 4L19 6"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                  );
-                })}
+              <div className="absolute right-0 mt-2 w-52 p-1.5 bg-white rounded-xl shadow-2xl border border-[#ebdcd2] z-50 overflow-hidden">
+                {sortOptions.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => {
+                      setSortBy(option);
+                      setCurrentPage(1);
+                      setIsSortDropdownOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold rounded-lg cursor-pointer ${
+                      sortBy === option
+                        ? "bg-[#95442c] text-white"
+                        : "text-stone-700 hover:bg-stone-50"
+                    }`}
+                  >
+                    <span>{option}</span>
+                    {sortBy === option && <span>✓</span>}
+                  </button>
+                ))}
               </div>
             )}
           </div>
         </div>
 
         {/* ================================================================
-    MOBILE CATEGORY DRAWER
-================================================================ */}
-
+            MOBILE CATEGORY DRAWER
+        ================================================================ */}
         {isCategoryDrawerOpen && (
           <>
-            {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[60]
-                 animate-in fade-in duration-200"
+              className="fixed inset-0 bg-black/50 backdrop-blur-[2px] z-[60] animate-in fade-in duration-200"
               onClick={() => setIsCategoryDrawerOpen(false)}
             />
 
-            {/* Bottom Sheet */}
             <div
               className="fixed bottom-0 left-0 right-0 z-[70]
-                 bg-white rounded-t-[28px]
-                 max-h-[82vh]
-                 overflow-hidden
-                 shadow-[0_-10px_40px_rgba(0,0,0,0.15)]
-                 animate-in slide-in-from-bottom duration-300"
+                 bg-white rounded-t-[28px] max-h-[82vh] overflow-hidden
+                 shadow-[0_-10px_40px_rgba(0,0,0,0.15)] animate-in slide-in-from-bottom duration-300"
             >
-              {/* Handle + Header */}
-              <div className="bg-white px-5 pt-3 pb-4 border-b border-gray-100">
-                <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5" />
-
+              <div className="bg-white px-5 pt-3 pb-4 border-b border-stone-100">
+                <div className="w-12 h-1.5 bg-stone-300 rounded-full mx-auto mb-4" />
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-widest text-[#5c3024]">
-                      Browse
+                    <p className="text-[10px] font-extrabold uppercase tracking-widest text-[#95442c]">
+                      Gomzi Nutrition
                     </p>
-                    <h3 className="text-2xl font-bold text-gray-900 mt-1">
-                      Categories
+                    <h3 className="text-xl font-black text-[#1c1917] mt-0.5">
+                      Filter Categories
                     </h3>
                   </div>
 
                   <button
                     onClick={() => setIsCategoryDrawerOpen(false)}
-                    className="w-10 h-10 rounded-full bg-gray-100
-                       flex items-center justify-center
-                       text-gray-500 hover:bg-gray-200
-                       transition-colors"
+                    className="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-200 cursor-pointer"
                     aria-label="Close categories"
                   >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18 18 6M6 6l12 12"
-                      />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18 18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
               </div>
 
-              {/* Categories */}
               <div
-                className="px-5 py-4 overflow-y-auto overscroll-contain"
+                className="px-4 py-3 overflow-y-auto overscroll-contain space-y-1.5"
                 style={{
                   maxHeight: "calc(82vh - 120px)",
                   paddingBottom: "max(1.25rem, env(safe-area-inset-bottom))",
                 }}
               >
-                <div className="space-y-2">
-                  {categories.map((item) => {
-                    const isSelected = selectedCategory === item.name;
-
-                    return (
-                      <button
-                        key={item.name}
-                        onClick={() => {
-                          handleCategorySelect(item.name);
-                          setIsCategoryDrawerOpen(false);
-                        }}
-                        className={`w-full min-h-[60px] px-4 rounded-2xl
-                            flex items-center justify-between
-                            transition-all duration-200
-                            ${
-                              isSelected
-                                ? "bg-[#5c3024] text-white shadow-lg shadow-[#5c3024]/20"
-                                : "bg-gray-50 text-gray-800 hover:bg-gray-100 active:scale-[0.99]"
-                            }`}
+                {categories.map((item) => {
+                  const isSelected = selectedCategory === item.name;
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => {
+                        handleCategorySelect(item.name);
+                        setIsCategoryDrawerOpen(false);
+                      }}
+                      className={`w-full min-h-[48px] px-3.5 rounded-xl flex items-center justify-between transition-all duration-200 cursor-pointer ${
+                        isSelected
+                          ? "bg-[#95442c] text-white shadow-sm"
+                          : "bg-stone-50 text-stone-800 hover:bg-stone-100"
+                      }`}
+                    >
+                      <span className="font-bold text-xs sm:text-sm">{item.name}</span>
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-full font-mono ${
+                          isSelected
+                            ? "bg-white/20 text-white"
+                            : "bg-white text-stone-500 border border-stone-200"
+                        }`}
                       >
-                        <div className="flex items-center gap-3">
-                          {/* Category indicator */}
-                          <div
-                            className={`w-9 h-9 rounded-xl flex items-center justify-center
-                                ${
-                                  isSelected
-                                    ? "bg-white/15"
-                                    : "bg-white border border-gray-200"
-                                }`}
-                          >
-                            {isSelected ? (
-                              <svg
-                                className="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="m5 12 4 4L19 6"
-                                />
-                              </svg>
-                            ) : (
-                              <div className="w-2 h-2 rounded-full bg-[#5c3024]/40" />
-                            )}
-                          </div>
-
-                          <span className="font-semibold text-[15px]">
-                            {item.name}
-                          </span>
-                        </div>
-
-                        <span
-                          className={`min-w-[34px] px-2.5 py-1 rounded-full
-                              text-xs font-semibold text-center
-                              ${
-                                isSelected
-                                  ? "bg-white/15 text-white"
-                                  : "bg-white text-gray-400 border border-gray-200"
-                              }`}
-                        >
-                          {item.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+                        {item.count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </>
         )}
 
         {/* ================================================================
-            MAIN CONTENT
+            MAIN CONTENT (Sidebar + Products Grid)
         ================================================================ */}
-
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 mt-5">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
           {/* ================================================================
               DESKTOP SIDEBAR
           ================================================================ */}
-
           {hasProducts && (
-            <aside className="hidden lg:block w-64 flex-shrink-0">
-              <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-4">
-                <h3 className="font-toma text-lg font-semibold text-text mb-4 pb-3 border-b border-gray-200">
-                  Products
-                </h3>
+            <aside className="hidden lg:block w-64 shrink-0 sticky top-24">
+              <div className="bg-white rounded-2xl border border-[#ebdcd2] p-5 shadow-2xs">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#ebdcd2]">
+                  <h3 className="font-toma text-xs font-black text-[#1c1917] uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-2 h-4 bg-[#95442c] rounded-full inline-block" />
+                    Categories
+                  </h3>
+                  {selectedCategory !== "All Products" && (
+                    <button
+                      onClick={() => handleCategorySelect("All Products")}
+                      className="text-[11px] font-bold text-[#95442c] hover:underline cursor-pointer"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
 
-                <ul className="space-y-2">
-                  {categories.map((item) => (
-                    <li key={item.name}>
-                      <button
-                        onClick={() => handleCategorySelect(item.name)}
-                        className={`w-full text-left px-3 py-2 rounded cursor-pointer transition-colors font-modelica text-sm ${
-                          selectedCategory === item.name
-                            ? "bg-primary text-white"
-                            : "text-text-light hover:bg-gray-50"
-                        }`}
-                      >
-                        {item.name} ({item.count})
-                      </button>
-                    </li>
-                  ))}
+                <ul className="space-y-1 max-h-[65vh] overflow-y-auto pr-1">
+                  {categories.map((item) => {
+                    const isSelected = selectedCategory === item.name;
+                    return (
+                      <li key={item.name}>
+                        <button
+                          onClick={() => handleCategorySelect(item.name)}
+                          className={`w-full text-left px-3 py-2 rounded-xl cursor-pointer transition-all text-xs font-bold flex items-center justify-between ${
+                            isSelected
+                              ? "bg-[#95442c] text-white shadow-xs"
+                              : "text-stone-700 hover:bg-[#faf6f2] hover:text-[#95442c]"
+                          }`}
+                        >
+                          <span className="truncate">{item.name}</span>
+                          <span
+                            className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ml-2 shrink-0 ${
+                              isSelected
+                                ? "bg-white/20 text-white"
+                                : "bg-stone-100 text-stone-500"
+                            }`}
+                          >
+                            {item.count}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </aside>
           )}
 
           {/* ================================================================
-              PRODUCTS
+              PRODUCTS GRID
           ================================================================ */}
-
-          <div className="flex-1">
-            {/* Mobile Header */}
-
-            <div className="lg:hidden mb-6 pb-4 border-b border-gray-200">
-              <h2 className="font-toma text-xl font-bold text-text mb-2">
+          <div className="flex-1 w-full min-w-0">
+            {/* Mobile Category Active Heading */}
+            <div className="lg:hidden mb-4 pb-3 border-b border-stone-200 flex items-center justify-between">
+              <h2 className="font-toma text-lg font-black text-[#1c1917]">
                 {selectedCategory}
               </h2>
-
-              <span className="font-modelica text-sm text-text-light">
-                {pagination.totalDocs ?? products.length} products
+              <span className="text-xs text-stone-500 font-mono">
+                {pagination.totalDocs ?? products.length} items
               </span>
             </div>
 
-            {/* Product Grid */}
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-6">
+            {/* Standardized 3-Col Product Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-5">
               {products.map((product) => (
                 <ProductCard
                   key={product._id}
@@ -739,48 +647,62 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
               ))}
             </div>
 
-            {/* No Products */}
-
+            {/* No Products Found */}
             {products.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-20">
+              <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-[#ebdcd2] p-8 text-center">
                 <img
                   src="/images/coming-soon.webp"
-                  alt="Coming Soon"
-                  className="img-fluid mb-6"
+                  alt="No Products"
+                  className="w-32 h-32 object-contain mb-4 opacity-80"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
                 />
+                <h3 className="text-lg font-black text-[#1c1917] font-toma">
+                  No Supplements Found
+                </h3>
+                <p className="text-xs text-stone-500 mt-1 max-w-sm">
+                  We currently don't have items in this category. Explore other categories or check back soon!
+                </p>
+                <button
+                  onClick={() => handleCategorySelect("All Products")}
+                  className="mt-4 px-4 py-2 bg-[#95442c] text-white text-xs font-bold rounded-xl hover:bg-[#7a3522] cursor-pointer"
+                >
+                  View All Products
+                </button>
               </div>
             )}
 
             {/* ============================================================
                 PAGINATION
             ============================================================ */}
-
             {pagination.totalPages > 1 && (
-              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-2.5">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-full sm:w-auto px-6 py-2 rounded border font-modelica text-sm transition-colors ${
+                  className={`w-full sm:w-auto px-4 py-2 rounded-xl border text-xs font-bold transition-colors ${
                     currentPage === 1
-                      ? "border-gray-200 text-gray-400 cursor-not-allowed"
-                      : "border-gray-300 text-text hover:bg-gray-50 cursor-pointer"
+                      ? "border-stone-200 text-stone-300 cursor-not-allowed bg-stone-50"
+                      : "border-[#ebdcd2] text-stone-700 hover:bg-[#faf6f2] hover:text-[#95442c] cursor-pointer bg-white shadow-2xs"
                   }`}
                 >
-                  Previous
+                  ← Previous
                 </button>
 
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-wrap justify-center gap-1.5">
                   {[...Array(pagination.totalPages || 1)].map((_, index) => {
                     const pageNumber = index + 1;
+                    const isCurrent = currentPage === pageNumber;
 
                     return (
                       <button
                         key={pageNumber}
                         onClick={() => handlePageChange(pageNumber)}
-                        className={`w-10 h-10 rounded cursor-pointer font-modelica text-sm transition-colors ${
-                          currentPage === pageNumber
-                            ? "bg-primary text-white"
-                            : "border border-gray-300 text-text hover:bg-gray-50"
+                        className={`w-9 h-9 rounded-xl cursor-pointer text-xs font-bold transition-colors ${
+                          isCurrent
+                            ? "bg-[#95442c] text-white shadow-xs"
+                            : "border border-[#ebdcd2] text-stone-700 hover:bg-stone-50 bg-white"
                         }`}
                       >
                         {pageNumber}
@@ -792,13 +714,13 @@ const ProductsGrid = ({ categorySlug, pageData }) => {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === pagination.totalPages}
-                  className={`w-full sm:w-auto px-6 py-2 rounded border font-modelica text-sm transition-colors ${
+                  className={`w-full sm:w-auto px-4 py-2 rounded-xl border text-xs font-bold transition-colors ${
                     currentPage === pagination.totalPages
-                      ? "border-gray-200 text-gray-400 cursor-not-allowed"
-                      : "border-gray-300 text-text hover:bg-gray-50 cursor-pointer"
+                      ? "border-stone-200 text-stone-300 cursor-not-allowed bg-stone-50"
+                      : "border-[#ebdcd2] text-stone-700 hover:bg-[#faf6f2] hover:text-[#95442c] cursor-pointer bg-white shadow-2xs"
                   }`}
                 >
-                  Next
+                  Next →
                 </button>
               </div>
             )}
