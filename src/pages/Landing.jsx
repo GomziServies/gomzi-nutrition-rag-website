@@ -13,8 +13,14 @@ import HkCategoryShowcase from "../component/healthkart/HkCategoryShowcase";
 import HkWhyGomzi from "../component/healthkart/HkWhyGomzi";
 import HkCustomerReviews from "../component/healthkart/HkCustomerReviews";
 import HkSeoAccordion from "../component/healthkart/HkSeoAccordion";
+import BrandRangeSection from "../component/ui/BrandRangeSection";
+import BlackFeatureBar from "../component/common/Black-Feature-Bar";
 
-const DEFAULT_SECTIONS = ['hero', 'categories', 'deals', 'flash', 'static-banner', 'bestsellers', 'combos', 'promo-banner', 'whey', 'stacks', 'nutrition-banner', 'creatine', 'why', 'reviews', 'seo'].map(id => ({ id, enabled: true }));
+const DEFAULT_SECTIONS = [
+  'hero', 'categories', 'deals', 'flash', 'static-banner',
+  'bestsellers', 'combos', 'promo-banner', 'whey', 'stacks',
+  'nutrition-banner', 'creatine', 'brands', 'quality', 'why', 'reviews', 'seo'
+].map(id => ({ id, enabled: true }));
 const CATEGORY_SHOWCASES = [
   { id: 'whey', title: 'Whey Protein & Isolate Range', category: 'Whey Protein', categorySlug: 'whey-protein', subtitle: 'Explore whey proteins and isolates for your everyday training routine.' },
   { id: 'stacks', title: 'Combos & Value Stacks', category: 'Combos & Stacks', categorySlug: 'combos-stacks', subtitle: 'Explore supplement bundles for your goals and routine.' },
@@ -35,7 +41,12 @@ const Landing = () => {
     'promo-banner': <HkManagedBannerAd source="promo" />,
     whey: showcase('whey'), stacks: showcase('stacks'),
     'nutrition-banner': <HkManagedBannerAd source="nutrition" />,
-    creatine: showcase('creatine'), why: <HkWhyGomzi />, reviews: <HkCustomerReviews />, seo: <HkSeoAccordion />,
+    creatine: showcase('creatine'),
+    brands: <BrandRangeSection />,
+    quality: <BlackFeatureBar />,
+    why: <HkWhyGomzi />,
+    reviews: <HkCustomerReviews />,
+    seo: <HkSeoAccordion />,
   };
   return (
     <div className="w-full max-w-full overflow-x-hidden bg-[#f4f4f4] min-h-screen text-text selection:bg-primary selection:text-white">

@@ -1,5 +1,5 @@
 // src/component/healthkart/HkCategoryCircles.jsx
-import { useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -42,8 +42,20 @@ function getBadge(tag) {
 export function PopularCategories({ categories, loading = false, error = "", onRetry }) {
   const swiperRef = useRef(null);
 
-  if (!loading && !error && !categories.length) return null;
-  const visibleSlides = (maximum) => Math.max(1, Math.min(categories.length, maximum));
+  // Deduplicate categories by slug or title to guarantee zero repeats
+  const displayCategories = useMemo(() => {
+    if (!Array.isArray(categories)) return [];
+    const seen = new Set();
+    return categories.filter((c) => {
+      const key = (c.slug || c.title || c.id || "").toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [categories]);
+
+  if (!loading && !error && !displayCategories.length) return null;
+  const visibleSlides = (maximum) => Math.max(1, Math.min(displayCategories.length, maximum));
 
   return (
     <section className="w-full py-6 sm:py-9 md:py-12 border-b border-stone-200/70 bg-gradient-to-b from-[#FAF7F3] via-[#FFFFFF] to-[#FAF6F2] font-sans relative overflow-hidden">
@@ -62,9 +74,7 @@ export function PopularCategories({ categories, loading = false, error = "", onR
                 Categories
               </span>
             </h2>
-            <p className="hidden sm:block text-xs sm:text-sm mt-1 font-medium font-modelica text-stone-500 line-clamp-1 sm:line-clamp-none">
-              Scientifically engineered sports nutrition and wellness essentials built for your physique and athletic goals.
-            </p>
+
           </div>
 
           {/* Action Row: View All + Desktop Navigation */}
@@ -73,7 +83,7 @@ export function PopularCategories({ categories, loading = false, error = "", onR
               to="/category"
               className="inline-flex items-center gap-1 text-[11px] sm:text-xs md:text-sm font-bold text-primary hover:text-[#7a3420] transition-colors underline-offset-4 hover:underline font-tomato whitespace-nowrap"
             >
-              <span>View All ({categories.length || 12})</span>
+              <span>View All Categories</span>
               <ArrowRight size={13} className="sm:w-3.5 sm:h-3.5" />
             </Link>
 
@@ -132,7 +142,7 @@ export function PopularCategories({ categories, loading = false, error = "", onR
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
               }}
-              loop={categories.length > 5}
+              loop={displayCategories.length > 5}
               speed={700}
               spaceBetween={10}
               slidesPerView={visibleSlides(2.15)}
@@ -147,7 +157,7 @@ export function PopularCategories({ categories, loading = false, error = "", onR
               }}
               className="py-2.5 sm:py-3"
             >
-              {categories.map((cat) => {
+              {displayCategories.map((cat) => {
                 const badge = getBadge(cat.tag);
                 // Subtitle fallback guarantees consistent 2-tier baseline alignment
                 const subtitle = cat.spec || (cat.productCount ? `${cat.productCount} Products Available` : "Featured Range");

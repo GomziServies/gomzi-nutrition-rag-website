@@ -114,3 +114,31 @@ export const removeToken = () => {
   }
   dispatchAuthSync(null, null);
 };
+
+export const getLocalCache = (key, maxAgeMs = 1000 * 60 * 60 * 24) => {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object" && "timestamp" in parsed && "data" in parsed) {
+      if (Date.now() - parsed.timestamp > maxAgeMs) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return parsed.data;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+};
+
+export const setLocalCache = (key, data) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
+  } catch {
+    // quota exceeded or private browsing fallback
+  }
+};

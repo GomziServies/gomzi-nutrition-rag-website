@@ -94,6 +94,27 @@
   --container-width: 1280px;
 }
 
+/* Continuous Horizontal Marquee (Right-to-Left) for Top Announcement Bar */
+@keyframes topbar-marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.topbar-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: topbar-marquee-left 35s linear infinite;
+}
+
+.topbar-track:hover {
+  animation-play-state: paused;
+}
+
 /* globals.css */
 
 .scrollbar-hide::-webkit-scrollbar {

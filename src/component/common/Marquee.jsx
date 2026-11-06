@@ -6,11 +6,8 @@ import {
 } from "react";
 
 /**
- * Infinite horizontal marquee.
- *
- * Renders its children twice and animates the track by -50%, so the loop is
- * seamless. Pauses on hover. Exposes `scroll(dir)` so external chevrons can
- * nudge the rail.
+ * Single-line horizontal marquee.
+ * Strictly maintains a single row using flex-nowrap and w-max.
  */
 const Marquee = forwardRef(function Marquee(
   { children, duration = 40, reverse = false, className = "" },
@@ -27,7 +24,6 @@ const Marquee = forwardRef(function Marquee(
       const step = (track.scrollWidth || 0) / 2 || 240;
       setOffset((v) => {
         const next = v + dir * step;
-        // wrap back into a single step range so the offset never drifts
         if (next <= -step) return next + step;
         if (next >= 0) return next - step;
         return next;
@@ -49,17 +45,17 @@ const Marquee = forwardRef(function Marquee(
       >
         <div
           ref={trackRef}
-          className="marquee-track"
+          className="marquee-track flex w-max flex-nowrap items-center"
           style={{
+            display: "flex",
+            width: "max-content",
+            flexWrap: "nowrap",
             animationDuration: `${duration}s`,
             animationDirection: reverse ? "reverse" : "normal",
             animationPlayState: paused ? "paused" : "running",
           }}
         >
-          <div className="flex shrink-0 items-stretch">{children}</div>
-          <div className="flex shrink-0 items-stretch" aria-hidden="true">
-            {children}
-          </div>
+          <div className="flex shrink-0 items-center">{children}</div>
         </div>
       </div>
     </div>

@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Marquee from "../common/Marquee";
 import { getCompaniesApi } from "../../api/company.api";
 import { getLocalCache, setLocalCache } from "../../utils/storage";
 
@@ -40,11 +39,10 @@ function resolveHref(comp) {
 /**
  * HealthKart "Brand Range" rail.
  * Loaded dynamically from Admin Panel Companies catalog (/public/v1/companies).
- * Zero static mock/fallback brand SVGs.
+ * Single horizontal line of brand logos on all screen sizes (no duplicate second line).
  */
 export default function BrandRangeSection() {
   const navigate = useNavigate();
-  const railRef = useRef(null);
 
   const [brands, setBrands] = useState(() => {
     const cached = getLocalCache(COMPANIES_CACHE_KEY);
@@ -95,41 +93,41 @@ export default function BrandRangeSection() {
 
   return (
     <section className="w-full bg-white border-t border-b border-gray-100 py-6 md:py-8 overflow-hidden">
-      <div className="max-w-[1240px] mx-auto px-4 md:px-0">
-        <div className="relative">
-          <Marquee ref={railRef} duration={60} className="px-4">
-            {brands.map((brand, idx) => (
-              <button
-                key={`${brand.id || brand.name}-${idx}`}
-                onClick={() => navigate(brand.href)}
-                title={brand.tagline ? `${brand.name} - ${brand.tagline}` : brand.name}
-                aria-label={brand.name}
-                className="group mx-5 flex h-[56px] w-[170px] shrink-0 items-center justify-center bg-white transition-transform duration-200 hover:scale-105 focus:outline-none"
+      <div className="max-w-[1240px] mx-auto px-4">
+        {/* Single line of brand logos: evenly spaced on desktop, horizontal scroll on mobile */}
+        <div className="flex items-center justify-between overflow-x-auto no-scrollbar scrollbar-hide gap-5 md:gap-8 py-1">
+          {brands.map((brand, idx) => (
+            <button
+              type="button"
+              key={`${brand.id || brand.name}-${idx}`}
+              onClick={() => navigate(brand.href)}
+              title={brand.tagline ? `${brand.name} - ${brand.tagline}` : brand.name}
+              aria-label={brand.name}
+              className="group flex h-[56px] w-[130px] sm:w-[160px] md:w-[170px] shrink-0 items-center justify-center bg-white transition-transform duration-200 hover:scale-105 focus:outline-none cursor-pointer"
+            >
+              {brand.logo ? (
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  loading="lazy"
+                  className="max-h-full max-w-full object-contain transition-transform duration-200"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    img.style.display = "none";
+                    if (img.nextElementSibling) {
+                      img.nextElementSibling.style.display = "flex";
+                    }
+                  }}
+                />
+              ) : null}
+              <span
+                style={{ display: brand.logo ? "none" : "flex" }}
+                className="items-center justify-center text-sm font-bold tracking-tight text-gray-800 group-hover:text-primary transition-colors"
               >
-                {brand.logo ? (
-                  <img
-                    src={brand.logo}
-                    alt={brand.name}
-                    loading="lazy"
-                    className="max-h-full max-w-full object-contain transition-transform duration-200"
-                    onError={(e) => {
-                      const img = e.currentTarget;
-                      img.style.display = "none";
-                      if (img.nextElementSibling) {
-                        img.nextElementSibling.style.display = "flex";
-                      }
-                    }}
-                  />
-                ) : null}
-                <span
-                  style={{ display: brand.logo ? "none" : "flex" }}
-                  className="items-center justify-center text-sm font-bold tracking-tight text-gray-800 group-hover:text-primary transition-colors"
-                >
-                  {brand.name}
-                </span>
-              </button>
-            ))}
-          </Marquee>
+                {brand.name}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
     </section>

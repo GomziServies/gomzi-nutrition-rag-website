@@ -1,6 +1,8 @@
 export const CATALOG_SORT_VALUES = {
   Featured: "",
+  Popularity: "popularity",
   Bestseller: "bestseller",
+  "Customer Rating": "rating-desc",
   "Alphabetically, A-Z": "name-asc",
   "Alphabetically, Z-A": "name-desc",
   "Price, low to high": "price-asc",
@@ -8,6 +10,8 @@ export const CATALOG_SORT_VALUES = {
 };
 
 export function getCatalogSortLabel(value) {
+  if (value === "popularity") return "Popularity";
+  if (value === "rating-desc") return "Customer Rating";
   return Object.entries(CATALOG_SORT_VALUES).find(([, key]) => key === value?.toLowerCase())?.[0] || "Featured";
 }
 
@@ -25,7 +29,7 @@ export function updateCatalogFilters(current, changes) {
 
 export function categoryUrlWithFilters(destination, current) {
   const url = new URL(destination, "https://storefront.example");
-  for (const key of ["brand", "company", "sort", "search"]) {
+  for (const key of ["brand", "company", "sort", "search", "flavour", "priceRange", "rating"]) {
     const value = current.get(key);
     if (value) url.searchParams.set(key, value);
   }

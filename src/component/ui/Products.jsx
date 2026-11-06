@@ -1,23 +1,35 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 import ProductCard from "../common/ProductCard";
 import useProducts from "../../hooks/useProducts";
-import { useSearchParams, useNavigate } from "react-router-dom";
 import ProductCardSkeleton from "../ProductCardSkeleton";
 import useProductCategories from "../../hooks/useProductCategories";
 import useCategories from "../../hooks/useCategories";
 import { buildShopCategorySections } from "../../utils/shopCategories";
 import CategoryHero from "../category/CategoryHero";
-import ComparisonSection from "../category/ComparisonSection";
 import FAQSection from "../category/FAQSection";
 import BottomContentSection from "../category/BottomContentSection";
-
 import BrandFilter from "../category/BrandFilter";
 import useCatalogBrands from "../../hooks/useCatalogBrands";
 import MobileCatalogFilters from "../category/MobileCatalogFilters";
-import { CATALOG_SORT_VALUES, categoryUrlWithFilters, getCatalogSortLabel, updateCatalogFilters } from "../../utils/catalogFilters";
+import {
+  CATALOG_SORT_VALUES,
+  categoryUrlWithFilters,
+  getCatalogSortLabel,
+  updateCatalogFilters,
+} from "../../utils/catalogFilters";
 
 const sortConfig = {
+  "Popularity": {
+    sort: "rating",
+    sortOrder: "desc",
+  },
   "Bestseller": {
+    sort: "rating",
+    sortOrder: "desc",
+  },
+  "Customer Rating": {
     sort: "rating",
     sortOrder: "desc",
   },
@@ -39,31 +51,60 @@ const sortConfig = {
   },
 };
 
+const sortOptions = [
+  "Featured",
+  "Popularity",
+  "Bestseller",
+  "Customer Rating",
+  "Price, low to high",
+  "Price, high to low",
+  "Alphabetically, A-Z",
+  "Alphabetically, Z-A",
+];
+
+const PRICE_RANGE_OPTIONS = [
+  { id: "", label: "All Prices" },
+  { id: "under-999", label: "Under ₹999", min: 0, max: 999 },
+  { id: "1000-2499", label: "₹1,000 - ₹2,499", min: 1000, max: 2499 },
+  { id: "2500-4999", label: "₹2,500 - ₹4,999", min: 2500, max: 4999 },
+  { id: "5000-plus", label: "₹5,000+", min: 5000, max: Infinity },
+];
+
+const RATING_OPTIONS = [
+  { id: "", label: "All Ratings" },
+  { id: "4", label: "4★ & above", min: 4 },
+  { id: "3", label: "3★ & above", min: 3 },
+];
+
 const ProductsGrid = ({ pageData }) => {
   const navigate = useNavigate();
-
   const [searchParams, setSearchParams] = useSearchParams();
-  const selectedBrand = (searchParams.get("brand") || searchParams.get("company") || "").trim();
 
+  // Search and Filter Params
+  const selectedBrand = (searchParams.get("brand") || searchParams.get("company") || "").trim();
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
+  const selectedPriceRange = searchParams.get("priceRange") || "";
+  const selectedFlavour = searchParams.get("flavour") || "";
+  const selectedRating = searchParams.get("rating") || "";
 
   const selectedCategory = category || pageData?.category || "All Products";
+  const activeCategory = category || pageData?.category || "";
 
   const sortParam = searchParams.get("sort") || "";
   const sortBy = getCatalogSortLabel(sortParam);
-  const setSortBy = label => setSearchParams(updateCatalogFilters(searchParams, { sort: CATALOG_SORT_VALUES[label] }));
+  const setSortBy = (label) =>
+    setSearchParams(updateCatalogFilters(searchParams, { sort: CATALOG_SORT_VALUES[label] }));
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
 
-  /*
-  |--------------------------------------------------------------------------
-  | Product API (Single-page catalog loading without pagination)
-  |--------------------------------------------------------------------------
-  */
+  // Local quick search input
+  const [localSearch, setLocalSearch] = useState(search);
+  useEffect(() => {
+    setLocalSearch(search);
+  }, [search]);
 
-  const activeCategory = category || pageData?.category || "";
-
-  const { products, loading, error, retry } = useProducts({
+  // Fetch full category list from MongoDB API
+  const { products: rawProducts, loading, error, retry } = useProducts({
     page: 1,
     limit: 2000,
     search,
@@ -73,42 +114,123 @@ const ProductsGrid = ({ pageData }) => {
   });
 
   const brandFilters = useCatalogBrands();
-  const brandPanel = <BrandFilter {...brandFilters} value={selectedBrand} onChange={brand => setSearchParams(updateCatalogFilters(searchParams, { brand }))} />;
+  const brandPanel = (
+    <BrandFilter
+      {...brandFilters}
+      value={selectedBrand}
+      onChange={(brand) => setSearchParams(updateCatalogFilters(searchParams, { brand }))}
+    />
+  );
 
-  const {
-    categories: categoryData,
-    totalProducts,
-  } = useProductCategories();
-
+  const { categories: categoryData, totalProducts } = useProductCategories();
   const { categories: managedCategories } = useCategories();
 
   const backendCategoryCounts = useMemo(() => {
     const map = {};
-
-    if (!Array.isArray(categoryData)) {
-      return map;
-    }
-
+    if (!Array.isArray(categoryData)) return map;
     categoryData.forEach((item) => {
       if (!item?.category) return;
-
       map[item.category] = Number(item.count || 0);
     });
-
     return map;
   }, [categoryData]);
 
-  const categories = useMemo(() => [
-    { name: 'All Products', label: 'All Products', count: Number(totalProducts || 0) },
-    ...buildShopCategorySections(managedCategories).map(item => ({
-      name: item.filterCategory, label: item.title,
-      count: backendCategoryCounts[item.filterCategory] ?? item.productCount ?? 0,
-      url: item.viewAllUrl,
-    })),
-  ], [managedCategories, backendCategoryCounts, totalProducts]);
+  const categories = useMemo(
+    () => [
+      { name: "All Products", label: "All Products", count: Number(totalProducts || 0) },
+      ...buildShopCategorySections(managedCategories).map((item) => ({
+        name: item.filterCategory,
+        label: item.title,
+        count: backendCategoryCounts[item.filterCategory] ?? item.productCount ?? 0,
+        url: item.viewAllUrl,
+      })),
+    ],
+    [managedCategories, backendCategoryCounts, totalProducts]
+  );
 
+  // Dynamic available flavours from currently loaded products
+  const availableFlavours = useMemo(() => {
+    const counts = {};
+    (rawProducts || []).forEach((p) => {
+      const f = p?.flavour?.trim();
+      if (f && f.length < 30) {
+        counts[f] = (counts[f] || 0) + 1;
+      }
+    });
+    return Object.entries(counts)
+      .map(([flavour, count]) => ({ flavour, count }))
+      .sort((a, b) => b.count - a.count);
+  }, [rawProducts]);
+
+  // Filter and sort products client-side for immediate responsive experience
+  const filteredProducts = useMemo(() => {
+    let result = rawProducts || [];
+
+    // Filter by flavour
+    if (selectedFlavour) {
+      result = result.filter(
+        (p) => p.flavour && p.flavour.toLowerCase() === selectedFlavour.toLowerCase()
+      );
+    }
+
+    // Filter by price range
+    if (selectedPriceRange) {
+      const range = PRICE_RANGE_OPTIONS.find((opt) => opt.id === selectedPriceRange);
+      if (range) {
+        result = result.filter((p) => {
+          const effPrice = Number(p.discountPrice ?? p.price ?? 0);
+          return effPrice >= range.min && effPrice <= range.max;
+        });
+      }
+    }
+
+    // Filter by rating
+    if (selectedRating) {
+      const minRating = Number(selectedRating);
+      result = result.filter((p) => (p.rating?.average || 0) >= minRating);
+    }
+
+    // Client-side sort enhancements
+    if (sortBy === "Popularity" || sortBy === "Bestseller") {
+      result = [...result].sort((a, b) => {
+        const scoreA = (a.rating?.average || 0) * (a.rating?.totalReviews || 1);
+        const scoreB = (b.rating?.average || 0) * (b.rating?.totalReviews || 1);
+        return scoreB - scoreA;
+      });
+    } else if (sortBy === "Customer Rating") {
+      result = [...result].sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0));
+    } else if (sortBy === "Price, low to high") {
+      result = [...result].sort(
+        (a, b) =>
+          Number(a.discountPrice ?? a.price ?? 0) - Number(b.discountPrice ?? b.price ?? 0)
+      );
+    } else if (sortBy === "Price, high to low") {
+      result = [...result].sort(
+        (a, b) =>
+          Number(b.discountPrice ?? b.price ?? 0) - Number(a.discountPrice ?? a.price ?? 0)
+      );
+    } else if (sortBy === "Alphabetically, A-Z") {
+      result = [...result].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+    } else if (sortBy === "Alphabetically, Z-A") {
+      result = [...result].sort((a, b) => (b.name || "").localeCompare(a.name || ""));
+    }
+
+    return result;
+  }, [rawProducts, selectedFlavour, selectedPriceRange, selectedRating, sortBy]);
+
+  // Active filter chips
   const activeFilterChips = useMemo(() => {
     const chips = [];
+    if (search) {
+      chips.push({
+        key: "search",
+        label: `Search: "${search}"`,
+        onRemove: () => {
+          setLocalSearch("");
+          setSearchParams(updateCatalogFilters(searchParams, { search: "" }));
+        },
+      });
+    }
     if (sortParam && sortBy !== "Featured") {
       chips.push({
         key: "sort",
@@ -130,8 +252,30 @@ const ProductsGrid = ({ pageData }) => {
         onRemove: () => handleCategorySelect("All Products"),
       });
     }
+    if (selectedPriceRange) {
+      const range = PRICE_RANGE_OPTIONS.find((opt) => opt.id === selectedPriceRange);
+      chips.push({
+        key: "priceRange",
+        label: `Price: ${range?.label || selectedPriceRange}`,
+        onRemove: () => setSearchParams(updateCatalogFilters(searchParams, { priceRange: "" })),
+      });
+    }
+    if (selectedFlavour) {
+      chips.push({
+        key: "flavour",
+        label: `Flavour: ${selectedFlavour}`,
+        onRemove: () => setSearchParams(updateCatalogFilters(searchParams, { flavour: "" })),
+      });
+    }
+    if (selectedRating) {
+      chips.push({
+        key: "rating",
+        label: `Rating: ${selectedRating}★ & above`,
+        onRemove: () => setSearchParams(updateCatalogFilters(searchParams, { rating: "" })),
+      });
+    }
     return chips;
-  }, [sortParam, sortBy, selectedBrand, category, selectedCategory, searchParams]);
+  }, [search, sortParam, sortBy, selectedBrand, category, selectedCategory, selectedPriceRange, selectedFlavour, selectedRating, searchParams]);
 
   const handleCategorySelect = (categoryName) => {
     window.scrollTo({
@@ -144,22 +288,19 @@ const ProductsGrid = ({ pageData }) => {
       return;
     }
 
-    const destination = categories.find(item => item.name === categoryName)?.url;
-    navigate(categoryUrlWithFilters(destination || `/gomzi-supplement?category=${encodeURIComponent(categoryName)}`, searchParams));
+    const destination = categories.find((item) => item.name === categoryName)?.url;
+    navigate(
+      categoryUrlWithFilters(
+        destination || `/gomzi-supplement?category=${encodeURIComponent(categoryName)}`,
+        searchParams
+      )
+    );
   };
 
-  const handleAddToCart = (product) => {
-    console.log("Added to cart:", product);
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setSearchParams(updateCatalogFilters(searchParams, { search: localSearch.trim() }));
   };
-
-  const sortOptions = [
-    "Featured",
-    "Bestseller",
-    "Alphabetically, A-Z",
-    "Alphabetically, Z-A",
-    "Price, low to high",
-    "Price, high to low",
-  ];
 
   return (
     <div className="w-full min-w-0 bg-light py-3 sm:py-8 md:py-12 min-h-screen font-sans">
@@ -168,29 +309,49 @@ const ProductsGrid = ({ pageData }) => {
         <CategoryHero pageData={pageData} />
 
         {/* ================================================================
-            DESKTOP TOOLBAR
+            DESKTOP TOOLBAR (Product count, Search by name, Sort)
         ================================================================ */}
-        <div className="hidden lg:flex items-center justify-between border-b border-border pb-4 mb-6">
-          <div className="flex items-center gap-2.5">
+        <div className="hidden lg:flex items-center justify-between border-b border-border pb-4 mb-6 gap-4">
+          <div className="flex items-center gap-2.5 shrink-0">
             <span className="px-3 py-1 rounded-full bg-white border border-border text-xs font-black text-primary font-mono shadow-2xs">
-              {loading ? '…' : products.length}
+              {loading ? "…" : filteredProducts.length}
             </span>
             <span className="text-xs font-bold text-stone-600 uppercase tracking-wider">
               Verified Supplements
             </span>
             {selectedCategory !== "All Products" && (
               <span className="text-xs text-stone-400">
-                • Filtered by <strong className="text-primary">{selectedCategory}</strong>
-              </span>
-            )}
-            {sortBy !== "Featured" && (
-              <span className="text-xs text-stone-400">
-                • Sorted by <strong className="text-primary">{sortBy}</strong>
+                • <strong className="text-primary">{selectedCategory}</strong>
               </span>
             )}
           </div>
 
-          <div className="relative">
+          {/* Search by Product Name Input */}
+          <form onSubmit={handleSearchSubmit} className="flex-1 max-w-sm relative">
+            <input
+              type="text"
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              placeholder="Search by product name..."
+              className="w-full h-10 pl-9 pr-8 text-xs font-medium border border-border rounded-xl bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 shadow-2xs"
+            />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+            {localSearch && (
+              <button
+                type="button"
+                onClick={() => {
+                  setLocalSearch("");
+                  setSearchParams(updateCatalogFilters(searchParams, { search: "" }));
+                }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 text-sm font-bold"
+              >
+                &times;
+              </button>
+            )}
+          </form>
+
+          {/* Sort Dropdown */}
+          <div className="relative shrink-0">
             <button
               onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
               className="h-10 px-4 border border-border rounded-xl bg-white flex items-center gap-2.5 hover:border-primary transition-all cursor-pointer shadow-2xs text-xs font-bold text-stone-700"
@@ -205,12 +366,7 @@ const ProductsGrid = ({ pageData }) => {
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
@@ -224,9 +380,7 @@ const ProductsGrid = ({ pageData }) => {
                       setIsSortDropdownOpen(false);
                     }}
                     className={`w-full text-left px-3.5 py-2.5 text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center justify-between ${
-                      sortBy === option
-                        ? "bg-primary text-white"
-                        : "text-stone-700 hover:bg-stone-50"
+                      sortBy === option ? "bg-primary text-white" : "text-stone-700 hover:bg-stone-50"
                     }`}
                   >
                     <span>{option}</span>
@@ -246,11 +400,26 @@ const ProductsGrid = ({ pageData }) => {
             categories={categories}
             selectedCategory={selectedCategory}
             selectedBrand={selectedBrand}
+            selectedPriceRange={selectedPriceRange}
+            priceOptions={PRICE_RANGE_OPTIONS}
+            selectedFlavour={selectedFlavour}
+            flavourOptions={availableFlavours}
+            selectedRating={selectedRating}
+            ratingOptions={RATING_OPTIONS}
             sortBy={sortBy}
             sortOptions={sortOptions}
             brandFilters={brandFilters}
             onCategoryChange={handleCategorySelect}
-            onBrandChange={brand => setSearchParams(updateCatalogFilters(searchParams, { brand }))}
+            onBrandChange={(brand) => setSearchParams(updateCatalogFilters(searchParams, { brand }))}
+            onPriceChange={(priceRange) =>
+              setSearchParams(updateCatalogFilters(searchParams, { priceRange }))
+            }
+            onFlavourChange={(flavour) =>
+              setSearchParams(updateCatalogFilters(searchParams, { flavour }))
+            }
+            onRatingChange={(rating) =>
+              setSearchParams(updateCatalogFilters(searchParams, { rating }))
+            }
             onSortChange={setSortBy}
           />
         </div>
@@ -273,9 +442,7 @@ const ProductsGrid = ({ pageData }) => {
                 {item.count > 0 && (
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                      isSelected
-                        ? "bg-white/20 text-white"
-                        : "bg-stone-100 text-stone-500"
+                      isSelected ? "bg-white/20 text-white" : "bg-stone-100 text-stone-500"
                     }`}
                   >
                     {item.count}
@@ -304,7 +471,10 @@ const ProductsGrid = ({ pageData }) => {
             ))}
             {activeFilterChips.length > 1 && (
               <button
-                onClick={() => navigate("/gomzi-supplement")}
+                onClick={() => {
+                  setLocalSearch("");
+                  navigate("/gomzi-supplement");
+                }}
                 className="text-[11px] font-bold text-stone-400 hover:text-primary underline ml-1 cursor-pointer"
               >
                 Reset all
@@ -318,11 +488,14 @@ const ProductsGrid = ({ pageData }) => {
         ================================================================ */}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
           {/* ================================================================
-              DESKTOP SIDEBAR: CATEGORIES FIRST, THEN BRANDS
+              DESKTOP SIDEBAR: CATEGORIES, BRANDS, PRICE, RATING, FLAVOURS
           ================================================================ */}
-          <aside className="shop-category-sidebar hidden lg:block w-64 shrink-0 space-y-5 " aria-label="Shop filters">
+          <aside
+            className="shop-category-sidebar hidden lg:block w-64 shrink-0 space-y-5"
+            aria-label="Shop filters"
+          >
             {/* 1. CATEGORIES FILTER */}
-            <div className="shop-category-panel bg-white rounded-2xl border border-border p-5 shadow-2xs">
+            <div className="shop-category-panel bg-white rounded-2xl border border-border p-4 sm:p-5 shadow-2xs">
               <div className="flex shrink-0 items-center justify-between mb-4 pb-3 border-b border-border">
                 <h3 className="font-toma text-xs font-black text-text uppercase tracking-wider flex items-center gap-2">
                   <span className="w-2 h-4 bg-primary rounded-full inline-block" />
@@ -338,10 +511,7 @@ const ProductsGrid = ({ pageData }) => {
                 )}
               </div>
 
-              <ul
-                aria-label="Product categories"
-                className="shop-category-list space-y-1"
-              >
+              <ul aria-label="Product categories" className="shop-category-list space-y-1">
                 {categories.map((item) => {
                   const isSelected = selectedCategory === item.name;
                   return (
@@ -357,9 +527,7 @@ const ProductsGrid = ({ pageData }) => {
                         <span className="truncate">{item.label || item.name}</span>
                         <span
                           className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ml-2 shrink-0 ${
-                            isSelected
-                              ? "bg-white/20 text-white"
-                              : "bg-stone-100 text-stone-500"
+                            isSelected ? "bg-white/20 text-white" : "bg-stone-100 text-stone-500"
                           }`}
                         >
                           {item.count}
@@ -373,6 +541,143 @@ const ProductsGrid = ({ pageData }) => {
 
             {/* 2. BRANDS FILTER */}
             {brandPanel}
+
+            {/* 3. PRICE RANGE FILTER */}
+            <section aria-label="Price filters" className="bg-white rounded-2xl border border-border p-4 sm:p-5 shadow-2xs">
+              <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-border">
+                <h3 className="font-toma text-xs font-black text-text uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-2 h-4 bg-primary rounded-full inline-block" />
+                  Price Range
+                </h3>
+                {selectedPriceRange && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchParams(updateCatalogFilters(searchParams, { priceRange: "" }))}
+                    className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+              <div className="space-y-1">
+                {PRICE_RANGE_OPTIONS.map((opt) => {
+                  const active = selectedPriceRange === opt.id;
+                  return (
+                    <button
+                      key={opt.id || "all"}
+                      type="button"
+                      onClick={() => setSearchParams(updateCatalogFilters(searchParams, { priceRange: opt.id }))}
+                      className={`w-full text-left px-3 py-2 rounded-xl cursor-pointer transition-all text-xs font-bold flex items-center justify-between ${
+                        active
+                          ? "bg-primary text-white shadow-xs"
+                          : "text-stone-700 hover:bg-[#faf6f2] hover:text-primary"
+                      }`}
+                    >
+                      <span>{opt.label}</span>
+                      {active && <span>✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* 4. CUSTOMER RATING FILTER */}
+            <section aria-label="Customer rating filters" className="bg-white rounded-2xl border border-border p-4 sm:p-5 shadow-2xs">
+              <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-border">
+                <h3 className="font-toma text-xs font-black text-text uppercase tracking-wider flex items-center gap-2">
+                  <span className="w-2 h-4 bg-primary rounded-full inline-block" />
+                  Customer Rating
+                </h3>
+                {selectedRating && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchParams(updateCatalogFilters(searchParams, { rating: "" }))}
+                    className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+              <div className="space-y-1">
+                {RATING_OPTIONS.map((opt) => {
+                  const active = selectedRating === opt.id;
+                  return (
+                    <button
+                      key={opt.id || "all"}
+                      type="button"
+                      onClick={() => setSearchParams(updateCatalogFilters(searchParams, { rating: opt.id }))}
+                      className={`w-full text-left px-3 py-2 rounded-xl cursor-pointer transition-all text-xs font-bold flex items-center justify-between ${
+                        active
+                          ? "bg-primary text-white shadow-xs"
+                          : "text-stone-700 hover:bg-[#faf6f2] hover:text-primary"
+                      }`}
+                    >
+                      <span>{opt.label}</span>
+                      {active && <span>✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* 5. FLAVOUR FILTER */}
+            {availableFlavours.length > 0 && (
+              <section aria-label="Flavour filters" className="bg-white rounded-2xl border border-border p-4 sm:p-5 shadow-2xs">
+                <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-border">
+                  <h3 className="font-toma text-xs font-black text-text uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-2 h-4 bg-primary rounded-full inline-block" />
+                    Flavours
+                  </h3>
+                  {selectedFlavour && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchParams(updateCatalogFilters(searchParams, { flavour: "" }))}
+                      className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-1 max-h-56 overflow-y-auto custom-scrollbar">
+                  <button
+                    type="button"
+                    onClick={() => setSearchParams(updateCatalogFilters(searchParams, { flavour: "" }))}
+                    className={`w-full text-left px-3 py-2 rounded-xl cursor-pointer transition-all text-xs font-bold flex items-center justify-between ${
+                      !selectedFlavour
+                        ? "bg-primary text-white shadow-xs"
+                        : "text-stone-700 hover:bg-[#faf6f2] hover:text-primary"
+                    }`}
+                  >
+                    <span>All Flavours</span>
+                    {!selectedFlavour && <span>✓</span>}
+                  </button>
+                  {availableFlavours.map((item) => {
+                    const active = selectedFlavour.toLowerCase() === item.flavour.toLowerCase();
+                    return (
+                      <button
+                        key={item.flavour}
+                        type="button"
+                        onClick={() => setSearchParams(updateCatalogFilters(searchParams, { flavour: item.flavour }))}
+                        className={`w-full text-left px-3 py-2 rounded-xl cursor-pointer transition-all text-xs font-bold flex items-center justify-between ${
+                          active
+                            ? "bg-primary text-white shadow-xs"
+                            : "text-stone-700 hover:bg-[#faf6f2] hover:text-primary"
+                        }`}
+                      >
+                        <span className="truncate">{item.flavour}</span>
+                        <span
+                          className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ml-2 shrink-0 ${
+                            active ? "bg-white/20 text-white" : "bg-stone-100 text-stone-500"
+                          }`}
+                        >
+                          {item.count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
           </aside>
 
           {/* ================================================================
@@ -392,23 +697,30 @@ const ProductsGrid = ({ pageData }) => {
                 )}
               </div>
               <span className="shrink-0 whitespace-nowrap text-[11px] sm:text-xs text-stone-500 font-mono bg-white px-2 py-0.5 rounded-full border border-border">
-                {loading ? '…' : `${products.length} products`}
+                {loading ? "…" : `${filteredProducts.length} products`}
               </span>
             </div>
 
             {/* Standardized 2-Col Mobile, 3-Col Desktop Product Grid */}
-            <div aria-busy={loading} aria-label="Product results" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-5">
-              {loading ? Array.from({ length: 12 }, (_, index) => <ProductCardSkeleton key={index} mobileStacked={false} />) : products.map((product) => (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                  onAddToCart={handleAddToCart}
-                />
-              ))}
+            <div
+              aria-busy={loading}
+              aria-label="Product results"
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-5"
+            >
+              {loading
+                ? Array.from({ length: 12 }, (_, index) => (
+                    <ProductCardSkeleton key={index} mobileStacked={false} />
+                  ))
+                : filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                    />
+                  ))}
             </div>
 
             {/* No Products Found */}
-            {!loading && products.length === 0 && (
+            {!loading && filteredProducts.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-border p-8 text-center">
                 <img
                   src="/images/coming-soon.webp"
@@ -422,13 +734,20 @@ const ProductsGrid = ({ pageData }) => {
                   {error ? "We couldn’t load the catalog" : "No supplements found"}
                 </h3>
                 <p className="text-xs text-stone-500 mt-1 max-w-sm">
-                  {error ? "Please check your connection and try again." : search ? `No matches for “${search}”. Try another search or explore the full range.` : "We currently don't have items in this category. Explore the full range to find more options."}
+                  {error
+                    ? "Please check your connection and try again."
+                    : search
+                    ? `No matches for “${search}”. Try another search or explore the full range.`
+                    : "We currently don't have items matching your selected filters. Explore the full range to find more options."}
                 </p>
                 <button
-                  onClick={() => error ? retry() : navigate(`/gomzi-supplement${sortParam ? `?sort=${encodeURIComponent(sortParam)}` : ""}`)}
+                  onClick={() => {
+                    setLocalSearch("");
+                    navigate("/gomzi-supplement");
+                  }}
                   className="mt-4 px-4 py-2 bg-primary text-white text-xs font-bold rounded-xl hover:bg-hover cursor-pointer"
                 >
-                  {error ? "Try again" : "Clear filters"}
+                  {error ? "Try again" : "Clear all filters"}
                 </button>
               </div>
             )}

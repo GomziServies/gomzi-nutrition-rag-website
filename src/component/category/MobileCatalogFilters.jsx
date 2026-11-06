@@ -2,21 +2,43 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import BrandFilter from "./BrandFilter";
 
-const TITLES = { category: "Select Category", brand: "Filter by Brand", sort: "Sort Products" };
+const TITLES = {
+  category: "Select Category",
+  brand: "Filter by Brand",
+  price: "Filter by Price",
+  flavour: "Filter by Flavour",
+  rating: "Customer Rating",
+  sort: "Sort Products",
+};
 
-export function MobileFilterButtons({ category, brand, sort, panel, onOpen }) {
+export function MobileFilterButtons({
+  category,
+  brand,
+  price,
+  flavour,
+  rating,
+  sort,
+  panel,
+  onOpen,
+}) {
   const isCategoryFiltered = category && category !== "All Products";
   const isBrandFiltered = Boolean(brand && brand !== "All Brands");
+  const isPriceFiltered = Boolean(price && price !== "all");
+  const isFlavourFiltered = Boolean(flavour);
+  const isRatingFiltered = Boolean(rating && rating !== "all");
   const isSortFiltered = sort && sort !== "Featured";
 
   const items = [
     { key: "category", label: "Category", value: category || "All Products", isFiltered: isCategoryFiltered },
     { key: "brand", label: "Brand", value: brand || "All Brands", isFiltered: isBrandFiltered },
+    { key: "price", label: "Price", value: price ? (price === "under-999" ? "<₹999" : price) : "All", isFiltered: isPriceFiltered },
+    { key: "flavour", label: "Flavour", value: flavour || "All", isFiltered: isFlavourFiltered },
+    { key: "rating", label: "Rating", value: rating ? `${rating}★+` : "All", isFiltered: isRatingFiltered },
     { key: "sort", label: "Sort", value: sort, isFiltered: isSortFiltered },
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-2" aria-label="Catalog filters and sorting">
+    <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5" aria-label="Catalog filters and sorting">
       {items.map(item => (
         <button
           key={item.key}
@@ -25,21 +47,21 @@ export function MobileFilterButtons({ category, brand, sort, panel, onOpen }) {
           aria-expanded={panel === item.key}
           aria-label={`${item.label}: ${item.value}`}
           onClick={() => onOpen(item.key)}
-          className={`min-w-0 min-h-[50px] sm:min-h-[56px] rounded-xl border px-2.5 py-1.5 sm:py-2 text-left shadow-2xs transition-all cursor-pointer ${
+          className={`shrink-0 min-h-[44px] rounded-xl border px-3 py-1.5 text-left shadow-2xs transition-all cursor-pointer flex flex-col justify-center ${
             item.isFiltered
               ? "border-primary bg-[#faf4ef]"
               : "border-border bg-white hover:border-primary/50 active:bg-stone-50"
           }`}
         >
-          <div className="flex items-center justify-between">
-            <span className={`block text-[10px] font-black uppercase tracking-wider ${item.isFiltered ? "text-primary" : "text-stone-400"}`}>
+          <div className="flex items-center justify-between gap-1">
+            <span className={`block text-[9px] font-black uppercase tracking-wider ${item.isFiltered ? "text-primary" : "text-stone-400"}`}>
               {item.label}
             </span>
             {item.isFiltered && (
               <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
             )}
           </div>
-          <span className={`block truncate mt-0.5 text-xs font-bold ${item.isFiltered ? "text-primary" : "text-stone-800"}`}>
+          <span className={`block truncate text-xs font-bold max-w-[100px] ${item.isFiltered ? "text-primary" : "text-stone-800"}`}>
             {item.value}
           </span>
         </button>
@@ -48,7 +70,26 @@ export function MobileFilterButtons({ category, brand, sort, panel, onOpen }) {
   );
 }
 
-export default function MobileCatalogFilters({ categories, selectedCategory, selectedBrand, sortBy, sortOptions, brandFilters, onCategoryChange, onBrandChange, onSortChange }) {
+export default function MobileCatalogFilters({
+  categories = [],
+  selectedCategory,
+  selectedBrand,
+  selectedPriceRange = "",
+  priceOptions = [],
+  selectedFlavour = "",
+  flavourOptions = [],
+  selectedRating = "",
+  ratingOptions = [],
+  sortBy,
+  sortOptions = [],
+  brandFilters,
+  onCategoryChange,
+  onBrandChange,
+  onPriceChange,
+  onFlavourChange,
+  onRatingChange,
+  onSortChange,
+}) {
   const [panel, setPanel] = useState(null);
   const dialogRef = useRef(null);
   const isOpen = Boolean(panel);
@@ -77,7 +118,19 @@ export default function MobileCatalogFilters({ categories, selectedCategory, sel
     };
   }, [isOpen]);
 
-  const choose = (callback, value) => { callback(value); setPanel(null); };
+  const choose = (callback, value) => {
+    if (callback) callback(value);
+    setPanel(null);
+  };
+
+  const navTabs = [
+    ["category", "Category"],
+    ["brand", "Brand"],
+    ["price", "Price"],
+    ["flavour", "Flavour"],
+    ["rating", "Rating"],
+    ["sort", "Sort"],
+  ];
 
   const dialog = (
     <dialog
@@ -102,15 +155,15 @@ export default function MobileCatalogFilters({ categories, selectedCategory, sel
             &times;
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-2 mt-2.5">
-          {[["category", "Categories"], ["brand", "Brands"], ["sort", "Sort"]].map(([key, label]) => (
+        <div className="flex items-center gap-1.5 mt-2.5 overflow-x-auto no-scrollbar py-0.5">
+          {navTabs.map(([key, label]) => (
             <button
               key={key}
               type="button"
               aria-pressed={panel === key}
               onClick={() => setPanel(key)}
-              className={`min-h-9 sm:min-h-10 min-w-0 rounded-lg px-2 text-xs font-bold cursor-pointer transition-colors ${
-                panel === key ? "bg-primary text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200"
+              className={`shrink-0 min-h-8 rounded-lg px-2.5 text-xs font-bold cursor-pointer transition-colors ${
+                panel === key ? "bg-primary text-white shadow-xs" : "bg-stone-100 text-stone-600 hover:bg-stone-200"
               }`}
             >
               {label}
@@ -146,6 +199,89 @@ export default function MobileCatalogFilters({ categories, selectedCategory, sel
           </ul>
         )}
         {panel === "brand" && <BrandFilter {...brandFilters} value={selectedBrand} onChange={value => choose(onBrandChange, value)} />}
+        {panel === "price" && (
+          <ul className="space-y-1.5" aria-label="Price options">
+            {priceOptions.map(option => {
+              const isSelected = (selectedPriceRange || "") === (option.id || "");
+              return (
+                <li key={option.id || "all"}>
+                  <button
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => choose(onPriceChange, option.id)}
+                    className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-left text-xs sm:text-sm font-bold cursor-pointer transition-colors ${
+                      isSelected ? "bg-primary text-white" : "bg-stone-50 text-stone-700 hover:bg-stone-100"
+                    }`}
+                  >
+                    <span>{option.label}</span>
+                    {isSelected && <span aria-hidden="true" className="font-bold">&check;</span>}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {panel === "flavour" && (
+          <ul className="space-y-1.5" aria-label="Flavour options">
+            <li key="all">
+              <button
+                type="button"
+                aria-pressed={!selectedFlavour}
+                onClick={() => choose(onFlavourChange, "")}
+                className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-left text-xs sm:text-sm font-bold cursor-pointer transition-colors ${
+                  !selectedFlavour ? "bg-primary text-white" : "bg-stone-50 text-stone-700 hover:bg-stone-100"
+                }`}
+              >
+                <span>All Flavours</span>
+                {!selectedFlavour && <span aria-hidden="true" className="font-bold">&check;</span>}
+              </button>
+            </li>
+            {flavourOptions.map(item => {
+              const isSelected = selectedFlavour.toLowerCase() === item.flavour.toLowerCase();
+              return (
+                <li key={item.flavour}>
+                  <button
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => choose(onFlavourChange, item.flavour)}
+                    className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-left text-xs sm:text-sm font-bold cursor-pointer transition-colors ${
+                      isSelected ? "bg-primary text-white" : "bg-stone-50 text-stone-700 hover:bg-stone-100"
+                    }`}
+                  >
+                    <span className="min-w-0 truncate">{item.flavour}</span>
+                    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-mono ${
+                      isSelected ? "bg-white/20 text-white" : "bg-black/5 text-stone-500"
+                    }`}>
+                      {item.count}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {panel === "rating" && (
+          <ul className="space-y-1.5" aria-label="Rating options">
+            {ratingOptions.map(option => {
+              const isSelected = (selectedRating || "") === (option.id || "");
+              return (
+                <li key={option.id || "all"}>
+                  <button
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => choose(onRatingChange, option.id)}
+                    className={`flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-left text-xs sm:text-sm font-bold cursor-pointer transition-colors ${
+                      isSelected ? "bg-primary text-white" : "bg-stone-50 text-stone-700 hover:bg-stone-100"
+                    }`}
+                  >
+                    <span>{option.label}</span>
+                    {isSelected && <span aria-hidden="true" className="font-bold">&check;</span>}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
         {panel === "sort" && (
           <ul className="space-y-1.5" aria-label="Sort options">
             {sortOptions.map(option => {
@@ -174,7 +310,16 @@ export default function MobileCatalogFilters({ categories, selectedCategory, sel
 
   return (
     <div className="lg:hidden min-w-0">
-      <MobileFilterButtons category={selectedCategory} brand={selectedBrand} sort={sortBy} panel={panel} onOpen={setPanel} />
+      <MobileFilterButtons
+        category={selectedCategory}
+        brand={selectedBrand}
+        price={selectedPriceRange}
+        flavour={selectedFlavour}
+        rating={selectedRating}
+        sort={sortBy}
+        panel={panel}
+        onOpen={setPanel}
+      />
       {typeof document !== "undefined" && createPortal(dialog, document.body)}
     </div>
   );

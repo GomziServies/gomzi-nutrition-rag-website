@@ -30,6 +30,7 @@ import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
 import useCategories from "../../hooks/useCategories";
 import { fetchProducts } from "../../services/product.service";
+import { formatSpecString } from "../common/ProductCard";
 import {
   getProductImageUrl,
   handleQuickAddToCart,
@@ -372,7 +373,7 @@ export default function HkHeader() {
   const activeMega = MEGA_CATEGORIES.find((m) => m.id === activeMegaCategory) || MEGA_CATEGORIES[0];
 
   return (
-    <header className="w-full bg-white shadow-sm sticky top-0 z-50 font-sans border-b border-border/60">
+    <header className="w-full bg-white/95 backdrop-blur-md shadow-xs sticky top-0 z-50 font-sans border-b border-border/60">
       {/* ── Middle Header Row (HealthKart style) ── */}
       <div className="max-w-[1280px] mx-auto px-4 py-3 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 md:gap-4">
         {/* Left: Mobile hamburger & Brand Logo */}
@@ -389,7 +390,7 @@ export default function HkHeader() {
             <img
               src={branding.logo}
               alt="Gomzi Nutrition"
-              className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105"
+              className="h-11 sm:h-14 md:h-[54px] w-auto object-contain transition-transform group-hover:scale-105"
             />
           </Link>
         </div>
@@ -398,9 +399,9 @@ export default function HkHeader() {
         <div className="order-3 md:order-none w-full md:w-auto md:flex-1 max-w-2xl md:mx-2 relative" ref={searchContainerRef}>
           <form onSubmit={handleSearchSubmit} className="relative w-full">
             <div
-              className={`flex items-center bg-light border rounded-xl h-11 px-3.5 transition-all shadow-inner ${isSearchFocused
-                ? "border-primary bg-white ring-2 ring-primary/20 shadow-md"
-                : "border-border hover:border-primary/60"
+              className={`flex items-center bg-white border rounded-xl h-11 px-3.5 transition-all shadow-xs ${isSearchFocused
+                ? "border-primary ring-2 ring-primary/20 shadow-md"
+                : "border-stone-300 hover:border-primary/80"
                 }`}
             >
               <Search
@@ -578,7 +579,7 @@ export default function HkHeader() {
                                 {product.name}
                               </h4>
                               <p className="text-[11px] text-stone-500 truncate">
-                                {product.flavour || "100% Genuine Formula"}
+                                {formatSpecString(product.flavour) || "100% Genuine Formula"}
                               </p>
                             </div>
 
@@ -871,30 +872,29 @@ export default function HkHeader() {
             )}
           </div>
 
-          <nav aria-label="Shop navigation" className="hidden lg:flex items-center gap-4 xl:gap-6 py-2 whitespace-nowrap">
+          <nav aria-label="Shop navigation" className="hidden lg:flex flex-1 items-center justify-center gap-5 xl:gap-8 py-2 whitespace-nowrap">
             <NavLink
               to="/"
               end
               onClick={() => setIsCategoryMenuOpen(false)}
               className={({ isActive }) =>
-                `inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 font-bold transition-all shadow-sm ${isActive
-                  ? "bg-primary text-white border-primary"
-                  : "bg-white hover:bg-[#fbf4f0] text-stone-700 hover:text-primary"
-                }`
+                `hover:text-primary transition-colors ${isActive ? "text-primary font-bold" : "text-stone-700"}`
               }
             >
-              <Home size={14} />
-              <span>Home</span>
+              Home
             </NavLink>
-            <Link to="/gomzi-supplement?sort=bestseller" onClick={() => setIsCategoryMenuOpen(false)} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-[#fcf2ee] hover:bg-[#f6e4dc] px-3 py-1.5 text-primary font-bold transition-colors">
+            <NavLink
+              to="/gomzi-supplement?sort=bestseller"
+              onClick={() => setIsCategoryMenuOpen(false)}
+              className={({ isActive }) =>
+                `hover:text-primary transition-colors ${isActive ? "text-primary font-bold" : "text-stone-700"}`
+              }
+            >
               Shop Now
-            </Link>
+            </NavLink>
             {PRIMARY_LINKS.filter(link => !["/", "/gomzi-supplement", "/category"].includes(link.to)).map(link => (
               <NavigationLink key={link.to} link={link} onClick={() => setIsCategoryMenuOpen(false)} />
             ))}
-            <a href="/pdf/product-report.pdf" target="_blank" rel="noreferrer" className="text-sm font-bold text-emerald-700 hover:text-emerald-900 transition-colors">
-              Batch Lab Reports
-            </a>
           </nav>
           <div className="hidden md:flex lg:hidden xl:flex items-center gap-2 whitespace-nowrap">
             <PhoneCall size={13} className="text-primary" />
@@ -986,16 +986,7 @@ export default function HkHeader() {
                 </div>
               </div>
 
-              <div className="space-y-2 pt-2">
-                <a
-                  href="/pdf/product-report.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block font-bold text-emerald-700"
-                >
-                  Batch Lab Reports
-                </a>
-              </div>
+
             </div>
 
             <div className="p-4 border-t border-stone-200 bg-[#fbf8f5]">
