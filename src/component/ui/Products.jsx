@@ -12,6 +12,7 @@ import FAQSection from "../category/FAQSection";
 import BottomContentSection from "../category/BottomContentSection";
 import BrandFilter from "../category/BrandFilter";
 import useCatalogBrands from "../../hooks/useCatalogBrands";
+import useCouponLink from "../../hooks/useCouponLink";
 import MobileCatalogFilters from "../category/MobileCatalogFilters";
 import {
   CATALOG_SORT_VALUES,
@@ -88,6 +89,12 @@ const ProductsGrid = ({ pageData }) => {
   const selectedFlavour = searchParams.get("flavour") || "";
   const selectedRating = searchParams.get("rating") || "";
 
+  // Shared referral link (?coupon_code=ABC): validate it and, when the coupon is limited to
+  // specific products, show only those products.
+  const couponLink = useCouponLink(searchParams.get("coupon_code") || "");
+  const clearCouponLink = () =>
+    setSearchParams(updateCatalogFilters(searchParams, { coupon_code: "" }));
+
   const selectedCategory = category || pageData?.category || "All Products";
   const activeCategory = category || pageData?.category || "";
 
@@ -104,7 +111,7 @@ const ProductsGrid = ({ pageData }) => {
   }, [search]);
 
   // Fetch full category list from MongoDB API
-  const { products: rawProducts, loading, error, retry } = useProducts({
+  const { products: rawProducts, loading: productsLoading, error, retry } = useProducts({
     page: 1,
     limit: 2000,
     search,
@@ -112,6 +119,7 @@ const ProductsGrid = ({ pageData }) => {
     company: selectedBrand,
     ...(sortConfig[sortBy] || {}),
   });
+  const loading = productsLoading || couponLink.loading;
 
   const brandFilters = useCatalogBrands();
   const brandPanel = (
@@ -166,6 +174,11 @@ const ProductsGrid = ({ pageData }) => {
   const filteredProducts = useMemo(() => {
     let result = rawProducts || [];
 
+    // Referral link limited to specific products: show only those products
+    if (couponLink.applicableIds) {
+      result = result.filter((p) => couponLink.applicableIds.has(String(p._id)));
+    }
+
     // Filter by flavour
     if (selectedFlavour) {
       result = result.filter(
@@ -216,7 +229,7 @@ const ProductsGrid = ({ pageData }) => {
     }
 
     return result;
-  }, [rawProducts, selectedFlavour, selectedPriceRange, selectedRating, sortBy]);
+  }, [rawProducts, couponLink.applicableIds, selectedFlavour, selectedPriceRange, selectedRating, sortBy]);
 
   // Active filter chips
   const activeFilterChips = useMemo(() => {
@@ -307,6 +320,47 @@ const ProductsGrid = ({ pageData }) => {
       <div className="site-container">
         {/* Category Hero Section */}
         <CategoryHero pageData={pageData} />
+
+        {/* Shared referral coupon link banner */}
+        {couponLink.code && !couponLink.loading && (
+          couponLink.coupon ? (
+            <div
+              role="status"
+              className="mb-4 sm:mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-white px-4 py-3 shadow-2xs"
+            >
+              <div className="min-w-0">
+                <p className="text-sm font-black text-text">
+                  Coupon <span className="font-mono text-primary">{couponLink.coupon.coupon_code}</span> applied
+                  {" — "}
+                  {couponLink.coupon.discount_type === "percent"
+                    ? `${couponLink.coupon.discount}% off`
+                    : `₹${couponLink.coupon.discount} off`}
+                </p>
+                <p className="mt-0.5 text-xs text-stone-500">
+                  {couponLink.applicableIds
+                    ? `Valid on the ${filteredProducts.length} product${filteredProducts.length === 1 ? "" : "s"} below. It is applied automatically at checkout.`
+                    : "Valid on all products. It is applied automatically at checkout."}
+                </p>
+              </div>
+              {couponLink.applicableIds && (
+                <button
+                  type="button"
+                  onClick={clearCouponLink}
+                  className="text-xs font-bold text-primary hover:underline cursor-pointer"
+                >
+                  Browse all products
+                </button>
+              )}
+            </div>
+          ) : (
+            <div
+              role="alert"
+              className="mb-4 sm:mb-6 rounded-2xl border border-border bg-white px-4 py-3 text-xs text-stone-600 shadow-2xs"
+            >
+              {couponLink.error}
+            </div>
+          )
+        )}
 
         {/* ================================================================
             DESKTOP TOOLBAR (Product count, Search by name, Sort)

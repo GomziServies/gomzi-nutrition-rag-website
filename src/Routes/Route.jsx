@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import NotFound, { RouteError } from "../pages/NotFound";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate, useLocation } from "react-router-dom";
 import Wrapper from "../HOC/Wrapper";
 import Landing from "../pages/Landing";
 const Allproducts = lazy(() => import("../pages/Allproducts"));
@@ -29,11 +29,18 @@ const ShippingPolicy = lazy(() => import("../pages/About/DeliveryPolicy"));
 const CategoriesSection = lazy(() => import("../pages/Categories"));
 const GymOffers = lazy(() => import("../pages/GymOffers"));
 
+// Shared referral links use /shop?coupon_code=XYZ — send them to the product catalogue, keeping the query.
+const ShopRedirect = () => {
+  const { search } = useLocation();
+  return <Navigate to={`/gomzi-supplement${search}`} replace />;
+};
+
 export const Route = createBrowserRouter([
   {
     element: <Wrapper />,
     errorElement: <RouteError />,
     children: [
+      { path: "/shop", element: <ShopRedirect /> },
       { path: "/wholesale", element: <WholesaleB2B /> },
       { path: "/deals", element: <Deals /> },
       { path: "/gym-offers", element: <GymOffers /> },
