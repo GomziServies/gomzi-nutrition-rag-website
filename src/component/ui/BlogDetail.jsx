@@ -149,7 +149,15 @@ const BlogDetail = () => {
         ================================================== */}
         <section className="pb-16 md:pb-24">
           <div className="max-w-4xl mx-auto px-4">
-            {/* Intro */}
+            {/* Document Content: Rich Google Docs HTML or Fallback Sections */}
+            {blog.content?.html ? (
+              <div
+                className="blog-rich-document text-gray-800 font-modelica text-base md:text-lg leading-relaxed mb-12"
+                dangerouslySetInnerHTML={{ __html: blog.content.html }}
+              />
+            ) : (
+              <>
+                {/* Intro */}
             <div className="space-y-5">
               {blog.content?.intro?.map((paragraph, index) => (
                 <p
@@ -277,6 +285,8 @@ const BlogDetail = () => {
               </section>
               );
             })}
+              </>
+            )}
 
             {/* Protein Table */}
             {blog.content?.proteinTable && (
@@ -361,6 +371,31 @@ const BlogDetail = () => {
             </div>
           </div>
         </section>
+      
+      <style>{
+        `
+        .blog-rich-document h1 { font-size: 2rem; font-weight: 700; color: #111827; margin: 2rem 0 1rem 0; line-height: 1.25; }
+        .blog-rich-document h2 { font-size: 1.625rem; font-weight: 700; color: #1f2937; margin: 1.75rem 0 0.875rem 0; line-height: 1.3; }
+        .blog-rich-document h3 { font-size: 1.25rem; font-weight: 600; color: #374151; margin: 1.5rem 0 0.75rem 0; line-height: 1.4; }
+        .blog-rich-document h4 { font-size: 1.125rem; font-weight: 600; color: #4b5563; margin: 1.25rem 0 0.5rem 0; }
+        .blog-rich-document p { margin-bottom: 1.25rem; line-height: 1.8; color: #374151; }
+        .blog-rich-document ul { list-style-type: disc; padding-left: 1.75rem; margin-bottom: 1.25rem; }
+        .blog-rich-document ol { list-style-type: decimal; padding-left: 1.75rem; margin-bottom: 1.25rem; }
+        .blog-rich-document li { margin-bottom: 0.5rem; line-height: 1.7; }
+        .blog-rich-document blockquote { border-left: 4px solid #2563eb; background: #f8fafc; padding: 1rem 1.25rem; margin: 1.5rem 0; color: #475569; font-style: italic; border-radius: 0 8px 8px 0; }
+        .blog-rich-document pre { background: #0f172a; color: #f8fafc; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; margin: 1.5rem 0; }
+        .blog-rich-document a { color: #2563eb; text-decoration: underline; font-weight: 500; }
+        .blog-rich-document a:hover { color: #1d4ed8; }
+        .blog-rich-document img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.25rem auto; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .blog-rich-document figure { margin: 2rem 0; text-align: center; }
+        .blog-rich-document figcaption { font-size: 0.875rem; color: #6b7280; font-style: italic; margin-top: 0.5rem; }
+        .blog-rich-document table { width: 100%; border-collapse: collapse; margin: 1.75rem 0; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
+        .blog-rich-document th { background-color: #f8fafc; font-weight: 700; color: #1e293b; padding: 12px 16px; border: 1px solid #e2e8f0; text-align: left; font-size: 0.925rem; }
+        .blog-rich-document td { padding: 12px 16px; border: 1px solid #e2e8f0; vertical-align: top; color: #334155; font-size: 0.925rem; }
+        .blog-rich-document tr:nth-child(even) td { background-color: #fbfcfe; }
+        `
+      }</style>
+    
       </article>
     </>
   );
