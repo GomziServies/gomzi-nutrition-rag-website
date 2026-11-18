@@ -5,7 +5,7 @@ import { ArrowRight, Loader2, Plus, ShoppingBag, Sparkles } from "lucide-react";
 import { fetchProducts, addToCart } from "../../services/product.service";
 import { addGuestCartItem } from "../../services/cartStorage.service";
 import useCart from "../../hooks/useCart";
-import { fetchComboStacks, DEFAULT_STACKS } from "../../services/comboStack.service";
+import { fetchComboStacks, DEFAULT_STACKS, DEFAULT_HEADER_CONFIG } from "../../services/comboStack.service";
 import { getProductImageUrl } from "../../data/homeProducts";
 import { formatSpecString } from "../common/ProductCard";
 import { successToast, errorToast } from "../../utils/toast";
@@ -358,6 +358,7 @@ export default function HkComboStackBuilder() {
   const { isAuthenticated } = useAuth();
   const { items: cartItems } = useCart();
   const [stacks, setStacks] = useState(DEFAULT_STACKS);
+  const [headerConfig, setHeaderConfig] = useState(DEFAULT_HEADER_CONFIG);
   const [active1, setActive1] = useState(DEFAULT_STACKS[0]?.id || "");
   const [active2, setActive2] = useState(DEFAULT_STACKS[1]?.id || "");
   const [isDesktop, setIsDesktop] = useState(
@@ -389,6 +390,9 @@ export default function HkComboStackBuilder() {
     fetchComboStacks().then(remoteStacks => {
       if (!current || !remoteStacks || !Array.isArray(remoteStacks) || remoteStacks.length === 0) return;
       setStacks(remoteStacks);
+      if (remoteStacks.headerConfig) {
+        setHeaderConfig(remoteStacks.headerConfig);
+      }
 
       setActive1(prev => {
         if (remoteStacks.some(s => s.id === prev)) return prev;
@@ -425,14 +429,14 @@ export default function HkComboStackBuilder() {
         <div className="flex flex-col gap-2 mb-6">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-primary">
-              Better together
+              {headerConfig.eyebrow || "Better together"}
             </p>
           </div>
           <h2 className="text-[26px] sm:text-[34px] lg:text-[38px] leading-[1.2] font-black tracking-[-0.035em] text-text">
-            Your routine. Your stack.
+            {headerConfig.title || "Your routine. Your stack."}
           </h2>
           <p className="text-xs sm:text-sm text-stone-500">
-            Handpicked product essentials at special bundle pricing. Add them in one step.
+            {headerConfig.subtitle || "Handpicked product essentials at special bundle pricing. Add them in one step."}
           </p>
         </div>
 

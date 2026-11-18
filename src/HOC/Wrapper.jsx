@@ -8,6 +8,7 @@ import HkTopBar from "../component/healthkart/HkTopBar";
 import HkHeader from "../component/healthkart/HkHeader";
 import HkFooter from "../component/healthkart/HkFooter";
 import useContactDetails from "../content/useContactDetails";
+import CookieConsentBanner from "../component/CookieConsentBanner";
 
 // Safe layout effect for both SSR (server) and CSR (browser)
 const useIsomorphicLayoutEffect =
@@ -271,10 +272,12 @@ const Wrapper = () => {
     }
   }, []);
 
+  const isHomePage = location.pathname === "/" || location.pathname === "";
+
   return (
     <div className="storefront min-h-screen bg-light text-text relative">
       <a className="skip-link" href="#main-content">Skip to content</a>
-      <HkTopBar />
+      {!isHomePage && <HkTopBar />}
       <HkHeader />
       <main id="main-content" tabIndex={-1}>
         <Suspense fallback={<PageLoading />}><Outlet /></Suspense>
@@ -282,9 +285,22 @@ const Wrapper = () => {
       <HkFooter />
 
       {/* Floating WhatsApp Quick Support Action Button */}
+      {/* Cookie Consent & Anonymous Traffic Logging */}
+      <CookieConsentBanner />
+
       {contact?.whatsappUrl && (
         <a
-          href={contact.whatsappUrl}
+          href={
+            contact.whatsappWithText
+              ? contact.whatsappWithText(
+                  typeof window !== "undefined" && location.pathname.startsWith("/product/")
+                    ? `Hello Gomzi Nutrition! I am looking at this product on your website: ${window.location.href} and have some questions. Please assist me.`
+                    : "Hello Gomzi Nutrition! I am browsing your website and need some assistance with products / my order."
+                )
+              : `${contact.whatsappUrl}?text=${encodeURIComponent(
+                  "Hello Gomzi Nutrition! I am browsing your website and need some assistance with products / my order."
+                )}`
+          }
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat with Gomzi Nutrition on WhatsApp"

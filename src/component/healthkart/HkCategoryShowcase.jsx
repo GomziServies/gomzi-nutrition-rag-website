@@ -20,10 +20,6 @@ const SHOWCASE_CATEGORY_QUERIES = {
     categories: ["Whey Protein"],
     searches: ["Whey"],
   },
-  "Combos & Stacks": {
-    categories: ["Combos & Stacks"],
-    searches: ["Combo", "Stack"],
-  },
 };
 
 export default function HkCategoryShowcase({

@@ -3,12 +3,12 @@ import { getHeroBannersApi, getAdBannersApi, getPromoBannersApi, getNutritionPro
 const FILE_BASE_URL = "https://files.fggroup.in/";
 
 export const FALLBACK_HERO_BANNERS = [{
-  id: "default-hero",
-  title: "Science-backed nutrition for everyday performance",
-  subtitle: "Explore sports nutrition and daily essentials from Gomzi Nutrition.",
-  desktopImage: "/images/banner-(gls)-web-view.webp",
-  mobileImage: "/images/banner-(gls)-mobile-view.webp",
-  alt: "Science-backed sports nutrition products by Gomzi Supplement.",
+  id: "hero-optimum-nutrition-combo",
+  title: "Optimum Nutrition Gold Standard Whey - Buy 2 Get 4 Free Combo Offer",
+  subtitle: "Purchase 2 x Gold Standard Whey 5lb and Get 4 Free Essentials",
+  desktopImage: "/images/banners/hero-banner-optimum-nutrition-desktop.webp",
+  mobileImage: "/images/banners/hero-banner-optimum-nutrition-mobile.webp",
+  alt: "Optimum Nutrition Gold Standard Whey Buy 2 Get 4 Free Combo Offer",
   shopLink: "/gomzi-supplement",
   brochureUrl: "/pdf/gomzi-brochure.pdf",
 }];

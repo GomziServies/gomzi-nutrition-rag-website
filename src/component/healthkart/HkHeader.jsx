@@ -2,6 +2,7 @@ import useBranding from "../../content/useBranding";
 import useContactDetails from "../../content/useContactDetails";
 // src/component/healthkart/HkHeader.jsx
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   Search,
@@ -110,15 +111,15 @@ const MEGA_CATEGORIES = [
           { name: "Heavyweight Mass Gainer", slug: "mass-gainer" },
           { name: "High Calorie Weight Gainer", slug: "mass-gainer" },
           { name: "Carb & Protein Blends", slug: "mass-gainer" },
-          { name: "Bulk Up Muscle Combos", slug: "combos-stacks" },
+          { name: "Lean Muscle Gainers", slug: "mass-gainer" },
         ],
       },
       {
-        title: "Combos & Bundles",
+        title: "Weight Support",
         items: [
-          { name: "Mass Gainer + Creatine Stack", slug: "combos-stacks" },
-          { name: "Whey + Shaker Combo Pack", slug: "combos-stacks" },
-          { name: "Ultimate Bulking Stack", slug: "combos-stacks" },
+          { name: "Complex Carbohydrates", slug: "mass-gainer" },
+          { name: "Digestive Enzyme Blends", slug: "mass-gainer" },
+          { name: "High-Calorie Recovery", slug: "mass-gainer" },
         ],
       },
     ],
@@ -904,105 +905,133 @@ export default function HkHeader() {
         </div>
       </div>
 
-      {/* ── Mobile Drawer ── */}
-      {mobileDrawerOpen && (
-        <div className="fixed inset-0 z-[999] flex">
-          <div
-            className="fixed inset-0 bg-black/50"
-            onClick={() => setMobileDrawerOpen(false)}
-          />
-          <div ref={drawerRef} role="dialog" aria-modal="true" aria-label="Shop navigation" className="relative w-80 max-w-[85%] bg-white h-full shadow-2xl flex flex-col z-10 font-sans">
-            <div className="p-4 bg-[#fbf8f5] border-b border-stone-200 flex items-center justify-between">
-              <Link to="/" onClick={() => setMobileDrawerOpen(false)} className="flex items-center">
-                <img
-                  src={branding.logo}
-                  alt="Gomzi Nutrition"
-                  className="h-8 w-auto object-contain"
-                />
-              </Link>
-              <button
-                onClick={() => setMobileDrawerOpen(false)}
-                autoFocus
-                aria-label="Close navigation menu"
-                className="p-1 text-stone-500 hover:text-stone-800"
-              >
-                <X size={20} />
-              </button>
-            </div>
+      {/* ── Mobile Drawer (Portaled to document.body to avoid header backdrop-filter / sticky clipping) ── */}
+      {mobileDrawerOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div className="fixed inset-0 z-[9999] flex isolate">
+            {/* Backdrop Overlay */}
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+              onClick={() => setMobileDrawerOpen(false)}
+              aria-hidden="true"
+            />
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 text-sm">
-              <nav aria-label="Mobile navigation" className="pb-3 border-b border-stone-100 space-y-1">
-                {PRIMARY_LINKS.map(link => (
-                  <NavigationLink key={link.to} link={link} mobile onClick={() => setMobileDrawerOpen(false)} />
-                ))}
-              </nav>
-              <div className="pb-3 border-b border-stone-100">
-                <p className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-2">
-                  Top Categories
-                </p>
-                <div className="space-y-1.5 font-semibold text-stone-700">
-                  <Link
-                    to="/gomzi-supplement/whey-protein"
-                    onClick={() => setMobileDrawerOpen(false)}
-                    className="block py-1 hover:text-primary"
+            {/* Slide-out Drawer Panel */}
+            <div
+              ref={drawerRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Shop navigation"
+              className="relative w-80 max-w-[85vw] bg-white h-full h-[100dvh] max-h-[100dvh] shadow-2xl flex flex-col z-10 font-sans animate-in slide-in-from-left duration-250 ease-out"
+            >
+              {/* Drawer Header */}
+              <div className="p-4 bg-[#fbf8f5] border-b border-stone-200 flex items-center justify-between flex-shrink-0">
+                <Link to="/" onClick={() => setMobileDrawerOpen(false)} className="flex items-center">
+                  <img
+                    src={branding.logo}
+                    alt="Gomzi Nutrition"
+                    className="h-8 w-auto object-contain"
+                  />
+                </Link>
+                <button
+                  onClick={() => setMobileDrawerOpen(false)}
+                  autoFocus
+                  aria-label="Close navigation menu"
+                  className="p-1.5 rounded-lg text-stone-500 hover:text-stone-800 hover:bg-stone-100 transition-colors cursor-pointer"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Drawer Scrollable Content */}
+              <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-4 text-sm">
+                <nav aria-label="Mobile navigation" className="pb-3 border-b border-stone-100 space-y-1">
+                  {PRIMARY_LINKS.map(link => (
+                    <NavigationLink key={link.to} link={link} mobile onClick={() => setMobileDrawerOpen(false)} />
+                  ))}
+                </nav>
+
+                <div className="pb-3 border-b border-stone-100">
+                  <p className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-2">
+                    Top Categories
+                  </p>
+                  <div className="space-y-1 font-semibold text-stone-700">
+                    <Link
+                      to="/gomzi-supplement/whey-protein"
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className="block py-1.5 px-2 rounded-md hover:bg-stone-50 hover:text-primary transition-colors"
+                    >
+                      Whey Protein (86)
+                    </Link>
+                    <Link
+                      to="/gomzi-supplement/mass-gainer"
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className="block py-1.5 px-2 rounded-md hover:bg-stone-50 hover:text-primary transition-colors"
+                    >
+                      Mass Gainer (23)
+                    </Link>
+                    <Link
+                      to="/gomzi-supplement/creatine"
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className="block py-1.5 px-2 rounded-md hover:bg-stone-50 hover:text-primary transition-colors"
+                    >
+                      Creatine Monohydrate (53)
+                    </Link>
+                    <Link
+                      to="/gomzi-supplement/pre-workout"
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className="block py-1.5 px-2 rounded-md hover:bg-stone-50 hover:text-primary transition-colors"
+                    >
+                      Pre-Workout Explosive (36)
+                    </Link>
+                    <Link
+                      to="/gomzi-supplement/protein-bars-snacks"
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className="block py-1.5 px-2 rounded-md hover:bg-stone-50 hover:text-primary transition-colors"
+                    >
+                      High Protein Peanut Butter (20)
+                    </Link>
+                    <Link
+                      to="/gomzi-supplement/wellness-health"
+                      onClick={() => setMobileDrawerOpen(false)}
+                      className="block py-1.5 px-2 rounded-md hover:bg-stone-50 hover:text-primary transition-colors"
+                    >
+                      Apex Multivitamins &amp; Wellness
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="pt-1">
+                  <p className="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-2">
+                    Need Help?
+                  </p>
+                  <a
+                    href={contact.telephoneUrl}
+                    className="flex items-center gap-2 text-xs font-semibold text-stone-700 hover:text-primary py-1"
                   >
-                    Whey Protein (86)
-                  </Link>
-                  <Link
-                    to="/gomzi-supplement/mass-gainer"
-                    onClick={() => setMobileDrawerOpen(false)}
-                    className="block py-1 hover:text-primary"
-                  >
-                    Mass Gainer (23)
-                  </Link>
-                  <Link
-                    to="/gomzi-supplement/creatine"
-                    onClick={() => setMobileDrawerOpen(false)}
-                    className="block py-1 hover:text-primary"
-                  >
-                    Creatine Monohydrate (53)
-                  </Link>
-                  <Link
-                    to="/gomzi-supplement/pre-workout"
-                    onClick={() => setMobileDrawerOpen(false)}
-                    className="block py-1 hover:text-primary"
-                  >
-                    Pre-Workout Explosive (36)
-                  </Link>
-                  <Link
-                    to="/gomzi-supplement/protein-bars-snacks"
-                    onClick={() => setMobileDrawerOpen(false)}
-                    className="block py-1 hover:text-primary"
-                  >
-                    High Protein Peanut Butter (20)
-                  </Link>
-                  <Link
-                    to="/gomzi-supplement/wellness-health"
-                    onClick={() => setMobileDrawerOpen(false)}
-                    className="block py-1 hover:text-primary"
-                  >
-                    Apex Multivitamins &amp; Wellness
-                  </Link>
+                    <PhoneCall size={14} className="text-primary" />
+                    <span>{contact.phone}</span>
+                  </a>
                 </div>
               </div>
 
-
+              {/* Drawer Footer Account Button */}
+              <div className="p-4 border-t border-stone-200 bg-[#fbf8f5] flex-shrink-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
+                <button
+                  onClick={() => {
+                    navigate(isAuthenticated ? "/profile" : "/login");
+                    setMobileDrawerOpen(false);
+                  }}
+                  className="w-full py-2.5 bg-primary hover:bg-hover text-white text-xs font-bold rounded-lg uppercase tracking-wider cursor-pointer shadow-sm transition-colors"
+                >
+                  {isAuthenticated ? (userDisplayName !== "Account" ? `Hi, ${userDisplayName}` : "My Account") : "Login / Register"}
+                </button>
+              </div>
             </div>
-
-            <div className="p-4 border-t border-stone-200 bg-[#fbf8f5]">
-              <button
-                onClick={() => {
-                  navigate(isAuthenticated ? "/profile" : "/login");
-                  setMobileDrawerOpen(false);
-                }}
-                className="w-full py-2.5 bg-primary text-white text-xs font-bold rounded-lg uppercase tracking-wider cursor-pointer"
-              >
-                {isAuthenticated ? (userDisplayName !== "Account" ? `Hi, ${userDisplayName}` : "My Account") : "Login / Register"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </header>
   );
 }

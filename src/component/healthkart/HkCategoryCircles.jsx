@@ -58,13 +58,13 @@ export function PopularCategories({ categories, loading = false, error = "", onR
   const visibleSlides = (maximum) => Math.max(1, Math.min(displayCategories.length, maximum));
 
   return (
-    <section className="w-full py-6 sm:py-9 md:py-12 border-b border-stone-200/70 bg-gradient-to-b from-[#FAF7F3] via-[#FFFFFF] to-[#FAF6F2] font-sans relative overflow-hidden">
+    <section className="w-full py-4 sm:py-6 md:py-8 border-b border-stone-200/70 bg-gradient-to-b from-[#FAF7F3] via-[#FFFFFF] to-[#FAF6F2] font-sans relative overflow-hidden">
       <div className="max-w-[1280px] mx-auto px-3 sm:px-5 md:px-6 relative z-10">
         
         {/* ── Modern Responsive Header ── */}
-        <div className="flex flex-row items-end justify-between gap-3 mb-5 sm:mb-7 md:mb-9">
+        <div className="flex flex-row items-end justify-between gap-3 mb-3 sm:mb-5 md:mb-6">
           <div className="max-w-[70%] sm:max-w-xl">
-            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] sm:text-[10px] md:text-[11px] font-black uppercase tracking-wider mb-1 sm:mb-2 shadow-2xs">
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] sm:text-[10px] md:text-[11px] font-black uppercase tracking-wider mb-1 sm:mb-1.5 shadow-2xs">
               <Zap size={11} className="text-primary fill-primary/30 sm:w-3 sm:h-3" />
               <span>Explore By Fitness Goal</span>
             </div>
@@ -116,7 +116,7 @@ export function PopularCategories({ categories, loading = false, error = "", onR
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"
           >
             {[0, 1, 2, 3, 4, 5].map((index) => (
-              <div key={index} className="h-[265px] sm:h-[295px] md:h-[315px] lg:h-[320px] rounded-[20px] sm:rounded-[24px] bg-stone-100/50 p-3 sm:p-4 animate-pulse" />
+              <div key={index} className="h-[270px] sm:h-[295px] md:h-[315px] lg:h-[330px] xl:h-[340px] rounded-[20px] sm:rounded-[24px] bg-stone-100/50 p-3 sm:p-4 animate-pulse" />
             ))}
           </div>
         ) : error ? (
@@ -155,7 +155,7 @@ export function PopularCategories({ categories, loading = false, error = "", onR
                 1024: { slidesPerView: visibleSlides(5), spaceBetween: 16 },
                 1280: { slidesPerView: visibleSlides(5.8), spaceBetween: 18 },
               }}
-              className="py-2.5 sm:py-3"
+              className="py-1.5 sm:py-2"
             >
               {displayCategories.map((cat) => {
                 const badge = getBadge(cat.tag);
@@ -166,11 +166,11 @@ export function PopularCategories({ categories, loading = false, error = "", onR
                   <SwiperSlide key={cat.id} className="!h-auto flex">
                     <CategoryLink
                       href={cat.url}
-                      className="group relative flex flex-col justify-between w-full h-[265px] sm:h-[295px] md:h-[315px] lg:h-[320px] min-h-[265px] sm:min-h-[295px] md:min-h-[315px] lg:min-h-[320px] max-h-[265px] sm:max-h-[295px] md:max-h-[315px] lg:max-h-[320px] rounded-[18px] sm:rounded-[22px] md:rounded-[24px] p-2.5 sm:p-3.5 md:p-4 bg-white hover:bg-gradient-to-b hover:from-white hover:via-[#FFFDFB] hover:to-[#FAF4EE] border border-stone-200/90 hover:border-primary/50 shadow-[0_3px_14px_rgba(42,23,17,0.04)] hover:shadow-[0_14px_28px_rgba(149,68,44,0.14)] transition-all duration-300 cursor-pointer overflow-hidden box-border select-none"
+                      className="group relative flex flex-col justify-between w-full h-[270px] sm:h-[295px] md:h-[315px] lg:h-[330px] xl:h-[340px] min-h-[270px] sm:min-h-[295px] md:min-h-[315px] lg:min-h-[330px] xl:min-h-[340px] max-h-[270px] sm:max-h-[295px] md:max-h-[315px] lg:max-h-[330px] xl:max-h-[340px] rounded-[18px] sm:rounded-[22px] md:rounded-[24px] p-2.5 sm:p-3 md:p-3.5 bg-white hover:bg-gradient-to-b hover:from-white hover:via-[#FFFDFB] hover:to-[#FAF4EE] border border-stone-200/90 hover:border-primary/50 shadow-[0_3px_14px_rgba(42,23,17,0.04)] hover:shadow-[0_14px_28px_rgba(149,68,44,0.14)] transition-all duration-300 cursor-pointer overflow-hidden box-border select-none"
                     >
                       {/* Ambient Accent Glow on Hover */}
                       <div
-                        className="absolute -top-10 -right-10 w-24 h-24 rounded-full opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 pointer-events-none"
+                        className="absolute -top-10 -right-10 w-28 h-28 rounded-full opacity-0 group-hover:opacity-25 blur-xl transition-opacity duration-500 pointer-events-none"
                         style={{ backgroundColor: cat.accent || "#95442c" }}
                       />
 
@@ -194,23 +194,23 @@ export function PopularCategories({ categories, loading = false, error = "", onR
                         )}
                       </div>
 
-                      {/* ── Fixed Circular Cameo Stage Slot (100% Clipped & Normalized) ── */}
-                      <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-[136px] lg:h-[136px] mx-auto flex items-center justify-center my-auto shrink-0">
-                        {/* Ambient Radial Spotlight */}
+                      {/* ── Fixed Square Rounded Stage Slot (Shows full square lifestyle image with soft rounded corners) ── */}
+                      <div className="relative w-28 h-28 min-[380px]:w-32 min-[380px]:h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 xl:w-[160px] xl:h-[160px] mx-auto flex items-center justify-center my-auto shrink-0">
+                        {/* Ambient Accent Glow on Hover */}
                         <div
-                          className="absolute -inset-1 rounded-full opacity-40 group-hover:opacity-90 blur-md transition-all duration-500 pointer-events-none"
+                          className="absolute -inset-1 rounded-2xl opacity-25 group-hover:opacity-80 blur-md transition-all duration-500 pointer-events-none"
                           style={{
-                            background: `radial-gradient(circle, ${cat.accent ? cat.accent + "33" : "rgba(149,68,44,0.18)"} 0%, rgba(255,255,255,0) 70%)`,
+                            background: `radial-gradient(circle, ${cat.accent ? cat.accent + "40" : "rgba(149,68,44,0.22)"} 0%, rgba(255,255,255,0) 70%)`,
                           }}
                         />
 
-                        {/* Circular Masked Stage: Clips ANY square or lifestyle background cleanly */}
-                        <div className="relative w-full h-full rounded-full overflow-hidden border border-stone-200/80 group-hover:border-primary/40 transition-all duration-300 shadow-[inset_0_2px_8px_rgba(42,23,17,0.06)] bg-gradient-to-b from-[#FBF8F5] via-[#F6EFE9] to-[#EFE4DA] group-hover:from-[#FFF6F0] group-hover:via-[#FDEEE4] group-hover:to-[#F9DEC8] flex items-center justify-center p-2">
+                        {/* Square Rounded Stage Container */}
+                        <div className="relative w-full h-full rounded-2xl sm:rounded-[20px] overflow-hidden border border-stone-200/90 group-hover:border-primary/50 transition-all duration-300 shadow-[0_3px_12px_rgba(42,23,17,0.06)] group-hover:shadow-[0_8px_22px_rgba(149,68,44,0.16)] bg-gradient-to-b from-[#FBF8F5] via-[#F6EFE9] to-[#EFE4DA] flex items-center justify-center p-0.5">
                           <img
                             src={cat.image}
                             alt={cat.title}
                             loading="lazy"
-                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300 ease-out pointer-events-none drop-shadow-[0_6px_12px_rgba(42,23,17,0.18)]"
+                            className="w-full h-full object-cover rounded-[14px] sm:rounded-[18px] group-hover:scale-106 transition-transform duration-300 ease-out pointer-events-none"
                             onError={(e) => {
                               if (!e.currentTarget.dataset.fallback) {
                                 e.currentTarget.dataset.fallback = "true";
@@ -221,7 +221,7 @@ export function PopularCategories({ categories, loading = false, error = "", onR
                         </div>
 
                         {/* Ground Contact Shadow */}
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-12 sm:w-14 md:w-16 h-1 sm:h-1.5 rounded-full bg-stone-900/15 blur-[2px] group-hover:w-18 transition-all duration-300" />
+                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3/4 h-2 rounded-full bg-stone-900/12 blur-[3px] group-hover:w-5/6 transition-all duration-300" />
                       </div>
 
                       {/* ── Fixed 2-Tier Title & Subtitle Slot (Consistent Baseline) ── */}
