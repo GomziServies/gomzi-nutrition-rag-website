@@ -11,7 +11,8 @@
     "check": "npm run lint && npm run build && npm test",
     "preview": "vite preview",
     "content:generate": "node scripts/generate-website-content.mjs",
-    "prebuild": "npm run content:generate"
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "prebuild": "npm run content:generate && npm run sitemap"
   },
   "dependencies": {
     "@react-oauth/google": "^0.13.5",

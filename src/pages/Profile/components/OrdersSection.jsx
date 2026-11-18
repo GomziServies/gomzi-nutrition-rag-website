@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { getOrdersApi } from "../../../api/order.api";
+import { getOrdersApi, cancelOrderApi } from "../../../api/order.api";
 import { Link } from "react-router-dom";
 import { OrderListSkeleton } from "../../../component/common/LoadingSkeletons";
 
@@ -11,6 +11,7 @@ function OrdersSection() {
   const [openOrder, setOpenOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [cancellingId, setCancellingId] = useState(null);
 
   async function loadOrders() {
     try {
@@ -21,6 +22,19 @@ function OrdersSection() {
       setError("We couldn't load your orders. Please try again.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleCancelOrder(orderId) {
+    if (!window.confirm("Are you sure you want to cancel this order?")) return;
+    try {
+      setCancellingId(orderId);
+      await cancelOrderApi({ order_id: orderId, reason: "Cancelled by Customer" });
+      await loadOrders();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to cancel order. Please contact support.");
+    } finally {
+      setCancellingId(null);
     }
   }
 
@@ -68,6 +82,14 @@ function OrdersSection() {
           <>
             {orders.map((order, index) => {
               const isOpen = openOrder === order._id;
+              const isCancelled =
+                order.status === "CANCELLED" ||
+                order.user_meal_product?.shiprocket?.current_status === "CANCELLED" ||
+                order.user_meal_product?.tracking?.some((t) => t.shipment_status === "CANCELLED");
+              const isDispatched = order.user_meal_product?.tracking?.some((t) =>
+                ["SHIPPED", "DISPATCHED", "OUT FOR DELIVERY", "DELIVERED"].includes(t.shipment_status)
+              );
+              const canCancel = !isCancelled && !isDispatched && order.status !== "CANCELLED";
 
               return (
                 <div
@@ -128,12 +150,18 @@ function OrdersSection() {
                         <div>
                           <span
                             className={`px-3 py-1.5 rounded-full text-xs md:text-sm font-semibold ${
-                              order.status === "SUCCESS"
+                              isCancelled
+                                ? "bg-red-100 text-red-700"
+                                : order.status === "SUCCESS"
                                 ? "bg-green-100 text-green-700"
                                 : "bg-yellow-100 text-yellow-700"
                             }`}
                           >
-                            {order.purchase_mode === "Cash On Delivery" && order.status === "SUCCESS" ? "Placed · Pay on delivery" : order.status}
+                            {isCancelled
+                              ? "Cancelled"
+                              : order.purchase_mode === "Cash On Delivery" && order.status === "SUCCESS"
+                              ? "Placed · Pay on delivery"
+                              : order.status}
                           </span>
                         </div>
 
@@ -222,10 +250,11 @@ function OrdersSection() {
                         <div className="bg-gray-50 rounded-2xl p-4">
                           <p className="text-gray-500 text-sm">Order Status</p>
 
-                          <h3 className="font-bold text-lg mt-2 text-primary">
-                            {
-                              order.user_meal_product?.tracking?.filter((entry) => entry.status !== false).at(-1)?.shipment_status || (order.status === "SUCCESS" ? "PLACED" : order.status)
-                            }
+                          <h3 className={`font-bold text-lg mt-2 ${isCancelled ? "text-red-600" : "text-primary"}`}>
+                            {isCancelled
+                              ? "CANCELLED"
+                              : order.user_meal_product?.tracking?.filter((entry) => entry.status !== false).at(-1)?.shipment_status ||
+                                (order.status === "SUCCESS" ? "PLACED" : order.status)}
                           </h3>
                         </div>
                       </div>
@@ -244,81 +273,143 @@ function OrdersSection() {
                         </p>
                       </div>
 
-                      {/* TRACKER */}
+                      {/* TRACKER / CANCELLED STATE */}
                       <div className="mt-10">
-                        <h3 className="text-xl font-bold mb-6">
-                          Order Tracking
-                        </h3>
-
-                        <div className="overflow-x-auto pb-3 scrollbar-hide">
-                        <div className="flex min-w-[620px] items-center justify-between relative">
-                          <div className="absolute top-5 left-0 w-full h-1 bg-gray-200"></div>
-                          {(() => {
-                            const trackingSteps = [
-                              "PLACED",
-                              "CONFIRMED",
-                              "SHIPPED",
-                              "OUT FOR DELIVERY",
-                              "DELIVERED",
-                            ];
-                            const trackingList = order.user_meal_product?.tracking || [];
-                            const highestIndex = Math.max(
-                              -1,
-                              ...trackingList.map((t) => {
-                                const statusName = t.shipment_status === 'DISPATCHED' ? 'SHIPPED' : t.shipment_status;
-                                return trackingSteps.indexOf(statusName);
-                              })
-                            );
-
-                            return (
-                              <>
-                                {highestIndex >= 0 && (
-                                  <div
-                                    className="absolute top-5 left-0 h-1 bg-green-500 transition-all duration-300"
-                                    style={{
-                                      width: `${(highestIndex / (trackingSteps.length - 1)) * 100}%`,
-                                    }}
-                                  ></div>
+                        {isCancelled ? (
+                          <div className="bg-red-50 border border-red-200 rounded-2xl p-6">
+                            <div className="flex items-start gap-4">
+                              <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-xl flex-shrink-0">
+                                ✕
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-bold text-red-800 text-base md:text-lg">
+                                  This order has been cancelled
+                                </h4>
+                                <p className="text-red-600 text-sm mt-1 leading-relaxed">
+                                  {order.purchase_mode === "Cash On Delivery"
+                                    ? "Your order and courier dispatch have been cancelled. No payment was collected."
+                                    : "Your order and courier dispatch have been cancelled. If your payment was deducted online, the refund will be credited to your original payment method in 3–5 working days."}
+                                </p>
+                                {order.notes?.cancelled_reason && (
+                                  <p className="text-xs text-red-500 mt-2 font-medium">
+                                    Reason: {order.notes.cancelled_reason}
+                                  </p>
                                 )}
-                                {trackingSteps.map((step, index) => {
-                                  const completed =
-                                    highestIndex >= index ||
-                                    trackingList.some(
-                                      (t) =>
-                                        t.shipment_status === step ||
-                                        (step === "SHIPPED" && t.shipment_status === "DISPATCHED")
-                                    );
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                              <h3 className="text-xl font-bold">
+                                Order Tracking
+                              </h3>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                {(order.user_meal_product?.shiprocket?.courier_name || order.notes?.courier_name) && (
+                                  <span className="bg-blue-50 text-blue-700 border border-blue-200 text-xs px-3 py-1 rounded-full font-medium">
+                                    Courier: {order.user_meal_product?.shiprocket?.courier_name || order.notes?.courier_name}
+                                  </span>
+                                )}
+                                {(order.user_meal_product?.shiprocket?.awb_code || order.notes?.awb_code) && (
+                                  <span className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full font-mono font-medium">
+                                    AWB: {order.user_meal_product?.shiprocket?.awb_code || order.notes?.awb_code}
+                                  </span>
+                                )}
+                                {(order.user_meal_product?.shiprocket?.tracking_url || order.notes?.tracking_url || order.user_meal_product?.shiprocket?.awb_code || order.notes?.awb_code) && (
+                                  <a
+                                    href={order.user_meal_product?.shiprocket?.tracking_url || order.notes?.tracking_url || `https://shiprocket.co/tracking/${order.user_meal_product?.shiprocket?.awb_code || order.notes?.awb_code}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex items-center gap-1.5 bg-primary text-white text-xs px-3.5 py-1.5 rounded-full font-medium hover:bg-hover transition shadow-sm"
+                                  >
+                                    <span>Track Courier Live</span>
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                  </a>
+                                )}
+                                {canCancel && (
+                                  <button
+                                    type="button"
+                                    disabled={cancellingId === order._id}
+                                    onClick={() => handleCancelOrder(order._id)}
+                                    className="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-full font-medium text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition"
+                                  >
+                                    {cancellingId === order._id ? "Cancelling..." : "Cancel Order"}
+                                  </button>
+                                )}
+                              </div>
+                            </div>
 
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="relative z-10 flex flex-col items-center flex-1"
-                                    >
+                            <div className="overflow-x-auto pb-3 scrollbar-hide">
+                            <div className="flex min-w-[620px] items-center justify-between relative">
+                              <div className="absolute top-5 left-0 w-full h-1 bg-gray-200"></div>
+                              {(() => {
+                                const trackingSteps = [
+                                  "PLACED",
+                                  "CONFIRMED",
+                                  "SHIPPED",
+                                  "OUT FOR DELIVERY",
+                                  "DELIVERED",
+                                ];
+                                const trackingList = order.user_meal_product?.tracking || [];
+                                const highestIndex = Math.max(
+                                  -1,
+                                  ...trackingList.map((t) => {
+                                    const statusName = t.shipment_status === 'DISPATCHED' ? 'SHIPPED' : t.shipment_status;
+                                    return trackingSteps.indexOf(statusName);
+                                  })
+                                );
+
+                                return (
+                                  <>
+                                    {highestIndex >= 0 && (
                                       <div
-                                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 transition-all duration-200 ${
-                                          completed
-                                            ? "bg-green-500 border-green-500 text-white"
-                                            : "bg-white border-gray-300 text-gray-400"
-                                        }`}
-                                      >
-                                        ✓
-                                      </div>
+                                        className="absolute top-5 left-0 h-1 bg-green-500 transition-all duration-300"
+                                        style={{
+                                          width: `${(highestIndex / (trackingSteps.length - 1)) * 100}%`,
+                                        }}
+                                      ></div>
+                                    )}
+                                    {trackingSteps.map((step, index) => {
+                                      const completed =
+                                        highestIndex >= index ||
+                                        trackingList.some(
+                                          (t) =>
+                                            t.shipment_status === step ||
+                                            (step === "SHIPPED" && t.shipment_status === "DISPATCHED")
+                                        );
 
-                                      <p
-                                        className={`mt-3 text-sm text-center font-semibold ${
-                                          completed ? "text-black" : "text-gray-400"
-                                        }`}
-                                      >
-                                        {step}
-                                      </p>
-                                    </div>
-                                  );
-                                })}
-                              </>
-                            );
-                          })()}
-                        </div>
-                        </div>
+                                      return (
+                                        <div
+                                          key={index}
+                                          className="relative z-10 flex flex-col items-center flex-1"
+                                        >
+                                          <div
+                                            className={`w-12 h-12 rounded-full flex items-center justify-center font-bold border-4 transition-all duration-200 ${
+                                              completed
+                                                ? "bg-green-500 border-green-500 text-white"
+                                                : "bg-white border-gray-300 text-gray-400"
+                                            }`}
+                                          >
+                                            ✓
+                                          </div>
+
+                                          <p
+                                            className={`mt-3 text-sm text-center font-semibold ${
+                                              completed ? "text-black" : "text-gray-400"
+                                            }`}
+                                          >
+                                            {step}
+                                          </p>
+                                        </div>
+                                      );
+                                    })}
+                                  </>
+                                );
+                              })()}
+                            </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

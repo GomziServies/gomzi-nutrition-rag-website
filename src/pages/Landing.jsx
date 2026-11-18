@@ -3,6 +3,7 @@ import React from "react";
 import SEO from "../component/SEO";
 import { useWebsiteContent } from "../content/WebsiteContent";
 import HkHeroBanner from "../component/healthkart/HkHeroBanner";
+import HkTopBar from "../component/healthkart/HkTopBar";
 import HkCategoryCircles from "../component/healthkart/HkCategoryCircles";
 import HkStealDeals from "../component/healthkart/HkStealDeals";
 import HkFlashDeals from "../component/healthkart/HkFlashDeals";
@@ -14,16 +15,15 @@ import HkWhyGomzi from "../component/healthkart/HkWhyGomzi";
 import HkCustomerReviews from "../component/healthkart/HkCustomerReviews";
 import HkSeoAccordion from "../component/healthkart/HkSeoAccordion";
 import BrandRangeSection from "../component/ui/BrandRangeSection";
-import BlackFeatureBar from "../component/common/Black-Feature-Bar";
+import CertificationsBar from "../component/common/CertificationsBar";
 
 const DEFAULT_SECTIONS = [
   'hero', 'categories', 'deals', 'flash', 'static-banner',
-  'bestsellers', 'combos', 'promo-banner', 'whey', 'stacks',
+  'bestsellers', 'combos', 'promo-banner', 'whey',
   'nutrition-banner', 'creatine', 'brands', 'quality', 'why', 'reviews', 'seo'
 ].map(id => ({ id, enabled: true }));
 const CATEGORY_SHOWCASES = [
   { id: 'whey', title: 'Whey Protein & Isolate Range', category: 'Whey Protein', categorySlug: 'whey-protein', subtitle: 'Explore whey proteins and isolates for your everyday training routine.' },
-  { id: 'stacks', title: 'Combos & Value Stacks', category: 'Combos & Stacks', categorySlug: 'combos-stacks', subtitle: 'Explore supplement bundles for your goals and routine.' },
   { id: 'creatine', title: 'Creatine & Pre-Workout Powerhouse', category: 'Creatine', categorySlug: 'creatine', subtitle: 'Discover creatine formulas to support your training.' },
 ];
 
@@ -35,15 +35,24 @@ const Landing = () => {
     return settings ? <HkCategoryShowcase key={id} {...settings} /> : null;
   };
   const components = {
-    hero: <HkHeroBanner />, categories: <HkCategoryCircles />, deals: <HkStealDeals />,
-    flash: <HkFlashDeals />, 'static-banner': <HkManagedBannerAd />,
-    bestsellers: <HkBestSellersTabbed />, combos: <HkComboStackBuilder />,
+    hero: (
+      <>
+        <HkHeroBanner />
+        <HkTopBar />
+      </>
+    ),
+    categories: <HkCategoryCircles />,
+    deals: <HkStealDeals />,
+    flash: <HkFlashDeals />,
+    'static-banner': <HkManagedBannerAd />,
+    bestsellers: <HkBestSellersTabbed />,
+    combos: <HkComboStackBuilder />,
     'promo-banner': <HkManagedBannerAd source="promo" />,
-    whey: showcase('whey'), stacks: showcase('stacks'),
+    whey: showcase('whey'),
     'nutrition-banner': <HkManagedBannerAd source="nutrition" />,
     creatine: showcase('creatine'),
     brands: <BrandRangeSection />,
-    quality: <BlackFeatureBar />,
+    quality: <CertificationsBar />,
     why: <HkWhyGomzi />,
     reviews: <HkCustomerReviews />,
     seo: <HkSeoAccordion />,
@@ -57,7 +66,7 @@ const Landing = () => {
         description="Shop authentic whey proteins, mass gainers, creatine, pre-workouts, and clean supplements direct from Gomzi Nutrition. Explore genuine products with verifiable batch reports."
       />
 
-      {sections.filter(section => section.enabled && components[section.id]).map(section => <React.Fragment key={section.id}>{components[section.id]}</React.Fragment>)}
+      {sections.filter(section => section.id !== 'stacks' && section.enabled && components[section.id]).map(section => <React.Fragment key={section.id}>{components[section.id]}</React.Fragment>)}
     </div>
   );
 };

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37" />
+      <stop offset="50%" stop-color="#f5e18a" />
+      <stop offset="100%" stop-color="#aa8214" />
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3d29" />
+      <stop offset="100%" stop-color="#0f2115" />
+    </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.15" />
+    </filter>
+    <!-- Circular text paths -->
+    <path id="topArc" d="M 32,120 A 88,88 0 1,1 208,120" fill="none" />
+    <path id="bottomArc" d="M 208,120 A 88,88 0 0,1 32,120" fill="none" />
+  </defs>
+
+  <!-- Outer Fluted Certificate Seal Edge -->
+  <g filter="url(#subtleShadow)">
+    <circle cx="120" cy="120" r="114" fill="#f8faf4" stroke="#89a842" stroke-width="2.5" />
+    <circle cx="120" cy="120" r="107" fill="none" stroke="#d4af37" stroke-width="1.2" stroke-dasharray="3,2" />
+    <circle cx="120" cy="120" r="102" fill="none" stroke="#1e3d29" stroke-width="1.8" />
+  </g>
+
+  <!-- Decorative Ring Background -->
+  <circle cx="120" cy="120" r="99" fill="#f2f6ea" />
+
+  <!-- Inner Dark Blue/Green Medallion -->
+  <circle cx="120" cy="120" r="68" fill="url(#greenGrad)" stroke="#d4af37" stroke-width="2.2" />
+
+  <!-- Arched Text Top -->
+  <text font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9.5" font-weight="700" fill="#1b3624" letter-spacing="1.5">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">
+      GENERAL PRODUCT SAFETY REGULATION
+    </textPath>
+  </text>
+
+  <!-- Arched Text Bottom -->
+  <text font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.8" font-weight="600" fill="#2d4a36" letter-spacing="1.8">
+    <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">
+      ★ EU COMPLIANT • (EU) 2023/988 ★
+    </textPath>
+  </text>
+
+  <!-- Shield Shape inside Center -->
+  <path d="M 120,62 C 138,62 147,70 147,82 C 147,106 120,119 120,119 C 120,119 93,106 93,82 C 93,70 102,62 120,62 Z" fill="#152b1d" stroke="url(#goldGrad)" stroke-width="1.8" />
+
+  <!-- EU Stars Arch Inside Shield (5 gold stars) -->
+  <g fill="#f5e18a">
+    <polygon points="120,67 121.5,70.5 125,70.5 122,72.5 123.2,76 120,73.8 116.8,76 118,72.5 115,70.5 118.5,70.5" transform="scale(0.7) translate(51, 30)" />
+    <polygon points="120,67 121.5,70.5 125,70.5 122,72.5 123.2,76 120,73.8 116.8,76 118,72.5 115,70.5 118.5,70.5" transform="scale(0.55) translate(80, 52)" />
+    <polygon points="120,67 121.5,70.5 125,70.5 122,72.5 123.2,76 120,73.8 116.8,76 118,72.5 115,70.5 118.5,70.5" transform="scale(0.55) translate(116, 52)" />
+  </g>
+
+  <!-- GPSR Acronym -->
+  <text x="120" y="103" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="900" fill="#ffffff" letter-spacing="2">
+    GPSR
+  </text>
+
+  <!-- Ribbon / Banner across lower center -->
+  <g>
+    <rect x="74" y="128" width="92" height="18" rx="3" fill="#89a842" stroke="#ffffff" stroke-width="1.2" />
+    <text x="120" y="141" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" fill="#ffffff" letter-spacing="1.2">
+      EU SAFETY CERTIFIED
+    </text>
+  </g>
+
+  <!-- Trust Seal Guarantee Stars -->
+  <circle cx="48" cy="120" r="3" fill="#89a842" />
+  <circle cx="192" cy="120" r="3" fill="#89a842" />
+</svg>

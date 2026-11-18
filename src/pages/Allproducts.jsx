@@ -18,7 +18,6 @@ const extraCategories = {
   "accessories": "Accessories",
   "peanut-butter": "Protein Bars & Snacks",
   "protein-bars-snacks": "Protein Bars & Snacks",
-  "combos-stacks": "Combos & Stacks",
 };
 
 function getCategoryPage(slug, queryCategory, categories, categoryConfig) {

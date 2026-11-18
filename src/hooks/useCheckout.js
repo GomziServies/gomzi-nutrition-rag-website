@@ -58,6 +58,13 @@ const useCheckout = (coupon) => {
       ...prev,
       [field]: value,
     }));
+    try {
+      if (field === "mobile" && value) localStorage.setItem("rag_last_phone", String(value).trim());
+      if (field === "email" && value) localStorage.setItem("rag_last_email", String(value).trim());
+      if (field === "first_name" && value) localStorage.setItem("rag_last_name", String(value).trim());
+    } catch {
+      // storage unavailable
+    }
   };
 
   const updatePaymentMode = (method) => {
