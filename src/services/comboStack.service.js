@@ -80,6 +80,12 @@ export const DEFAULT_STACKS = [
   },
 ];
 
+export const DEFAULT_HEADER_CONFIG = {
+  eyebrow: "BETTER TOGETHER",
+  title: "Your routine. Your stack.",
+  subtitle: "Handpicked product essentials at special bundle pricing. Add them in one step.",
+};
+
 export function normalizeComboStacks(data) {
   const list = Array.isArray(data?.comboStacks) ? data.comboStacks : [];
   const valid = list
@@ -117,7 +123,9 @@ export function normalizeComboStacks(data) {
       };
     });
 
-  return valid.length > 0 ? valid : DEFAULT_STACKS;
+  const result = valid.length > 0 ? valid : DEFAULT_STACKS;
+  result.headerConfig = data?.headerConfig || DEFAULT_HEADER_CONFIG;
+  return result;
 }
 
 export async function fetchComboStacks({ signal } = {}) {

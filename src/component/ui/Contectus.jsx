@@ -139,7 +139,17 @@ const ContactSection = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
             {/* WhatsApp */}
             <a
-              href={contact.whatsappUrl}
+              href={
+                contact.whatsappWithText
+                  ? contact.whatsappWithText(
+                      "Hello Gomzi Nutrition! I am reaching out from your Contact Us page and would like to inquire about your supplements and services."
+                    )
+                  : `${contact.whatsappUrl}?text=${encodeURIComponent(
+                      "Hello Gomzi Nutrition! I am reaching out from your Contact Us page and would like to inquire about your supplements and services."
+                    )}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
               className="group bg-white border border-border rounded-2xl p-6 hover:border-primary hover:shadow-md transition-all"
             >
               <div className="flex items-start gap-4 sm:gap-5">

@@ -14,3 +14,6 @@ export const createOrderApi = (data) =>
   api.post("/user/v1/meals/create-order", data);
 export const getTrackingOrderApi = () =>
   api.get("/user/v1/meals/get-product-tracking");
+
+export const cancelOrderApi = (data) =>
+  api.post("/user/v1/orders/cancel", data);

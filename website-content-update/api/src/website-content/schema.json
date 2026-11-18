@@ -827,26 +827,19 @@
       "type": "text",
       "default": "Apply"
     },
-    "component.checkout.CheckoutSummary.text.78499492cb7e": {
+    "component.checkout.CheckoutSummary.text.49c58c77fe25": {
       "source": "src/component/checkout/CheckoutSummary.jsx",
       "group": "Checkout / Checkout Summary",
-      "label": "✓ Coupon \"",
+      "label": "Coupon \"",
       "type": "text",
-      "default": "✓ Coupon \""
+      "default": "Coupon \""
     },
-    "component.checkout.CheckoutSummary.text.a70844a5764d": {
+    "component.checkout.CheckoutSummary.text.219f7107a24a": {
       "source": "src/component/checkout/CheckoutSummary.jsx",
       "group": "Checkout / Checkout Summary",
-      "label": "\" applied",
+      "label": "\" applied successfully",
       "type": "text",
-      "default": "\" applied"
-    },
-    "component.checkout.CheckoutSummary.text.9b1c661fa594": {
-      "source": "src/component/checkout/CheckoutSummary.jsx",
-      "group": "Checkout / Checkout Summary",
-      "label": "Note: Discount applies strictly to eligible products in your order.",
-      "type": "text",
-      "default": "Note: Discount applies strictly to eligible products in your order."
+      "default": "\" applied successfully"
     },
     "component.checkout.CheckoutSummary.text.dea8335b6cd3": {
       "source": "src/component/checkout/CheckoutSummary.jsx",
@@ -1019,9 +1012,9 @@
       "type": "text",
       "default": "Need help? Contact us"
     },
-    "component.common.Black-Feature-Bar.section.bf31e6128301": {
-      "source": "src/component/common/Black-Feature-Bar.jsx",
-      "group": "Website sections / Black Feature Bar",
+    "component.common.CertificationsBar.section.440e2fda2f39": {
+      "source": "src/component/common/CertificationsBar.jsx",
+      "group": "Website sections / Certifications Bar",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
@@ -1152,6 +1145,41 @@
       "type": "toggle",
       "default": true
     },
+    "component.CookieConsentBanner.text.a6155e5405e1": {
+      "source": "src/component/CookieConsentBanner.jsx",
+      "group": "Website sections / Cookie Consent Banner",
+      "label": "We Value Your Privacy & Cookies",
+      "type": "text",
+      "default": "We Value Your Privacy & Cookies"
+    },
+    "component.CookieConsentBanner.text.1fab07136d62": {
+      "source": "src/component/CookieConsentBanner.jsx",
+      "group": "Website sections / Cookie Consent Banner",
+      "label": "We use cookies to analyze store traffic, remember your preferences, and deliver personalized su",
+      "type": "text",
+      "default": "We use cookies to analyze store traffic, remember your preferences, and deliver personalized supplement recommendations."
+    },
+    "component.CookieConsentBanner.attribute-title.48845bff334a": {
+      "source": "src/component/CookieConsentBanner.jsx",
+      "group": "Website sections / Cookie Consent Banner",
+      "label": "title: Dismiss",
+      "type": "text",
+      "default": "Dismiss"
+    },
+    "component.CookieConsentBanner.text.ec7376b2b2d0": {
+      "source": "src/component/CookieConsentBanner.jsx",
+      "group": "Website sections / Cookie Consent Banner",
+      "label": "Reject Non-Essential",
+      "type": "text",
+      "default": "Reject Non-Essential"
+    },
+    "component.CookieConsentBanner.text.3172d6f12b8f": {
+      "source": "src/component/CookieConsentBanner.jsx",
+      "group": "Website sections / Cookie Consent Banner",
+      "label": "Accept All Cookies",
+      "type": "text",
+      "default": "Accept All Cookies"
+    },
     "component.healthkart.HkBannerAds.attribute-aria-label.7d649bd18fbc": {
       "source": "src/component/healthkart/HkBannerAds.jsx",
       "group": "Home / Banner Ads",
@@ -1197,11 +1225,6 @@
           "category": "Whey Protein"
         },
         {
-          "id": "combos",
-          "label": "Combos & Stacks",
-          "category": "Combos & Stacks"
-        },
-        {
           "id": "creatine",
           "label": "Creatine",
           "category": "Creatine"
@@ -1228,7 +1251,7 @@
         }
       ]
     },
-    "component.healthkart.HkBestSellersTabbed.section.f7c08cbf489b": {
+    "component.healthkart.HkBestSellersTabbed.section.9cbfc3c153a2": {
       "source": "src/component/healthkart/HkBestSellersTabbed.jsx",
       "group": "Home / Best Sellers Tabbed",
       "label": "Show section: Explore supplements by category",
@@ -1291,7 +1314,7 @@
       "type": "text",
       "default": "No products found in this category."
     },
-    "component.healthkart.HkCategoryCircles.section.1f37db922da1": {
+    "component.healthkart.HkCategoryCircles.section.04ff14276199": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
       "label": "Show section: Explore By Fitness Goal",
@@ -1396,7 +1419,7 @@
       "type": "text",
       "default": "Explore Range"
     },
-    "component.healthkart.HkCategoryShowcase.section.023735e65055": {
+    "component.healthkart.HkCategoryShowcase.section.60025bddd666": {
       "source": "src/component/healthkart/HkCategoryShowcase.jsx",
       "group": "Home / Category Showcase",
       "label": "Show section: Products",
@@ -1536,10 +1559,10 @@
       "type": "text",
       "default": "Direct bundle pricing applied. Verified inventory guaranteed at checkout."
     },
-    "component.healthkart.HkComboStackBuilder.section.746adc3576f7": {
+    "component.healthkart.HkComboStackBuilder.section.b933ddb19b17": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
-      "label": "Show section: Better together",
+      "label": "Show section: Combo 1",
       "type": "toggle",
       "default": true
     },
@@ -1668,7 +1691,7 @@
       "type": "text",
       "default": "Purchased: "
     },
-    "component.healthkart.HkFlashDeals.section.d2675c478d2c": {
+    "component.healthkart.HkFlashDeals.section.0ee372d0a0fe": {
       "source": "src/component/healthkart/HkFlashDeals.jsx",
       "group": "Home / Flash Deals",
       "label": "Show section: Flash Deals & Just Launched",
@@ -2519,25 +2542,25 @@
                   "slug": "mass-gainer"
                 },
                 {
-                  "name": "Bulk Up Muscle Combos",
-                  "slug": "combos-stacks"
+                  "name": "Lean Muscle Gainers",
+                  "slug": "mass-gainer"
                 }
               ]
             },
             {
-              "title": "Combos & Bundles",
+              "title": "Weight Support",
               "items": [
                 {
-                  "name": "Mass Gainer + Creatine Stack",
-                  "slug": "combos-stacks"
+                  "name": "Complex Carbohydrates",
+                  "slug": "mass-gainer"
                 },
                 {
-                  "name": "Whey + Shaker Combo Pack",
-                  "slug": "combos-stacks"
+                  "name": "Digestive Enzyme Blends",
+                  "slug": "mass-gainer"
                 },
                 {
-                  "name": "Ultimate Bulking Stack",
-                  "slug": "combos-stacks"
+                  "name": "High-Calorie Recovery",
+                  "slug": "mass-gainer"
                 }
               ]
             }
@@ -3130,7 +3153,7 @@
       "type": "text",
       "default": "Login / Register"
     },
-    "component.healthkart.HkHeroBanner.section.86cb35a82232": {
+    "component.healthkart.HkHeroBanner.section.3b2252403733": {
       "source": "src/component/healthkart/HkHeroBanner.jsx",
       "group": "Home / Hero Banner",
       "label": "Show section: Content section",
@@ -3158,7 +3181,7 @@
       "type": "text",
       "default": "Next hero banner"
     },
-    "component.healthkart.HkHeroBanner.section.7bffd6c03696": {
+    "component.healthkart.HkHeroBanner.section.f2c8c2a5b93d": {
       "source": "src/component/healthkart/HkHeroBanner.jsx",
       "group": "Home / Hero Banner",
       "label": "Show section: Loading featured offers…",
@@ -3529,7 +3552,7 @@
       "type": "link",
       "default": "/blog"
     },
-    "component.ui.BlogDetail.section.6d43c88d47f1": {
+    "component.ui.BlogDetail.section.06ceef971553": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Home",
@@ -3571,21 +3594,21 @@
       "type": "text",
       "default": "By "
     },
-    "component.ui.BlogDetail.section.26d72e99775e": {
+    "component.ui.BlogDetail.section.15811bd57b46": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.821a317ba65d": {
+    "component.ui.BlogDetail.section.2f9081896ab7": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.97688e72b62d": {
+    "component.ui.BlogDetail.section.c6cb970822a6": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
@@ -3599,42 +3622,42 @@
       "type": "text",
       "default": "← Back to Blog"
     },
-    "component.ui.BlogDetail.section.c8f2ba8a3b50": {
+    "component.ui.BlogDetail.section.4975117a3464": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.066ee68f13f7": {
+    "component.ui.BlogDetail.section.2b5b537ed340": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.70b03403267e": {
+    "component.ui.BlogDetail.section.30ed98019646": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.18df65295872": {
+    "component.ui.BlogDetail.section.4f803c4f3466": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: !",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.f91234bb86de": {
+    "component.ui.BlogDetail.section.d308a7d4aac4": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: “",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.693799cf51bb": {
+    "component.ui.BlogDetail.section.c248cd2922f0": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Simple formula",
@@ -3648,14 +3671,14 @@
       "type": "text",
       "default": "Simple formula"
     },
-    "component.ui.BlogDetail.section.647981004869": {
+    "component.ui.BlogDetail.section.9364c0b7ec4a": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.ea16f875b878": {
+    "component.ui.BlogDetail.section.c4ccfb78e0e0": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Frequently Asked Questions",
@@ -3669,14 +3692,14 @@
       "type": "text",
       "default": "Frequently Asked Questions"
     },
-    "component.ui.BlogDetail.section.db5c66cd9b3d": {
+    "component.ui.BlogDetail.section.b682600c92c6": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.6973e97d8125": {
+    "component.ui.BlogDetail.section.786b91e6228e": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading & Sources",
@@ -3690,7 +3713,7 @@
       "type": "text",
       "default": "Further Reading & Sources"
     },
-    "component.ui.BlogDetail.section.5a4023983e05": {
+    "component.ui.BlogDetail.section.e5a31b273530": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Related Reading",
@@ -3704,7 +3727,7 @@
       "type": "text",
       "default": "Related Reading"
     },
-    "component.ui.BlogDetail.section.b6de241140e6": {
+    "component.ui.BlogDetail.section.963c1e35c62c": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading",
@@ -3830,7 +3853,7 @@
       "type": "text",
       "default": "Manufacturing Facility"
     },
-    "component.ui.BrandRangeSection.section.a0a5df5022dc": {
+    "component.ui.BrandRangeSection.section.55dff9e8f484": {
       "source": "src/component/ui/BrandRangeSection.jsx",
       "group": "Website sections / Brand Range Section",
       "label": "Show section: Content section",
@@ -5322,7 +5345,7 @@
       "type": "text",
       "default": "Product categories"
     },
-    "component.ui.Products.section.efe785c107f5": {
+    "component.ui.Products.section.e3747a74d8ca": {
       "source": "src/component/ui/Products.jsx",
       "group": "Website sections / Products",
       "label": "Show section: Price Range",
@@ -5343,7 +5366,7 @@
       "type": "text",
       "default": "Price Range"
     },
-    "component.ui.Products.section.5b633ae745f3": {
+    "component.ui.Products.section.7c862d89e838": {
       "source": "src/component/ui/Products.jsx",
       "group": "Website sections / Products",
       "label": "Show section: Customer Rating",
@@ -5364,7 +5387,7 @@
       "type": "text",
       "default": "Customer Rating"
     },
-    "component.ui.Products.section.9a69b7176b56": {
+    "component.ui.Products.section.e14731b9c70c": {
       "source": "src/component/ui/Products.jsx",
       "group": "Website sections / Products",
       "label": "Show section: Flavours",
@@ -12736,7 +12759,7 @@
       "type": "text",
       "default": "Resend OTP"
     },
-    "pages.Landing.items.fd495b17cb17": {
+    "pages.Landing.items.c5f8eb0e8a55": {
       "source": "src/pages/Landing.jsx",
       "group": "Home / General",
       "label": "Repeated items",
@@ -12751,7 +12774,6 @@
         "combos",
         "promo-banner",
         "whey",
-        "stacks",
         "nutrition-banner",
         "creatine",
         "brands",
@@ -12773,13 +12795,6 @@
           "category": "Whey Protein",
           "categorySlug": "whey-protein",
           "subtitle": "Explore whey proteins and isolates for your everyday training routine."
-        },
-        {
-          "id": "stacks",
-          "title": "Combos & Value Stacks",
-          "category": "Combos & Stacks",
-          "categorySlug": "combos-stacks",
-          "subtitle": "Explore supplement bundles for your goals and routine."
         },
         {
           "id": "creatine",
@@ -12979,6 +12994,13 @@
       "type": "text",
       "default": "Total"
     },
+    "pages.Profile.components.OrdersSection.text.d353a99eb455": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Cancelled",
+      "type": "text",
+      "default": "Cancelled"
+    },
     "pages.Profile.components.OrdersSection.text.e0feeb8f09ee": {
       "source": "src/pages/Profile/components/OrdersSection.jsx",
       "group": "Account / Orders Section",
@@ -13021,6 +13043,13 @@
       "type": "text",
       "default": "Order Status"
     },
+    "pages.Profile.components.OrdersSection.text.8ab6812a66e4": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "CANCELLED",
+      "type": "text",
+      "default": "CANCELLED"
+    },
     "pages.Profile.components.OrdersSection.text.faf039df3343": {
       "source": "src/pages/Profile/components/OrdersSection.jsx",
       "group": "Account / Orders Section",
@@ -13035,12 +13064,75 @@
       "type": "text",
       "default": "Shipping Address"
     },
+    "pages.Profile.components.OrdersSection.text.d9e0f2dfc1ce": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "This order has been cancelled",
+      "type": "text",
+      "default": "This order has been cancelled"
+    },
+    "pages.Profile.components.OrdersSection.text.cf5fcd6ded40": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Your order and courier dispatch have been cancelled. No payment was collected.",
+      "type": "text",
+      "default": "Your order and courier dispatch have been cancelled. No payment was collected."
+    },
+    "pages.Profile.components.OrdersSection.text.755b0084a695": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Your order and courier dispatch have been cancelled. If your payment was deducted online, the r",
+      "type": "text",
+      "default": "Your order and courier dispatch have been cancelled. If your payment was deducted online, the refund will be credited to your original payment method in 3–5 working days."
+    },
+    "pages.Profile.components.OrdersSection.text.4bc4df5f6ced": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Reason:",
+      "type": "text",
+      "default": "Reason: "
+    },
     "pages.Profile.components.OrdersSection.text.c53b20fe7241": {
       "source": "src/pages/Profile/components/OrdersSection.jsx",
       "group": "Account / Orders Section",
       "label": "Order Tracking",
       "type": "text",
       "default": "Order Tracking"
+    },
+    "pages.Profile.components.OrdersSection.text.e72a138e4d34": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Courier:",
+      "type": "text",
+      "default": "Courier: "
+    },
+    "pages.Profile.components.OrdersSection.text.adc67b656758": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "AWB:",
+      "type": "text",
+      "default": "AWB: "
+    },
+    "pages.Profile.components.OrdersSection.text.081eaca29ac0": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Track Courier Live",
+      "type": "text",
+      "default": "Track Courier Live"
+    },
+    "pages.Profile.components.OrdersSection.text.7b26131098bb": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Cancelling...",
+      "type": "text",
+      "default": "Cancelling..."
+    },
+    "pages.Profile.components.OrdersSection.text.205f0163b0d7": {
+      "source": "src/pages/Profile/components/OrdersSection.jsx",
+      "group": "Account / Orders Section",
+      "label": "Cancel Order",
+      "type": "text",
+      "default": "Cancel Order"
     },
     "pages.Profile.components.ProfileSection.text.64ceb89543b7": {
       "source": "src/pages/Profile/components/ProfileSection.jsx",
@@ -14103,10 +14195,6 @@
         },
         {
           "id": "whey",
-          "enabled": true
-        },
-        {
-          "id": "stacks",
           "enabled": true
         },
         {

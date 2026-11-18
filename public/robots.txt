@@ -4,3 +4,9 @@ Allow: /
 Disallow: /checkouts
 Disallow: /profile
 Disallow: /thank-you
+Disallow: /cart
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://ragnutrition.in/sitemap.xml
+

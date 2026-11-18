@@ -18,7 +18,6 @@ import { ProductGridSkeleton } from "../common/LoadingSkeletons";
 const TABS = [
   { id: "all", label: "All Products", category: "" },
   { id: "whey", label: "Whey Protein", category: "Whey Protein" },
-  { id: "combos", label: "Combos & Stacks", category: "Combos & Stacks" },
   { id: "creatine", label: "Creatine", category: "Creatine" },
   { id: "preworkout", label: "Pre-Workout", category: "Pre Workout" },
   { id: "gainer", label: "Mass Gainer", category: "Mass Gainer" },
