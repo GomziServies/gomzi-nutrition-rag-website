@@ -263,3 +263,351 @@ button:not(:disabled), a { cursor: pointer; }
 .catalog-mobile-dialog::backdrop { background: rgb(0 0 0 / 45%); }
 .catalog-mobile-dialog-content { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 .catalog-mobile-dialog [aria-label="Product brands"] { max-height: none; overflow: visible; padding-right: 0; }
+
+/* =============================================================================
+   BLOG RICH DOCUMENT STYLES (Matches live RAG Nutrition blog article layout)
+   ============================================================================= */
+.blog-rich-document {
+  color: #374151;
+  word-break: break-word;
+  font-family: var(--font-modelica, "Inter", sans-serif);
+}
+
+/* First paragraph styled as article lead/intro */
+.blog-rich-document > p:first-of-type {
+  font-size: 1.125rem;
+  line-height: 2.1rem;
+  color: #374151;
+}
+@media (min-width: 768px) {
+  .blog-rich-document > p:first-of-type {
+    font-size: 1.25rem;
+    line-height: 2.25rem;
+  }
+}
+
+/* Headings matching ArticleHeading */
+.blog-rich-document h1,
+.blog-rich-document h2 {
+  font-family: var(--font-tomato, "Inter", sans-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #111827;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+}
+@media (min-width: 640px) {
+  .blog-rich-document h1,
+  .blog-rich-document h2 { font-size: 1.875rem; }
+}
+@media (min-width: 768px) {
+  .blog-rich-document h1,
+  .blog-rich-document h2 { font-size: 2.25rem; }
+}
+
+.blog-rich-document h3 {
+  font-family: var(--font-tomato, "Inter", sans-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #111827;
+  margin-top: 2.25rem;
+  margin-bottom: 0.875rem;
+}
+@media (min-width: 768px) {
+  .blog-rich-document h3 { font-size: 1.5rem; }
+}
+
+.blog-rich-document h4 {
+  font-family: var(--font-tomato, "Inter", sans-serif);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Paragraphs */
+.blog-rich-document p {
+  font-size: 1rem;
+  line-height: 2rem;
+  color: #374151;
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+}
+@media (min-width: 768px) {
+  .blog-rich-document p {
+    font-size: 1.125rem;
+  }
+}
+
+.blog-rich-document strong,
+.blog-rich-document b {
+  font-weight: 700;
+  color: #111827;
+}
+
+.blog-rich-document em,
+.blog-rich-document i {
+  font-style: italic;
+}
+
+.blog-rich-document u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.blog-rich-document s,
+.blog-rich-document strike {
+  text-decoration: line-through;
+}
+
+/* Bullet Points styled with brand round primary dot (matches live site) */
+.blog-rich-document ul {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+  list-style: none !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.blog-rich-document ul > li {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1rem;
+  line-height: 2rem;
+  color: #374151;
+}
+@media (min-width: 768px) {
+  .blog-rich-document ul > li {
+    font-size: 1.125rem;
+  }
+}
+
+.blog-rich-document ul > li::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary, #95442c);
+  flex-shrink: 0;
+}
+
+/* Numbered lists */
+.blog-rich-document ol {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  list-style-type: decimal !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 1rem;
+  line-height: 2rem;
+  color: #374151;
+}
+@media (min-width: 768px) {
+  .blog-rich-document ol {
+    font-size: 1.125rem;
+  }
+}
+
+.blog-rich-document ol > li {
+  padding-left: 0.25rem;
+}
+
+/* Blockquotes */
+.blog-rich-document blockquote {
+  margin: 2rem 0;
+  padding: 1.25rem 1.75rem;
+  border-left: 4px solid var(--color-primary, #95442c);
+  background-color: #faf7f3;
+  border-radius: 0 1rem 1rem 0;
+  color: #374151;
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+/* Links */
+.blog-rich-document a {
+  color: var(--color-primary, #95442c);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+.blog-rich-document a:hover {
+  opacity: 0.8;
+}
+
+/* Section divider */
+.blog-rich-document hr {
+  border: 0;
+  border-top: 1px solid var(--color-border, #ebdcd2);
+  margin: 3rem 0;
+}
+
+/* Figures & Images (matches live article image card style) */
+.blog-rich-document figure,
+.blog-rich-document .gdocs-figure {
+  margin: 2.25rem 0;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background-color: #ffffff;
+  border: 1px solid var(--color-border, #ebdcd2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .blog-rich-document figure,
+  .blog-rich-document .gdocs-figure {
+    border-radius: 1.75rem;
+  }
+}
+
+.blog-rich-document figure img,
+.blog-rich-document .gdocs-figure img,
+.blog-rich-document img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-height: 520px;
+  display: block;
+  margin: 0 auto;
+}
+
+.blog-rich-document figcaption {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  color: #78716c;
+  text-align: center;
+  background-color: #faf7f3;
+  border-top: 1px solid var(--color-border, #ebdcd2);
+  font-family: var(--font-modelica, inherit);
+  font-style: italic;
+}
+
+/* Tables (matches ProteinTable / ComparisonTable style) */
+.blog-rich-document .table-responsive-wrapper {
+  margin: 2.25rem 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border, #ebdcd2);
+  background-color: #ffffff;
+  overflow-x: auto;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.blog-rich-document table {
+  width: 100% !important;
+  min-width: 650px;
+  border-collapse: collapse !important;
+  margin: 2.25rem 0 !important;
+  border: 1px solid var(--color-border, #ebdcd2) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  background-color: #ffffff !important;
+  display: table !important;
+  font-family: var(--font-modelica, inherit);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.blog-rich-document .table-responsive-wrapper table {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.blog-rich-document thead tr,
+.blog-rich-document table tr:first-child:has(th) {
+  background-color: #8A3822 !important;
+  color: #ffffff !important;
+}
+
+.blog-rich-document th {
+  background-color: #8A3822 !important;
+  color: #ffffff !important;
+  text-align: left !important;
+  padding: 1.15rem 1.5rem !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  white-space: nowrap;
+}
+@media (min-width: 768px) {
+  .blog-rich-document th {
+    padding: 1.2rem 1.6rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+.blog-rich-document tbody tr,
+.blog-rich-document table tr:not(:first-child) {
+  border-bottom: 1px solid var(--color-border, #ebdcd2) !important;
+  background-color: #ffffff !important;
+  transition: background-color 0.15s ease;
+}
+
+.blog-rich-document tbody tr:last-child,
+.blog-rich-document table tr:last-child {
+  border-bottom: none !important;
+}
+
+.blog-rich-document tbody tr:hover,
+.blog-rich-document table tr:not(:first-child):hover {
+  background-color: #faf7f3 !important;
+}
+
+.blog-rich-document td {
+  padding: 1.1rem 1.35rem !important;
+  font-size: 0.925rem !important;
+  line-height: 1.6 !important;
+  vertical-align: top !important;
+  border: none !important;
+  color: #4b5563 !important;
+}
+@media (min-width: 768px) {
+  .blog-rich-document td {
+    padding: 1.2rem 1.6rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+.blog-rich-document tbody tr td:first-child,
+.blog-rich-document table tr:not(:first-child) td:first-child {
+  font-weight: 700 !important;
+  color: #111827 !important;
+}
+
+/* Pre & Code */
+.blog-rich-document pre {
+  background-color: #1c1917;
+  color: #f5f5f4;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  margin: 2rem 0;
+}
+
+.blog-rich-document code {
+  background-color: #faf7f3;
+  color: var(--color-primary, #95442c);
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+.blog-rich-document pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}

@@ -81,18 +81,32 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
       setCouponLoading(true);
       setCouponError("");
 
+      // Pass all candidate identifiers (product, combo, variation)
+      const candidateProducts = (items || []).flatMap((item) => {
+        const list = [{ product_id: item.item_id, item_id: item.item_id }];
+        if (item.combo_id) {
+          list.push({ product_id: item.combo_id, combo_id: item.combo_id });
+        }
+        if (item.variation_id) {
+          list.push({ product_id: item.variation_id, variation_id: item.variation_id });
+        }
+        if (Array.isArray(item.combo_components)) {
+          item.combo_components.forEach((c) => {
+            if (c?.product_id) list.push({ product_id: c.product_id });
+          });
+        }
+        return list;
+      });
+
       const data = await checkCouponCode({
         coupon_code: discountCode.trim(),
-        products: getCartPricingLines(items).map((i) => ({
-          product_id: i.product_id,
-        })),
+        products: candidateProducts,
       });
       const couponData = data.data.data;
 
       setCoupon(couponData);
     } catch (error) {
       setCoupon(null);
-
       setCouponError(error?.response?.data?.message || "Invalid coupon code");
     } finally {
       setCouponLoading(false);
@@ -104,31 +118,44 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
       setDiscountCode(coupon.coupon_code);
     }
   }, [coupon]);
+
   let couponDiscount = 0;
+  const isScoped =
+    coupon?.scope === "SPECIFIC_PRODUCTS" &&
+    Array.isArray(coupon?.applicable_products) &&
+    coupon.applicable_products.length > 0;
 
   if (coupon) {
-    const isScoped =
-      coupon.scope === "SPECIFIC_PRODUCTS" &&
-      Array.isArray(coupon.applicable_products) &&
-      coupon.applicable_products.length > 0;
-
     const applicableSet = isScoped
-      ? new Set(coupon.applicable_products.map((id) => String(id)))
+      ? new Set(coupon.applicable_products.map((id) => String(id?._id || id)))
       : null;
 
-    // Line-item eligible base sum
-    const eligibleTotal = getCartPricingLines(items).reduce((sum, item) => {
-      const pId = String(item.product_id);
-      if (!isScoped || applicableSet.has(pId)) {
-        return sum + item.unit_price * item.quantity;
+    // Line-item eligible base sum: only discount eligible items
+    const eligibleTotal = getCartPricingLines(items).reduce((sum, line) => {
+      const pId = String(line.product_id || "");
+      const iId = String(line.item_id || "");
+      const cId = line.combo_id ? String(line.combo_id) : "";
+      const vId = line.variation_id ? String(line.variation_id) : "";
+
+      const isEligible =
+        !isScoped ||
+        (pId && applicableSet.has(pId)) ||
+        (iId && applicableSet.has(iId)) ||
+        (cId && applicableSet.has(cId)) ||
+        (vId && applicableSet.has(vId));
+
+      if (isEligible) {
+        return sum + line.unit_price * line.quantity;
       }
       return sum;
     }, 0);
 
-    if (coupon.discount_type === "percent") {
-      couponDiscount = (eligibleTotal * Number(coupon.discount || 0)) / 100;
-    } else if (coupon.discount_type === "fixed" || coupon.discount_type === "rupees") {
-      couponDiscount = Math.min(Number(coupon.discount || 0), eligibleTotal);
+    if (eligibleTotal > 0) {
+      if (coupon.discount_type === "percent") {
+        couponDiscount = (eligibleTotal * Number(coupon.discount || 0)) / 100;
+      } else if (coupon.discount_type === "fixed" || coupon.discount_type === "rupees") {
+        couponDiscount = Math.min(Number(coupon.discount || 0), eligibleTotal);
+      }
     }
 
     couponDiscount = Math.min(couponDiscount, total);
@@ -182,13 +209,23 @@ export default function CheckoutSummary({ coupon, setCoupon }) {
         </button>
       </form>
       {coupon && (
-        <p className="mt-2 text-sm text-green-600">
-          Coupon "{coupon.coupon_code}" applied successfully
-        </p>
+        <div className="mt-2.5 p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-800">
+          <div className="flex items-center justify-between font-semibold">
+            <span>✓ Coupon "{coupon.coupon_code}" applied</span>
+            <span>{coupon.discount_type === 'percent' ? `${coupon.discount}% OFF` : `₹${coupon.discount} OFF`}</span>
+          </div>
+          {isScoped && (
+            <p className="mt-1 text-[11px] text-emerald-700">
+              Note: Discount applies strictly to eligible products in your order.
+            </p>
+          )}
+        </div>
       )}
 
       {couponError && (
-        <p className="mt-2 text-sm text-red-500">{couponError}</p>
+        <div className="mt-2.5 p-2.5 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 leading-relaxed">
+          {couponError}
+        </div>
       )}
 
       <div className="border-t border-gray-300 mt-6 pt-5 space-y-3">
