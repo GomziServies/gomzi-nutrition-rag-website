@@ -3552,7 +3552,7 @@
       "type": "link",
       "default": "/blog"
     },
-    "component.ui.BlogDetail.section.b9cd8a5c640a": {
+    "component.ui.BlogDetail.section.b548ad97dd27": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Home",
@@ -3594,21 +3594,21 @@
       "type": "text",
       "default": "By "
     },
-    "component.ui.BlogDetail.section.7b721c50ff02": {
+    "component.ui.BlogDetail.section.1ed518556c45": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.71bafb61f079": {
+    "component.ui.BlogDetail.section.5e3399399a4d": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.a7c48dfef404": {
+    "component.ui.BlogDetail.section.3523d49f10f1": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
@@ -3622,42 +3622,42 @@
       "type": "text",
       "default": "← Back to Blog"
     },
-    "component.ui.BlogDetail.section.182561f3168d": {
+    "component.ui.BlogDetail.section.603b719e6471": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.47587ad4ee73": {
+    "component.ui.BlogDetail.section.b2f3d3446137": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.1ff08e440903": {
+    "component.ui.BlogDetail.section.2f5c4329cbd8": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.2aedb56ce800": {
+    "component.ui.BlogDetail.section.6d53dbdd64a2": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: !",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.828629f5d1a0": {
+    "component.ui.BlogDetail.section.8200efe15a15": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: “",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.87be87745fed": {
+    "component.ui.BlogDetail.section.63e0392f7f8f": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Simple formula",
@@ -3671,14 +3671,14 @@
       "type": "text",
       "default": "Simple formula"
     },
-    "component.ui.BlogDetail.section.c36029b24cb9": {
+    "component.ui.BlogDetail.section.4dad844c1f3a": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.9c3fe732dd0b": {
+    "component.ui.BlogDetail.section.a6c794299306": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Frequently Asked Questions",
@@ -3692,14 +3692,14 @@
       "type": "text",
       "default": "Frequently Asked Questions"
     },
-    "component.ui.BlogDetail.section.b826981c8c6c": {
+    "component.ui.BlogDetail.section.e16bd9dc526f": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.42ec04831006": {
+    "component.ui.BlogDetail.section.cabc15610ed9": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading & Sources",
@@ -3713,7 +3713,7 @@
       "type": "text",
       "default": "Further Reading & Sources"
     },
-    "component.ui.BlogDetail.section.3a4195575e6d": {
+    "component.ui.BlogDetail.section.a01baa892e5a": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Related Reading",
@@ -3727,7 +3727,7 @@
       "type": "text",
       "default": "Related Reading"
     },
-    "component.ui.BlogDetail.section.2f172bd39e1a": {
+    "component.ui.BlogDetail.section.6c223087af0a": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading",

@@ -284,3 +284,127 @@ button:not(:disabled), a { cursor: pointer; }
 .catalog-mobile-dialog::backdrop { background: rgb(0 0 0 / 45%); }
 .catalog-mobile-dialog-content { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 .catalog-mobile-dialog [aria-label="Product brands"] { max-height: none; overflow: visible; padding-right: 0; }
+
+/* ================================================================
+   BLOG & RICH DOCUMENT TABLE SYSTEM (Comparison & Data Tables)
+================================================================ */
+
+.table-responsive-wrapper,
+.blog-rich-document .table-responsive-wrapper {
+  margin-block: 2rem;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 1rem;
+  border: 1px solid #ebdcd2;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.025);
+}
+
+.blog-rich-document table {
+  width: 100% !important;
+  min-width: 650px;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  background-color: #ffffff !important;
+  font-family: var(--font-sans);
+}
+
+.blog-rich-document colgroup,
+.blog-rich-document col {
+  width: auto !important;
+}
+
+/* Table Header */
+.blog-rich-document table thead,
+.blog-rich-document table thead tr {
+  background-color: #8A3822 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.blog-rich-document table thead th,
+.blog-rich-document table thead td {
+  background-color: #8A3822 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  padding: 1.125rem 1.5rem !important;
+  border: none !important;
+  letter-spacing: 0.025em;
+  user-select: none;
+}
+
+.blog-rich-document table thead th *,
+.blog-rich-document table thead td * {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+
+/* Table Body Rows */
+.blog-rich-document table tbody tr {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #ebdcd2 !important;
+  transition: background-color 0.2s ease;
+}
+
+.blog-rich-document table tbody tr:hover {
+  background-color: #faf7f3 !important;
+}
+
+.blog-rich-document table tbody tr:last-child {
+  border-bottom: none !important;
+}
+
+/* Table Body Cells */
+.blog-rich-document table tbody td {
+  padding: 1.125rem 1.5rem !important;
+  border: none !important;
+  border-bottom: 1px solid #ebdcd2 !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.625 !important;
+  vertical-align: top !important;
+  background-color: transparent !important;
+}
+
+.blog-rich-document table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* First Column: Factor / Metric / Criteria (Dark Bold) */
+.blog-rich-document table tbody tr td:first-child {
+  font-weight: 700 !important;
+  color: #111827 !important;
+}
+
+.blog-rich-document table tbody tr td:first-child * {
+  font-weight: 700 !important;
+  color: #111827 !important;
+  background-color: transparent !important;
+  margin: 0 !important;
+}
+
+/* Data Columns: Values / Details (Neutral Readable) */
+.blog-rich-document table tbody tr td:not(:first-child) {
+  font-weight: 400 !important;
+  color: #4b5563 !important;
+}
+
+.blog-rich-document table tbody tr td:not(:first-child) * {
+  font-weight: 400 !important;
+  color: #4b5563 !important;
+  background-color: transparent !important;
+  margin: 0 !important;
+}
+
+.blog-rich-document table p {
+  margin: 0 !important;
+  line-height: inherit !important;
+}
+

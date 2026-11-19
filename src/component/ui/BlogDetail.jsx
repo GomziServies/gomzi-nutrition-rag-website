@@ -20,6 +20,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 
 import SEO from "../../component/SEO";
 import { blogs } from "../../data/blogs";
+import { formatBlogTables } from "../../utils/blogTableFormatter";
 
 const BlogDetail = () => {
   const { slug } = useParams();
@@ -106,11 +107,8 @@ const BlogDetail = () => {
     }
 
     if (cleanedHtml) {
-      // Ensure tables are wrapped in a responsive card wrapper matching ComparisonTable
-      cleanedHtml = cleanedHtml.replace(
-        /(?:<div class="[^"]*table-responsive-wrapper[^"]*">)?<table([^>]*)>([\s\S]*?)<\/table>(?:<\/div>)?/gi,
-        '<div class="table-responsive-wrapper"><table$1>$2</table></div>'
-      );
+      // Format tables into responsive comparison cards matching the Gomzi brand table UI
+      cleanedHtml = formatBlogTables(cleanedHtml);
     }
 
     return { effectiveFaqs: faqs, displayHtml: cleanedHtml };
