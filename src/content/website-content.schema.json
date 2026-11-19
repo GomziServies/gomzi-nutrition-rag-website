@@ -1012,7 +1012,7 @@
       "type": "text",
       "default": "Need help? Contact us"
     },
-    "component.common.CertificationsBar.section.440e2fda2f39": {
+    "component.common.CertificationsBar.section.7f489ad8915c": {
       "source": "src/component/common/CertificationsBar.jsx",
       "group": "Website sections / Certifications Bar",
       "label": "Show section: Content section",
@@ -1251,7 +1251,7 @@
         }
       ]
     },
-    "component.healthkart.HkBestSellersTabbed.section.9cbfc3c153a2": {
+    "component.healthkart.HkBestSellersTabbed.section.141dc5ae59a8": {
       "source": "src/component/healthkart/HkBestSellersTabbed.jsx",
       "group": "Home / Best Sellers Tabbed",
       "label": "Show section: Explore supplements by category",
@@ -1314,7 +1314,7 @@
       "type": "text",
       "default": "No products found in this category."
     },
-    "component.healthkart.HkCategoryCircles.section.04ff14276199": {
+    "component.healthkart.HkCategoryCircles.section.1f37db922da1": {
       "source": "src/component/healthkart/HkCategoryCircles.jsx",
       "group": "Home / Category Circles",
       "label": "Show section: Explore By Fitness Goal",
@@ -1419,7 +1419,7 @@
       "type": "text",
       "default": "Explore Range"
     },
-    "component.healthkart.HkCategoryShowcase.section.60025bddd666": {
+    "component.healthkart.HkCategoryShowcase.section.e41e141d6715": {
       "source": "src/component/healthkart/HkCategoryShowcase.jsx",
       "group": "Home / Category Showcase",
       "label": "Show section: Products",
@@ -1559,7 +1559,7 @@
       "type": "text",
       "default": "Direct bundle pricing applied. Verified inventory guaranteed at checkout."
     },
-    "component.healthkart.HkComboStackBuilder.section.b933ddb19b17": {
+    "component.healthkart.HkComboStackBuilder.section.9228391cfaf5": {
       "source": "src/component/healthkart/HkComboStackBuilder.jsx",
       "group": "Home / Combo Stack Builder",
       "label": "Show section: Combo 1",
@@ -3552,7 +3552,7 @@
       "type": "link",
       "default": "/blog"
     },
-    "component.ui.BlogDetail.section.06ceef971553": {
+    "component.ui.BlogDetail.section.b9cd8a5c640a": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Home",
@@ -3594,21 +3594,21 @@
       "type": "text",
       "default": "By "
     },
-    "component.ui.BlogDetail.section.15811bd57b46": {
+    "component.ui.BlogDetail.section.7b721c50ff02": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.2f9081896ab7": {
+    "component.ui.BlogDetail.section.71bafb61f079": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.c6cb970822a6": {
+    "component.ui.BlogDetail.section.a7c48dfef404": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: →",
@@ -3622,42 +3622,42 @@
       "type": "text",
       "default": "← Back to Blog"
     },
-    "component.ui.BlogDetail.section.4975117a3464": {
+    "component.ui.BlogDetail.section.182561f3168d": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.2b5b537ed340": {
+    "component.ui.BlogDetail.section.47587ad4ee73": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.30ed98019646": {
+    "component.ui.BlogDetail.section.1ff08e440903": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.4f803c4f3466": {
+    "component.ui.BlogDetail.section.2aedb56ce800": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: !",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.d308a7d4aac4": {
+    "component.ui.BlogDetail.section.828629f5d1a0": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: “",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.c248cd2922f0": {
+    "component.ui.BlogDetail.section.87be87745fed": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Simple formula",
@@ -3671,14 +3671,14 @@
       "type": "text",
       "default": "Simple formula"
     },
-    "component.ui.BlogDetail.section.9364c0b7ec4a": {
+    "component.ui.BlogDetail.section.c36029b24cb9": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.c4ccfb78e0e0": {
+    "component.ui.BlogDetail.section.9c3fe732dd0b": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Frequently Asked Questions",
@@ -3692,14 +3692,14 @@
       "type": "text",
       "default": "Frequently Asked Questions"
     },
-    "component.ui.BlogDetail.section.b682600c92c6": {
+    "component.ui.BlogDetail.section.b826981c8c6c": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Content section",
       "type": "toggle",
       "default": true
     },
-    "component.ui.BlogDetail.section.786b91e6228e": {
+    "component.ui.BlogDetail.section.42ec04831006": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading & Sources",
@@ -3713,7 +3713,7 @@
       "type": "text",
       "default": "Further Reading & Sources"
     },
-    "component.ui.BlogDetail.section.e5a31b273530": {
+    "component.ui.BlogDetail.section.3a4195575e6d": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Related Reading",
@@ -3727,7 +3727,7 @@
       "type": "text",
       "default": "Related Reading"
     },
-    "component.ui.BlogDetail.section.963c1e35c62c": {
+    "component.ui.BlogDetail.section.2f172bd39e1a": {
       "source": "src/component/ui/BlogDetail.jsx",
       "group": "Website sections / Blog Detail",
       "label": "Show section: Further Reading",
@@ -3853,7 +3853,7 @@
       "type": "text",
       "default": "Manufacturing Facility"
     },
-    "component.ui.BrandRangeSection.section.55dff9e8f484": {
+    "component.ui.BrandRangeSection.section.251162b16155": {
       "source": "src/component/ui/BrandRangeSection.jsx",
       "group": "Website sections / Brand Range Section",
       "label": "Show section: Content section",
@@ -5275,6 +5275,41 @@
       "type": "text",
       "default": " scoop"
     },
+    "component.ui.Products.text.03e3b090f720": {
+      "source": "src/component/ui/Products.jsx",
+      "group": "Website sections / Products",
+      "label": "Coupon",
+      "type": "text",
+      "default": "Coupon "
+    },
+    "component.ui.Products.text.3cde05a79850": {
+      "source": "src/component/ui/Products.jsx",
+      "group": "Website sections / Products",
+      "label": "applied",
+      "type": "text",
+      "default": " applied"
+    },
+    "component.ui.Products.text.3b2e8119b6fc": {
+      "source": "src/component/ui/Products.jsx",
+      "group": "Website sections / Products",
+      "label": "—",
+      "type": "text",
+      "default": " — "
+    },
+    "component.ui.Products.text.c839b64c3427": {
+      "source": "src/component/ui/Products.jsx",
+      "group": "Website sections / Products",
+      "label": "Valid on all products. It is applied automatically at checkout.",
+      "type": "text",
+      "default": "Valid on all products. It is applied automatically at checkout."
+    },
+    "component.ui.Products.text.0a8e3b19e024": {
+      "source": "src/component/ui/Products.jsx",
+      "group": "Website sections / Products",
+      "label": "Browse all products",
+      "type": "text",
+      "default": "Browse all products"
+    },
     "component.ui.Products.text.b4935894c8ce": {
       "source": "src/component/ui/Products.jsx",
       "group": "Website sections / Products",
@@ -5345,7 +5380,7 @@
       "type": "text",
       "default": "Product categories"
     },
-    "component.ui.Products.section.e3747a74d8ca": {
+    "component.ui.Products.section.c58dd5735ce8": {
       "source": "src/component/ui/Products.jsx",
       "group": "Website sections / Products",
       "label": "Show section: Price Range",
@@ -5366,7 +5401,7 @@
       "type": "text",
       "default": "Price Range"
     },
-    "component.ui.Products.section.7c862d89e838": {
+    "component.ui.Products.section.75193490ae2f": {
       "source": "src/component/ui/Products.jsx",
       "group": "Website sections / Products",
       "label": "Show section: Customer Rating",
@@ -5387,7 +5422,7 @@
       "type": "text",
       "default": "Customer Rating"
     },
-    "component.ui.Products.section.e14731b9c70c": {
+    "component.ui.Products.section.1d0311dd873d": {
       "source": "src/component/ui/Products.jsx",
       "group": "Website sections / Products",
       "label": "Show section: Flavours",
