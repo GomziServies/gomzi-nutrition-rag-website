@@ -27,6 +27,95 @@ const BlogDetail = () => {
   const [blog, setBlog] = useState(staticFallback || null);
   const [loading, setLoading] = useState(!staticFallback);
 
+  const rawHtml = blog?.content?.html;
+  const hasRichHtml = Boolean(
+    rawHtml &&
+      typeof rawHtml === "string" &&
+      (rawHtml.replace(/<p><br\s*\/?><\/p>/gi, "").replace(/<[^>]*>/g, "").trim().length > 0 ||
+        /<img|<table|<iframe|<figure/i.test(rawHtml))
+  );
+
+  const processedHtml = React.useMemo(() => {
+    if (!hasRichHtml || !rawHtml) return "";
+    return rawHtml.replace(
+      /<img([^>]+)src=["']([^"']+)["']([^>]*)>/gi,
+      (match, prefix, src, suffix) => {
+        const resolved = resolveImageUrl(src);
+        return `<img${prefix}src="${resolved}"${suffix}>`;
+      }
+    );
+  }, [hasRichHtml, rawHtml]);
+
+  // Extract FAQs and ensure no duplicate unstyled FAQ heading exists in body HTML
+  const { effectiveFaqs, displayHtml } = React.useMemo(() => {
+    let faqs = Array.isArray(blog?.content?.faqs) && blog.content.faqs.length > 0 ? [...blog.content.faqs] : [];
+    let cleanedHtml = processedHtml || "";
+
+    if (cleanedHtml) {
+      // Matches any H1-H6 heading containing "Frequently Asked Questions" or "FAQs" even when wrapped in spans/styles
+      const faqHeadingRegex = /<h([1-6])[^>]*>(?:(?!<\/h\1>)[\s\S])*?(?:Frequently\s+Asked\s+Questions|FAQs?)(?:(?!<\/h\1>)[\s\S])*?<\/h\1>/i;
+      const match = faqHeadingRegex.exec(cleanedHtml);
+
+      if (match) {
+        const startIndex = match.index;
+        const afterHeading = cleanedHtml.slice(startIndex + match[0].length);
+        // Find next major section heading (h1 or h2) that terminates the FAQ section
+        const nextSectionMatch = /<h[12][^>]*>/i.exec(afterHeading);
+        const endIndex = nextSectionMatch ? startIndex + match[0].length + nextSectionMatch.index : cleanedHtml.length;
+        const faqChunk = cleanedHtml.slice(startIndex + match[0].length, endIndex);
+
+        // If blog.content.faqs was empty, dynamically extract Q&As from the HTML chunk
+        if (faqs.length === 0) {
+          const pMatches = faqChunk.match(/<p[\s\S]*?<\/p>/gi) || [];
+          let currentQ = null;
+          let currentA = [];
+
+          pMatches.forEach((p) => {
+            const text = p.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+            if (!text) return;
+
+            const isQuestion =
+              /^\s*\d+[\.\)]\s+.*\?$/.test(text) ||
+              (text.endsWith("?") &&
+                (p.includes("font-weight:700") ||
+                  p.includes("font-weight: 700") ||
+                  p.includes("font-weight:bold") ||
+                  p.includes("font-weight: bold") ||
+                  /<strong|<b\b/i.test(p) ||
+                  text.length < 150));
+
+            if (isQuestion) {
+              if (currentQ && currentA.length > 0) {
+                faqs.push({ question: currentQ, answer: currentA.join("\n\n") });
+              }
+              currentQ = text.replace(/^\s*\d+[\.\)]\s*/, "");
+              currentA = [];
+            } else if (currentQ) {
+              currentA.push(text);
+            }
+          });
+
+          if (currentQ && currentA.length > 0) {
+            faqs.push({ question: currentQ, answer: currentA.join("\n\n") });
+          }
+        }
+
+        // Remove the raw unstyled FAQ section from the article body HTML so it only renders in the styled accordion
+        cleanedHtml = cleanedHtml.slice(0, startIndex) + cleanedHtml.slice(endIndex);
+      }
+    }
+
+    if (cleanedHtml) {
+      // Ensure tables are wrapped in a responsive card wrapper matching ComparisonTable
+      cleanedHtml = cleanedHtml.replace(
+        /(?:<div class="[^"]*table-responsive-wrapper[^"]*">)?<table([^>]*)>([\s\S]*?)<\/table>(?:<\/div>)?/gi,
+        '<div class="table-responsive-wrapper"><table$1>$2</table></div>'
+      );
+    }
+
+    return { effectiveFaqs: faqs, displayHtml: cleanedHtml };
+  }, [processedHtml, blog?.content?.faqs]);
+
   useEffect(() => {
     let isMounted = true;
     if (slug) {
@@ -149,7 +238,15 @@ const BlogDetail = () => {
         ================================================== */}
         <section className="pb-16 md:pb-24">
           <div className="max-w-4xl mx-auto px-4">
-            {/* Intro */}
+            {/* Document Content: Rich Google Docs HTML or Fallback Sections */}
+            {hasRichHtml ? (
+              <div
+                className="blog-rich-document text-gray-800 font-modelica mb-12"
+                dangerouslySetInnerHTML={{ __html: displayHtml }}
+              />
+            ) : (
+              <>
+                {/* Intro */}
             <div className="space-y-5">
               {blog.content?.intro?.map((paragraph, index) => (
                 <p
@@ -277,6 +374,8 @@ const BlogDetail = () => {
               </section>
               );
             })}
+              </>
+            )}
 
             {/* Protein Table */}
             {blog.content?.proteinTable && (
@@ -288,38 +387,44 @@ const BlogDetail = () => {
               <ComparisonTable table={blog.content.comparisonTable} />
             )}
 
-            {/* Choice Section */}
-            {blog.content?.choiceSection && (
+            {/* Dynamic Tables from Admin Content */}
+            {Array.isArray(blog.content?.tables) &&
+              blog.content.tables.map((table, tIdx) => (
+                <ProteinTable key={tIdx} table={table} />
+              ))}
+
+            {/* Choice Section (Legacy Fallback) */}
+            {!hasRichHtml && blog.content?.choiceSection && (
               <ChoiceSection section={blog.content.choiceSection} />
             )}
 
-            {/* Caution */}
-            {blog.content?.cautionSection && (
+            {/* Caution (Legacy Fallback) */}
+            {!hasRichHtml && blog.content?.cautionSection && (
               <CautionSection section={blog.content.cautionSection} />
             )}
 
-            {/* Expert */}
-            {blog.content?.expertSection && (
+            {/* Expert (Legacy Fallback) */}
+            {!hasRichHtml && blog.content?.expertSection && (
               <ExpertSection section={blog.content.expertSection} />
             )}
 
-            {/* Calculator */}
-            {blog.content?.calculatorSection && (
+            {/* Calculator (Legacy Fallback) */}
+            {!hasRichHtml && blog.content?.calculatorSection && (
               <CalculatorSection section={blog.content.calculatorSection} />
             )}
 
-            {/* Gomzi */}
-            {blog.content?.gomziSection && (
+            {/* Gomzi (Legacy Fallback) */}
+            {!hasRichHtml && blog.content?.gomziSection && (
               <GomziSection section={blog.content.gomziSection} />
             )}
 
             {/* FAQs */}
-            {blog.content?.faqs?.length > 0 && (
-              <FaqSection faqs={blog.content.faqs} />
+            {effectiveFaqs?.length > 0 && (
+              <FaqSection faqs={effectiveFaqs} />
             )}
 
-            {/* Bottom Line */}
-            {blog.content?.bottomLine && (
+            {/* Bottom Line (Legacy Fallback) */}
+            {!hasRichHtml && blog.content?.bottomLine && (
               <BottomLine section={blog.content.bottomLine} />
             )}
             {/* Further Reading */}
@@ -383,18 +488,21 @@ const ArticleHeading = ({ children }) => {
 ============================================================ */
 
 const ProteinTable = ({ table }) => {
-  return (
-    <section className="mt-14">
-      <ArticleHeading>{table.heading}</ArticleHeading>
+  if (!table || !Array.isArray(table.columns) || !Array.isArray(table.rows)) return null;
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-white">
-        <table className="w-full min-w-[700px] border-collapse font-modelica">
+  return (
+    <section className="mt-12 sm:mt-14">
+      {table.heading && <ArticleHeading>{table.heading}</ArticleHeading>}
+
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-[#ebdcd2] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.025)]">
+        <table className="w-full min-w-[650px] border-collapse font-modelica">
           <thead>
-            <tr className="bg-primary text-white">
+            <tr className="bg-[#8A3822] text-white">
               {table.columns.map((column, index) => (
                 <th
                   key={index}
-                  className="text-left px-5 py-4 text-sm font-semibold"
+                  className="text-left px-6 py-4.5 text-[15px] sm:text-base font-semibold text-white tracking-wide border-none select-none"
+                  style={{ backgroundColor: "#8A3822" }}
                 >
                   {column}
                 </th>
@@ -406,23 +514,25 @@ const ProteinTable = ({ table }) => {
             {table.rows.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-border last:border-b-0 hover:bg-gray-50"
+                className="border-b border-[#ebdcd2] last:border-b-0 hover:bg-[#faf7f3] transition-colors"
               >
                 {row.map((cell, cellIndex) => (
                   <td
                     key={cellIndex}
                     className={`
-                          px-5
-                          py-4
-                          text-sm
-                          md:text-base
-                          align-top
-                          ${
-                            cellIndex === 0
-                              ? "font-semibold text-gray-900"
-                              : "text-gray-600"
-                          }
-                        `}
+                      px-6
+                      py-4.5
+                      text-[15px]
+                      sm:text-base
+                      leading-relaxed
+                      align-top
+                      border-none
+                      ${
+                        cellIndex === 0
+                          ? "font-bold text-[#111827]"
+                          : "text-[#4b5563]"
+                      }
+                    `}
                   >
                     {cell}
                   </td>
@@ -441,18 +551,21 @@ const ProteinTable = ({ table }) => {
 ============================================================ */
 
 const ComparisonTable = ({ table }) => {
-  return (
-    <section className="mt-14">
-      <ArticleHeading>{table.heading}</ArticleHeading>
+  if (!table || !Array.isArray(table.columns) || !Array.isArray(table.rows)) return null;
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-white">
-        <table className="w-full min-w-[680px] border-collapse font-modelica">
+  return (
+    <section className="mt-12 sm:mt-14">
+      {table.heading && <ArticleHeading>{table.heading}</ArticleHeading>}
+
+      <div className="mt-6 overflow-x-auto rounded-2xl border border-[#ebdcd2] bg-white shadow-[0_2px_8px_rgba(0,0,0,0.025)]">
+        <table className="w-full min-w-[650px] border-collapse font-modelica">
           <thead>
-            <tr className="bg-primary text-white">
+            <tr className="bg-[#8A3822] text-white">
               {table.columns.map((column, index) => (
                 <th
                   key={index}
-                  className="text-left px-5 py-4 text-sm font-semibold"
+                  className="text-left px-6 py-4.5 text-[15px] sm:text-base font-semibold text-white tracking-wide border-none select-none"
+                  style={{ backgroundColor: "#8A3822" }}
                 >
                   {column}
                 </th>
@@ -464,23 +577,25 @@ const ComparisonTable = ({ table }) => {
             {table.rows.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className="border-b border-border last:border-b-0"
+                className="border-b border-[#ebdcd2] last:border-b-0 hover:bg-[#faf7f3] transition-colors"
               >
                 {row.map((cell, cellIndex) => (
                   <td
                     key={cellIndex}
                     className={`
-                          px-5
-                          py-4
-                          text-sm
-                          md:text-base
-                          align-top
-                          ${
-                            cellIndex === 0
-                              ? "font-semibold text-gray-900"
-                              : "text-gray-600"
-                          }
-                        `}
+                      px-6
+                      py-4.5
+                      text-[15px]
+                      sm:text-base
+                      leading-relaxed
+                      align-top
+                      border-none
+                      ${
+                        cellIndex === 0
+                          ? "font-bold text-[#111827]"
+                          : "text-[#4b5563]"
+                      }
+                    `}
                   >
                     {cell}
                   </td>
@@ -658,26 +773,30 @@ const GomziSection = ({ section }) => {
 ============================================================ */
 
 const FaqSection = ({ faqs }) => {
-  return (
-    <section className="mt-14">
-      <ArticleHeading>Frequently Asked Questions</ArticleHeading>
+  if (!faqs || faqs.length === 0) return null;
 
-      <div className="mt-6 space-y-3">
+  return (
+    <section className="mt-14 sm:mt-16">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-tomato font-bold text-gray-900 leading-tight mb-6 sm:mb-8">
+        Frequently Asked Questions
+      </h2>
+
+      <div className="space-y-4">
         {faqs.map((faq, index) => (
           <details
             key={index}
-            className="group rounded-2xl bg-white border border-border overflow-hidden"
+            className="group rounded-2xl bg-white border border-[#ebdcd2] shadow-[0_2px_8px_rgba(0,0,0,0.025)] hover:border-primary/40 transition-all duration-200 overflow-hidden"
           >
-            <summary className="list-none cursor-pointer px-5 md:px-6 py-5 flex items-center justify-between gap-5 font-modelica font-semibold text-gray-900">
-              <span>{faq.question}</span>
+            <summary className="list-none cursor-pointer px-6 py-4 sm:py-5 flex items-center justify-between gap-4 font-tomato font-semibold text-base sm:text-[17px] text-gray-900 select-none [&::-webkit-details-marker]:hidden">
+              <span className="leading-snug">{faq.question}</span>
 
-              <span className="flex-shrink-0 text-primary text-xl transition-transform duration-300 group-open:rotate-45">
+              <span className="flex-shrink-0 text-primary text-xl sm:text-2xl font-bold font-mono transition-transform duration-300 group-open:rotate-45 leading-none select-none">
                 +
               </span>
             </summary>
 
-            <div className="px-5 md:px-6 pb-5">
-              <p className="font-modelica text-gray-600 leading-7">
+            <div className="px-6 pb-5 pt-1 border-t border-gray-100/90 mt-1">
+              <p className="font-modelica text-gray-600 text-[15px] sm:text-base leading-relaxed">
                 {faq.answer}
               </p>
             </div>
